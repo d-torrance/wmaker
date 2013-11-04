@@ -349,6 +349,8 @@ typedef struct W_Pixmap WMPixmap;
 typedef struct W_Font	WMFont;
 typedef struct W_Color	WMColor;
 
+typedef struct WMTheme WMTheme;
+
 typedef struct W_Screen WMScreen;
 
 typedef struct W_View WMView;
@@ -880,6 +882,8 @@ unsigned short WMBlueComponentOfColor(WMColor *color);
 unsigned short WMGetColorAlpha(WMColor *color);
 
 char* WMGetColorRGBDescription(WMColor *color);
+
+WMTheme* W_GetTheme(WMScreen *scr);
 
 /* ---[ WINGs/widgets.c ]------------------------------------------------- */
 

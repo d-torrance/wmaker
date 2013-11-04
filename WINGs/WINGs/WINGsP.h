@@ -64,6 +64,17 @@ typedef struct W_DraggingInfo {
     struct W_DragDestinationInfo* destInfo; /* infos needed by destination */
 } W_DraggingInfo;
 
+/* ---[ wcolor.c ]----------------------------------------------------- */
+
+typedef struct WMTheme {
+	WMColor *background;
+	WMColor *foreground;
+	WMColor *shadow;
+	WMColor *highlight;
+	WMColor *unselectedTabBackground;
+	WMColor *unselectedTabHighlight;
+} WMTheme;
+
 /* ---[ Structures from WINGs.h ]----------------------------------------- */
 
 /* Pre-definition of internal structs */
@@ -265,6 +276,8 @@ typedef struct W_Screen {
     struct W_View *modalView;
     unsigned modalLoop:1;
     unsigned ignoreNextDoubleClick:1;
+
+    WMTheme *theme;
 } W_Screen;
 
 #define W_DRAWABLE(scr)		(scr)->rcontext->drawable

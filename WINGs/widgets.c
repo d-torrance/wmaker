@@ -668,6 +668,8 @@ WMScreen *WMCreateScreenWithRContext(Display * display, int screen, RContext * c
 		scrPtr->ignoredModifierMask = numLockMask | scrollLockMask | LockMask;
 	}
 
+	scrPtr->theme = W_GetTheme(scrPtr);
+
 	/* initially allocate some colors */
 	WMWhiteColor(scrPtr);
 	WMBlackColor(scrPtr);
