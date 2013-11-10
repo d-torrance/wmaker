@@ -1764,6 +1764,13 @@ void wArrangeIcons(WScreen *scr, Bool arrangeAll)
 			vars[head].yo = vars[head].sy2 - isize;
 			vars[head].ys = -1;
 		}
+		if (scr->dock && (scr->dock->lowered && !wPreferences.no_window_over_dock)) {
+			if (scr->dock->on_right_side) {
+				vars[head].xo -= wPreferences.icon_size;
+			} else {
+				vars[head].xo += wPreferences.icon_size;
+			}
+		}
 	}
 
 #define X ((wPreferences.icon_yard & IY_VERT) \
