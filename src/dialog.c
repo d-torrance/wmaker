@@ -743,7 +743,7 @@ static void drawIconProc(WMList * lPtr, int index, Drawable d, char *text, int s
 	color.blue = WMBlueComponentOfColor(back) >> 8;
 	color.alpha = WMGetColorAlpha(back) >> 8;
 
-	pixmap = WMCreateBlendedPixmapFromFile(wmscr, file, &color);
+	pixmap = WMCreateScaledBlendedPixmapFromFile(wmscr, file, &color, width - 2, height - 2);
 	wfree(file);
 
 	if (!pixmap) {
@@ -1280,7 +1280,7 @@ void wShowInfoPanel(WScreen *scr)
 	}
 #endif
 
-	strbuf = wstrappend(strbuf, _("Supported image formats: "));
+	strbuf = wstrappend(strbuf, _("Image formats: "));
 	strl = RSupportedFileFormats();
 	separator = NULL;
 	for (i = 0; strl[i] != NULL; i++) {
@@ -1297,6 +1297,10 @@ void wShowInfoPanel(WScreen *scr)
 	strbuf = wstrappend(strbuf, ", MWM");
 #endif
 
+#ifdef USE_MAGICK
+	strbuf = wstrappend(strbuf, ", ImageMagick");
+#endif
+
 #ifdef USE_XINERAMA
 	strbuf = wstrappend(strbuf, _("\n"));
 #ifdef SOLARIS_XINERAMA
@@ -1305,7 +1309,7 @@ void wShowInfoPanel(WScreen *scr)
 	strbuf = wstrappend(strbuf, _("Xinerama: "));
 	{
 		char tmp[128];
-		snprintf(tmp, sizeof(tmp) - 1, _("%d heads found."), scr->xine_info.count);
+		snprintf(tmp, sizeof(tmp) - 1, _("%d head(s) found."), scr->xine_info.count);
 		strbuf = wstrappend(strbuf, tmp);
 	}
 #endif

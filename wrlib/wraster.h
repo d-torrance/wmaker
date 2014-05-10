@@ -290,6 +290,11 @@ enum {
 
 
 /*
+ * Cleaning before application exit
+ */
+void RShutdown(void);
+
+/*
  * Returns a NULL terminated array of strings containing the
  * supported formats, such as: TIFF, XPM, PNG, JPEG, PPM, GIF
  * Do not free the returned data.

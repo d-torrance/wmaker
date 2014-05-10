@@ -73,10 +73,22 @@ RImage *RLoadGIF(const char *file, int index);
 RImage *RLoadWEBP(const char *file);
 #endif
 
+#ifdef USE_MAGICK
+RImage *RLoadMagick(const char *file_name);
+
+void RReleaseMagick(void);
+#endif
+
 /*
  * Function for Saving in a specific format
  */
 Bool RSaveXPM(RImage *image, const char *file);
+
+
+/*
+ * Function to terminate properly
+ */
+void RReleaseCache(void);
 
 
 #endif

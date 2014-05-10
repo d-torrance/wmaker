@@ -690,6 +690,17 @@ AC_ARG_ENABLE([webp],
 WM_IMGFMT_CHECK_WEBP
 
 
+dnl MAGICK Support
+dnl ===========
+AC_ARG_ENABLE([magick],
+    [AS_HELP_STRING([--disable-magick], [disable MAGICK support through libMagickWand])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-magick])] )],
+    [enable_magick=auto])
+WM_IMGFMT_CHECK_MAGICK
+
+
 dnl PPM Support
 dnl ===========
 # The PPM format is always enabled because we have built-in support for the format

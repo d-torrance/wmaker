@@ -33,6 +33,7 @@ LIBWRASTER3
     RConvertImageMask;
     RCopyArea;
     RCreateContext;
+    RDestroyContext;
     RCreateImage;
     RCreateImageFromDrawable;
     RCreateImageFromXImage;
@@ -72,6 +73,7 @@ LIBWRASTER3
     RRotateImage;
     RSaveImage;
     RScaleImage;
+    RShutdown;
     RSmoothScaleImage;
     RSupportedFileFormats;
 

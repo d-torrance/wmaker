@@ -4,6 +4,7 @@
 
 #include "WINGsP.h"
 #include "wconfig.h"
+#include "userdefaults.h"
 
 
 struct W_Application WMApplication;
@@ -51,16 +52,28 @@ void WMInitializeApplication(const char *applicationName, int *argc, char **argv
 void WMReleaseApplication(void) {
 	int i;
 
+	/*
+	 * We save the configuration on exit, this used to be handled
+	 * through an 'atexit' registered function but if application
+	 * properly calls WMReleaseApplication then the info to that
+	 * will have been freed by us.
+	 */
+	w_save_defaults_changes();
+
 	W_ReleaseNotificationCenter();
 
-	if (WMApplication.applicationName)
+	if (WMApplication.applicationName) {
 		wfree(WMApplication.applicationName);
+		WMApplication.applicationName = NULL;
+	}
 
-	for (i = 0; i < WMApplication.argc; i++)
-		wfree(WMApplication.argv[i]);
+	if (WMApplication.argv) {
+		for (i = 0; i < WMApplication.argc; i++)
+			wfree(WMApplication.argv[i]);
 
-	if (WMApplication.argv)
 		wfree(WMApplication.argv);
+		WMApplication.argv = NULL;
+	}
 }
 
 void WMSetResourcePath(const char *path)

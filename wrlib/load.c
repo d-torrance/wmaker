@@ -129,6 +129,23 @@ static void init_cache(void)
 	}
 }
 
+void RReleaseCache(void)
+{
+	int i;
+
+	if (RImageCacheSize > 0) {
+		for (i = 0; i < RImageCacheSize; i++) {
+			if (RImageCache[i].file) {
+				RReleaseImage(RImageCache[i].image);
+				free(RImageCache[i].file);
+			}
+		}
+		free(RImageCache);
+		RImageCache = NULL;
+		RImageCacheSize = -1;
+	}
+}
+
 RImage *RLoadImage(RContext * context, const char *file, int index)
 {
 	RImage *image = NULL;
@@ -165,8 +182,16 @@ RImage *RLoadImage(RContext * context, const char *file, int index)
 		return NULL;
 
 	case IM_UNKNOWN:
+#ifdef USE_MAGICK
+		/* generic file format support using ImageMagick
+		 * BMP, PCX, PICT, SVG, ...
+		 */
+		image = RLoadMagick(file);
+		break;
+#else
 		RErrorCode = RERR_BADFORMAT;
 		return NULL;
+#endif
 
 	case IM_XPM:
 		image = RLoadXPM(context, file);

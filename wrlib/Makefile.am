@@ -28,6 +28,7 @@ libwraster_la_SOURCES = 	\
 	save.c		\
 	gradient.c 	\
 	xpixmap.c	\
+	convert.h 	\
 	convert.c 	\
 	context.c 	\
 	misc.c 		\
@@ -64,9 +65,14 @@ if USE_WEBP
 libwraster_la_SOURCES += load_webp.c
 endif
 
+if USE_MAGICK
+libwraster_la_SOURCES += load_magick.c
+endif
+
+AM_CFLAGS = @MAGICKFLAGS@
 AM_CPPFLAGS = $(DFLAGS) @HEADER_SEARCH_PATH@
 
-libwraster_la_LIBADD = @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @XLIBS@ @LIBXMU@ -lm
+libwraster_la_LIBADD = @LIBRARY_SEARCH_PATH@ @GFXLIBS@ @MAGICKLIBS@ @XLIBS@ @LIBXMU@ -lm
 
 pkgconfigdir = $(libdir)/pkgconfig
 pkgconfig_DATA = wrlib.pc
@@ -79,7 +85,7 @@ wrlib.pc: Makefile
 	@echo 'Description: Image manipulation and conversion library' >> $@
 	@echo 'Version: $(VERSION)' >> $@
 	@echo 'Libs: $(lib_search_path) -lwraster' >> $@
-	@echo 'Libs.private: $(GFXLIBS) $(XLIBS) -lm' >> $@
+	@echo 'Libs.private: $(GFXLIBS) $(MAGICKLIBS) $(XLIBS) -lm' >> $@
 	@echo 'Cflags: $(inc_search_path)' >> $@
 
 get-wraster-flags: get-wraster-flags.in Makefile
