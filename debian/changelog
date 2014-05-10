@@ -1,11 +1,15 @@
-wmaker (0.95.5+20140426-0ppa1) trusty; urgency=low
+wmaker (0.95.5+20140509-0ppa1) trusty; urgency=low
 
   * Git snapshot.
   * Added Unity Greeter icons.
   * Removed debian/patches/50_def_config_path.diff and debian/patches/
     55_typo.diff (already applied in next).
+  * debian/control:
+    - Bump Standards-Version to 3.9.5.
+  * updated *.symbols files
+  * libwutil3 -> libwutil4
 
- -- Doug Torrance <dtorrance@monmouthcollege.edu>  Sat, 26 Apr 2014 21:03:32 -0500
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Fri, 09 May 2014 21:12:48 -0500
 
 wmaker (0.95.5+20131015-1ppa3~precise) precise; urgency=low
 
@@ -15,7 +19,7 @@ wmaker (0.95.5+20131015-1ppa3~precise) precise; urgency=low
 
 wmaker (0.95.5+20131015-1ppa1) raring; urgency=low
 
- * Git snapshot
+  * Git snapshot
 
  -- Doug Torrance <dtorrance@monmouthcollege.edu>  Tue, 15 Oct 2013 17:46:45 -0500
 
@@ -23,7 +27,7 @@ wmaker (0.95.5-1ppa1) raring; urgency=low
 
   * Packaging for PPA.
 
- -- Doug Torrance <dtorrance@monmouthcollege.edu>   Mon, 23 Sep 2013 23:05:31 -0500
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Mon, 23 Sep 2013 23:05:31 -0500
 
 wmaker (0.95.5-1) unstable; urgency=low
 
