@@ -67,7 +67,6 @@ dnl AC_CANONICAL_HOST -- already done by AC_PROG_LIBTOOL
 
 dnl Checks for programs.
 dnl ===================
-AC_ISC_POSIX
 AC_PROG_CC
 WM_PROG_CC_C11
 AC_PROG_LN_S
@@ -129,6 +128,25 @@ AS_IF([test "x$debug" = "xyes"],
      dnl Having more than 1 prototype for a function makes code updates
      dnl more difficult, so try to avoid it
      AX_CFLAGS_GCC_OPTION([-Wredundant-decls])
+     dnl
+     dnl Proper attributes helps the compiler to produce better code
+     WM_CFLAGS_CHECK_FIRST([format attribute suggest],
+         [-Wsuggest-attribute=format  dnl new gcc syntax
+          -Wmissing-format-attribute  dnl old gcc syntax, clang
+         ])
+     WM_CFLAGS_CHECK_FIRST([no-return attribute suggest],
+         [-Wsuggest-attribute=noreturn  dnl gcc syntax
+          -Wmissing-noreturn            dnl clang syntax
+         ])
+     dnl
+     dnl The use of trampolines cause code that can crash on some
+     dnl secured OS, and in a more general way generate binary code
+     dnl that may not be optimal
+     AX_CFLAGS_GCC_OPTION([-Wtrampolines])
+     dnl
+     dnl GCC provides a couple of checks to detect incorrect macro uses
+     AX_CFLAGS_GCC_OPTION([-Wundef])
+     AX_CFLAGS_GCC_OPTION([-Wunused-macros])
 ], [dnl
      dnl When debug not enabled, we try to avoid some non-necessary
      dnl messages from the compiler
@@ -144,6 +162,7 @@ AS_IF([test "x$debug" = "xyes"],
 dnl Tracking on what is detected for final status
 dnl =============================================
 unsupported=""
+supported_xext=""
 supported_gfx=""
 
 
@@ -232,6 +251,7 @@ AC_FUNC_MEMCMP
 AC_FUNC_VPRINTF
 AC_CHECK_FUNCS(gethostname select poll strcasecmp strncasecmp \
 	       setsid mallinfo mkstemp sysconf)
+AC_SEARCH_LIBS([strerror], [cposix])
 
 dnl Check for strlcat/strlcpy
 dnl =========================
@@ -271,6 +291,11 @@ AS_IF([test "x$WM_OSDEP" = "xbsd"],
 dnl Check for inotify
 dnl =================
 AC_CHECK_HEADERS(sys/inotify.h, AC_DEFINE(HAVE_INOTIFY, 1, Check for inotify))
+
+
+dnl Check for syslog 
+dnl =================
+AC_CHECK_HEADERS([syslog.h], [AC_DEFINE([HAVE_SYSLOG], [1], [Check for syslog])])
 
 
 dnl Checks for header files.
@@ -342,9 +367,9 @@ dnl ==================
 dnl List of supported locales
 dnl =========================
 supported_locales="be bg bs ca cs da de el es et fi fr gl hr hu hy it ja ko ms nl no pl pt ro ru sk sv tr zh_CN zh_TW"
-supported_wprefs_locales="bg ca cs de es et fi fr hr hu it ja ko pt ru sk zh_CN zh_TW"
-supported_wings_locales="bg ca cs de fr sk"
-supported_util_locales="de es fr pt"
+supported_wprefs_locales="bg ca cs de es et fi fr hr hu it ja ko nl pt ru sk zh_CN zh_TW"
+supported_wings_locales="bg ca cs de fr hu nl sk"
+supported_util_locales="de es fr nl pt"
 
 for lang in $LINGUAS; do
 	ok=0
@@ -435,8 +460,6 @@ X_LIBRARY_PATH=$x_libraries
 XCFLAGS="$X_CFLAGS"
 XLFLAGS="$X_LIBS"
 XLIBS="-lX11 $X_EXTRA_LIBS"
-LIBXMU="-lXmu"
-AC_SUBST(LIBXMU)
 
 lib_search_path="$lib_search_path $XLFLAGS"
 inc_search_path="$inc_search_path $XCFLAGS"
@@ -473,35 +496,50 @@ dnl ============================
 AC_ARG_ENABLE(modelock, AS_HELP_STRING([--enable-modelock], [XKB keyboard language status support]),
 		AC_DEFINE(XKB_MODELOCK, 1, [whether XKB language MODELOCK should be enabled]))
 
-dnl Shape support
-dnl =============
-shape=yes
-AC_ARG_ENABLE(shape, AS_HELP_STRING([--disable-shape], [disable shaped window extension support]),
-		shape=$enableval, shape=yes)
-added_xext=no
-
-if test "$shape" = yes; then
-	AC_CHECK_LIB(Xext, XShapeSelectInput, [XLIBS="-lXext $XLIBS"
-		added_xext=yes
-		AC_DEFINE(SHAPE, 1, [define if you want support for shaped windows (set by configure)])], 
-		shape=no, $XLFLAGS $XLIBS)
-fi
-
-dnl XRandR support
+dnl XShape support
 dnl ==============
-xrandr=no
-AC_ARG_ENABLE(xrandr, AS_HELP_STRING([--enable-xrandr], [enable XRandR window extension support (NOT recommended, buggy)]),
-		xrandr=$enableval, xrandr=no)
-added_xext=no
+AC_ARG_ENABLE([shape],
+    [AS_HELP_STRING([--disable-shape], [disable shaped window extension support])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-shape]) ]) ],
+    [enable_shape=auto])
+WM_XEXT_CHECK_XSHAPE
 
-LIBXRANDR=
-if test "$xrandr" = yes; then
-	AC_CHECK_LIB(Xrandr, XRRQueryExtension, [LIBXRANDR=-lXrandr
-		added_xext=yes
-		AC_DEFINE(HAVE_XRANDR, 1, [define if you want support for XRandR (set by configure)])],
-		xrandr=no, $XLFLAGS $XLIBS)
-fi
-AC_SUBST(LIBXRANDR)
+dnl MIT-SHM support
+dnl ===============
+AC_ARG_ENABLE([shm],
+    [AS_HELP_STRING([--disable-shm], [disable usage of MIT-SHM extension])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-shm]) ]) ],
+    [enable_shm=auto])
+WM_XEXT_CHECK_XSHM
+
+dnl X Misceleanous Utility
+dnl ======================
+# the libXmu is used in WRaster
+WM_EXT_CHECK_XMU
+
+dnl XINERAMA support
+dnl ================
+AC_ARG_ENABLE([xinerama],
+    [AS_HELP_STRING([--enable-xinerama], [enable Xinerama extension support])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-xinerama]) ]) ],
+    [enable_xinerama=auto])
+WM_XEXT_CHECK_XINERAMA
+
+dnl RandR support
+dnl ==============
+AC_ARG_ENABLE([randr],
+    [AS_HELP_STRING([--enable-randr], [enable RandR extension support (NOT recommended, buggy)])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-randr]) ]) ],
+    [enable_randr=no])
+WM_XEXT_CHECK_XRANDR
 
 dnl
 dnl libWINGS uses math functions, check whether usage requires linking
@@ -569,73 +607,6 @@ fi
 
 AC_SUBST(XFTFLAGS)
 AC_SUBST(XFTLIBS)
-
-
-dnl XINERAMA support
-dnl ================
-xinerama=no
-AC_ARG_ENABLE(xinerama, AS_HELP_STRING([--enable-xinerama], [enable Xinerama extension support]),
-		xinerama=$enableval, xinerama=no)
-
-LIBXINERAMA=
-if test "$xinerama" = yes; then
-	AC_CHECK_LIB(Xinerama, XineramaQueryScreens, 
-                [LIBXINERAMA=-lXinerama
-                xfxine=yes],
-		xfxine=no, $XLFLAGS $XLIBS)
-
-	AC_CHECK_LIB(Xext, XineramaGetInfo,
-                [sunxine=yes
-                ], sunxine=no, $XLFLAGS $XLIBS)
-
-	if test "$xfxine" = yes; then
-		xine=1
-	fi
-
-	if test "$sunxine" = yes; then
-	    xine=1
-	    AC_DEFINE(SOLARIS_XINERAMA, 1, 
-		[define if you want support for the XINERAMA extension and are in Solaris (set by configure)])
-	fi
-
-	if test "$xine" = 1; then
-	    AC_DEFINE(XINERAMA, 1, 
-		[define if you want support for the XINERAMA extension (set by configure)])
-	fi
-fi
-AC_SUBST(LIBXINERAMA)
-
-
-dnl MIT-SHM support
-dnl ===============
-shm=yes
-AC_ARG_ENABLE(shm, AS_HELP_STRING([--disable-shm], [disable usage of MIT-SHM extension]),
-		shm=$enableval, shm=yes)
-
-if test "$shm" = yes; then
-	AC_CHECK_LIB(Xext, XShmAttach, ok=yes, ok=no, $XLFLAGS $XLIBS)
-
-	if test "$ok" = yes; then
-	AC_CHECK_FUNC(shmget, ok=yes, ok=no)
-	fi
-
-	if test "$ok" = yes; then
-		if test "$added_xext" = no; then
-			XLIBS="-lXext $XLIBS"
-		fi
-                AC_DEFINE(XSHM, 1, [define if X's shared memory extension is available (set by configure)])
-	fi
-fi
-
-
-dnl R6 Style Session Management Support
-dnl ===================================
-
-#
-#
-#AC_DEFINE(R6SM)
-#AC_SUBST(XSMPLIBS)
-#
 
 
 dnl ==============================================
@@ -706,6 +677,28 @@ AC_ARG_ENABLE([tiff],
         [AC_MSG_ERROR([bad value $enableval for --enable-tiff])] )],
     [enable_tiff=auto])
 WM_IMGFMT_CHECK_TIFF
+
+
+dnl WEBP Support
+dnl ===========
+AC_ARG_ENABLE([webp],
+    [AS_HELP_STRING([--disable-webp], [disable WEBP support through libwebp])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-webp])] )],
+    [enable_webp=auto])
+WM_IMGFMT_CHECK_WEBP
+
+
+dnl MAGICK Support
+dnl ===========
+AC_ARG_ENABLE([magick],
+    [AS_HELP_STRING([--disable-magick], [disable MAGICK support through libMagickWand])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-magick])] )],
+    [enable_magick=auto])
+WM_IMGFMT_CHECK_MAGICK
 
 
 dnl PPM Support
@@ -849,11 +842,10 @@ echo "Installation path prefix            : $prefix"
 echo "Installation path for binaries      : $_bindir"
 echo "Installation path for libraries     : $libdir"
 echo "Installation path for WPrefs.app    : $wprefs_base_dir" | sed -e 's|\${prefix}|'"$prefix|"
+echo "Supported X extensions:             :$supported_xext"
 echo "Supported graphic format libraries  :$supported_gfx"
 echo "Unsupported features                :$unsupported"
 echo "Antialiased text support in WINGs   : $xft"
-echo "Xinerama extension support          : $xinerama"
-echo "XRandR extension support            : $xrandr"
 echo "Translated message files to install : $mof"
 dnl echo "Supported languages beside English  : $languages"
 if test "x$MOFILES" != "x"; then

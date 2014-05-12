@@ -22,7 +22,7 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 #include <X11/extensions/shape.h>
 #endif
 
@@ -258,7 +258,7 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 	char *name = w_global.workspace.array[workspace]->name;
 	int len = strlen(name);
 	int x, y;
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 	int head;
 	WMRect rect;
 	int xx, yy;
@@ -286,7 +286,7 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 	w = WMWidthOfString(w_global.workspace.font_for_name, name, len);
 	h = WMFontHeight(w_global.workspace.font_for_name);
 
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 	head = wGetHeadForPointerLocation(scr);
 	rect = wGetRectForHead(scr, head);
 	if (scr->xine_info.count) {
@@ -301,7 +301,7 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 
 	switch (wPreferences.workspace_name_display_position) {
 	case WD_TOP:
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 		px = xx;
 #else
 		px = (scr->scr_width - (w + 4)) / 2;
@@ -309,7 +309,7 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 		py = WORKSPACE_NAME_DISPLAY_PADDING;
 		break;
 	case WD_BOTTOM:
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 		px = xx;
 #else
 		px = (scr->scr_width - (w + 4)) / 2;
@@ -334,7 +334,7 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 		break;
 	case WD_CENTER:
 	default:
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 		px = xx;
 		py = yy;
 #else
@@ -370,8 +370,9 @@ static void showWorkspaceName(WScreen * scr, int workspace)
 
 	WMDrawString(scr->wmscreen, text, scr->white, w_global.workspace.font_for_name, 2, 2, name, len);
 
-#ifdef SHAPE
-	XShapeCombineMask(dpy, scr->workspace_name, ShapeBounding, 0, 0, mask, ShapeSet);
+#ifdef USE_XSHAPE
+	if (w_global.xext.shape.supported)
+		XShapeCombineMask(dpy, scr->workspace_name, ShapeBounding, 0, 0, mask, ShapeSet);
 #endif
 	XSetWindowBackgroundPixmap(dpy, scr->workspace_name, text);
 	XClearWindow(dpy, scr->workspace_name);

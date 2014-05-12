@@ -619,7 +619,8 @@ static void setViewedImage(IconPanel *panel, const char *file)
 	color.green = 0xaa;
 	color.blue = 0xae;
 	color.alpha = 0;
-	pixmap = WMCreateBlendedPixmapFromFile(WMWidgetScreen(panel->win), file, &color);
+	pixmap = WMCreateScaledBlendedPixmapFromFile(WMWidgetScreen(panel->win), file, &color, 75, 75);
+
 	if (!pixmap) {
 		WMSetButtonEnabled(panel->okButton, False);
 
@@ -742,7 +743,7 @@ static void drawIconProc(WMList * lPtr, int index, Drawable d, char *text, int s
 	color.blue = WMBlueComponentOfColor(back) >> 8;
 	color.alpha = WMGetColorAlpha(back) >> 8;
 
-	pixmap = WMCreateBlendedPixmapFromFile(wmscr, file, &color);
+	pixmap = WMCreateScaledBlendedPixmapFromFile(wmscr, file, &color, width - 2, height - 2);
 	wfree(file);
 
 	if (!pixmap) {
@@ -1106,7 +1107,7 @@ typedef struct {
 #define COPYRIGHT_TEXT  \
     "Copyright \xc2\xa9 1997-2006 Alfredo K. Kojima\n"\
     "Copyright \xc2\xa9 1998-2006 Dan Pascu\n"\
-    "Copyright \xc2\xa9 2013 Window Maker Developers Team"
+    "Copyright \xc2\xa9 2013-2014 Window Maker Developers Team"
 
 static InfoPanel *thePanel = NULL;
 
@@ -1221,7 +1222,7 @@ void wShowInfoPanel(WScreen *scr)
 
 	panel->copyrL = WMCreateLabel(panel->win);
 	WMResizeWidget(panel->copyrL, 360, 60);
-	WMMoveWidget(panel->copyrL, 15, 185);
+	WMMoveWidget(panel->copyrL, 15, 190);
 	WMSetLabelTextAlignment(panel->copyrL, WALeft);
 	WMSetLabelText(panel->copyrL, COPYRIGHT_TEXT);
 	font = WMSystemFontOfSize(scr->wmscreen, 11);
@@ -1279,7 +1280,7 @@ void wShowInfoPanel(WScreen *scr)
 	}
 #endif
 
-	strbuf = wstrappend(strbuf, _("Supported image formats: "));
+	strbuf = wstrappend(strbuf, _("Image formats: "));
 	strl = RSupportedFileFormats();
 	separator = NULL;
 	for (i = 0; strl[i] != NULL; i++) {
@@ -1292,19 +1293,15 @@ void wShowInfoPanel(WScreen *scr)
 	strbuf = wstrappend(strbuf, _("\nAdditional support for: "));
 	strbuf = wstrappend(strbuf, "WMSPEC");
 
-#ifdef HAVE_XRANDR
-	strbuf = wstrappend(strbuf, ", XRandR ");
-	if (w_global.xext.randr.supported)
-		strbuf = wstrappend(strbuf, _("(Supported)"));
-	else
-		strbuf = wstrappend(strbuf, _("(Unsupported)"));
-#endif
-
 #ifdef MWM_HINTS
 	strbuf = wstrappend(strbuf, ", MWM");
 #endif
 
-#ifdef XINERAMA
+#ifdef USE_MAGICK
+	strbuf = wstrappend(strbuf, ", ImageMagick");
+#endif
+
+#ifdef USE_XINERAMA
 	strbuf = wstrappend(strbuf, _("\n"));
 #ifdef SOLARIS_XINERAMA
 	strbuf = wstrappend(strbuf, _("Solaris "));
@@ -1312,13 +1309,23 @@ void wShowInfoPanel(WScreen *scr)
 	strbuf = wstrappend(strbuf, _("Xinerama: "));
 	{
 		char tmp[128];
-		snprintf(tmp, sizeof(tmp) - 1, _("%d heads found."), scr->xine_info.count);
+		snprintf(tmp, sizeof(tmp) - 1, _("%d head(s) found."), scr->xine_info.count);
 		strbuf = wstrappend(strbuf, tmp);
 	}
 #endif
 
+#ifdef USE_RANDR
+	strbuf = wstrappend(strbuf, _("\n"));
+	strbuf = wstrappend(strbuf, "RandR: ");
+	if (w_global.xext.randr.supported)
+		strbuf = wstrappend(strbuf, _("supported"));
+	else
+		strbuf = wstrappend(strbuf, _("unsupported"));
+	strbuf = wstrappend(strbuf, ".");
+#endif
+
 	panel->infoL = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->infoL, 350, 75);
+	WMResizeWidget(panel->infoL, 350, 80);
 	WMMoveWidget(panel->infoL, 15, 115);
 	WMSetLabelText(panel->infoL, strbuf);
 	font = WMSystemFontOfSize(scr->wmscreen, 11);

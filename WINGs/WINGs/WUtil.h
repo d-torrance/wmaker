@@ -305,9 +305,13 @@ char* wtrimspace(const char *s);
  */
 char *wshellquote(const char *s);
 
-/* ---[ WINGs/wmisc.c ]--------------------------------------------------- */
+/* ---[ WINGs/misc.c ]--------------------------------------------------- */
 
 WMRange wmkrange(int start, int count);
+
+/* An application must call this function before exiting, to let WUtil do some internal cleanup */
+void wutil_shutdown(void);
+
 
 /* ---[ WINGs/usleep.c ]-------------------------------------------------- */
 
@@ -347,7 +351,7 @@ void WHandleEvents(void);
 /* ---[ WINGs/hashtable.c ]----------------------------------------------- */
 
 
-WMHashTable* WMCreateHashTable(WMHashTableCallbacks callbacks);
+WMHashTable* WMCreateHashTable(const WMHashTableCallbacks callbacks);
 
 void WMFreeHashTable(WMHashTable *table);
 

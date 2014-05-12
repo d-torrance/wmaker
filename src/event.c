@@ -35,14 +35,14 @@
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 # include <X11/extensions/shape.h>
 #endif
 #ifdef XDND
 #include "xdnd.h"
 #endif
 
-#ifdef HAVE_XRANDR
+#ifdef USE_RANDR
 #include <X11/extensions/Xrandr.h>
 #endif
 
@@ -103,7 +103,7 @@ static void handle_inotify_events(void);
 static void wdelete_death_handler(WMagicNumber id);
 
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 static void handleShapeNotify(XEvent *event);
 #endif
 
@@ -265,7 +265,7 @@ void DispatchEvent(XEvent * event)
 		break;
 
 	case ConfigureNotify:
-#ifdef HAVE_XRANDR
+#ifdef USE_RANDR
 		if (event->xconfigure.window == DefaultRootWindow(dpy))
 			XRRUpdateConfiguration(event);
 #endif
@@ -547,7 +547,7 @@ static void handleExtensions(XEvent * event)
 	XkbEvent *xkbevent;
 	xkbevent = (XkbEvent *) event;
 #endif				/*KEEP_XKB_LOCK_STATUS */
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 	if (w_global.xext.shape.supported && event->type == (w_global.xext.shape.event_base + ShapeNotify)) {
 		handleShapeNotify(event);
 	}
@@ -557,7 +557,7 @@ static void handleExtensions(XEvent * event)
 		handleXkbIndicatorStateNotify(event);
 	}
 #endif				/*KEEP_XKB_LOCK_STATUS */
-#ifdef HAVE_XRANDR
+#ifdef USE_RANDR
 	if (w_global.xext.randr.supported && event->type == (w_global.xext.randr.event_base + RRScreenChangeNotify)) {
 		/* From xrandr man page: "Clients must call back into Xlib using
 		 * XRRUpdateConfiguration when screen configuration change notify
@@ -1147,7 +1147,7 @@ static void handleLeaveNotify(XEvent * event)
 	}
 }
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 static void handleShapeNotify(XEvent * event)
 {
 	XShapeEvent *shev = (XShapeEvent *) event;
@@ -1183,7 +1183,7 @@ static void handleShapeNotify(XEvent * event)
 		wWindowSetShape(wwin);
 	}
 }
-#endif				/* SHAPE */
+#endif				/* USE_XSHAPE */
 
 #ifdef KEEP_XKB_LOCK_STATUS
 /* please help ]d if you know what to do */
@@ -1714,6 +1714,25 @@ static void handleKeyPress(XEvent * event)
 			}
 		}
 		break;
+
+	case WKBD_RUN:
+	{
+		char *cmdline;
+
+		cmdline = ExpandOptions(scr, _("exec %a(Run,Type command to run:)"));
+
+		XGrabPointer(dpy, scr->root_win, True, 0,
+			     GrabModeAsync, GrabModeAsync, None, wPreferences.cursor[WCUR_WAIT], CurrentTime);
+		XSync(dpy, 0);
+
+		if (cmdline) {
+			ExecuteShellCommand(scr, cmdline);
+			wfree(cmdline);
+		}
+		XUngrabPointer(dpy, CurrentTime);
+		XSync(dpy, 0);
+		break;
+	}
 
 	case WKBD_NEXTWSLAYER:
 	case WKBD_PREVWSLAYER:

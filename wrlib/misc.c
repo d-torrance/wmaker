@@ -26,6 +26,9 @@
 #include <X11/Xlib.h>
 
 #include "wraster.h"
+#include "imgformat.h"
+#include "convert.h"
+
 
 void RBevelImage(RImage * image, int bevel_type)
 {
@@ -239,4 +242,16 @@ const char *RMessageForError(int errorCode)
 	case RERR_INTERNAL:
 		return "internal error";
 	}
+}
+
+/*
+ * cleaning third-party libs at shutdown
+ */
+void RShutdown(void)
+{
+#ifdef USE_MAGICK
+	RReleaseMagick();
+#endif
+	RReleaseCache();
+	r_destroy_conversion_tables();
 }

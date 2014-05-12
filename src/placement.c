@@ -294,6 +294,53 @@ static void set_width_height(WWindow *wwin, unsigned int *width, unsigned int *h
 	}
 }
 
+static Bool
+window_overlaps(WWindow *win, int x, int y, int w, int h, Bool ignore_sunken)
+{
+	int tw, th, tx, ty;
+
+	if (ignore_sunken &&
+	    win->frame->core->stacking->window_level < WMNormalLevel) {
+		return False;
+	}
+
+	tw = win->frame->core->width;
+	th = win->frame->core->height;
+	tx = win->frame_x;
+	ty = win->frame_y;
+
+	if ((tx < (x + w)) && ((tx + tw) > x) &&
+	    (ty < (y + h)) && ((ty + th) > y) &&
+	    (win->flags.mapped ||
+	     (win->flags.shaded &&
+	      win->frame->workspace == w_global.workspace.current &&
+	      !(win->flags.miniaturized || win->flags.hidden)))) {
+		return True;
+	}
+
+	return False;
+}
+
+static Bool
+screen_has_space(WScreen *scr, int x, int y, int w, int h, Bool ignore_sunken)
+{
+	WWindow *focused = scr->focused_window, *i;
+
+	for (i = focused; i; i = i->next) {
+		if (window_overlaps(i, x, y, w, h, ignore_sunken)) {
+			return False;
+		}
+	}
+
+	for (i = focused; i; i = i->prev) {
+		if (window_overlaps(i, x, y, w, h, ignore_sunken)) {
+			return False;
+		}
+	}
+
+	return True;
+}
+
 static void
 smartPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret, unsigned int width,
 		 unsigned int height, WArea usableArea)
@@ -376,87 +423,38 @@ center_place_window(WWindow *wwin, int *x_ret, int *y_ret,
 
 static Bool
 autoPlaceWindow(WWindow *wwin, int *x_ret, int *y_ret,
-		unsigned int width, unsigned int height, int tryCount, WArea usableArea)
+		unsigned int width, unsigned int height,
+		Bool ignore_sunken, WArea usableArea)
 {
 	WScreen *scr = wwin->screen_ptr;
-	int test_x = 0, test_y = Y_ORIGIN;
-	int loc_ok = False, tw, tx, ty, th;
-	int swidth, sx;
-	WWindow *test_window;
+	int x, y;
+	int sw, sh;
 
 	set_width_height(wwin, &width, &height);
-	swidth = usableArea.x2 - usableArea.x1;
-	sx = X_ORIGIN;
+	sw = usableArea.x2 - usableArea.x1;
+	sh = usableArea.y2 - usableArea.y1;
 
-	/* this was based on fvwm2's smart placement */
-	while (((test_y + height) < (usableArea.y2 - usableArea.y1)) && !loc_ok) {
-		test_x = sx;
-
-		while (((test_x + width) < swidth) && (!loc_ok)) {
-
-			loc_ok = True;
-			test_window = scr->focused_window;
-
-			while ((test_window != NULL) && (loc_ok == True)) {
-
-				if (test_window->frame->core->stacking->window_level
-				    < WMNormalLevel && tryCount > 0) {
-					test_window = test_window->next;
-					continue;
-				}
-				tw = test_window->frame->core->width;
-				th = test_window->frame->core->height;
-				tx = test_window->frame_x;
-				ty = test_window->frame_y;
-
-				if ((tx < (test_x + width)) && ((tx + tw) > test_x) &&
-				    (ty < (test_y + height)) && ((ty + th) > test_y) &&
-				    (test_window->flags.mapped ||
-				     (test_window->flags.shaded &&
-				      test_window->frame->workspace == w_global.workspace.current &&
-				      !(test_window->flags.miniaturized || test_window->flags.hidden)))) {
-
-					loc_ok = False;
-				}
-				test_window = test_window->next;
-			}
-
-			test_window = scr->focused_window;
-
-			while ((test_window != NULL) && (loc_ok == True)) {
-
-				if (test_window->frame->core->stacking->window_level
-				    < WMNormalLevel && tryCount > 0) {
-					test_window = test_window->prev;
-					continue;
-				}
-				tw = test_window->frame->core->width;
-				th = test_window->frame->core->height;
-				tx = test_window->frame_x;
-				ty = test_window->frame_y;
-
-				if ((tx < (test_x + width)) && ((tx + tw) > test_x) &&
-				    (ty < (test_y + height)) && ((ty + th) > test_y) &&
-				    (test_window->flags.mapped ||
-				     (test_window->flags.shaded &&
-				      test_window->frame->workspace == w_global.workspace.current &&
-				      !(test_window->flags.miniaturized || test_window->flags.hidden)))) {
-
-					loc_ok = False;
-				}
-				test_window = test_window->prev;
-			}
-			if (loc_ok == True) {
-				*x_ret = test_x;
-				*y_ret = test_y;
-				break;
-			}
-			test_x += PLACETEST_HSTEP;
-		}
-		test_y += PLACETEST_VSTEP;
+	/* try placing at center first */
+	if (center_place_window(wwin, &x, &y, width, height, usableArea) &&
+	    screen_has_space(scr, x, y, width, height, False)) {
+		*x_ret = x;
+		*y_ret = y;
+		return True;
 	}
 
-	return loc_ok;
+	/* this was based on fvwm2's smart placement */
+	for (y = Y_ORIGIN; (y + height) < sh; y += PLACETEST_VSTEP) {
+		for (x = X_ORIGIN; (x + width) < sw; x += PLACETEST_HSTEP) {
+			if (screen_has_space(scr, x, y,
+					     width, height, ignore_sunken)) {
+				*x_ret = x;
+				*y_ret = y;
+				return True;
+			}
+		}
+	}
+
+	return False;
 }
 
 static void
@@ -521,9 +519,9 @@ void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret, unsigned width, unsigned
 			break;
 
 	case WPM_AUTO:
-		if (autoPlaceWindow(wwin, x_ret, y_ret, width, height, 0, usableArea)) {
+		if (autoPlaceWindow(wwin, x_ret, y_ret, width, height, False, usableArea)) {
 			break;
-		} else if (autoPlaceWindow(wwin, x_ret, y_ret, width, height, 1, usableArea)) {
+		} else if (autoPlaceWindow(wwin, x_ret, y_ret, width, height, True, usableArea)) {
 			break;
 		}
 		/* there isn't a break here, because if we fail, it should fall

@@ -47,7 +47,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-#ifdef XSHM
+#ifdef USE_XSHM
 #include <X11/extensions/XShm.h>
 #endif
 
@@ -204,7 +204,7 @@ typedef struct RXImage {
     XImage *image;
 
     /* Private data. Do not access */
-#ifdef XSHM
+#ifdef USE_XSHM
     XShmSegmentInfo info;
     char is_shared;
 #endif
@@ -288,6 +288,11 @@ enum {
 #define RERR_XERROR		127    /* internal X error */
 #define RERR_INTERNAL		128    /* should not happen */
 
+
+/*
+ * Cleaning before application exit
+ */
+void RShutdown(void);
 
 /*
  * Returns a NULL terminated array of strings containing the
@@ -397,6 +402,8 @@ void RDrawLines(RImage *image, const RPoint *points, int npoints, int mode,
 
 void ROperateLines(RImage *image, int operation, const RPoint *points, int npoints,
                    int mode, const RColor *color);
+
+void ROperateRectangle(RImage *image, int operation, int x0, int y0, int x1, int y1, const RColor *color);
 
 void RDrawSegments(RImage *image, const RSegment *segs, int nsegs, const RColor *color);
 

@@ -10,6 +10,9 @@
 #include "wconfig.h"
 
 #include "WINGs.h"
+#include "WINGsP.h"
+#include "userdefaults.h"
+
 
 typedef struct W_UserDefaults {
 	WMPropList *defaults;
@@ -87,13 +90,10 @@ char *wdefaultspathfordomain(const char *domain)
 	slen = strlen(gspath) + strlen(DEFAULTS_DIR) + strlen(domain) + 4;
 	path = wmalloc(slen);
 
-	if (wstrlcpy(path, gspath, slen) >= slen ||
-	    wstrlcat(path, DEFAULTS_DIR, slen) >= slen ||
-	    wstrlcat(path, "/", slen) >= slen ||
-	    wstrlcat(path, domain, slen) >= slen) {
-		wfree(path);
-		return NULL;
-	}
+	strcpy(path, gspath);
+	strcat(path, DEFAULTS_DIR);
+	strcat(path, "/");
+	strcat(path, domain);
 
 	return path;
 }
@@ -114,9 +114,19 @@ char *wglobaldefaultspathfordomain(const char *domain)
 	return t;
 }
 
-static void
-saveDefaultsChanges(void)
+void w_save_defaults_changes(void)
 {
+	if (WMApplication.applicationName == NULL) {
+		/*
+		 * This means that the user has properly exited by calling the
+		 * function 'WMReleaseApplication' (which has already called us)
+		 * but we're being called again by the fallback 'atexit' method
+		 * (the legacy way of saving changes on exit which is kept for
+		 * application that would forget to call 'WMReleaseApplication')
+		 */
+		return;
+	}
+
 	/* save the user defaults databases */
 	synchronizeUserDefaults(NULL);
 }
@@ -127,7 +137,7 @@ static void registerSaveOnExit(void)
 	static Bool registeredSaveOnExit = False;
 
 	if (!registeredSaveOnExit) {
-		atexit(saveDefaultsChanges);
+		atexit(w_save_defaults_changes);
 		registeredSaveOnExit = True;
 	}
 }

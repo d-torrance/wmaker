@@ -42,14 +42,8 @@
 
 /* BUG There's something fishy with shaped windows */
 /* Whithout shape extension the magnified image is completely broken -Dan */
-#if 0
-# ifdef SHAPE
-#  define SHAPE_WAS_DEFINED
-#  undef SHAPE
-# endif
-#endif
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 # include <X11/extensions/shape.h>
 #endif
 
@@ -167,6 +161,9 @@ typedef struct W_ColorPanel {
 	WMButton *grayPresetBtn[7];
 
 	/* RGB Panel */
+	int rgbState;
+	WMButton *rgbDecB;
+	WMButton *rgbHexB;
 	WMFrame *rgbFrm;
 	WMLabel *rgbMinL;
 	WMLabel *rgbMaxL;
@@ -255,6 +252,11 @@ enum {
 	CLmenuRemove
 } colorListMenuItem;
 
+enum {
+	RGBdec,
+	RGBhex
+};
+
 #define	PWIDTH                  194
 #define	PHEIGHT                 266
 #define	colorWheelSize          150
@@ -319,6 +321,7 @@ static void grayBrightnessTextFieldCallback(void *observerData, WMNotification *
 
 static void rgbSliderCallback(WMWidget * w, void *data);
 static void rgbTextFieldCallback(void *observerData, WMNotification * notification);
+static void rgbDecToHex(WMWidget *w, void *data);
 
 static void cmykSliderCallback(WMWidget * w, void *data);
 static void cmykTextFieldCallback(void *observerData, WMNotification * notification);
@@ -346,7 +349,6 @@ static void colorListPaintItem(WMList * lPtr, int index, Drawable d, char *text,
 static void colorListSelect(WMWidget * w, void *data);
 static void colorListColorMenuCallback(WMWidget * w, void *data);
 static void colorListListMenuCallback(WMWidget * w, void *data);
-static void colorListListMenuNew(W_ColorPanel * panel);
 
 static void wheelInit(W_ColorPanel * panel);
 static void grayInit(W_ColorPanel * panel);
@@ -710,6 +712,21 @@ static WMColorPanel *makeColorPanel(WMScreen * scrPtr, const char *name)
 	WMMoveWidget(panel->rgbBlueT, 146, 57);
 	WMSetTextFieldAlignment(panel->rgbBlueT, WALeft);
 	WMAddNotificationObserver(rgbTextFieldCallback, panel, WMTextDidEndEditingNotification, panel->rgbBlueT);
+
+	panel->rgbDecB = WMCreateButton(panel->rgbFrm, WBTRadio);
+	WMSetButtonText(panel->rgbDecB, "Decimal");
+	WMSetButtonSelected(panel->rgbDecB, 1);
+	panel->rgbState = RGBdec;
+	WMSetButtonAction(panel->rgbDecB, rgbDecToHex, panel);
+	WMMoveWidget(panel->rgbDecB, 2, 81);
+
+	panel->rgbHexB = WMCreateButton(panel->rgbFrm, WBTRadio);
+	WMSetButtonText(panel->rgbHexB, "Hexadecimal");
+	WMSetButtonAction(panel->rgbHexB, rgbDecToHex, panel);
+	WMMoveWidget(panel->rgbHexB, 2, 104);
+
+	WMGroupButtons(panel->rgbDecB, panel->rgbHexB);
+
 	/* End of RGB Panel */
 
 	/* Widgets for CMYK Panel */
@@ -1184,7 +1201,7 @@ static void readConfiguration(W_ColorPanel * panel)
 static void readXColors(W_ColorPanel * panel)
 {
 	WMListItem *item;
-	RGBColor *entry;
+	const RGBColor *entry;
 
 	for (entry = rgbColors; entry->name != NULL; entry++) {
 		item = WMAddListItem(panel->colorListContentLst, entry->name);
@@ -1516,7 +1533,7 @@ static Pixmap magnifyCreatePixmap(WMColorPanel * panel)
 {
 	W_Screen *scr = WMWidgetScreen(panel->win);
 	int u, v;
-#ifndef SHAPE
+#ifndef USE_XSHAPE
 	Pixmap pixmap;
 #endif
 	unsigned long color;
@@ -1553,7 +1570,7 @@ static Pixmap magnifyCreatePixmap(WMColorPanel * panel)
 		}
 	}
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 	return panel->magnifyGlass->magPix;
 #else
 	pixmap = XCreatePixmap(scr->display, W_DRAWABLE(scr), Cursor_mask_width, Cursor_mask_height, scr->depth);
@@ -1645,7 +1662,7 @@ static WMPoint magnifyInitialize(W_ColorPanel * panel)
 	panel->magnifyGlass->image = NULL;
 
 	/* Clipmask to make magnified view-contents circular */
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 	XShapeCombineMask(scr->display, WMViewXID(panel->magnifyGlass->view),
 			  ShapeBounding, 0, 0, clip_mask, ShapeSet);
 #else
@@ -1664,7 +1681,7 @@ static WMPoint magnifyInitialize(W_ColorPanel * panel)
 	XClearWindow(scr->display, WMViewXID(panel->magnifyGlass->view));
 	XFlush(scr->display);
 
-#ifndef SHAPE
+#ifndef USE_XSHAPE
 	XFreePixmap(scr->display, pixmap);
 #endif
 
@@ -1784,7 +1801,7 @@ static void magnifyPutCursor(WMWidget * w, void *data)
 				XClearWindow(scr->display, WMViewXID(panel->magnifyGlass->view));
 				/* Synchronize the event queue, so the Expose is handled NOW */
 				XFlush(scr->display);
-#ifndef SHAPE
+#ifndef USE_XSHAPE
 				XFreePixmap(scr->display, pixmap);
 #endif
 			}
@@ -2355,11 +2372,45 @@ static void grayBrightnessTextFieldCallback(void *observerData, WMNotification *
 
 /******************* RGB Panel Functions *****************/
 
+void rgbIntToChar(W_ColorPanel *panel, int *value)
+{
+	char tmp[4];
+	char *format;
+
+	if (panel->rgbState == RGBdec)
+		format = "%d";
+	if (panel->rgbState == RGBhex)
+		format = "%0X";
+
+	sprintf(tmp, format, value[0]);
+	WMSetTextFieldText(panel->rgbRedT, tmp);
+	sprintf(tmp, format, value[1]);
+	WMSetTextFieldText(panel->rgbGreenT, tmp);
+	sprintf(tmp, format, value[2]);
+	WMSetTextFieldText(panel->rgbBlueT, tmp);
+}
+
+int *rgbCharToInt(W_ColorPanel *panel)
+{
+	static int value[3];
+
+	if (panel->rgbState == RGBdec) {
+		value[0] = atoi(WMGetTextFieldText(panel->rgbRedT));
+		value[1] = atoi(WMGetTextFieldText(panel->rgbGreenT));
+		value[2] = atoi(WMGetTextFieldText(panel->rgbBlueT));
+	}
+	if (panel->rgbState == RGBhex) {
+		value[0] = strtol(WMGetTextFieldText(panel->rgbRedT), NULL, 16);
+		value[1] = strtol(WMGetTextFieldText(panel->rgbGreenT), NULL, 16);
+		value[2] = strtol(WMGetTextFieldText(panel->rgbBlueT),  NULL, 16);
+	}
+	return value;
+}
+
 static void rgbSliderCallback(WMWidget * w, void *data)
 {
 	CPColor cpColor;
 	int value[3];
-	char tmp[4];
 	W_ColorPanel *panel = (W_ColorPanel *) data;
 
 	/* Parameter not used, but tell the compiler that it is ok */
@@ -2369,12 +2420,7 @@ static void rgbSliderCallback(WMWidget * w, void *data)
 	value[1] = WMGetSliderValue(panel->rgbGreenS);
 	value[2] = WMGetSliderValue(panel->rgbBlueS);
 
-	sprintf(tmp, "%d", value[0]);
-	WMSetTextFieldText(panel->rgbRedT, tmp);
-	sprintf(tmp, "%d", value[1]);
-	WMSetTextFieldText(panel->rgbGreenT, tmp);
-	sprintf(tmp, "%d", value[2]);
-	WMSetTextFieldText(panel->rgbBlueT, tmp);
+	rgbIntToChar(panel, value);
 
 	cpColor.rgb.red = value[0];
 	cpColor.rgb.green = value[1];
@@ -2388,17 +2434,14 @@ static void rgbSliderCallback(WMWidget * w, void *data)
 static void rgbTextFieldCallback(void *observerData, WMNotification * notification)
 {
 	CPColor cpColor;
-	int value[3];
-	char tmp[4];
+	int *value;
 	int n;
 	W_ColorPanel *panel = (W_ColorPanel *) observerData;
 
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) notification;
 
-	value[0] = atoi(WMGetTextFieldText(panel->rgbRedT));
-	value[1] = atoi(WMGetTextFieldText(panel->rgbGreenT));
-	value[2] = atoi(WMGetTextFieldText(panel->rgbBlueT));
+	value = rgbCharToInt(panel);
 
 	for (n = 0; n < 3; n++) {
 		if (value[n] > 255)
@@ -2407,12 +2450,7 @@ static void rgbTextFieldCallback(void *observerData, WMNotification * notificati
 			value[n] = 0;
 	}
 
-	sprintf(tmp, "%d", value[0]);
-	WMSetTextFieldText(panel->rgbRedT, tmp);
-	sprintf(tmp, "%d", value[1]);
-	WMSetTextFieldText(panel->rgbGreenT, tmp);
-	sprintf(tmp, "%d", value[2]);
-	WMSetTextFieldText(panel->rgbBlueT, tmp);
+	rgbIntToChar(panel, value);
 
 	WMSetSliderValue(panel->rgbRedS, value[0]);
 	WMSetSliderValue(panel->rgbGreenS, value[1]);
@@ -2425,6 +2463,28 @@ static void rgbTextFieldCallback(void *observerData, WMNotification * notificati
 
 	updateSwatch(panel, cpColor);
 	panel->lastChanged = WMRGBModeColorPanel;
+}
+
+static void rgbDecToHex(WMWidget *w, void *data)
+{
+	W_ColorPanel *panel = (W_ColorPanel *) data;
+	(void) w;
+	int *value;
+
+	if (WMGetButtonSelected(panel->rgbDecB) && panel->rgbState == RGBhex) {
+		WMSetLabelText(panel->rgbMaxL, "255");
+		WMRedisplayWidget(panel->rgbMaxL);
+		value = rgbCharToInt(panel);
+		panel->rgbState = RGBdec;
+		rgbIntToChar(panel, value);
+	}
+	if (WMGetButtonSelected(panel->rgbHexB) && panel->rgbState == RGBdec) {
+		WMSetLabelText(panel->rgbMaxL, "FF");
+		WMRedisplayWidget(panel->rgbMaxL);
+		value = rgbCharToInt(panel);
+		panel->rgbState = RGBhex;
+		rgbIntToChar(panel, value);
+	}
 }
 
 /******************* CMYK Panel Functions *****************/
@@ -3244,19 +3304,12 @@ static void colorListListMenuCallback(WMWidget * w, void *data)
 
 	switch (item) {
 	case CLmenuAdd:
-		/* New Color List */
-		colorListListMenuNew(panel);
 		break;
 	case CLmenuRename:
 		break;
 	case CLmenuRemove:
 		break;
 	}
-}
-
-static void colorListListMenuNew(W_ColorPanel * panel)
-{
-
 }
 
 /*************** Panel Initialisation Functions *****************/
@@ -3463,8 +3516,3 @@ static unsigned char getShift(unsigned char value)
 
 	return i;
 }
-
-#ifdef SHAPE_WAS_DEFINED
-#undef SHAPE_WAS_DEFINED
-#define SHAPE
-#endif

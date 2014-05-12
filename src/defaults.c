@@ -721,6 +721,8 @@ WDefaultEntry optionList[] = {
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"ScreenSwitchKey", "None", (void *)WKBD_SWITCH_SCREEN,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"RunKey", "None", (void *)WKBD_RUN,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 
 #ifdef KEEP_XKB_LOCK_STATUS
 	{"ToggleKbdModeKey", "None", (void *)WKBD_TOGGLE,
@@ -2032,6 +2034,8 @@ static int getFont(WScreen * scr, WDefaultEntry * entry, WMPropList * value, voi
 	static WMFont *font;
 	const char *val;
 
+	(void) addr;
+
 	GET_STRING_OR_DEFAULT("Font", val);
 
 	font = WMCreateFont(scr->wmscreen, val);
@@ -2057,6 +2061,8 @@ static int getColor(WScreen * scr, WDefaultEntry * entry, WMPropList * value, vo
 	static XColor color;
 	const char *val;
 	int second_pass = 0;
+
+	(void) addr;
 
 	GET_STRING_OR_DEFAULT("Color", val);
 

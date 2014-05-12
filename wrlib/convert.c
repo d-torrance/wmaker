@@ -34,8 +34,10 @@
 #include <assert.h>
 
 #include "wraster.h"
+#include "convert.h"
 
-#ifdef XSHM
+
+#ifdef USE_XSHM
 extern Pixmap R_CreateXImageMappedPixmap(RContext * context, RXImage * ximage);
 #endif
 
@@ -61,6 +63,38 @@ typedef struct RStdConversionTable {
 
 static RConversionTable *conversionTable = NULL;
 static RStdConversionTable *stdConversionTable = NULL;
+
+static void release_conversion_table(void)
+{
+	RConversionTable *tmp = conversionTable;
+
+	while (tmp) {
+		RConversionTable *tmp_to_delete = tmp;
+
+		tmp = tmp->next;
+		free(tmp_to_delete);
+	}
+	conversionTable = NULL;
+}
+
+static void release_std_conversion_table(void)
+{
+	RStdConversionTable *tmp = stdConversionTable;
+
+	while (tmp) {
+		RStdConversionTable *tmp_to_delete = tmp;
+
+		tmp = tmp->next;
+		free(tmp_to_delete);
+	}
+	stdConversionTable = NULL;
+}
+
+void r_destroy_conversion_tables(void)
+{
+	release_conversion_table();
+	release_std_conversion_table();
+}
 
 static unsigned short *computeTable(unsigned short mask)
 {
@@ -819,7 +853,7 @@ static RXImage *image2Bitmap(RContext * ctx, RImage * image, int threshold)
 int RConvertImage(RContext * context, RImage * image, Pixmap * pixmap)
 {
 	RXImage *ximg = NULL;
-#ifdef XSHM
+#ifdef USE_XSHM
 	Pixmap tmp;
 #endif
 
@@ -852,7 +886,7 @@ int RConvertImage(RContext * context, RImage * image, Pixmap * pixmap)
 
 	*pixmap = XCreatePixmap(context->dpy, context->drawable, image->width, image->height, context->depth);
 
-#ifdef XSHM
+#ifdef USE_XSHM
 	if (context->flags.use_shared_pixmap && ximg->is_shared)
 		tmp = R_CreateXImageMappedPixmap(context, ximg);
 	else
@@ -873,9 +907,9 @@ int RConvertImage(RContext * context, RImage * image, Pixmap * pixmap)
 	} else {
 		RPutXImage(context, *pixmap, context->copy_gc, ximg, 0, 0, 0, 0, image->width, image->height);
 	}
-#else				/* !XSHM */
+#else				/* !USE_XSHM */
 	RPutXImage(context, *pixmap, context->copy_gc, ximg, 0, 0, 0, 0, image->width, image->height);
-#endif				/* !XSHM */
+#endif				/* !USE_XSHM */
 
 	RDestroyXImage(context, ximg);
 

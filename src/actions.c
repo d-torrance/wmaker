@@ -354,6 +354,7 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 	WArea usableArea, totalArea;
 	Bool has_border = 1;
 	int adj_size;
+	WScreen *scr = wwin->screen_ptr;
 
 	if (!IS_RESIZABLE(wwin))
 		return;
@@ -362,14 +363,14 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 		has_border = 0;
 
 	/* the size to adjust the geometry */
-	adj_size = wwin->screen_ptr->frame_border_width * 2 * has_border;
+	adj_size = scr->frame_border_width * 2 * has_border;
 
 	/* save old coordinates before we change the current values */
 	if (!wwin->flags.maximized)
 		save_old_geometry(wwin, SAVE_GEOMETRY_ALL);
 
-	totalArea.x2 = wwin->screen_ptr->scr_width;
-	totalArea.y2 = wwin->screen_ptr->scr_height;
+	totalArea.x2 = scr->scr_width;
+	totalArea.y2 = scr->scr_height;
 	totalArea.x1 = 0;
 	totalArea.y1 = 0;
 	usableArea = totalArea;
@@ -385,6 +386,7 @@ void wMaximizeWindow(WWindow *wwin, int directions)
 
 		usableArea = wGetUsableAreaForHead(scr, head, &totalArea, True);
 	}
+
 
 	/* Only save directions, not kbd or xinerama hints */
 	directions &= (MAX_HORIZONTAL | MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS);
@@ -1729,7 +1731,19 @@ void wArrangeIcons(WScreen *scr, Bool arrangeAll)
 
 	for (head = 0; head < heads; ++head) {
 		WArea area = wGetUsableAreaForHead(scr, head, NULL, False);
-		WMRect rect = wmkrect(area.x1, area.y1, area.x2 - area.x1, area.y2 - area.y1);
+		WMRect rect;
+
+		if (scr->dock) {
+			int offset = wPreferences.icon_size + DOCK_EXTRA_SPACE;
+
+			if (scr->dock->on_right_side)
+				area.x2 -= offset;
+			else
+				area.x1 += offset;
+		}
+
+		rect = wmkrect(area.x1, area.y1, area.x2 - area.x1, area.y2 - area.y1);
+
 		vars[head].pi = vars[head].si = 0;
 		vars[head].sx1 = rect.pos.x;
 		vars[head].sy1 = rect.pos.y;
@@ -1763,13 +1777,6 @@ void wArrangeIcons(WScreen *scr, Bool arrangeAll)
 		} else {
 			vars[head].yo = vars[head].sy2 - isize;
 			vars[head].ys = -1;
-		}
-		if (scr->dock && (scr->dock->lowered && !wPreferences.no_window_over_dock)) {
-			if (scr->dock->on_right_side) {
-				vars[head].xo -= wPreferences.icon_size;
-			} else {
-				vars[head].xo += wPreferences.icon_size;
-			}
 		}
 	}
 

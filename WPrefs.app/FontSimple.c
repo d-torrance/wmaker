@@ -91,9 +91,9 @@ typedef struct _Panel {
 
 #define ICON_FILE	"fonts"
 
-static struct {
-	char *option;
-	char *label;
+static const struct {
+	const char *option;
+	const char *label;
 } fontOptions[] = {
 	{
 	"WindowTitleFont", N_("Window Title")}, {
@@ -102,9 +102,11 @@ static struct {
 	"IconTitleFont", N_("Icon Title")}, {
 	"ClipTitleFont", N_("Clip Title")}, {
 	"LargeDisplayFont", N_("Desktop Caption")}, {
+	"SystemFont", N_("System Font")}, {
+	"BoldSystemFont", N_("Bold System Font")}, {
 NULL, NULL},};
 
-static char *standardSizes[] = {
+static const char *standardSizes[] = {
 	"6",
 	"8",
 	"9",
@@ -128,9 +130,9 @@ static char *standardSizes[] = {
 	NULL
 };
 
-static struct {
+static const struct {
 	int weight;
-	char *name;
+	const char *name;
 } fontWeights[] = {
 	{
 	FC_WEIGHT_THIN, "Thin"}, {
@@ -146,9 +148,9 @@ static struct {
 	0, NULL}
 };
 
-static struct {
+static const struct {
 	int slant;
-	char *name;
+	const char *name;
 } fontSlants[] = {
 	{
 	FC_SLANT_ROMAN, ""},	/*"Roman"}, */
@@ -158,9 +160,9 @@ static struct {
 	0, NULL}
 };
 
-static struct {
+static const struct {
 	int width;
-	char *name;
+	const char *name;
 } fontWidths[] = {
 	{
 	FC_WIDTH_ULTRACONDENSED, "UltraCondensed"}, {
@@ -371,7 +373,7 @@ static void selectedFamily(WMWidget * w, void *data)
 		WMClearList(panel->styleL);
 		for (i = 0; i < family->stylen; i++) {
 			int j;
-			char *weight = "", *slant = "", *width = "";
+			const char *weight = "", *slant = "", *width = "";
 			WMListItem *item;
 
 			for (j = 0; fontWeights[j].name; j++)
@@ -587,7 +589,19 @@ static void showData(_Panel * panel)
 		if (ofont)
 			wfree(ofont);
 
-		font = GetStringForKey(fontOptions[i].option);
+		if (strcmp(fontOptions[i].option,"SystemFont")==0 ||
+		    strcmp(fontOptions[i].option,"BoldSystemFont")==0) {
+			char *path;
+			WMUserDefaults *defaults;
+			path = wdefaultspathfordomain("WMGLOBAL");
+			defaults = WMGetDefaultsFromPath(path);
+			wfree(path);
+			font = WMGetUDStringForKey(defaults,
+						   fontOptions[i].option);
+		}
+		else {
+			font = GetStringForKey(fontOptions[i].option);
+		}
 		if (font)
 			font = wstrdup(font);
 		WMSetMenuItemRepresentedObject(item, font);
@@ -608,7 +622,21 @@ static void storeData(_Panel * panel)
 
 		font = WMGetMenuItemRepresentedObject(item);
 		if (font && *font) {
-			SetStringForKey(font, fontOptions[i].option);
+			if (strcmp(fontOptions[i].option,"SystemFont")==0 ||
+			    strcmp(fontOptions[i].option,"BoldSystemFont")==0) {
+				char *path;
+				WMUserDefaults *defaults;
+				path = wdefaultspathfordomain("WMGLOBAL");
+				defaults = WMGetDefaultsFromPath(path);
+				wfree(path);
+				WMSetUDStringForKey(defaults,
+						    font,
+						    fontOptions[i].option);
+				WMSaveUserDefaults(defaults);
+			}
+			else {
+				SetStringForKey(font, fontOptions[i].option);
+			}
 		}
 	}
 }

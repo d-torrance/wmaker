@@ -24,6 +24,8 @@
 /*
  * TODO: rewrite, too dirty
  */
+#include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -37,14 +39,16 @@
 #include <sys/types.h>
 #include <ctype.h>
 
-#include "../config.h"
-
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 # ifdef SOLARIS_XINERAMA	/* sucks */
 #  include <X11/extensions/xinerama.h>
 # else
 #  include <X11/extensions/Xinerama.h>
 # endif
+#endif
+
+#ifdef HAVE_STDNORETURN
+#include <stdnoreturn.h>
 #endif
 
 #include "../src/wconfig.h"
@@ -74,7 +78,7 @@ int scrX, scrY;
 WXineramaInfo xineInfo;
 
 Bool smooth = False;
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 Bool xineStretch = False;
 #endif
 
@@ -96,11 +100,17 @@ typedef struct BackgroundTexture {
 	int height;
 } BackgroundTexture;
 
+static noreturn void quit(int rcode)
+{
+	WMReleaseApplication();
+	exit(rcode);
+}
+
 static void initXinerama(void)
 {
 	xineInfo.screens = NULL;
 	xineInfo.count = 0;
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 # ifdef SOLARIS_XINERAMA
 	if (XineramaGetState(dpy, scr)) {
 		XRectangle head[MAXFRAMEBUFFERS];
@@ -137,7 +147,7 @@ static void initXinerama(void)
 		XFree(xine_screens);
 	}
 # endif				/* !SOLARIS_XINERAMA */
-#endif				/* XINERAMA */
+#endif				/* USE_XINERAMA */
 }
 
 static RImage *loadImage(RContext * rc, const char *file)
@@ -548,7 +558,7 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 				texture->width = scrWidth;
 				texture->height = scrHeight;
 
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 				if (xineInfo.count && ! xineStretch) {
 					int i;
 					for (i = 0; i < xineInfo.count; ++i) {
@@ -560,9 +570,9 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 				} else {
 					applyImage(rc, texture, image, type[0], 0, 0, scrWidth, scrHeight);
 				}
-#else				/* !XINERAMA */
+#else				/* !USE_XINERAMA */
 				applyImage(rc, texture, image, type[0], 0, 0, scrWidth, scrHeight);
-#endif				/* !XINERAMA */
+#endif				/* !USE_XINERAMA */
 				RReleaseImage(image);
 			}
 			break;
@@ -880,7 +890,7 @@ static int readmsg(int fd, char *buffer, int size)
  * n is 4 bytes
  * size = 4 bytes for length of the message data
  */
-static void helperLoop(RContext * rc)
+static noreturn void helperLoop(RContext * rc)
 {
 	BackgroundTexture *textures[WORKSPACE_COUNT];
 	int maxTextures = 0;
@@ -899,7 +909,7 @@ static void helperLoop(RContext * rc)
 			errcount--;
 			if (errcount == 0) {
 				wfatal("quitting");
-				exit(1);
+				quit(1);
 			}
 			continue;
 		}
@@ -913,7 +923,7 @@ static void helperLoop(RContext * rc)
 			errcount--;
 			if (errcount == 0) {
 				wfatal("quitting");
-				exit(1);
+				quit(1);
 			}
 			continue;
 		}
@@ -969,7 +979,7 @@ static void helperLoop(RContext * rc)
 #ifdef DEBUG
 			printf("exit command\n");
 #endif
-			exit(0);
+			quit(0);
 
 		default:
 			wwarning("unknown message received");
@@ -980,11 +990,15 @@ static void helperLoop(RContext * rc)
 
 static void updateDomain(const char *domain, const char *key, const char *texture)
 {
+	int result;
 	char *program = "wdwrite";
 
 	/* here is a mem leak */
-	system(wstrconcat("wdwrite ",
+	result = system(wstrconcat("wdwrite ",
 			  wstrconcat(domain, smooth ? " SmoothWorkspaceBack YES" : " SmoothWorkspaceBack NO")));
+
+	if (result == -1)
+		werror("error executing system command");
 
 	execlp(program, program, domain, key, texture, NULL);
 	wwarning("warning could not run \"%s\"", program);
@@ -1125,12 +1139,6 @@ static char *getFullPixmapPath(const char *file)
 	return wstrdup(file);
 }
 
-void wAbort(void)
-{
-	wfatal("aborting");
-	exit(1);
-}
-
 static void print_help(void)
 {
 	printf("Usage: %s [options] [image]\n", __progname);
@@ -1141,7 +1149,7 @@ static void print_help(void)
 	puts(" -d, --dither                     dither image");
 	puts(" -m, --match                      match  colors");
 	puts(" -S, --smooth                     smooth scaled image");
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 	puts(" -X, --xinerama                   stretch image across Xinerama heads");
 #endif
 	puts(" -b, --back-color <color>         background color");
@@ -1230,7 +1238,7 @@ int main(int argc, char **argv)
 			i++;
 			if (i >= argc) {
 				wfatal("too few arguments for %s", argv[i - 1]);
-				exit(1);
+				quit(1);
 			}
 			display = argv[i];
 		} else if (strcmp(argv[i], "-s") == 0 || strcmp(argv[i], "--scale") == 0) {
@@ -1251,7 +1259,7 @@ int main(int argc, char **argv)
 			obey_user++;
 		} else if (strcmp(argv[i], "-S") == 0 || strcmp(argv[i], "--smooth") == 0) {
 			smooth = True;
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 		} else if (strcmp(argv[i], "-X") == 0 || strcmp(argv[i], "--xinerama") == 0) {
 			xineStretch = True;
 #endif
@@ -1262,61 +1270,61 @@ int main(int argc, char **argv)
 			i++;
 			if (i >= argc) {
 				wfatal("too few arguments for %s", argv[i - 1]);
-				exit(1);
+				quit(1);
 			}
 			domain = wstrdup(argv[i]);
 		} else if (strcmp(argv[i], "-c") == 0 || strcmp(argv[i], "--colors") == 0) {
 			i++;
 			if (i >= argc) {
 				wfatal("too few arguments for %s", argv[i - 1]);
-				exit(1);
+				quit(1);
 			}
 			if (sscanf(argv[i], "%i", &cpc) != 1) {
 				wfatal("bad value for colors per channel: \"%s\"", argv[i]);
-				exit(1);
+				quit(1);
 			}
 		} else if (strcmp(argv[i], "-b") == 0 || strcmp(argv[i], "--back-color") == 0) {
 			i++;
 			if (i >= argc) {
 				wfatal("too few arguments for %s", argv[i - 1]);
-				exit(1);
+				quit(1);
 			}
 			back_color = argv[i];
 		} else if (strcmp(argv[i], "-p") == 0 || strcmp(argv[i], "--parse") == 0) {
 			i++;
 			if (i >= argc) {
 				wfatal("too few arguments for %s", argv[i - 1]);
-				exit(1);
+				quit(1);
 			}
 			texture = argv[i];
 		} else if (strcmp(argv[i], "-w") == 0 || strcmp(argv[i], "--workspace") == 0) {
 			i++;
 			if (i >= argc) {
 				wfatal("too few arguments for %s", argv[i - 1]);
-				exit(1);
+				quit(1);
 			}
 			if (sscanf(argv[i], "%i", &workspace) != 1) {
 				wfatal("bad value for workspace number: \"%s\"", argv[i]);
-				exit(1);
+				quit(1);
 			}
 		} else if (strcmp(argv[i], "-v") == 0 || strcmp(argv[i], "--version") == 0) {
 			printf("%s (Window Maker %s)\n", __progname, VERSION);
-			exit(0);
+			quit(0);
 		} else if (strcmp(argv[i], "-h") == 0 || strcmp(argv[i], "--help") == 0) {
 			print_help();
-			exit(0);
+			quit(0);
 		} else if (argv[i][0] != '-') {
 			image_name = argv[i];
 		} else {
 			printf("%s: invalid argument '%s'\n", __progname, argv[i]);
 			printf("Try '%s --help' for more information\n", __progname);
-			exit(1);
+			quit(1);
 		}
 	}
 	if (!image_name && !texture && !helperMode) {
 		printf("%s: you must specify a image file name or a texture\n", __progname);
 		printf("Try '%s --help' for more information\n", __progname);
-		exit(1);
+		quit(1);
 	}
 
 	PixmapPath = getPixmapPath(domain);
@@ -1336,7 +1344,7 @@ int main(int argc, char **argv)
 	dpy = XOpenDisplay(display);
 	if (!dpy) {
 		wfatal("could not open display");
-		exit(1);
+		quit(1);
 	}
 #if 0
 	XSynchronize(dpy, 1);
@@ -1369,12 +1377,16 @@ int main(int argc, char **argv)
 
 	if (!rc) {
 		wfatal("could not initialize wrlib: %s", RMessageForError(RErrorCode));
-		exit(1);
+		quit(1);
 	}
 
 	if (helperMode) {
+		int result;
+
 		/* lower priority, so that it wont use all the CPU */
-		nice(15);
+		result = nice(15);
+		if (result == -1)
+			wwarning("error could not nice process");
 
 		helperLoop(rc);
 	} else {
@@ -1383,8 +1395,7 @@ int main(int argc, char **argv)
 
 		if (!texture) {
 			char *image_path = getFullPixmapPath(image_name);
-
-			sprintf(buffer, "(%s, \"%s\", %s)", style, image_path, back_color);
+			snprintf(buffer, sizeof(buffer), "(%s, \"%s\", %s)", style, image_path, back_color);
 			wfree(image_path);
 			texture = (char *)buffer;
 		}
@@ -1395,7 +1406,7 @@ int main(int argc, char **argv)
 
 		tex = parseTexture(rc, texture);
 		if (!tex)
-			exit(1);
+			quit(1);
 
 		if (workspace < 0)
 			changeTexture(tex);
@@ -1405,5 +1416,6 @@ int main(int argc, char **argv)
 		}
 	}
 
+	WMReleaseApplication();
 	return 0;
 }

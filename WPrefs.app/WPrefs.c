@@ -19,8 +19,14 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
+#include "config.h"
+
 #include "WPrefs.h"
 #include <assert.h>
+
+#ifdef HAVE_STDNORETURN
+#include <stdnoreturn.h>
+#endif
 
 
 #define ICON_TITLE_FONT "sans serif:pixelsize=9"
@@ -70,7 +76,7 @@ static void savePanelData(Panel * panel);
 
 static void prepareForClose(void);
 
-static void quit(WMWidget *w, void *data)
+static noreturn void quit(WMWidget *w, void *data)
 {
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) w;
@@ -78,6 +84,7 @@ static void quit(WMWidget *w, void *data)
 
 	prepareForClose();
 
+	WMReleaseApplication();
 	exit(0);
 }
 
@@ -437,77 +444,9 @@ void CreateImages(WMScreen *scr, RContext *rc, RImage *xis, const char *file,
 }
 
 
-static WMPixmap *makeTitledIcon(WMScreen * scr, WMPixmap * icon, const char *title1, const char *title2)
-{
-	return WMRetainPixmap(icon);
-
-#if 0
-	static GC gc = NULL;
-	static XFontStruct *hfont = NULL;
-	static XFontStruct *vfont = NULL;
-	WMPixmap *tmp;
-	Pixmap pix, mask;
-	Display *dpy = WMScreenDisplay(scr);
-	WMColor *black = WMBlackColor(scr);
-	GC fgc;
-	WMSize size = WMGetPixmapSize(icon);
-
-	tmp = WMCreatePixmap(scr, 60, 60, WMScreenDepth(scr), True);
-
-	pix = WMGetPixmapXID(tmp);
-	mask = WMGetPixmapMaskXID(tmp);
-
-	if (gc == NULL) {
-		gc = XCreateGC(dpy, mask, 0, NULL);
-
-		hfont = XLoadQueryFont(dpy, ICON_TITLE_FONT);
-		vfont = XLoadQueryFont(dpy, ICON_TITLE_VFONT);
-	}
-
-	if (hfont == NULL) {
-		return WMRetainPixmap(icon);
-	}
-
-	XSetForeground(dpy, gc, 0);
-	XFillRectangle(dpy, mask, gc, 0, 0, 60, 60);
-
-	fgc = WMColorGC(black);
-
-	XSetForeground(dpy, gc, 1);
-
-	XCopyArea(dpy, WMGetPixmapXID(icon), pix, fgc, 0, 0, size.width, size.height, 12, 12);
-
-	if (WMGetPixmapMaskXID(icon) != None)
-		XCopyPlane(dpy, WMGetPixmapMaskXID(icon), mask, gc, 0, 0, size.width, size.height, 12, 12, 1);
-	else
-		XFillRectangle(dpy, mask, gc, 12, 12, 48, 48);
-
-	if (title1) {
-		XSetFont(dpy, fgc, vfont->fid);
-		XSetFont(dpy, gc, vfont->fid);
-
-		XDrawString(dpy, pix, fgc, 0, vfont->ascent, title1, strlen(title1));
-
-		XDrawString(dpy, mask, gc, 0, vfont->ascent, title1, strlen(title1));
-	}
-
-	if (title2) {
-		XSetFont(dpy, fgc, hfont->fid);
-		XSetFont(dpy, gc, hfont->fid);
-
-		XDrawString(dpy, pix, fgc, (title1 ? 12 : 0), hfont->ascent, title2, strlen(title2));
-
-		XDrawString(dpy, mask, gc, (title1 ? 12 : 0), hfont->ascent, title2, strlen(title2));
-	}
-
-	return tmp;
-#endif
-}
-
-void SetButtonAlphaImage(WMScreen * scr, WMButton * bPtr, const char *file, const char *title1, const char *title2)
+void SetButtonAlphaImage(WMScreen *scr, WMButton *bPtr, const char *file)
 {
 	WMPixmap *icon;
-	WMPixmap *icon2;
 	RColor color;
 	char *iconPath;
 
@@ -525,18 +464,7 @@ void SetButtonAlphaImage(WMScreen * scr, WMButton * bPtr, const char *file, cons
 		icon = NULL;
 	}
 
-	if (icon) {
-		icon2 = makeTitledIcon(scr, icon, title1, title2);
-		if (icon)
-			WMReleasePixmap(icon);
-	} else {
-		icon2 = NULL;
-	}
-
-	WMSetButtonImage(bPtr, icon2);
-
-	if (icon2)
-		WMReleasePixmap(icon2);
+	WMSetButtonImage(bPtr, icon);
 
 	color.red = 0xff;
 	color.green = 0xff;
@@ -573,26 +501,13 @@ void AddSection(Panel * panel, const char *iconFile)
 	WMHangData(bPtr, panel);
 
 	WMSetBalloonTextForView(((PanelRec *) panel)->description, WMWidgetView(bPtr));
-
-	{
-		char *t1, *t2;
-
-		t1 = wstrdup(((PanelRec *) panel)->sectionName);
-		t2 = strchr(t1, ' ');
-		if (t2) {
-			*t2 = 0;
-			t2++;
-		}
-		SetButtonAlphaImage(WMWidgetScreen(bPtr), bPtr, iconFile, t1, t2);
-		wfree(t1);
-	}
+	SetButtonAlphaImage(WMWidgetScreen(bPtr), bPtr, iconFile);
 	WMMapWidget(bPtr);
 
 	WPrefs.sectionB[WPrefs.sectionCount] = bPtr;
 
-	if (WPrefs.sectionCount > 0) {
+	if (WPrefs.sectionCount > 0)
 		WMGroupButtons(WPrefs.sectionB[0], bPtr);
-	}
 
 	WPrefs.sectionCount++;
 
@@ -679,7 +594,7 @@ void Initialize(WMScreen * scr)
 	WMSetLabelText(WPrefs.statusL, "");
 }
 
-WMWindow *GetWindow(Panel * panel)
+WMWindow *GetWindow(void)
 {
 	return WPrefs.win;
 }

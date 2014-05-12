@@ -1624,7 +1624,7 @@ msgstr "Скорост на мишката"
 
 # ../../WPrefs.app/MouseSettings.c:508
 #: ../../WPrefs.app/MouseSettings.c:507
-msgid "Acceler.:"
+msgid "Accel.:"
 msgstr "Ускорение"
 
 # ../../WPrefs.app/MouseSettings.c:521
@@ -2404,11 +2404,9 @@ msgstr ""
 "личане"
 
 #: ../../WPrefs.app/WindowHandling.c:423
-msgid ""
-"Open dialogs in same workspace\n"
-"as their owners"
+msgid "Open dialogs in same workspace as their owners"
 msgstr ""
-"Диалоговите прозорци да са на работното\n"
+"Диалоговите прозорци да са на работното "
 "място, на владеещия ги прозорец."
 
 # ../../WPrefs.app/WindowHandling.c:442

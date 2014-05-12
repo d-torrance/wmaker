@@ -26,8 +26,9 @@
 #include "window.h"
 #include "framewin.h"
 #include "placement.h"
+#include "dock.h"
 
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 # ifdef SOLARIS_XINERAMA	/* sucks */
 #  include <X11/extensions/xinerama.h>
 # else
@@ -40,7 +41,7 @@ void wInitXinerama(WScreen * scr)
 	scr->xine_info.primary_head = 0;
 	scr->xine_info.screens = NULL;
 	scr->xine_info.count = 0;
-#ifdef XINERAMA
+#ifdef USE_XINERAMA
 # ifdef SOLARIS_XINERAMA
 	if (XineramaGetState(dpy, scr->screen)) {
 		WXineramaInfo *info = &scr->xine_info;
@@ -79,7 +80,7 @@ void wInitXinerama(WScreen * scr)
 		XFree(xine_screens);
 	}
 # endif				/* !SOLARIS_XINERAMA */
-#endif				/* XINERAMA */
+#endif				/* USE_XINERAMA */
 }
 
 int wGetRectPlacementInfo(WScreen * scr, WMRect rect, int *flags)
@@ -302,6 +303,29 @@ WArea wGetUsableAreaForHead(WScreen * scr, int head, WArea * totalAreaPtr, Bool 
 		usableArea = noicons ? scr->totalUsableArea[head] : scr->usableArea[head];
 	} else
 		usableArea = totalArea;
+
+	if (noicons) {
+		/* check if user wants dock covered */
+		if (scr->dock && (!scr->dock->lowered || wPreferences.no_window_over_dock)) {
+			int offset = wPreferences.icon_size + DOCK_EXTRA_SPACE;
+
+			if (scr->dock->on_right_side)
+				usableArea.x2 -= offset;
+			else
+				usableArea.x1 += offset;
+		}
+
+		/* check if icons are on the same side as dock, and adjust if not done already */
+		if (scr->dock && wPreferences.no_window_over_icons && !wPreferences.no_window_over_dock && (wPreferences.icon_yard & IY_VERT)) {
+			int offset = wPreferences.icon_size + DOCK_EXTRA_SPACE;
+
+			if (scr->dock->on_right_side && (wPreferences.icon_yard & IY_RIGHT))
+				usableArea.x2 -= offset;
+			/* can't use IY_LEFT in if, it's 0 ... */
+			if (!scr->dock->on_right_side && !(wPreferences.icon_yard & IY_RIGHT))
+				usableArea.x1 += offset;
+		}
+	}
 
 	return usableArea;
 }

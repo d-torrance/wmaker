@@ -38,13 +38,13 @@
 #include <X11/cursorfont.h>
 #include <X11/Xproto.h>
 #include <X11/keysym.h>
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 #include <X11/extensions/shape.h>
 #endif
 #ifdef KEEP_XKB_LOCK_STATUS
 #include <X11/XKBlib.h>
 #endif
-#ifdef HAVE_XRANDR
+#ifdef USE_RANDR
 #include <X11/extensions/Xrandr.h>
 #endif
 
@@ -412,9 +412,6 @@ void StartUp(Bool defaultScreenOnly)
 	struct sigaction sig_action;
 	int i, j, max;
 	char **formats;
-#ifdef HAVE_XRANDR
-	int dummy;
-#endif
 	Atom atom[wlengthof(atomNames)];
 
 	/*
@@ -590,13 +587,13 @@ void StartUp(Bool defaultScreenOnly)
 
 	XSetErrorHandler((XErrorHandler) catchXError);
 
-#ifdef SHAPE
+#ifdef USE_XSHAPE
 	/* ignore j */
 	w_global.xext.shape.supported = XShapeQueryExtension(dpy, &w_global.xext.shape.event_base, &j);
 #endif
 
-#ifdef HAVE_XRANDR
-	w_global.xext.randr.supported = XRRQueryExtension(dpy, &w_global.xext.randr.event_base, &dummy);
+#ifdef USE_RANDR
+	w_global.xext.randr.supported = XRRQueryExtension(dpy, &w_global.xext.randr.event_base, &j);
 #endif
 
 #ifdef KEEP_XKB_LOCK_STATUS

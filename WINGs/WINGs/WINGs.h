@@ -26,7 +26,7 @@
 #include <WINGs/WUtil.h>
 #include <X11/Xlib.h>
 
-#define WINGS_H_VERSION  20041030
+#define WINGS_H_VERSION  20131115
 
 
 #ifdef __cplusplus
@@ -36,6 +36,22 @@ extern "C" {
 }
 #endif
 
+
+#ifdef __STDC_VERSION__
+# if __STDC_VERSION__ >= 201112L
+/*
+ * Ideally, we would like to include the proper header to have 'noreturn' properly
+ * defined (that's what is done for the rest of the code)
+ * However, as we're a public API file we can't do that in a portable fashion, so
+ * we just stick to plain STD C11 keyword
+ */
+#  define _wings_noreturn _Noreturn
+# else
+#  define _wings_noreturn /**/
+# endif
+#else
+#define _wings_noreturn /**/
+#endif
 
 typedef unsigned long WMPixel;
 
@@ -628,8 +644,10 @@ WMRect wmkrect(int x, int y, unsigned int width, unsigned int height);
 /* ---[ WINGs/wapplication.c ]-------------------------------------------- */
 
 
-
 void WMInitializeApplication(const char *applicationName, int *argc, char **argv);
+
+/* You're supposed to call this funtion before exiting so WINGs can terminate properly */
+void WMReleaseApplication(void);
 
 void WMSetResourcePath(const char *path);
 
@@ -650,7 +668,7 @@ WMScreen* WMCreateScreen(Display *display, int screen);
 
 WMScreen* WMCreateSimpleApplicationScreen(Display *display);
 
-void WMScreenMainLoop(WMScreen *scr);
+_wings_noreturn void WMScreenMainLoop(WMScreen *scr);
 
 void WMBreakModalLoop(WMScreen *scr);
 
@@ -826,6 +844,11 @@ WMPixmap* WMCreateBlendedPixmapFromRImage(WMScreen *scrPtr, RImage *image,
 
 WMPixmap* WMCreateBlendedPixmapFromFile(WMScreen *scrPtr, const char *fileName,
                                         const RColor *color);
+
+WMPixmap* WMCreateScaledBlendedPixmapFromFile(WMScreen *scrPtr, const char *fileName,
+                                              const RColor *color,
+                                              unsigned int width,
+                                              unsigned int height);
 
 void WMDrawPixmap(WMPixmap *pixmap, Drawable d, int x, int y);
 
@@ -1431,6 +1454,22 @@ void WMSetPopUpButtonEnabled(WMPopUpButton *bPtr, Bool flag);
 
 Bool WMGetPopUpButtonEnabled(WMPopUpButton *bPtr);
 
+/* ---[ WINGs/wprogressindicator.c ]------------------------------------- */
+
+WMProgressIndicator* WMCreateProgressIndicator(WMWidget *parent);
+
+void WMSetProgressIndicatorMinValue(WMProgressIndicator *progressindicator, int value);
+
+void WMSetProgressIndicatorMaxValue(WMProgressIndicator *progressindicator, int value);
+
+void WMSetProgressIndicatorValue(WMProgressIndicator *progressindicator, int value);
+
+int WMGetProgressIndicatorMinValue(WMProgressIndicator *progressindicator);
+
+int WMGetProgressIndicatorMaxValue(WMProgressIndicator *progressindicator);
+
+int WMGetProgressIndicatorValue(WMProgressIndicator *progressindicator);
+
 /* ---[ WINGs/wcolorpanel.c ]--------------------------------------------- */
 
 WMColorPanel* WMGetColorPanel(WMScreen *scrPtr);
@@ -1863,5 +1902,9 @@ void W_setconf_doubleClickDelay(int value);
 }
 #endif /* __cplusplus */
 
-#endif
 
+/* These definitions are not meant to be seen outside this file */
+#undef _wings_noreturn
+
+
+#endif

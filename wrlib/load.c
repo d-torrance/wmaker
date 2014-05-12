@@ -3,6 +3,7 @@
  * Raster graphics library
  *
  * Copyright (c) 1997-2003 Alfredo K. Kojima
+ * Copyright (c) 2014 Window Maker Team
  *
  *  This library is free software; you can redistribute it and/or
  *  modify it under the terms of the GNU Library General Public
@@ -32,10 +33,6 @@
 #include <string.h>
 #include <time.h>
 #include <assert.h>
-
-#ifdef USE_PNG
-#include <png.h>
-#endif
 
 #include "wraster.h"
 #include "imgformat.h"
@@ -73,12 +70,18 @@ static WRImgFormat identFile(const char *path);
 
 char **RSupportedFileFormats(void)
 {
-	static char *tmp[IM_TYPES + 1];
+	static char *tmp[IM_TYPES + 2];
 	int i = 0;
 
 	/* built-in */
 	tmp[i++] = "XPM";
-	/* built-in */
+	/* built-in PNM here refers to anymap format: PPM, PGM, PBM */
+	tmp[i++] = "PNM";
+	/*
+	 * PPM is a just a sub-type of PNM, but it has to be in the list
+	 * for compatibility with legacy programs that may expect it but
+	 * not the new PNM type
+	 */
 	tmp[i++] = "PPM";
 #ifdef USE_TIFF
 	tmp[i++] = "TIFF";
@@ -91,6 +94,9 @@ char **RSupportedFileFormats(void)
 #endif
 #ifdef USE_GIF
 	tmp[i++] = "GIF";
+#endif
+#ifdef USE_WEBP
+	tmp[i++] = "WEBP";
 #endif
 	tmp[i] = NULL;
 
@@ -120,6 +126,23 @@ static void init_cache(void)
 			return;
 		}
 		memset(RImageCache, 0, sizeof(RCachedImage) * RImageCacheSize);
+	}
+}
+
+void RReleaseCache(void)
+{
+	int i;
+
+	if (RImageCacheSize > 0) {
+		for (i = 0; i < RImageCacheSize; i++) {
+			if (RImageCache[i].file) {
+				RReleaseImage(RImageCache[i].image);
+				free(RImageCache[i].file);
+			}
+		}
+		free(RImageCache);
+		RImageCache = NULL;
+		RImageCacheSize = -1;
 	}
 }
 
@@ -159,8 +182,16 @@ RImage *RLoadImage(RContext * context, const char *file, int index)
 		return NULL;
 
 	case IM_UNKNOWN:
+#ifdef USE_MAGICK
+		/* generic file format support using ImageMagick
+		 * BMP, PCX, PICT, SVG, ...
+		 */
+		image = RLoadMagick(file);
+		break;
+#else
 		RErrorCode = RERR_BADFORMAT;
 		return NULL;
+#endif
 
 	case IM_XPM:
 		image = RLoadXPM(context, file);
@@ -189,6 +220,12 @@ RImage *RLoadImage(RContext * context, const char *file, int index)
 		image = RLoadGIF(file, index);
 		break;
 #endif				/* USE_GIF */
+
+#ifdef USE_WEBP
+	case IM_WEBP:
+		image = RLoadWEBP(file);
+		break;
+#endif				/* USE_WEBP */
 
 	case IM_PPM:
 		image = RLoadPPM(file);
@@ -264,6 +301,11 @@ char *RGetImageFileFormat(const char *file)
 		return "GIF";
 #endif				/* USE_GIF */
 
+#ifdef USE_WEBP
+	case IM_WEBP:
+		return "WEBP";
+#endif				/* USE_WEBP */
+
 	case IM_PPM:
 		return "PPM";
 
@@ -303,14 +345,19 @@ static WRImgFormat identFile(const char *path)
 	    || (buffer[0] == 'M' && buffer[1] == 'M' && buffer[2] == 0 && buffer[3] == '*'))
 		return IM_TIFF;
 
-#ifdef USE_PNG
-	/* check for PNG */
-	if (!png_sig_cmp(buffer, 0, 8))
+	/*
+	 * check for PNG
+	 *
+	 * The signature is defined in the PNG specifiation:
+	 * http://www.libpng.org/pub/png/spec/1.2/PNG-Structure.html
+	 * it is valid for v1.0, v1.1, v1.2 and ISO version
+	 */
+	if (buffer[0] == 137 && buffer[1] == 80 && buffer[2] == 78 && buffer[3] == 71 &&
+	    buffer[4] ==  13 && buffer[5] == 10 && buffer[6] == 26 && buffer[7] == 10)
 		return IM_PNG;
-#endif
 
-	/* check for raw PPM or PGM */
-	if (buffer[0] == 'P' && (buffer[1] == '5' || buffer[1] == '6'))
+	/* check for PBM or PGM or PPM */
+	if (buffer[0] == 'P' && (buffer[1] > '0' && buffer[1] < '7') && (buffer[2] == 0x0a || buffer[2] == 0x20 || buffer[2] == 0x09 || buffer[2] == 0x0d))
 		return IM_PPM;
 
 	/* check for JPEG */
@@ -318,8 +365,18 @@ static WRImgFormat identFile(const char *path)
 		return IM_JPEG;
 
 	/* check for GIF */
-	if (buffer[0] == 'G' && buffer[1] == 'I' && buffer[2] == 'F')
+	if (buffer[0] == 'G' && buffer[1] == 'I' && buffer[2] == 'F' && buffer[3] == '8' &&
+	    (buffer[4] == '7' ||  buffer[4] == '9') && buffer[5] == 'a')
 		return IM_GIF;
+
+	/* check for WEBP */
+	if (buffer[ 0] == 'R' && buffer[ 1] == 'I' && buffer[ 2] == 'F' && buffer[ 3] == 'F' &&
+	    buffer[ 8] == 'W' && buffer[ 9] == 'E' && buffer[10] == 'B' && buffer[11] == 'P' &&
+	    buffer[12] == 'V' && buffer[13] == 'P' && buffer[14] == '8' &&
+	    (buffer[15] == ' '       /* Simple File Format (Lossy) */
+	     || buffer[15] == 'L'    /* Simple File Format (Lossless) */
+	     || buffer[15] == 'X'))  /* Extended File Format */
+		return IM_WEBP;
 
 	return IM_UNKNOWN;
 }

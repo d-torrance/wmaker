@@ -40,7 +40,7 @@ extern void _wraster_change_filter(int type);
 
 static Bool bestContext(Display * dpy, int screen_number, RContext * context);
 
-static RContextAttributes DEFAULT_CONTEXT_ATTRIBS = {
+static const RContextAttributes DEFAULT_CONTEXT_ATTRIBS = {
 	RC_UseSharedMemory | RC_RenderMode | RC_ColorsPerChannel,	/* flags */
 	RDitheredRendering,	/* render_mode */
 	4,			/* colors_per_channel */
@@ -664,7 +664,7 @@ RContext *RCreateContext(Display * dpy, int screen_number, const RContextAttribu
 	}
 
 	/* check avaiability of MIT-SHM */
-#ifdef XSHM
+#ifdef USE_XSHM
 	if (!(context->attribs->flags & RC_UseSharedMemory)) {
 		context->attribs->flags |= RC_UseSharedMemory;
 		context->attribs->use_shared_memory = True;
@@ -686,6 +686,21 @@ RContext *RCreateContext(Display * dpy, int screen_number, const RContextAttribu
 #endif
 
 	return context;
+}
+
+void RDestroyContext(RContext *context)
+{
+	if (context) {
+		if (context->copy_gc)
+			XFreeGC(context->dpy, context->copy_gc);
+		if (context->attribs) {
+			if ((context->attribs->flags & RC_VisualID) &&
+			    !(context->attribs->flags & RC_DefaultVisual))
+				XDestroyWindow(context->dpy, context->drawable);
+			free(context->attribs);
+		}
+		free(context);
+	}
 }
 
 static Bool bestContext(Display * dpy, int screen_number, RContext * context)
