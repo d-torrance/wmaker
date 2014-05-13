@@ -40,6 +40,7 @@ libwraster.so.3 libwraster3 #MINVER#
  ROperateLines@LIBWRASTER3 0.95.0
  ROperatePixel@LIBWRASTER3 0.95.0
  ROperatePixels@LIBWRASTER3 0.95.0
+ ROperateRectangle@LIBWRASTER3 0.95.5+20140513
  ROperateSegments@LIBWRASTER3 0.95.0
  RPutPixel@LIBWRASTER3 0.95.0
  RPutPixels@LIBWRASTER3 0.95.0
