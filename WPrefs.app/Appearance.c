@@ -22,6 +22,7 @@
 #include "WPrefs.h"
 
 #include <unistd.h>
+#include <dirent.h>
 #include <errno.h>
 #include <ctype.h>
 #include <time.h>
@@ -74,6 +75,13 @@ typedef struct _Panel {
 
 	WMFrame *taliF;
 	WMButton *taliB[3];
+
+	/* themes */
+	WMFrame *thmF;
+	WMList *thmLs;
+
+	WMButton *loadB;
+	WMButton *saveB;
 
 	/* root bg */
 	WMFrame *bgF;
@@ -1614,6 +1622,54 @@ static void titleAlignCallback(WMWidget * self, void *data)
 	}
 }
 
+static void themeListAction(WMWidget *w, void *data)
+{
+	char *path;
+	int row;
+	_Panel *panel = (_Panel *)data;
+	WMListItem *item;
+
+	(void) w;
+
+	row = WMGetListSelectedItemRow(panel->thmLs);
+	item = WMGetListItem(panel->thmLs, row);
+	path = (char *)item->clientData;
+	printf("%s\n",path);
+
+
+}
+
+void listThemes(_Panel *panel, char *dirname)
+{
+	DIR *dir;
+	struct dirent *dentry;
+
+	dir = opendir(dirname);
+	if (dir) {
+		while ((dentry = readdir(dir))) {
+			if (dentry->d_name[0] == '.')
+				continue;
+
+			char *path;
+			WMListItem *item;
+
+			path = wstrconcat(dirname, "/");
+			path = wstrappend(path, dentry->d_name);
+/* TODO:
+check whether given file/directory is actually a theme
+add ThemeListItem struct, containing:
+  path
+  name (remove .style, .themed; this is what appears in thmLs)
+  WMPropList containing texture info */
+
+			item = WMAddListItem(panel->thmLs, dentry->d_name);
+			item->clientData = path;
+		}
+		closedir(dir);
+	}
+	WMSortListItems(panel->thmLs);
+}
+
 static void createPanel(Panel * p)
 {
 	_Panel *panel = (_Panel *) p;
@@ -1916,8 +1972,57 @@ static void createPanel(Panel * p)
 
 	WMMapSubwidgets(panel->optF);
 
+	/*** themes ***/
+
+	panel->thmF = WMCreateFrame(panel->box);
+	WMSetFrameRelief(panel->thmF, WRFlat);
+
+	item = WMCreateTabViewItemWithIdentifier(4);
+	WMSetTabViewItemView(item, WMWidgetView(panel->thmF));
+	WMSetTabViewItemLabel(item, _("Themes"));
+
+	WMAddItemInTabView(panel->tabv, item);
+
+
+	panel->thmLs = WMCreateList(panel->thmF);
+	WMSetListAction(panel->thmLs, themeListAction, panel);
+	WMResizeWidget(panel->thmLs, 165, 181);
+	WMMoveWidget(panel->thmLs, 70, 7);
+
+
+	listThemes(panel, PKGDATADIR "/Themes");
+	listThemes(panel, wstrconcat(wusergnusteppath(),
+			      "/Library/WindowMaker/Themes"));
+
+	WMMapWidget(panel->thmLs);
+
+	font = WMSystemFontOfSize(scr, 10);
+
+	panel->loadB = WMCreateCommandButton(panel->thmF);
+	WMResizeWidget(panel->loadB, 57, 39);
+	WMMoveWidget(panel->loadB, 7, 7);
+	WMSetButtonFont(panel->loadB, font);
+	WMSetButtonText(panel->loadB, _("Load"));
+//	WMSetButtonAction(panel->loadB, newTexture, panel);
+	WMSetBalloonTextForView(_("Load the selected theme."), WMWidgetView(panel->loadB));
+
+	panel->saveB = WMCreateCommandButton(panel->thmF);
+	WMResizeWidget(panel->saveB, 57, 39);
+	WMMoveWidget(panel->saveB, 7, 46);
+	WMSetButtonFont(panel->saveB, font);
+	WMSetButtonText(panel->saveB, _("Save"));
+//	WMSetButtonAction(panel->saveB, extractTexture, panel);
+	WMSetBalloonTextForView(_("Save the current theme."), WMWidgetView(panel->saveB));
+
+	WMReleaseFont(font);
+
+	WMMapSubwidgets(panel->thmF);
+
+
 	 /**/ WMRealizeWidget(panel->box);
 	WMMapSubwidgets(panel->box);
+//remove later, for my sanity
+	WMSelectLastTabViewItem(panel->tabv);
 
 	WMSetPopUpButtonSelectedItem(panel->secP, 0);
 
