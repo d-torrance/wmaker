@@ -134,6 +134,12 @@ typedef struct {
 	unsigned ispixmap:1;
 } TextureListItem;
 
+typedef struct {
+	char *name;
+	char *path;
+	WMPropList *prop;
+} ThemeListItem;
+
 static void updateColorPreviewBox(_Panel * panel, int elements);
 
 static void showData(_Panel * panel);
@@ -1570,6 +1576,7 @@ static void changedTabItem(struct WMTabViewDelegate *self, WMTabView * tabView, 
 		changeColorPage(panel->colP, panel);
 		break;
 	case 3:
+	case 4:
 		switch (panel->oldTabItem) {
 		case 0:
 			changePage(NULL, panel);
@@ -1622,21 +1629,85 @@ static void titleAlignCallback(WMWidget * self, void *data)
 	}
 }
 
-static void themeListAction(WMWidget *w, void *data)
+static void loadTheme(WMWidget *w, void *data)
 {
-	char *path;
+	int i;
 	int row;
 	_Panel *panel = (_Panel *)data;
+	ThemeListItem *thitem;
 	WMListItem *item;
 
 	(void) w;
 
 	row = WMGetListSelectedItemRow(panel->thmLs);
 	item = WMGetListItem(panel->thmLs, row);
-	path = (char *)item->clientData;
-	printf("%s\n",path);
+	thitem = (ThemeListItem *)item->clientData;
 
+	for (i = 0; i < wlengthof(textureOptions); i++) {
+		WMPropList *prop;
 
+		prop = WMGetFromPLDictionary(thitem->prop,
+					     WMCreatePLString(textureOptions[i].key)); 
+		if (prop) {
+			TextureListItem *titem;
+
+			item = WMGetListItem(panel->texLs,
+					     panel->textureIndex[i]);
+			titem = (TextureListItem *) item->clientData;
+
+			if (titem) {
+				char *str;
+
+// if pixmap or textured gradient, try to find file
+				str = WMGetFromPLString(WMGetFromPLArray(prop, 0));
+				if (strcasecmp(&str[1], "pixmap") == 0 ||
+				    (strcasecmp(&str[2], "gradient") == 0 &&
+				     strncasecmp (str,"t",1) == 0)) {
+					char *path;
+			
+					str = WMGetFromPLString(WMGetFromPLArray(prop, 1));
+					path = wfindfileinarray(GetObjectForKey("PixmapPath"), str);
+
+					if (!path) { // check .themed dir
+						path = wfindfile(
+							thitem->path,
+							str);
+						if (path) {
+							WMDeleteFromPLArray(prop, 1);
+							WMInsertInPLArray(prop, 1, WMCreatePLString(path));
+						}
+						else { // can't find file, use default
+							prop = WMCreatePropListFromDescription(
+								textureOptions[i].default_value);
+						}
+					}
+				}
+	
+
+				titem->prop = prop;
+				titem->ispixmap = isPixmap(prop);
+
+				wfree(titem->texture);
+				titem->texture = WMGetPropListDescription(prop, False);
+
+				XFreePixmap(
+					WMScreenDisplay(
+						WMWidgetScreen(
+							panel->texLs)),
+					titem->preview);
+
+				titem->preview =
+					renderTexture(WMWidgetScreen(
+							      panel->texLs),
+						      titem->prop,
+						      TEXPREV_WIDTH,
+						      TEXPREV_HEIGHT,
+						      NULL, 0);
+			}
+		}
+	}
+	WMRedisplayWidget(panel->texLs);
+	updatePreviewBox(panel, EVERYTHING);
 }
 
 void listThemes(_Panel *panel, char *dirname)
@@ -1649,21 +1720,42 @@ void listThemes(_Panel *panel, char *dirname)
 		while ((dentry = readdir(dir))) {
 			if (dentry->d_name[0] == '.')
 				continue;
-
+			
 			char *path;
-			WMListItem *item;
+			struct stat s;
+			WMPropList *prop;
 
 			path = wstrconcat(dirname, "/");
 			path = wstrappend(path, dentry->d_name);
-/* TODO:
-check whether given file/directory is actually a theme
-add ThemeListItem struct, containing:
-  path
-  name (remove .style, .themed; this is what appears in thmLs)
-  WMPropList containing texture info */
 
-			item = WMAddListItem(panel->thmLs, dentry->d_name);
-			item->clientData = path;
+			//check if .themed dir
+			stat(path, &s);
+			if (S_ISDIR(s.st_mode)) {
+				prop = WMReadPropListFromFile(
+					wstrconcat(path, "/style"));
+			}
+			else
+				prop = WMReadPropListFromFile(path);
+
+			if (prop) {
+				char *ptr;
+				ThemeListItem *thitem;
+				WMListItem *item;
+
+				thitem = wmalloc(sizeof(ThemeListItem));
+
+				thitem->path = path;
+				thitem->prop = prop;
+
+				// strip extension from filename
+				thitem->name = dentry->d_name;
+				ptr = strrchr(thitem->name, '.');
+				if (ptr && ptr != thitem->name)
+					*ptr = 0;
+			
+				item = WMAddListItem(panel->thmLs, thitem->name);
+				item->clientData = thitem;
+			}
 		}
 		closedir(dir);
 	}
@@ -1980,20 +2072,15 @@ static void createPanel(Panel * p)
 	item = WMCreateTabViewItemWithIdentifier(4);
 	WMSetTabViewItemView(item, WMWidgetView(panel->thmF));
 	WMSetTabViewItemLabel(item, _("Themes"));
-
 	WMAddItemInTabView(panel->tabv, item);
 
-
 	panel->thmLs = WMCreateList(panel->thmF);
-	WMSetListAction(panel->thmLs, themeListAction, panel);
+	WMSetListDoubleAction(panel->thmLs, loadTheme, panel);
 	WMResizeWidget(panel->thmLs, 165, 181);
 	WMMoveWidget(panel->thmLs, 70, 7);
-
-
 	listThemes(panel, PKGDATADIR "/Themes");
 	listThemes(panel, wstrconcat(wusergnusteppath(),
 			      "/Library/WindowMaker/Themes"));
-
 	WMMapWidget(panel->thmLs);
 
 	font = WMSystemFontOfSize(scr, 10);
@@ -2003,7 +2090,7 @@ static void createPanel(Panel * p)
 	WMMoveWidget(panel->loadB, 7, 7);
 	WMSetButtonFont(panel->loadB, font);
 	WMSetButtonText(panel->loadB, _("Load"));
-//	WMSetButtonAction(panel->loadB, newTexture, panel);
+	WMSetButtonAction(panel->loadB, loadTheme, panel);
 	WMSetBalloonTextForView(_("Load the selected theme."), WMWidgetView(panel->loadB));
 
 	panel->saveB = WMCreateCommandButton(panel->thmF);
@@ -2022,7 +2109,7 @@ static void createPanel(Panel * p)
 	 /**/ WMRealizeWidget(panel->box);
 	WMMapSubwidgets(panel->box);
 //remove later, for my sanity
-	WMSelectLastTabViewItem(panel->tabv);
+//	WMSelectLastTabViewItem(panel->tabv);
 
 	WMSetPopUpButtonSelectedItem(panel->secP, 0);
 
