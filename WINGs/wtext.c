@@ -1023,7 +1023,6 @@ static void cursorToTextPosition(Text * tPtr, int x, int y)
 			if ((dir ? tb->next : tb->prior)) {
 				tb = (dir ? tb->next : tb->prior);
 			} else {
-				pos = tb->used;
 				break;	/* goto _doneH; */
 			}
 		}
@@ -1047,9 +1046,6 @@ static void cursorToTextPosition(Text * tPtr, int x, int y)
 			goto _doNothing;
 		}
 	}
-
-	if (tb->blank)
-		_w = 0;
 
 	_y = tb->sections[s]._y;
 
@@ -1117,7 +1113,6 @@ static void cursorToTextPosition(Text * tPtr, int x, int y)
 		if ((dir ? tb->next : tb->prior)) {
 			tb = (dir ? tb->next : tb->prior);
 		} else {
-			done = True;
 			break;
 		}
 
@@ -1253,7 +1248,6 @@ static void scrollersCallBack(WMWidget * w, void *self)
 					tPtr->vpos -= 16;
 				else
 					tPtr->vpos = 0;
-				scroll = True;
 			}
 			break;
 
@@ -1264,7 +1258,6 @@ static void scrollersCallBack(WMWidget * w, void *self)
 						tPtr->vpos += 16;
 					else
 						tPtr->vpos = limit;
-					scroll = True;
 				}
 			}
 			break;
@@ -1274,21 +1267,17 @@ static void scrollersCallBack(WMWidget * w, void *self)
 				tPtr->vpos -= height;
 			else
 				tPtr->vpos = 0;
-
-			scroll = True;
 			break;
 
 		case WSIncrementPage:
 			tPtr->vpos += height;
 			if (tPtr->vpos > (tPtr->docHeight - height))
 				tPtr->vpos = tPtr->docHeight - height;
-			scroll = True;
 			break;
 
 		case WSKnob:
 			tPtr->vpos = WMGetScrollerValue(tPtr->vS)
 			    * (float)(tPtr->docHeight - height);
-			scroll = True;
 			break;
 
 		case WSKnobSlot:
@@ -1311,7 +1300,6 @@ static void scrollersCallBack(WMWidget * w, void *self)
 					tPtr->hpos -= 16;
 				else
 					tPtr->hpos = 0;
-				scroll = True;
 			}
 			break;
 
@@ -1322,7 +1310,6 @@ static void scrollersCallBack(WMWidget * w, void *self)
 						tPtr->hpos += 16;
 					else
 						tPtr->hpos = limit;
-					scroll = True;
 				}
 			}
 			break;
@@ -1332,21 +1319,17 @@ static void scrollersCallBack(WMWidget * w, void *self)
 				tPtr->hpos -= width;
 			else
 				tPtr->hpos = 0;
-
-			scroll = True;
 			break;
 
 		case WSIncrementPage:
 			tPtr->hpos += width;
 			if (tPtr->hpos > (tPtr->docWidth - width))
 				tPtr->hpos = tPtr->docWidth - width;
-			scroll = True;
 			break;
 
 		case WSKnob:
 			tPtr->hpos = WMGetScrollerValue(tPtr->hS)
 			    * (float)(tPtr->docWidth - width);
-			scroll = True;
 			break;
 
 		case WSKnobSlot:
@@ -3316,7 +3299,7 @@ WMSetTextBlockProperties(WMText * tPtr, void *vtb, unsigned int first,
 
 void
 WMGetTextBlockProperties(WMText * tPtr, void *vtb, unsigned int *first,
-			 unsigned int *kanji, unsigned int *underlined, int *script, WMRulerMargins * margins)
+			 unsigned int *kanji, unsigned int *underlined, int *script, WMRulerMargins *margins)
 {
 	TextBlock *tb = (TextBlock *) vtb;
 	if (!tb)
@@ -3331,7 +3314,7 @@ WMGetTextBlockProperties(WMText * tPtr, void *vtb, unsigned int *first,
 	if (script)
 		*script = tb->script;
 	if (margins)
-		margins = &tPtr->margins[tb->marginN];
+		*margins = tPtr->margins[tb->marginN];
 }
 
 void WMPrependTextBlock(WMText * tPtr, void *vtb)
