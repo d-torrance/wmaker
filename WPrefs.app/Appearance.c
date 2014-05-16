@@ -1644,69 +1644,135 @@ static void loadTheme(WMWidget *w, void *data)
 	thitem = (ThemeListItem *)item->clientData;
 
 	for (i = 0; i < wlengthof(textureOptions); i++) {
-		WMPropList *prop;
+		TextureListItem *titem;
+		WMPropList *prop = NULL;
 
-		prop = WMGetFromPLDictionary(thitem->prop,
-					     WMCreatePLString(textureOptions[i].key)); 
+		if (WMIsPLDictionary(thitem->prop))
+			prop = WMGetFromPLDictionary(
+				thitem->prop,
+				WMCreatePLString(textureOptions[i].key));
+
 		if (prop) {
-			TextureListItem *titem;
+			const char *str;
 
 			item = WMGetListItem(panel->texLs,
 					     panel->textureIndex[i]);
 			titem = (TextureListItem *) item->clientData;
 
-			if (titem) {
-				char *str;
-
 // if pixmap or textured gradient, try to find file
-				str = WMGetFromPLString(WMGetFromPLArray(prop, 0));
-				if (strcasecmp(&str[1], "pixmap") == 0 ||
-				    (strcasecmp(&str[2], "gradient") == 0 &&
-				     strncasecmp (str,"t",1) == 0)) {
-					char *path;
-			
-					str = WMGetFromPLString(WMGetFromPLArray(prop, 1));
-					path = wfindfileinarray(GetObjectForKey("PixmapPath"), str);
+			str = WMGetFromPLString(WMGetFromPLArray(prop, 0));
+			if (strcasecmp(&str[1], "pixmap") == 0 ||
+			    (strcasecmp(&str[2], "gradient") == 0 &&
+			     toupper(str[0]) == 'T')) {
+				char *path;
 
-					if (!path) { // check .themed dir
-						path = wfindfile(
-							thitem->path,
-							str);
-						if (path) {
-							WMDeleteFromPLArray(prop, 1);
-							WMInsertInPLArray(prop, 1, WMCreatePLString(path));
-						}
-						else { // can't find file, use default
-							prop = WMCreatePropListFromDescription(
-								textureOptions[i].default_value);
-						}
+				str = WMGetFromPLString(
+					WMGetFromPLArray(prop, 1));
+				path = wfindfileinarray(
+					GetObjectForKey("PixmapPath"),
+					str);
+
+				if (!path) { // check .themed dir
+					path = wfindfile(thitem->path, str);
+					if (path) {
+						WMDeleteFromPLArray(prop, 1);
+						WMInsertInPLArray(
+							prop, 1,
+							WMCreatePLString(path));
 					}
+					else prop = WMCreatePropListFromDescription(
+						textureOptions[i].default_value);
 				}
-	
-
-				titem->prop = prop;
-				titem->ispixmap = isPixmap(prop);
-
-				wfree(titem->texture);
-				titem->texture = WMGetPropListDescription(prop, False);
-
-				XFreePixmap(
-					WMScreenDisplay(
-						WMWidgetScreen(
-							panel->texLs)),
-					titem->preview);
-
-				titem->preview =
-					renderTexture(WMWidgetScreen(
-							      panel->texLs),
-						      titem->prop,
-						      TEXPREV_WIDTH,
-						      TEXPREV_HEIGHT,
-						      NULL, 0);
 			}
+
+			titem->prop = prop;
+			titem->ispixmap = isPixmap(prop);
+
+			wfree(titem->texture);
+			titem->texture = WMGetPropListDescription(prop, False);
+
+			XFreePixmap(
+				WMScreenDisplay(WMWidgetScreen(panel->texLs)),
+				titem->preview);
+
+			titem->preview = renderTexture(
+				WMWidgetScreen(panel->texLs),titem->prop,
+				TEXPREV_WIDTH, TEXPREV_HEIGHT, NULL, 0);
 		}
 	}
 	WMRedisplayWidget(panel->texLs);
+
+	for (i = 0; i < wlengthof(colorOptions); i++) {
+		WMColor *color;
+		WMPropList *prop = NULL;
+
+		if (WMIsPLDictionary(thitem->prop))
+			prop = WMGetFromPLDictionary(
+				thitem->prop,
+				WMCreatePLString(colorOptions[i].key));
+
+		if (prop) {
+			const char *str;
+
+			str = WMGetFromPLString(prop);
+			if (!str)
+				str = colorOptions[i].default_value;
+
+			color = WMCreateNamedColor(WMWidgetScreen(panel->box),
+						   str, False);
+			if (!color)
+				color = WMBlackColor(
+					WMWidgetScreen(panel->box));
+
+			panel->colors[i] = color;
+		}
+	}
+
+	WMRedisplayWidget(panel->colW);
+
+	WMPropList *prop = NULL;
+	const char *str;
+
+	if (WMIsPLDictionary(thitem->prop))
+		prop = WMGetFromPLDictionary(
+			thitem->prop,
+			WMCreatePLString("MenuStyle"));
+
+	if (prop)
+		str = WMGetFromPLString(prop);
+	else
+		str = "normal";
+
+	if (str && strcasecmp(str, "flat") == 0)
+		panel->menuStyle = MSTYLE_FLAT;
+	else if (str && strcasecmp(str, "singletexture") == 0)
+		panel->menuStyle = MSTYLE_SINGLE;
+	else
+		panel->menuStyle = MSTYLE_NORMAL;
+
+	WMSetButtonSelected(panel->mstyB[panel->menuStyle], True);
+
+	prop = NULL;
+
+	if (WMIsPLDictionary(thitem->prop))
+		prop = WMGetFromPLDictionary(
+			thitem->prop,
+			WMCreatePLString("TitleJustify"));
+
+	if (prop)
+		str = WMGetFromPLString(prop);
+	else
+		str = "center";
+
+	if (str && strcasecmp(str, "left") == 0)
+		panel->titleAlignment = WALeft;
+	else if (str && strcasecmp(str, "right") == 0)
+		panel->titleAlignment = WARight;
+	else
+		panel->titleAlignment = WACenter;
+
+	WMSetButtonSelected(panel->taliB[panel->titleAlignment], True);
+
 	updatePreviewBox(panel, EVERYTHING);
 }
 
@@ -1720,7 +1786,7 @@ void listThemes(_Panel *panel, char *dirname)
 		while ((dentry = readdir(dir))) {
 			if (dentry->d_name[0] == '.')
 				continue;
-			
+
 			char *path;
 			struct stat s;
 			WMPropList *prop;
@@ -1752,8 +1818,9 @@ void listThemes(_Panel *panel, char *dirname)
 				ptr = strrchr(thitem->name, '.');
 				if (ptr && ptr != thitem->name)
 					*ptr = 0;
-			
-				item = WMAddListItem(panel->thmLs, thitem->name);
+
+				item = WMAddListItem(panel->thmLs,
+						     thitem->name);
 				item->clientData = thitem;
 			}
 		}
@@ -2079,8 +2146,11 @@ static void createPanel(Panel * p)
 	WMResizeWidget(panel->thmLs, 165, 181);
 	WMMoveWidget(panel->thmLs, 70, 7);
 	listThemes(panel, PKGDATADIR "/Themes");
+//	listThemes(panel, PKGDATADIR "/Styles");
 	listThemes(panel, wstrconcat(wusergnusteppath(),
-			      "/Library/WindowMaker/Themes"));
+				     "/Library/WindowMaker/Themes"));
+//	listThemes(panel, wstrconcat(wusergnusteppath(),
+//			      "/Library/WindowMaker/Styles"));
 	WMMapWidget(panel->thmLs);
 
 	font = WMSystemFontOfSize(scr, 10);
@@ -2091,7 +2161,8 @@ static void createPanel(Panel * p)
 	WMSetButtonFont(panel->loadB, font);
 	WMSetButtonText(panel->loadB, _("Load"));
 	WMSetButtonAction(panel->loadB, loadTheme, panel);
-	WMSetBalloonTextForView(_("Load the selected theme."), WMWidgetView(panel->loadB));
+	WMSetBalloonTextForView(_("Load the selected theme."),
+				WMWidgetView(panel->loadB));
 
 	panel->saveB = WMCreateCommandButton(panel->thmF);
 	WMResizeWidget(panel->saveB, 57, 39);
@@ -2099,7 +2170,8 @@ static void createPanel(Panel * p)
 	WMSetButtonFont(panel->saveB, font);
 	WMSetButtonText(panel->saveB, _("Save"));
 //	WMSetButtonAction(panel->saveB, extractTexture, panel);
-	WMSetBalloonTextForView(_("Save the current theme."), WMWidgetView(panel->saveB));
+	WMSetBalloonTextForView(_("Save the current theme."),
+				WMWidgetView(panel->saveB));
 
 	WMReleaseFont(font);
 
