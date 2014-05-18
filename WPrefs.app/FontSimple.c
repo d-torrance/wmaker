@@ -1,9 +1,9 @@
 /* FontSimple.c- simplified font configuration panel
- * 
+ *
  *  WPrefs - Window Maker Preferences Program
- * 
+ *
  *  Copyright (c) 1998-2004 Alfredo K. Kojima
- * 
+ *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -589,17 +589,17 @@ static void showData(_Panel * panel)
 		if (ofont)
 			wfree(ofont);
 
-		if (strcmp(fontOptions[i].option,"SystemFont")==0 ||
-		    strcmp(fontOptions[i].option,"BoldSystemFont")==0) {
+		if (strcmp(fontOptions[i].option, "SystemFont") == 0 ||
+		    strcmp(fontOptions[i].option, "BoldSystemFont") == 0) {
 			char *path;
 			WMUserDefaults *defaults;
+
 			path = wdefaultspathfordomain("WMGLOBAL");
 			defaults = WMGetDefaultsFromPath(path);
 			wfree(path);
 			font = WMGetUDStringForKey(defaults,
 						   fontOptions[i].option);
-		}
-		else {
+		} else {
 			font = GetStringForKey(fontOptions[i].option);
 		}
 		if (font)
@@ -622,10 +622,11 @@ static void storeData(_Panel * panel)
 
 		font = WMGetMenuItemRepresentedObject(item);
 		if (font && *font) {
-			if (strcmp(fontOptions[i].option,"SystemFont")==0 ||
-			    strcmp(fontOptions[i].option,"BoldSystemFont")==0) {
+			if (strcmp(fontOptions[i].option, "SystemFont") == 0 ||
+			    strcmp(fontOptions[i].option, "BoldSystemFont") == 0) {
 				char *path;
 				WMUserDefaults *defaults;
+
 				path = wdefaultspathfordomain("WMGLOBAL");
 				defaults = WMGetDefaultsFromPath(path);
 				wfree(path);
@@ -633,8 +634,7 @@ static void storeData(_Panel * panel)
 						    font,
 						    fontOptions[i].option);
 				WMSaveUserDefaults(defaults);
-			}
-			else {
+			} else {
 				SetStringForKey(font, fontOptions[i].option);
 			}
 		}

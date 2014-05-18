@@ -161,7 +161,6 @@ typedef struct W_ColorPanel {
 	WMButton *grayPresetBtn[7];
 
 	/* RGB Panel */
-	int rgbState;
 	WMButton *rgbDecB;
 	WMButton *rgbHexB;
 	WMFrame *rgbFrm;
@@ -173,6 +172,10 @@ typedef struct W_ColorPanel {
 	WMTextField *rgbRedT;
 	WMTextField *rgbGreenT;
 	WMTextField *rgbBlueT;
+	enum {
+		RGBdec,
+		RGBhex
+	} rgbState;
 
 	/* CMYK Panel */
 	WMFrame *cmykFrm;
@@ -718,11 +721,13 @@ static WMColorPanel *makeColorPanel(WMScreen * scrPtr, const char *name)
 	WMSetButtonSelected(panel->rgbDecB, 1);
 	panel->rgbState = RGBdec;
 	WMSetButtonAction(panel->rgbDecB, rgbDecToHex, panel);
+	WMResizeWidget(panel->rgbDecB, PWIDTH - 8, 23);
 	WMMoveWidget(panel->rgbDecB, 2, 81);
 
 	panel->rgbHexB = WMCreateButton(panel->rgbFrm, WBTRadio);
 	WMSetButtonText(panel->rgbHexB, "Hexadecimal");
 	WMSetButtonAction(panel->rgbHexB, rgbDecToHex, panel);
+	WMResizeWidget(panel->rgbHexB, PWIDTH - 8, 23);
 	WMMoveWidget(panel->rgbHexB, 2, 104);
 
 	WMGroupButtons(panel->rgbDecB, panel->rgbHexB);
@@ -2375,12 +2380,16 @@ static void grayBrightnessTextFieldCallback(void *observerData, WMNotification *
 void rgbIntToChar(W_ColorPanel *panel, int *value)
 {
 	char tmp[4];
-	char *format;
+	const char *format;
 
-	if (panel->rgbState == RGBdec)
+	switch (panel->rgbState) {
+	case RGBdec:
 		format = "%d";
-	if (panel->rgbState == RGBhex)
+		break;
+	case RGBhex:
 		format = "%0X";
+		break;
+	}
 
 	sprintf(tmp, format, value[0]);
 	WMSetTextFieldText(panel->rgbRedT, tmp);
@@ -2392,18 +2401,22 @@ void rgbIntToChar(W_ColorPanel *panel, int *value)
 
 int *rgbCharToInt(W_ColorPanel *panel)
 {
+	int base = 0;
 	static int value[3];
 
-	if (panel->rgbState == RGBdec) {
-		value[0] = atoi(WMGetTextFieldText(panel->rgbRedT));
-		value[1] = atoi(WMGetTextFieldText(panel->rgbGreenT));
-		value[2] = atoi(WMGetTextFieldText(panel->rgbBlueT));
+	switch (panel->rgbState) {
+	case RGBdec:
+		base = 10;
+		break;
+	case RGBhex:
+		base = 16;
+		break;
 	}
-	if (panel->rgbState == RGBhex) {
-		value[0] = strtol(WMGetTextFieldText(panel->rgbRedT), NULL, 16);
-		value[1] = strtol(WMGetTextFieldText(panel->rgbGreenT), NULL, 16);
-		value[2] = strtol(WMGetTextFieldText(panel->rgbBlueT),  NULL, 16);
-	}
+
+	value[0] = strtol(WMGetTextFieldText(panel->rgbRedT), NULL, base);
+	value[1] = strtol(WMGetTextFieldText(panel->rgbGreenT), NULL, base);
+	value[2] = strtol(WMGetTextFieldText(panel->rgbBlueT),  NULL, base);
+
 	return value;
 }
 
@@ -2468,22 +2481,31 @@ static void rgbTextFieldCallback(void *observerData, WMNotification * notificati
 static void rgbDecToHex(WMWidget *w, void *data)
 {
 	W_ColorPanel *panel = (W_ColorPanel *) data;
-	(void) w;
 	int *value;
 
-	if (WMGetButtonSelected(panel->rgbDecB) && panel->rgbState == RGBhex) {
-		WMSetLabelText(panel->rgbMaxL, "255");
-		WMRedisplayWidget(panel->rgbMaxL);
-		value = rgbCharToInt(panel);
-		panel->rgbState = RGBdec;
-		rgbIntToChar(panel, value);
-	}
-	if (WMGetButtonSelected(panel->rgbHexB) && panel->rgbState == RGBdec) {
-		WMSetLabelText(panel->rgbMaxL, "FF");
-		WMRedisplayWidget(panel->rgbMaxL);
-		value = rgbCharToInt(panel);
-		panel->rgbState = RGBhex;
-		rgbIntToChar(panel, value);
+	(void) w;
+
+	switch (panel->rgbState) {
+	case RGBhex:
+		if (WMGetButtonSelected(panel->rgbDecB)) {
+			WMSetLabelText(panel->rgbMaxL, "255");
+			WMRedisplayWidget(panel->rgbMaxL);
+			value = rgbCharToInt(panel);
+			panel->rgbState = RGBdec;
+			rgbIntToChar(panel, value);
+		}
+		break;
+
+	case RGBdec:
+		if (WMGetButtonSelected(panel->rgbHexB)) {
+			WMSetLabelText(panel->rgbMaxL, "FF");
+			WMRedisplayWidget(panel->rgbMaxL);
+			value = rgbCharToInt(panel);
+			panel->rgbState = RGBhex;
+			rgbIntToChar(panel, value);
+		}
+		break;
+>>>>>>> next
 	}
 }
 
