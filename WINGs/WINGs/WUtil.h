@@ -40,50 +40,31 @@
 #endif
 
 
-#ifndef __ASSERT_FUNCTION
-# if (!defined (__GNUC__) || (__GNUC__ < 2 && \
-      __GNUC_MINOR__ < (defined (__cplusplus) ? 6 : 4)))
-#  define __ASSERT_FUNCTION       ((char *) 0)
-# else
-#  define __ASSERT_FUNCTION       __PRETTY_FUNCTION__
-# endif
-#endif
-
 #ifndef __GNUC__
 #define  __attribute__(x)  /*NOTHING*/
 #endif
 
 #ifdef NDEBUG
 
-#define wassertr(expr)		{}
-#define wassertrv(expr, val)	{}
+#define wassertr(expr)  \
+	if (!(expr)) { return; }
+
+#define wassertrv(expr, val)  \
+	if (!(expr)) { return (val); }
 
 #else /* !NDEBUG */
 
-#ifdef DEBUG
-
-#include <assert.h>
-
-#define wassertr(expr) 	assert(expr)
-
-#define wassertrv(expr, val)	assert(expr)
-
-#else /* !DEBUG */
-
 #define wassertr(expr) \
     if (!(expr)) { \
-        wwarning("%s line %i (%s): assertion %s failed",\
-                 __FILE__, __LINE__, __ASSERT_FUNCTION, #expr);\
+        wwarning("wassertr: assertion %s failed", #expr); \
         return;\
     }
 
 #define wassertrv(expr, val) \
     if (!(expr)) { \
-        wwarning("%s line %i (%s): assertion %s failed",\
-                 __FILE__, __LINE__, __ASSERT_FUNCTION, #expr);\
+        wwarning("wassertrv: assertion %s failed", #expr); \
         return (val);\
     }
-#endif /* !DEBUG */
 
 #endif /* !NDEBUG */
 

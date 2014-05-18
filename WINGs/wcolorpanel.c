@@ -255,6 +255,11 @@ enum {
 	CLmenuRemove
 } colorListMenuItem;
 
+enum {
+	RGBdec,
+	RGBhex
+};
+
 #define	PWIDTH                  194
 #define	PHEIGHT                 266
 #define	colorWheelSize          150
@@ -2480,19 +2485,27 @@ static void rgbDecToHex(WMWidget *w, void *data)
 
 	(void) w;
 
-	if (WMGetButtonSelected(panel->rgbDecB) && panel->rgbState == RGBhex) {
-		WMSetLabelText(panel->rgbMaxL, "255");
-		WMRedisplayWidget(panel->rgbMaxL);
-		value = rgbCharToInt(panel);
-		panel->rgbState = RGBdec;
-		rgbIntToChar(panel, value);
-	}
-	if (WMGetButtonSelected(panel->rgbHexB) && panel->rgbState == RGBdec) {
-		WMSetLabelText(panel->rgbMaxL, "FF");
-		WMRedisplayWidget(panel->rgbMaxL);
-		value = rgbCharToInt(panel);
-		panel->rgbState = RGBhex;
-		rgbIntToChar(panel, value);
+	switch (panel->rgbState) {
+	case RGBhex:
+		if (WMGetButtonSelected(panel->rgbDecB)) {
+			WMSetLabelText(panel->rgbMaxL, "255");
+			WMRedisplayWidget(panel->rgbMaxL);
+			value = rgbCharToInt(panel);
+			panel->rgbState = RGBdec;
+			rgbIntToChar(panel, value);
+		}
+		break;
+
+	case RGBdec:
+		if (WMGetButtonSelected(panel->rgbHexB)) {
+			WMSetLabelText(panel->rgbMaxL, "FF");
+			WMRedisplayWidget(panel->rgbMaxL);
+			value = rgbCharToInt(panel);
+			panel->rgbState = RGBhex;
+			rgbIntToChar(panel, value);
+		}
+		break;
+>>>>>>> next
 	}
 }
 

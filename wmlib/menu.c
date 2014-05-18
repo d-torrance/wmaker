@@ -83,7 +83,7 @@ WMMenuAddItem(WMMenu * menu, char *text, WMMenuAction action,
 
 	entry->entryline = malloc(strlen(text) + 100);
 	if (!entry->entryline) {
-		free(menu);
+		free(entry);
 		return -1;
 	}
 
@@ -131,7 +131,7 @@ int WMMenuAddSubmenu(WMMenu * menu, char *text, WMMenu * submenu)
 
 	entry->entryline = malloc(strlen(text) + 100);
 	if (!entry->entryline) {
-		free(menu);
+		free(entry);
 		return -1;
 	}
 
