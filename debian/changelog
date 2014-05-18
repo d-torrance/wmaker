@@ -1,3 +1,17 @@
+wmaker (0.95.5+20140517-0ppa1) trusty; urgency=low
+
+  * Git snapshot.
+  * New features:
+    - Ambiance and Radiance themes.
+    - Basic WINGs theming.
+    - README.ppa file installed in /usr/share/doc/wmaker.  Read this for
+      more information!
+  * debian/control:
+    - Updated Maintainer.
+    - Added XSBC-Original-Maintainer.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Sat, 17 May 2014 21:43:15 -0500
+
 wmaker (0.95.5+20140513-0ppa1) trusty; urgency=low
 
   * Git snapshot.

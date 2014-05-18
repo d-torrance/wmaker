@@ -255,11 +255,6 @@ enum {
 	CLmenuRemove
 } colorListMenuItem;
 
-enum {
-	RGBdec,
-	RGBhex
-};
-
 #define	PWIDTH                  194
 #define	PHEIGHT                 266
 #define	colorWheelSize          150
@@ -2505,7 +2500,6 @@ static void rgbDecToHex(WMWidget *w, void *data)
 			rgbIntToChar(panel, value);
 		}
 		break;
->>>>>>> next
 	}
 }
 

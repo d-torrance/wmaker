@@ -1,0 +1,48 @@
+  _      ___         __             __  ___     __
+ | | /| / (_)__  ___/ /__ _    __  /  |/  /__ _/ /_____ ____
+ | |/ |/ / / _ \/ _  / _ \ |/|/ / / /|_/ / _ `/  '_/ -_) __/
+ |__/|__/_/_//_/\_,_/\___/__,__/ /_/  /_/\_,_/_/\_\\__/_/
+
+Thanks for trying out my Ubuntu PPA version of Window Maker!
+
+For the most part, this version is a snapshot of the next branch of
+the Window Maker git:
+http://repo.or.cz/w/wmaker-crm.git
+
+I have added a few extra features:
+
+#########################
+## Unity greeter badge ##
+#########################
+A little GNUstep icon appears when you select Window Maker at login in
+Unity Greeter.  Note that this is also available in the main Ubuntu
+package.
+
+################################
+## Ubuntu Window Maker themes ##
+################################
+Two new themes are available, approximating Ubuntu's Ambiance and Radiance
+themes.
+
+########################
+## Basic WINGs themes ##
+########################
+WINGs (the widget toolkit used by WPrefs and all of Window Maker's various
+dialog windows) has hardcorded in six colors used by all of its widgets.
+You can change these by setting new colors in ~/GNUstep/Defaults/WMGLOBAL.
+Here is an example that approximates the Radiance GTK theme:
+{
+ Background = "#f2f1f0";
+ Foreground = "#4c4c4c";
+ Selected = "#f68152";
+ Highlight = "#fcfcfb";
+ Shadow = "#c9c6c3";
+ UnselectedTabBackground = "#f2f1f0";
+ UnselectedTabShadow = "#cdc6c3";
+}
+
+###############
+## Questions ##
+###############
+Contact me:
+Doug Torrance <dtorrance@monmouthcollege.edu>

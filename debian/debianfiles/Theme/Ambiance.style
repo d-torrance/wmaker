@@ -1,0 +1,27 @@
+{
+	MenuStyle = flat;
+	TitleJustify = left;
+	WindowTitleFont = "Ubuntu:slant=0:weight=200:width=100:pixelsize=13";
+	MenuTitleFont = "Ubuntu:slant=0:weight=200:width=100:pixelsize=13";
+	MenuTextFont = "Ubuntu:slant=0:weight=80:width=100:pixelsize=13";
+	IconTitleFont = "Ubuntu:slant=0:weight=80:width=100:pixelsize=9";
+	ClipTitleFont = "Ubuntu:slant=0:weight=200:width=100:pixelsize=13";
+	LargeDisplayFont = "Ubuntu:slant=0:weight=200:width=100:pixelsize=24";
+	HighlightColor = "#f07746";
+	HighlightTextColor = "#4c4c4c";
+	ClipTitleColor = "#dfdbd2";
+ 	CClipTitleColor = "#807d78";
+ 	FTitleColor = "#dfdbd2";
+	PTitleColor = "#807d78";
+	UTitleColor = "#807d78";
+	FTitleBack = (vgradient, "#474642", "#3c3b37");
+	PTitleBack = (vgradient, "#41403d", "#3c3b37");
+	UTitleBack = (vgradient, "#41403d", "#3c3b37");
+	MenuTitleColor = "#dfdbd2";
+	MenuTextColor = "#dfdbd2";
+	MenuDisabledColor = "#919190";
+  	MenuTitleBack = (vgradient, "#474642", "#3c3b37");
+	MenuTextBack = (solid, "#41403b");
+	IconBack = (vgradient, "#474642", "#3c3b37");
+	WorkspaceBack = (spixmap, "/usr/share/backgrounds/warty-final-ubuntu.png", black);
+}

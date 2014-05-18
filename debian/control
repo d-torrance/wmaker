@@ -1,7 +1,8 @@
 Source: wmaker
 Section: x11
 Priority: optional
-Maintainer: Rodolfo García Peñas (kix) <kix@debian.org>
+Maintainer: Doug Torrance <dtorrance@monmouthcollege.edu>
+XSBC-Original-Maintainer: Rodolfo García Peñas (kix) <kix@debian.org>
 Standards-Version: 3.9.5
 Build-Depends: debhelper (>= 9), automake (>= 1:1.11), gettext,
  libfontconfig1-dev, libjpeg-dev, libpng-dev, libsm-dev, libtiff5-dev,
