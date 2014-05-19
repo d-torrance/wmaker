@@ -1,3 +1,10 @@
+  * debian/debianfiles/Theme/*ance.style
+    - Changed WorkspaceBack from spixmap to cpixmap to match Unity Greeter
+      background.
+  * debian/README.ppa
+    - Added information about conflicts with old wmaker-unity-greeter-badge
+      and wmaker-ubuntu-themes packages from PPA.
+
 wmaker (0.95.5+20140517-0ppa1) trusty; urgency=low
 
   * Git snapshot.
