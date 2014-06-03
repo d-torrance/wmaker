@@ -593,6 +593,12 @@ WScreen *wScreenInit(int screen_number)
 
 	if (!scr->wmscreen) {
 		wfatal(_("could not initialize WINGs widget set"));
+		RDestroyContext(scr->rcontext);
+		WMFreeArray(scr->fakeGroupLeaders);
+		wfree(scr->totalUsableArea);
+		wfree(scr->usableArea);
+		WMFreeBag(scr->stacking_list);
+		wfree(scr);
 		return NULL;
 	}
 
@@ -622,6 +628,8 @@ WScreen *wScreenInit(int screen_number)
 		/* frame boder color */
 		wGetColor(scr, WMGetColorRGBDescription(scr->frame_border_color), &xcol);
 		scr->frame_border_pixel = xcol.pixel;
+		wGetColor(scr, WMGetColorRGBDescription(scr->frame_focused_border_color), &xcol);
+		scr->frame_focused_border_pixel = xcol.pixel;
 		wGetColor(scr, WMGetColorRGBDescription(scr->frame_selected_border_color), &xcol);
 		scr->frame_selected_border_pixel = xcol.pixel;
 	}

@@ -120,6 +120,7 @@ static void autoDelayChanged(void *observerData, WMNotification *notification)
 		}
 		char *value = WMGetTextFieldText(anAutoDelayT);
 		adjustButtonSelectionBasedOnValue(panel, row, value);
+		free(value);
 		return;
 	}
 }
@@ -292,7 +293,11 @@ static void storeData(_Panel *panel)
 	int i;
 	for (i = 0; i < 4; i++)
 	{
-		SetStringForKey(WMGetTextFieldText(panel->autoDelayT[i]), auto_delay[i].key);
+		char *str;
+
+		str = WMGetTextFieldText(panel->autoDelayT[i]);
+		SetStringForKey(str, auto_delay[i].key);
+		wfree(str);
 	}
 	for (i = 0; i < 3; i++)
 	{

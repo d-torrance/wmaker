@@ -239,25 +239,26 @@ static void scrollIcons(WSwitchPanel *panel, int delta)
  */
 static RImage *assemblePuzzleImage(RImage **images, int width, int height)
 {
-	RImage *img = RCreateImage(width, height, 1);
+	RImage *img;
 	RImage *tmp;
 	int tw, th;
 	RColor color;
-	if (!img)
-		return NULL;
-
-	color.red = 0;
-	color.green = 0;
-	color.blue = 0;
-	color.alpha = 255;
-
-	RFillImage(img, &color);
 
 	tw = width - images[0]->width - images[2]->width;
 	th = height - images[0]->height - images[6]->height;
 
 	if (tw <= 0 || th <= 0)
 		return NULL;
+
+	img = RCreateImage(width, height, 1);
+	if (!img)
+		return NULL;
+
+	color.red   =   0;
+	color.green =   0;
+	color.blue  =   0;
+	color.alpha = 255;
+	RFillImage(img, &color);
 
 	/* top */
 	if (tw > 0) {
@@ -372,7 +373,7 @@ static WMArray *makeWindowListArray(WWindow *curwin, int include_unmapped, Bool 
 	for (fl = 0; fl < 2; fl++) {
 		for (wwin = curwin; wwin; wwin = wwin->prev) {
 			if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
-			    (wwin->flags.mapped || include_unmapped)) {
+			    (wwin->flags.mapped || wwin->flags.shaded || include_unmapped)) {
 				if (class_only)
 					if (!sameWindowClass(wwin, curwin))
 						continue;
@@ -388,7 +389,7 @@ static WMArray *makeWindowListArray(WWindow *curwin, int include_unmapped, Bool 
 
 		for (wwin = curwin; wwin && wwin != curwin; wwin = wwin->prev) {
 			if (((!fl && canReceiveFocus(wwin) > 0) || (fl && canReceiveFocus(wwin) < 0)) &&
-			    (wwin->flags.mapped || include_unmapped)) {
+			    (wwin->flags.mapped || wwin->flags.shaded || include_unmapped)) {
 				if (class_only)
 				    if (!sameWindowClass(wwin, curwin))
 					continue;

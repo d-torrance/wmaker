@@ -3204,8 +3204,11 @@ void wDockTrackWindowLaunch(WDock *dock, Window window)
 	Bool found = False;
 	char *command = NULL;
 
-	if (!PropGetWMClass(window, &wm_class, &wm_instance) || (!wm_class && !wm_instance))
+	if (!PropGetWMClass(window, &wm_class, &wm_instance)) {
+		free(wm_class);
+		free(wm_instance);
 		return;
+	}
 
 	command = GetCommandForWindow(window);
  retry:
@@ -4445,13 +4448,15 @@ static void drawerDestroy(WDock *drawer)
 
 	wAppIconDestroy(drawer->icon_array[0]);
 	wfree(drawer->icon_array);
-	wfree(drawer);
+	drawer->icon_array = NULL;
 
 	drawerRemoveFromChain(scr, drawer);
 	if (scr->last_dock == drawer)
 		scr->last_dock = NULL;
 	if (scr->attracting_drawer == drawer)
 		scr->attracting_drawer = NULL;
+
+	wfree(drawer);
 }
 
 

@@ -34,9 +34,9 @@
 #define PI 3.14159265358979323846
 #endif
 
-static RImage *rotateImage(RImage * image, float angle);
+static RImage *rotateImage(RImage *image, float angle);
 
-RImage *RRotateImage(RImage * image, float angle)
+RImage *RRotateImage(RImage *image, float angle)
 {
 	RImage *img;
 	int nwidth, nheight;
@@ -66,41 +66,41 @@ RImage *RRotateImage(RImage * image, float angle)
 		nheight = image->width;
 
 		img = RCreateImage(nwidth, nheight, True);
-		if (!img) {
+		if (!img)
 			return NULL;
-		}
 
 		if (bpp == 3) {
 			unsigned char *optr, *nptr;
-			unsigned offs;
-
-			offs = nwidth * 4;
 
 			optr = image->data;
 			nptr = img->data;
 
-			for (x = 0; x < nwidth; x++) {
-				nptr = img->data + x * 4;
+			for (x = nwidth; x; x--) {
+				nptr = img->data + 4 * (x - 1);
 				for (y = nheight; y; y--) {
 					nptr[0] = *optr++;
 					nptr[1] = *optr++;
 					nptr[2] = *optr++;
 					nptr[3] = 255;
 
-					nptr += offs;
+					nptr += 4 * nwidth;
 				}
 			}
 		} else {
-			unsigned *optr, *nptr;
-			unsigned *p;
+			unsigned char *optr, *nptr;
 
-			optr = (unsigned *)image->data;
-			p = (unsigned *)img->data;
-			for (x = 0; x < nwidth; x++) {
-				nptr = p++;
+			optr = image->data;
+			nptr = img->data;
+
+			for (x = nwidth; x; x--) {
+				nptr = img->data + 4 * (x - 1);
 				for (y = nheight; y; y--) {
-					*nptr = *optr++;
-					nptr += nwidth;
+					nptr[0] = *optr++;
+					nptr[1] = *optr++;
+					nptr[2] = *optr++;
+					nptr[3] = *optr++;
+
+					nptr += 4 * nwidth;
 				}
 			}
 		}
@@ -110,9 +110,8 @@ RImage *RRotateImage(RImage * image, float angle)
 		nwidth = image->width;
 		nheight = image->height;
 		img = RCreateImage(nwidth, nheight, True);
-		if (!img) {
+		if (!img)
 			return NULL;
-		}
 
 		if (bpp == 3) {
 			unsigned char *optr, *nptr;
@@ -149,41 +148,39 @@ RImage *RRotateImage(RImage * image, float angle)
 		nheight = image->width;
 
 		img = RCreateImage(nwidth, nheight, True);
-		if (!img) {
+		if (!img)
 			return NULL;
-		}
 
 		if (bpp == 3) {
 			unsigned char *optr, *nptr;
-			unsigned offs;
-
-			offs = nwidth * 4;
 
 			optr = image->data;
-			nptr = img->data;
 
-			for (x = 0; x < nwidth; x++) {
-				nptr = img->data + x * 4;
+			for (x = nwidth; x; x--) {
+				nptr = img->data + 4 * nwidth * nheight - x * 4;
 				for (y = nheight; y; y--) {
 					nptr[0] = *optr++;
 					nptr[1] = *optr++;
 					nptr[2] = *optr++;
 					nptr[3] = 255;
 
-					nptr += offs;
+					nptr -= 4 * nwidth;
 				}
 			}
 		} else {
-			unsigned *optr, *nptr;
-			unsigned *p;
+			unsigned char *optr, *nptr;
 
-			optr = (unsigned *)image->data;
-			p = (unsigned *)img->data + nwidth * nheight;
-			for (x = 0; x < nwidth; x++) {
-				nptr = p--;
+			optr = image->data;
+
+			for (x = nwidth; x; x--) {
+				nptr = img->data + 4 * nwidth * nheight - x * 4;
 				for (y = nheight; y; y--) {
-					*nptr = *optr++;
-					nptr -= nwidth;
+					nptr[0] = *optr++;
+					nptr[1] = *optr++;
+					nptr[2] = *optr++;
+					nptr[3] = *optr++;
+
+					nptr -= 4 * nwidth;
 				}
 			}
 		}
@@ -211,10 +208,11 @@ RImage *RRotateImage(RImage * image, float angle)
  * for each point P1 in the line from C to A
  *	for each point P2 in the perpendicular line starting at P1
  *		get pixel from the source and plot at P2
- * 		increment pixel location from source
+ *		increment pixel location from source
  *
  */
 
+#if 0
 static void
 copyLine(int x1, int y1, int x2, int y2, int nwidth, int format, unsigned char *dst, unsigned char **src)
 {
@@ -294,9 +292,14 @@ copyLine(int x1, int y1, int x2, int y2, int nwidth, int format, unsigned char *
 
 	*src = s;
 }
+#endif
 
-static RImage *rotateImage(RImage * image, float angle)
+static RImage *rotateImage(RImage *image, float angle)
 {
+	(void) angle;
+	puts("NOT FULLY IMPLEMENTED");
+	return RCloneImage(image);
+#if 0
 	RImage *img;
 	int nwidth, nheight;
 	int x1, y1;
@@ -373,8 +376,6 @@ static RImage *rotateImage(RImage * image, float angle)
 			}
 		}
 	} else {
-		puts("NOT IMPLEMTENED");
-		return img;
 		dpr = dx << 1;
 		dpru = dpr - (dy << 1);
 		p = dpr - dy;
@@ -398,4 +399,5 @@ static RImage *rotateImage(RImage * image, float angle)
 	}
 
 	return img;
+#endif
 }

@@ -375,8 +375,6 @@ void WMSetBrowserTitled(WMBrowser * bPtr, Bool flag)
 	if (bPtr->flags.isTitled == flag)
 		return;
 
-	columnX = 0;
-
 	if (!bPtr->flags.isTitled) {
 		columnY = TITLE_SPACING + bPtr->titleHeight;
 
@@ -478,7 +476,7 @@ static void paintItem(WMList * lPtr, int index, Drawable d, char *text, int stat
 	Display *display = scr->display;
 	WMFont *font = ((state & WLDSIsBranch) ? scr->boldFont : scr->normalFont);
 	WMColor *backColor = ((state & WLDSSelected) ? scr->white : view->backColor);
-	int width, height, x, y, textLen;
+	int width, height, x, y;
 
 	/* Parameter not used, but tell the compiler that it is ok */
 	(void) index;
@@ -487,13 +485,15 @@ static void paintItem(WMList * lPtr, int index, Drawable d, char *text, int stat
 	height = rect->size.height;
 	x = rect->pos.x;
 	y = rect->pos.y;
-	textLen = strlen(text);
 
 	XFillRectangle(display, d, WMColorGC(backColor), x, y, width, height);
 
 	if (text) {
+		int widthC, textLen;
+
 		/* Avoid overlaping... */
-		int widthC = (state & WLDSIsBranch) ? width - 20 : width - 8;
+		widthC = (state & WLDSIsBranch) ? width - 20 : width - 8;
+		textLen = strlen(text);
 		if (WMWidthOfString(font, text, textLen) > widthC) {
 			char *textBuf = createTruncatedString(font, text, &textLen, widthC);
 			W_PaintText(view, d, font, x + 4, y, widthC, WALeft, scr->black, False, textBuf, textLen);
@@ -783,6 +783,7 @@ WMArray *WMGetBrowserPaths(WMBrowser * bPtr)
 		for (i = 0; i <= column; i++) {
 			if (wstrlcat(path, bPtr->pathSeparator, slen) >= slen) {
 				wfree(path);
+				WMFreeArray(paths);
 				return NULL;
 			}
 			if (i == column) {

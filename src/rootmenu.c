@@ -571,6 +571,7 @@ static void separateCommand(char *line, char ***file, char **command)
 					*command = wstrdup(tmp);
 				else
 					wwarning(_("%s: missing command"), line);
+				wfree(token);
 				break;
 			}
 			WMAddToArray(array, token);
@@ -626,6 +627,11 @@ static void constructMenu(WMenu * menu, WMenuEntry * entry)
 	separateCommand((char *)entry->clientdata, &path, &cmd);
 	if (path == NULL || *path == NULL || **path == 0) {
 		wwarning(_("invalid OPEN_MENU specification: %s"), (char *)entry->clientdata);
+		if (path) {
+			for (i = 0; path[i] != NULL; i++)
+				wfree(path[i]);
+			wfree(path);
+		}
 		if (cmd)
 			wfree(cmd);
 		return;
@@ -746,6 +752,11 @@ static void constructPLMenuFromPipe(WMenu * menu, WMenuEntry * entry)
 	if (path == NULL || *path == NULL || **path == 0) {
 		wwarning(_("invalid OPEN_PLMENU specification: %s"),
 		    (char *)entry->clientdata);
+		if (path) {
+			for (i = 0; path[i] != NULL; i++)
+				wfree(path[i]);
+			wfree(path);
+		}
 		if (cmd)
 			wfree(cmd);
 		return;

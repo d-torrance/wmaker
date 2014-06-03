@@ -70,7 +70,6 @@ static char *options[] = {
 	"MenuTitleFont",
 	"MenuTextFont",
 	"IconTitleFont",
-	"DisplayFont",
 	"LargeDisplayFont",
 	"HighlightColor",
 	"HighlightTextColor",
@@ -93,6 +92,7 @@ static char *options[] = {
 	"IconTitleBack",
 	"FrameBorderWidth",
 	"FrameBorderColor",
+	"FrameFocusedBorderColor",
 	"FrameSelectedBorderColor",
 	"MenuStyle",
 	"WindowTitleExtendSpace",
@@ -129,7 +129,6 @@ static char *font_options[] = {
 	"MenuTitleFont",
 	"MenuTextFont",
 	"IconTitleFont",
-	"DisplayFont",
 	"LargeDisplayFont",
 	NULL
 };

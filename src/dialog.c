@@ -275,7 +275,7 @@ ScanFiles(const char *dir, const char *prefix, unsigned acceptmask, unsigned dec
 						  de->d_name + prefixlen) == WANotFound) {
 					suffix = wstrdup(de->d_name + prefixlen);
 					if (sb.st_mode & S_IFDIR)
-						wstrappend(suffix,"/");
+						suffix = wstrappend(suffix, "/");
 					WMAddToArray(result, suffix);
 				}
 				wfree(fullfilename);
@@ -664,13 +664,13 @@ static void listCallback(void *self, void *data)
 		if (item == NULL)
 			return;
 		path = item->text;
-		tmp = wexpandpath(path);
 
 		item = WMGetListSelectedItem(panel->iconList);
 		if (item == NULL)
 			return;
 		iconFile = item->text;
 
+		tmp = wexpandpath(path);
 		path = wmalloc(strlen(tmp) + strlen(iconFile) + 4);
 		strcpy(path, tmp);
 		strcat(path, "/");
@@ -1569,8 +1569,6 @@ int wShowCrashingDialogPanel(int whatSig)
 	int action;
 	char buf[256];
 
-	panel = wmalloc(sizeof(CrashPanel));
-
 	screen_no = DefaultScreen(dpy);
 	scr_width = WidthOfScreen(ScreenOfDisplay(dpy, screen_no));
 	scr_height = HeightOfScreen(ScreenOfDisplay(dpy, screen_no));
@@ -1580,6 +1578,8 @@ int wShowCrashingDialogPanel(int whatSig)
 		werror(_("cannot open connection for crashing dialog panel. Aborting."));
 		return WMAbort;
 	}
+
+	panel = wmalloc(sizeof(CrashPanel));
 
 	panel->retKey = XKeysymToKeycode(dpy, XK_Return);
 

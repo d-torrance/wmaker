@@ -581,7 +581,7 @@ static Bool updateStartForCurrentTextBlock(Text * tPtr, int x, int y, int *dir, 
 			return 0;
 
 		if (tb->graphic) {
-			tPtr->currentTextBlock = (dir ? tPtr->lastTextBlock : tPtr->firstTextBlock);
+			tPtr->currentTextBlock = (*dir ? tPtr->lastTextBlock : tPtr->firstTextBlock);
 			tPtr->tpos = 0;
 			return 0;
 		}
@@ -2052,6 +2052,7 @@ static WMData *requestHandler(WMView * view, Atom selection, Atom target, void *
 		if (text) {
 			data = WMCreateDataWithBytes(text, strlen(text));
 			WMSetDataFormat(data, TYPETEXT);
+			wfree(text);
 		}
 		*type = target;
 		return data;
@@ -2150,8 +2151,14 @@ static void autoSelectText(Text * tPtr, int clicks)
 	} else if (clicks == 3) {
 		TextBlock *cur = tb;
 
-		while (tb && !tb->first) {
+		while (!tb->first) {
 			tb = tb->prior;
+			if (tb == NULL) {
+#ifndef NDEBUG
+				wwarning("corrupted list of text blocks in WMText, while searching for first block");
+#endif
+				goto error_select_3clicks;
+			}
 		}
 		tPtr->sel.y = tb->sections[0]._y;
 
@@ -2161,6 +2168,7 @@ static void autoSelectText(Text * tPtr, int clicks)
 		}
 		tPtr->sel.h = tb->sections[tb->nsections - 1]._y + 5 - tPtr->sel.y;
 
+	error_select_3clicks:
 		tPtr->sel.x = 0;
 		tPtr->sel.w = tPtr->docWidth;
 		tPtr->clicked.x = 0;	/* only for now, fix sel. code */
@@ -2223,11 +2231,8 @@ static void handleTextKeyPress(Text * tPtr, XEvent * event)
 	case XK_Left:
 		if (!(tb = tPtr->currentTextBlock))
 			break;
-		if (tb->graphic)
-			goto L_imaGFX;
 
-		if (tPtr->tpos == 0) {
- L_imaGFX:
+		if (tb->graphic || tPtr->tpos == 0) {
 			if (tb->prior) {
 				tPtr->currentTextBlock = tb->prior;
 				if (tPtr->currentTextBlock->graphic)
@@ -2248,10 +2253,7 @@ static void handleTextKeyPress(Text * tPtr, XEvent * event)
 	case XK_Right:
 		if (!(tb = tPtr->currentTextBlock))
 			break;
-		if (tb->graphic)
-			goto R_imaGFX;
-		if (tPtr->tpos == tb->used) {
- R_imaGFX:
+		if (tb->graphic || tPtr->tpos == tb->used) {
 			if (tb->next) {
 				tPtr->currentTextBlock = tb->next;
 				tPtr->tpos = 0;
@@ -2891,7 +2893,7 @@ static void releaseStreamObjects(void *data)
 
 static WMArray *getStreamObjects(WMText * tPtr, int sel)
 {
-	WMArray *array = WMCreateArrayWithDestructor(4, releaseStreamObjects);
+	WMArray *array;
 	WMData *data;
 	char *stream;
 	unsigned short len;
@@ -2900,6 +2902,8 @@ static WMArray *getStreamObjects(WMText * tPtr, int sel)
 	stream = getStream(tPtr, sel, 1);
 	if (!stream)
 		return NULL;
+
+	array = WMCreateArrayWithDestructor(4, releaseStreamObjects);
 
 	start = stream;
 	while (start) {
@@ -3019,6 +3023,7 @@ WMText *WMCreateTextForDocumentType(WMWidget * parent, WMAction * parser, WMActi
 		WMAddToArray(types, "application/X-color");
 		WMAddToArray(types, "application/X-image");
 		WMRegisterViewForDraggedTypes(tPtr->view, types);
+		WMFreeArray(types);
 	}
 
 	/*WMAddNotificationObserver(fontChanged, tPtr,

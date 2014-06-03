@@ -126,6 +126,7 @@ static WDECallbackUpdate setIconTitleColor;
 static WDECallbackUpdate setIconTitleBack;
 static WDECallbackUpdate setFrameBorderWidth;
 static WDECallbackUpdate setFrameBorderColor;
+static WDECallbackUpdate setFrameFocusedBorderColor;
 static WDECallbackUpdate setFrameSelectedBorderColor;
 static WDECallbackUpdate setLargeDisplayFont;
 static WDECallbackUpdate setWTitleColor;
@@ -568,6 +569,8 @@ WDefaultEntry optionList[] = {
 	    NULL, getInt, setFrameBorderWidth, NULL, NULL},
 	{"FrameBorderColor", "black", NULL,
 	    NULL, getColor, setFrameBorderColor, NULL, NULL},
+	{"FrameFocusedBorderColor", "black", NULL,
+	    NULL, getColor, setFrameFocusedBorderColor, NULL, NULL},
 	{"FrameSelectedBorderColor", "white", NULL,
 	    NULL, getColor, setFrameSelectedBorderColor, NULL, NULL},
 
@@ -886,7 +889,6 @@ WDDomain *wDefaultsInitDomain(const char *domain, Bool requireDictionary)
 	WDDomain *db;
 	struct stat stbuf;
 	static int inited = 0;
-	const char *the_path;
 	WMPropList *shared_dict = NULL;
 
 	if (!inited) {
@@ -897,15 +899,14 @@ WDDomain *wDefaultsInitDomain(const char *domain, Bool requireDictionary)
 	db = wmalloc(sizeof(WDDomain));
 	db->domain_name = domain;
 	db->path = wdefaultspathfordomain(domain);
-	the_path = db->path;
 
-	if (the_path && stat(the_path, &stbuf) >= 0) {
-		db->dictionary = WMReadPropListFromFile(the_path);
+	if (stat(db->path, &stbuf) >= 0) {
+		db->dictionary = WMReadPropListFromFile(db->path);
 		if (db->dictionary) {
 			if (requireDictionary && !WMIsPLDictionary(db->dictionary)) {
 				WMReleasePropList(db->dictionary);
 				db->dictionary = NULL;
-				wwarning(_("Domain %s (%s) of defaults database is corrupted!"), domain, the_path);
+				wwarning(_("Domain %s (%s) of defaults database is corrupted!"), domain, db->path);
 			}
 			db->timestamp = stbuf.st_mtime;
 		} else {
@@ -2885,6 +2886,23 @@ static int setFrameBorderColor(WScreen * scr, WDefaultEntry * entry, void *tdata
 	if (scr->frame_border_color)
 		WMReleaseColor(scr->frame_border_color);
 	scr->frame_border_color = WMCreateRGBColor(scr->wmscreen, color->red, color->green, color->blue, True);
+
+	wFreeColor(scr, color->pixel);
+
+	return REFRESH_FRAME_BORDER;
+}
+
+static int setFrameFocusedBorderColor(WScreen *scr, WDefaultEntry *entry, void *tdata, void *foo)
+{
+	XColor *color = tdata;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
+
+	if (scr->frame_focused_border_color)
+		WMReleaseColor(scr->frame_focused_border_color);
+	scr->frame_focused_border_color = WMCreateRGBColor(scr->wmscreen, color->red, color->green, color->blue, True);
 
 	wFreeColor(scr, color->pixel);
 
