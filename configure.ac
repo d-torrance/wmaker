@@ -11,7 +11,7 @@ dnl
 dnl
 
 
-AC_INIT(WindowMaker, 0.95.5, , WindowMaker, http://www.windowmaker.org/)
+AC_INIT(WindowMaker, 0.95.5+20140602, , WindowMaker, http://www.windowmaker.org/)
 AC_CONFIG_SRCDIR(src/WindowMaker.h)
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS(config.h)
@@ -298,7 +298,7 @@ dnl =================
 AC_CHECK_HEADERS(sys/inotify.h, AC_DEFINE(HAVE_INOTIFY, 1, Check for inotify))
 
 
-dnl Check for syslog 
+dnl Check for syslog
 dnl =================
 AC_CHECK_HEADERS([syslog.h], [AC_DEFINE([HAVE_SYSLOG], [1], [Check for syslog])])
 
@@ -325,7 +325,7 @@ AC_TYPE_SIGNAL
 dnl pkg-config
 dnl ==========
 dnl AC_ARG_VAR(PKGCONFIG, [pkg-config command])
-AC_CHECK_PROG(PKGCONFIG, pkg-config, pkg-config) 
+AC_CHECK_PROG(PKGCONFIG, pkg-config, pkg-config)
 
 dnl gettext
 dnl =======
@@ -334,13 +334,13 @@ dnl AM_GNU_GETTEXT
 
 INTLIBS=""
 
-AC_CHECK_FUNC(gettext, [HAVEGETTEXT="yes"], 
+AC_CHECK_FUNC(gettext, [HAVEGETTEXT="yes"],
 	AC_CHECK_LIB(intl, gettext, [INTLIBS="-lintl" HAVEGETTEXT="yes"],
 			 INTLIBS="" ))
 
 AC_CHECK_PROG(XGETTEXT, xgettext, xgettext)
 
-if test "$XGETTEXT" != ""; then 
+if test "$XGETTEXT" != ""; then
     if $XGETTEXT --help 2>&1 | grep illegal >/dev/null ; then
         echo "xgettext isn't GNU version"
         XGETTEXT=""
@@ -472,7 +472,7 @@ inc_search_path="$inc_search_path $XCFLAGS"
 AC_SUBST(X_LIBRARY_PATH)
 
 dnl Decide which locale function to use, setlocale() or _Xsetlocale()
-dnl by MANOME Tomonori 
+dnl by MANOME Tomonori
 dnl ===========================================
 use_locale=yes
 AC_ARG_ENABLE(locale, AS_HELP_STRING([--disable-locale], [disable use of X locale support]),
@@ -486,13 +486,13 @@ fi
 
 dnl Check whether XInternAtoms() exist
 dnl ==================================
-AC_CHECK_LIB(X11, XInternAtoms, 
+AC_CHECK_LIB(X11, XInternAtoms,
              AC_DEFINE(HAVE_XINTERNATOMS, 1, [define if your X server has XInternAtoms() (set by configure)]),,
              $XLFLAGS $XLIBS)
 
 dnl Check whether XConvertCase() exist
 dnl ==================================
-AC_CHECK_LIB(X11, XConvertCase, 
+AC_CHECK_LIB(X11, XConvertCase,
              AC_DEFINE(HAVE_XCONVERTCASE, 1, [define if your X server has XConvertCase() (set by configure)]),,
              $XLFLAGS $XLIBS)
 
@@ -888,4 +888,3 @@ dnl ================================================
 dnl Local Variables:
 dnl compile-command: "autoconf"
 dnl End:
-

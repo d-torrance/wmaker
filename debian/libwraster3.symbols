@@ -31,6 +31,7 @@ libwraster.so.3 libwraster3 #MINVER#
  RGetSubImage@LIBWRASTER3 0.95.0
  RGetXImage@LIBWRASTER3 0.95.0
  RHSVtoRGB@LIBWRASTER3 0.95.0
+ RHorizontalFlipImage@LIBWRASTER3 0.95.5+20140602
  RLightImage@LIBWRASTER3 0.95.0
  RLoadImage@LIBWRASTER3 0.95.0
  RMakeCenteredImage@LIBWRASTER3 0.95.0
@@ -57,3 +58,4 @@ libwraster.so.3 libwraster3 #MINVER#
  RShutdown@LIBWRASTER3 0.95.5+20140509
  RSmoothScaleImage@LIBWRASTER3 0.95.0
  RSupportedFileFormats@LIBWRASTER3 0.95.0
+ RVerticalFlipImage@LIBWRASTER3 0.95.5+20140602

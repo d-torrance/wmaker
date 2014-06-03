@@ -107,35 +107,31 @@
   ClipRaiseKey = None;
   ConstrainWindowSize = NO;
   ClipRaiseLowerKey = None;
-  TitleJustify = center;
-  WindowTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
-  MenuTitleFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
-  MenuTextFont = "-*-helvetica-bold-r-normal-*-12-*-*-*-*-*-*-*";
-  IconTitleFont = "-*-helvetica-bold-r-normal-*-9-*-*-*-*-*-*-*";
-  ClipTitleFont = "Verdana:bold:pixelsize=10";
-  HighlightColor = white;
-  HighlightTextColor = black;
-  ClipTitleColor = black;
-  CClipTitleColor = gray20;
-  FTitleColor = white;
-  PTitleColor = white;
-  UTitleColor = black;
-  FTitleBack = (solid, black);
-  PTitleBack = (solid, gray40);
-  UTitleBack = (solid, "rgb:aa/aa/aa");
-  MenuTitleColor = white;
-  MenuTextColor = black;
-  MenuDisabledColor = gray40;
-  MenuTitleBack = (solid, black);
-  MenuTextBack = (solid, "rgb:aa/aa/aa");
-  WorkspaceBack = (
-    spixmap,
-    "/usr/share/WindowMaker/Backgrounds/debian.tiff",
-    gray20
-  );
-  IconBack = (dgradient, "rgb:a6/a6/b6", "rgb:51/55/61");
+  TitleJustify = left;
+  WindowTitleFont = "Ubuntu:slant=0:weight=200:width=100:pixelsize=13";
+  MenuTitleFont = "Ubuntu:slant=0:weight=200:width=100:pixelsize=13";
+  MenuTextFont = "Ubuntu:slant=0:weight=80:width=100:pixelsize=13";
+  IconTitleFont = "Ubuntu:slant=0:weight=80:width=100:pixelsize=9";
+  ClipTitleFont = "Ubuntu:slant=0:weight=200:width=100:pixelsize=13";
+  HighlightColor = "#f07746";
+  HighlightTextColor = "#4c4c4c";
+  ClipTitleColor = "#dfdbd2";
+  CClipTitleColor = "#807d78";
+  FTitleColor = "#dfdbd2";
+  PTitleColor = "#807d78";
+  UTitleColor = "#807d78";
+  FTitleBack = (vgradient, "#474642", "#3c3b37");
+  PTitleBack = (vgradient, "#41403d", "#3c3b37");
+  UTitleBack = (vgradient, "#41403d", "#3c3b37");
+  MenuTitleColor = "#dfdbd2";
+  MenuTextColor = "#dfdbd2";
+  MenuDisabledColor = "#919190";
+  MenuTitleBack = (vgradient, "#474642", "#3c3b37");
+  MenuTextBack = (solid, "#41403b");
+  WorkspaceBack = (cpixmap, "/usr/share/backgrounds/warty-final-ubuntu.png", black);
+  IconBack = (vgradient, "#474642", "#3c3b37");
   IconTitleColor = white;
   IconTitleBack = black;
   ResizebarBack = (solid, "rgb:aa/aa/aa");
-  MenuStyle = normal;
+  MenuStyle = flat;
 }

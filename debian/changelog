@@ -1,9 +1,18 @@
+wmaker (0.95.5+20140602-0ppa1) trusty; urgency=low
+
+  * Git snapshot.
+  * configure.ac
+    - Add +YYYYMMDD to version.
+  * debian/debianfiles/conf/WindowMaker
+    - Defaults to Radiance theme.
   * debian/debianfiles/Theme/*ance.style
     - Changed WorkspaceBack from spixmap to cpixmap to match Unity Greeter
       background.
   * debian/README.ppa
     - Added information about conflicts with old wmaker-unity-greeter-badge
       and wmaker-ubuntu-themes packages from PPA.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Mon, 02 Jun 2014 21:20:03 -0600
 
 wmaker (0.95.5+20140517-0ppa1) trusty; urgency=low
 
