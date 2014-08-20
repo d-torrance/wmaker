@@ -41,7 +41,7 @@
 
 
 /* version of the header for the library */
-#define WRASTER_HEADER_VERSION	22
+#define WRASTER_HEADER_VERSION	23
 
 
 #include <X11/Xlib.h>
@@ -49,6 +49,22 @@
 
 #ifdef USE_XSHM
 #include <X11/extensions/XShm.h>
+#endif
+
+
+/*
+ * Define some macro to provide attributes for the compiler
+ *
+ * These attributes help producing better code and/or detecting bugs, however not all compiler support them
+ * as they are not standard.
+ * Because we're a public API header, we can't count on autoconf to detect them for us, so we use that #if
+ * mechanism and define an internal macro appropriately. Please note that the macro are not considered being
+ * part of the public API.
+ */
+#if __GNUC__ >= 3
+#define __wrlib_deprecated(msg)  __attribute__ ((deprecated(msg)))
+#else
+#define __wrlib_deprecated(msg)
 #endif
 
 
@@ -82,30 +98,43 @@ extern "C" {
 
 
 
-
+/* image display modes */
+typedef enum {
+	RDitheredRendering = 0,
+	RBestMatchRendering = 1
+} RRenderingMode;
 
 
 /* std colormap usage/creation modes */
-enum {
-    RUseStdColormap,		       /* default. fallbacks to RIgnore.. if
-    there is none defined */
-    RCreateStdColormap,
-    RIgnoreStdColormap
-};
+typedef enum {
+	RUseStdColormap,	/* default: fallbacks to RIgnore if there is none defined */
+	RCreateStdColormap,
+	RIgnoreStdColormap
+} RStdColormapMode;
 
+
+/* smoothed scaling filter types */
+typedef enum {
+	RBoxFilter,
+	RTriangleFilter,
+	RBellFilter,
+	RBSplineFilter,
+	RLanczos3Filter,
+	RMitchellFilter
+} RScalingFilter;
 
 
 typedef struct RContextAttributes {
     int flags;
-    int render_mode;
+    RRenderingMode render_mode;
     int colors_per_channel;	       /* for PseudoColor */
     float rgamma;		       /* gamma correction for red, */
     float ggamma;		       /* green, */
     float bgamma;		       /* and blue */
     VisualID visualid;	       /* visual ID to use */
     int use_shared_memory;	       /* True of False */
-    int scaling_filter;
-    int standard_colormap_mode;    /* what to do with std cma */
+    RScalingFilter scaling_filter;
+    RStdColormapMode standard_colormap_mode;    /* what to do with std cma */
 } RContextAttributes;
 
 
@@ -147,6 +176,9 @@ typedef struct RContext {
 
     struct {
         unsigned int use_shared_pixmap:1;
+        unsigned int optimize_for_speed:1
+            __wrlib_deprecated("Flag optimize_for_speed in RContext is not used anymore "
+                               "and will be removed in future version, please do not use");
     } flags;
 } RContext;
 
@@ -211,38 +243,20 @@ typedef struct RXImage {
 } RXImage;
 
 
-/* image display modes */
-enum {
-    RDitheredRendering = 0,
-    RBestMatchRendering = 1
-};
-
-
-/* smoothed scaling filter types */
-enum {
-    RBoxFilter,
-    RTriangleFilter,
-    RBellFilter,
-    RBSplineFilter,
-    RLanczos3Filter,
-    RMitchellFilter
-};
-
-
 /* note that not all operations are supported in all functions */
-enum {
+typedef enum {
     RClearOperation,	       /* clear with 0 */
     RCopyOperation,
     RNormalOperation,	       /* same as combine */
     RAddOperation,
     RSubtractOperation
-};
+} RPixelOperation;
 
 
-enum {
+typedef enum {
     RAbsoluteCoordinates = 0,
     RRelativeCoordinates = 1
-};
+} RCoordinatesMode;
 
 
 enum {
@@ -259,16 +273,24 @@ enum {
 /* 2 pixel width */
 #define RBEV_RAISED3	3
 
-enum {
+typedef enum {
     RHorizontalGradient = 2,
     RVerticalGradient = 3,
     RDiagonalGradient = 4
-};
+} RGradientStyle;
 /* for backwards compatibility */
 #define RGRD_HORIZONTAL  RHorizontalGradient
 #define RGRD_VERTICAL 	RVerticalGradient
 #define RGRD_DIAGONAL	RDiagonalGradient
 
+
+/*
+ * How an image can be flipped, for RFlipImage
+ *
+ * Values are actually bit-mask which can be OR'd
+ */
+#define RHorizontalFlip	0x0001
+#define RVerticalFlip	0x0002
 
 
 /* error codes */
@@ -371,9 +393,7 @@ RImage *RSmoothScaleImage(RImage *src, unsigned new_width,
 
 RImage *RRotateImage(RImage *image, float angle);
 
-RImage *RVerticalFlipImage(RImage *image);
-
-RImage *RHorizontalFlipImage(RImage *image);
+RImage *RFlipImage(RImage *image, int mode);
 
 RImage *RMakeTiledImage(RImage *tile, unsigned width, unsigned height);
 
@@ -387,30 +407,30 @@ Bool RGetPixel(RImage *image, int x, int y, RColor *color);
 
 void RPutPixel(RImage *image, int x, int y, const RColor *color);
 
-void ROperatePixel(RImage *image, int operation, int x, int y, const RColor *color);
+void ROperatePixel(RImage *image, RPixelOperation operation, int x, int y, const RColor *color);
 
-void RPutPixels(RImage *image, const RPoint *points, int npoints, int mode,
+void RPutPixels(RImage *image, const RPoint *points, int npoints, RCoordinatesMode mode,
                 const RColor *color);
 
-void ROperatePixels(RImage *image, int operation, const RPoint *points,
-                    int npoints, int mode, const RColor *color);
+void ROperatePixels(RImage *image, RPixelOperation operation, const RPoint *points,
+                    int npoints, RCoordinatesMode mode, const RColor *color);
 
 int RDrawLine(RImage *image, int x0, int y0, int x1, int y1, const RColor *color);
 
-int ROperateLine(RImage *image, int operation, int x0, int y0, int x1, int y1,
+int ROperateLine(RImage *image, RPixelOperation operation, int x0, int y0, int x1, int y1,
                  const RColor *color);
 
-void RDrawLines(RImage *image, const RPoint *points, int npoints, int mode,
+void RDrawLines(RImage *image, const RPoint *points, int npoints, RCoordinatesMode mode,
                 const RColor *color);
 
-void ROperateLines(RImage *image, int operation, const RPoint *points, int npoints,
-                   int mode, const RColor *color);
+void ROperateLines(RImage *image, RPixelOperation operation, const RPoint *points, int npoints,
+                   RCoordinatesMode mode, const RColor *color);
 
-void ROperateRectangle(RImage *image, int operation, int x0, int y0, int x1, int y1, const RColor *color);
+void ROperateRectangle(RImage *image, RPixelOperation operation, int x0, int y0, int x1, int y1, const RColor *color);
 
 void RDrawSegments(RImage *image, const RSegment *segs, int nsegs, const RColor *color);
 
-void ROperateSegments(RImage *image, int operation, const RSegment *segs, int nsegs,
+void ROperateSegments(RImage *image, RPixelOperation operation, const RSegment *segs, int nsegs,
                       const RColor *color);
 
 /*
@@ -431,11 +451,11 @@ void RFillImage(RImage *image, const RColor *color);
 void RBevelImage(RImage *image, int bevel_type);
 
 RImage *RRenderGradient(unsigned width, unsigned height, const RColor *from,
-                        const RColor *to, int style);
+                        const RColor *to, RGradientStyle style);
 
 
 RImage *RRenderMultiGradient(unsigned width, unsigned height, RColor **colors,
-                             int style);
+                             RGradientStyle style);
 
 
 RImage *RRenderInterwovenGradient(unsigned width, unsigned height,
@@ -480,5 +500,10 @@ extern int RErrorCode;
 }
 #endif /* __cplusplus */
 
-#endif
+/*
+ * The definitions below are done for internal use only
+ * We undef them so users of the library may not misuse them
+ */
+#undef __wrlib_deprecated
 
+#endif

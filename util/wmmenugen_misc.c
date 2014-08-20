@@ -26,10 +26,20 @@
 
 #include <WINGs/WUtil.h>
 
-static char *terminals[] = {
-	"x-terminal-emulator", "aterm","eterm", "gnome-terminal", "konsole",
-	"kterm", "mlterm", "rxvt", "mrxvt", "pterm", "xterm", "dtterm",
-	NULL
+
+static const char *const terminals[] = {
+	"x-terminal-emulator", /* Debian wrapper to launch user's prefered X terminal */
+	"aterm",    /* AfterStep's X terminal, which provides "transparency" */
+	"eterm",    /* Enlightenment's terminal, designed for eye-candyness (and efficiency) */
+	"gnome-terminal",      /* GNOME project's terminal */
+	"konsole",  /* KDE project's terminals */
+	"kterm",    /* a Multi-Lingual Terminal based on xterm, originally by Katsuya Sano */
+	"mlterm",   /* a Multi-Lingual Terminal emulator written from scratch */
+	"rxvt",     /* a slimmed-down xterm */
+	"mrxvt",    /* rxvt with support for tabs amongst other things */
+	"pterm",    /* terminal based on PuTTY, a popular SSH client for Windows */
+	"xterm",    /* the standard terminal provided by the X Window System */
+	"dtterm"    /* provided by CDE, a frequent Desktop Environment in proprietary UNIXs */
 };
 
 /* pick a terminal emulator by finding the first existing entry of `terminals'
@@ -39,35 +49,26 @@ static char *terminals[] = {
  */
 char *find_terminal_emulator(void)
 {
-	char *path, *t, *ret;
+	char *path, *t;
 	int i;
 
-	path = t = ret = NULL;
-
 	t = getenv("WMMENU_TERMINAL");
-	if (t) {
-		ret = wstrdup(t);
-		return ret;
-	}
+	if (t)
+		return wstrdup(t);
 
 	path = getenv("PATH");
 	if (!path)
 		return NULL;
 
-	for (i = 0; terminals[i]; i++) {
+	for (i = 0; i < wlengthof(terminals); i++) {
 		t = wfindfile(path, terminals[i]);
-		if (t)
-			break;
+		if (t) {
+			wfree(t);
+			return wstrdup(terminals[i]);
+		}
 	}
 
-	if (t)
-		ret = wstrdup(basename(t));
-	else
-		ret = wstrdup(t);
-
-	wfree(t);
-
-	return ret;
+	return NULL;
 }
 
 /* tokenize `what' (LC_MESSAGES or LANG if `what' is NULL) in the form of

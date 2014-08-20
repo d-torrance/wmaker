@@ -37,9 +37,6 @@
 #include "wraster.h"
 #include "imgformat.h"
 
-#define	RETRY( x )	do {				\
-				x;			\
-			} while (errno == EINTR);
 
 typedef struct RCachedImage {
 	RImage *image;
@@ -49,18 +46,21 @@ typedef struct RCachedImage {
 } RCachedImage;
 
 /*
- * Size of image cache
+ * Number of image to keep in the cache
  */
 static int RImageCacheSize = -1;
 
+#define IMAGE_CACHE_DEFAULT_NBENTRIES	  8
+#define IMAGE_CACHE_MAXIMUM_NBENTRIES	256
+
 /*
- * Max. size of image to store in cache
+ * Max. size of image (in pixels) to store in the cache
  */
 static int RImageCacheMaxImage = -1;	/* 0 = any size */
 
-#define IMAGE_CACHE_SIZE	8
+#define IMAGE_CACHE_DEFAULT_MAXPIXELS	(64 * 64)
+#define IMAGE_CACHE_MAXIMUM_MAXPIXELS	(256 * 256)
 
-#define IMAGE_CACHE_MAX_IMAGE	64*64
 
 static RCachedImage *RImageCache;
 
@@ -108,16 +108,20 @@ static void init_cache(void)
 	char *tmp;
 
 	tmp = getenv("RIMAGE_CACHE");
-	if (!tmp || sscanf(tmp, "%i", &RImageCacheSize) != 1) {
-		RImageCacheSize = IMAGE_CACHE_SIZE;
-	}
+	if (!tmp || sscanf(tmp, "%i", &RImageCacheSize) != 1)
+		RImageCacheSize = IMAGE_CACHE_DEFAULT_NBENTRIES;
 	if (RImageCacheSize < 0)
 		RImageCacheSize = 0;
+	if (RImageCacheSize > IMAGE_CACHE_MAXIMUM_NBENTRIES)
+		RImageCacheSize = IMAGE_CACHE_MAXIMUM_NBENTRIES;
 
 	tmp = getenv("RIMAGE_CACHE_SIZE");
-	if (!tmp || sscanf(tmp, "%i", &RImageCacheMaxImage) != 1) {
-		RImageCacheMaxImage = IMAGE_CACHE_MAX_IMAGE;
-	}
+	if (!tmp || sscanf(tmp, "%i", &RImageCacheMaxImage) != 1)
+		RImageCacheMaxImage = IMAGE_CACHE_DEFAULT_MAXPIXELS;
+	if (RImageCacheMaxImage < 0)
+		RImageCacheMaxImage = 0;
+	if (RImageCacheMaxImage > IMAGE_CACHE_MAXIMUM_MAXPIXELS)
+		RImageCacheMaxImage = IMAGE_CACHE_MAXIMUM_MAXPIXELS;
 
 	if (RImageCacheSize > 0) {
 		RImageCache = malloc(sizeof(RCachedImage) * RImageCacheSize);
@@ -146,7 +150,7 @@ void RReleaseCache(void)
 	}
 }
 
-RImage *RLoadImage(RContext * context, const char *file, int index)
+RImage *RLoadImage(RContext *context, const char *file, int index)
 {
 	RImage *image = NULL;
 	int i;
@@ -154,9 +158,8 @@ RImage *RLoadImage(RContext * context, const char *file, int index)
 
 	assert(file != NULL);
 
-	if (RImageCacheSize < 0) {
+	if (RImageCacheSize < 0)
 		init_cache();
-	}
 
 	if (RImageCacheSize > 0) {
 
@@ -322,19 +325,23 @@ static WRImgFormat identFile(const char *path)
 
 	assert(path != NULL);
 
-	RETRY( file = fopen(path, "rb") )
-	if (file == NULL) {
-		RErrorCode = RERR_OPEN;
-		return IM_ERROR;
+	for (;;) {
+		file = fopen(path, "rb");
+		if (file != NULL)
+			break;
+		if (errno != EINTR) {
+			RErrorCode = RERR_OPEN;
+			return IM_ERROR;
+		}
 	}
 
-	RETRY( nread = fread(buffer, 1, sizeof(buffer), file) )
+	nread = fread(buffer, 1, sizeof(buffer), file);
 	if (nread < sizeof(buffer) || ferror(file)) {
-		RETRY( fclose(file) )
+		fclose(file);
 		RErrorCode = RERR_READ;
 		return IM_ERROR;
 	}
-	RETRY( fclose(file) )
+	fclose(file);
 
 	/* check for XPM */
 	if (strncmp((char *)buffer, "/* XPM */", 9) == 0)
@@ -370,8 +377,8 @@ static WRImgFormat identFile(const char *path)
 		return IM_GIF;
 
 	/* check for WEBP */
-	if (buffer[ 0] == 'R' && buffer[ 1] == 'I' && buffer[ 2] == 'F' && buffer[ 3] == 'F' &&
-	    buffer[ 8] == 'W' && buffer[ 9] == 'E' && buffer[10] == 'B' && buffer[11] == 'P' &&
+	if (buffer[0]  == 'R' && buffer[1]  == 'I' && buffer[2]  == 'F' && buffer[3]  == 'F' &&
+	    buffer[8]  == 'W' && buffer[9]  == 'E' && buffer[10] == 'B' && buffer[11] == 'P' &&
 	    buffer[12] == 'V' && buffer[13] == 'P' && buffer[14] == '8' &&
 	    (buffer[15] == ' '       /* Simple File Format (Lossy) */
 	     || buffer[15] == 'L'    /* Simple File Format (Lossless) */

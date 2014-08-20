@@ -230,6 +230,8 @@ applyImage(RContext * rc, BackgroundTexture * texture, RImage * image, char type
 
 			if (!RConvertImage(rc, image, &pixmap)) {
 				wwarning("could not convert texture:%s", RMessageForError(RErrorCode));
+				if (fimage)
+					RReleaseImage(image);
 				return;
 			}
 
@@ -326,7 +328,7 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 		RColor color1, color2;
 		RImage *image;
 		Pixmap pixmap;
-		int gtype;
+		RGradientStyle gtype;
 		int iwidth, iheight;
 
 		GETSTRORGOTO(val, tmp, 1, error);
@@ -396,7 +398,7 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 		RImage *image;
 		Pixmap pixmap;
 		int i, j;
-		int gtype;
+		RGradientStyle gtype;
 		int iwidth, iheight;
 
 		colors = malloc(sizeof(RColor *) * (count - 1));
@@ -524,9 +526,8 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 			rcolor.blue = 0;
 		}
 		/* for images with a transparent color */
-		if (image->data[3]) {
+		if (image && image->data[3])
 			RCombineImageWithColor(image, &rcolor);
-		}
 
 		switch (toupper(type[0])) {
 		case 'T':
@@ -537,8 +538,6 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 				RReleaseImage(image);
 				goto error;
 			}
-			if (image)
-				RReleaseImage(image);
 
 			texture->pixmap = pixmap;
 			texture->color = color;
@@ -558,6 +557,9 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 				texture->width = scrWidth;
 				texture->height = scrHeight;
 
+				if (!image)
+					break;
+
 #ifdef USE_XINERAMA
 				if (xineInfo.count && ! xineStretch) {
 					int i;
@@ -573,10 +575,12 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 #else				/* !USE_XINERAMA */
 				applyImage(rc, texture, image, type[0], 0, 0, scrWidth, scrHeight);
 #endif				/* !USE_XINERAMA */
-				RReleaseImage(image);
 			}
 			break;
 		}
+		if (image)
+			RReleaseImage(image);
+
 	} else if (strcasecmp(type, "thgradient") == 0
 		   || strcasecmp(type, "tvgradient") == 0 || strcasecmp(type, "tdgradient") == 0) {
 		XColor color;
@@ -587,7 +591,7 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 		Pixmap pixmap;
 		int opaq;
 		char *file;
-		int gtype;
+		RGradientStyle gtype;
 		int twidth, theight;
 
 		GETSTRORGOTO(val, file, 1, error);
@@ -646,7 +650,6 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 
 		if (!gradient) {
 			wwarning("could not render texture:%s", RMessageForError(RErrorCode));
-			RReleaseImage(gradient);
 			RReleaseImage(image);
 			goto error;
 		}
@@ -915,6 +918,14 @@ static noreturn void helperLoop(RContext * rc)
 		memcpy(buf, buffer, 4);
 		buf[4] = 0;
 		size = atoi(buf);
+		if (size < 0 || size > sizeof(buffer)) {
+			wfatal("received invalid size %d for message from WindowMaker", size);
+			quit(1);
+		}
+		if (size == 0) {
+			werror("received 0-sized message from WindowMaker, trying to continue");
+			continue;
+		}
 
 		/* get message */
 		if (readmsg(0, buffer, size) < 0) {
@@ -991,13 +1002,14 @@ static void updateDomain(const char *domain, const char *key, const char *textur
 {
 	int result;
 	char *program = "wdwrite";
+	char cmd_smooth[1024];
 
-	/* here is a mem leak */
-	result = system(wstrconcat("wdwrite ",
-			  wstrconcat(domain, smooth ? " SmoothWorkspaceBack YES" : " SmoothWorkspaceBack NO")));
-
+	snprintf(cmd_smooth, sizeof(cmd_smooth),
+	         "wdwrite %s SmoothWorkspaceBack %s",
+	         domain, smooth ? "YES" : "NO");
+	result = system(cmd_smooth);
 	if (result == -1)
-		werror("error executing system command");
+		werror("error executing system(\"%s\")", cmd_smooth);
 
 	execlp(program, program, domain, key, texture, NULL);
 	wwarning("warning could not run \"%s\"", program);
@@ -1194,6 +1206,8 @@ static void changeTextureForWorkspace(const char *domain, char *texture, int wor
 			WMAddToPLArray(array, empty);
 		}
 		WMAddToPLArray(array, val);
+
+		WMReleasePropList(empty);
 	} else {
 		WMDeleteFromPLArray(array, workspace);
 		WMInsertInPLArray(array, workspace, val);
@@ -1201,6 +1215,8 @@ static void changeTextureForWorkspace(const char *domain, char *texture, int wor
 
 	value = WMGetPropListDescription(array, False);
 	updateDomain(domain, "WorkspaceSpecificBack", value);
+
+	WMReleasePropList(array);
 }
 
 int main(int argc, char **argv)
@@ -1213,7 +1229,8 @@ int main(int argc, char **argv)
 	char *back_color = "gray20";
 	char *image_name = NULL;
 	char *domain = "WindowMaker";
-	int update = 0, cpc = 4, render_mode = RDitheredRendering, obey_user = 0;
+	int update = 0, cpc = 4, obey_user = 0;
+	RRenderingMode render_mode = RDitheredRendering;
 	char *texture = NULL;
 	int workspace = -1;
 

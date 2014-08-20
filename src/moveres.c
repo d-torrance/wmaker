@@ -1798,7 +1798,7 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 #define RESIZEBAR	1
 #define HCONSTRAIN	2
 
-static int getResizeDirection(WWindow * wwin, int x, int y, int dx, int dy, int flags)
+static int getResizeDirection(WWindow * wwin, int x, int y, int dy, int flags)
 {
 	int w = wwin->frame->core->width - 1;
 	int cw = wwin->frame->resizebar_corner_width;
@@ -1806,13 +1806,23 @@ static int getResizeDirection(WWindow * wwin, int x, int y, int dx, int dy, int 
 
 	/* if not resizing through the resizebar */
 	if (!(flags & RESIZEBAR)) {
+
 		int xdir = (abs(x) < (wwin->client.width / 2)) ? LEFT : RIGHT;
 		int ydir = (abs(y) < (wwin->client.height / 2)) ? UP : DOWN;
-		if (abs(dx) < 2 || abs(dy) < 2) {
-			if (abs(dy) > abs(dx))
-				xdir = 0;
-			else
-				ydir = 0;
+
+		/* How much resize space is allowed */
+		int spacew = abs(wwin->client.width / 3);
+		int spaceh = abs(wwin->client.height / 3);
+
+		/* Determine where x fits */
+		if ((abs(x) > wwin->client.width/2 - spacew/2) &&
+		    (abs(x) < wwin->client.width/2 + spacew/2)) {
+			/* Resize vertically */
+			xdir = 0;
+		} else if ((abs(y) > wwin->client.height/2 - spaceh/2) &&
+		           (abs(y) < wwin->client.height/2 + spaceh/2)) {
+			/* Resize horizontally */
+			ydir = 0;
 		}
 		return (xdir | ydir);
 	}
@@ -1970,9 +1980,7 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 						     || abs(orig_y - event.xmotion.y_root) < HRESIZE_THRESHOLD))
 					flags |= HCONSTRAIN;
 
-				res = getResizeDirection(wwin, tx, ty,
-							 orig_x - event.xmotion.x_root,
-							 orig_y - event.xmotion.y_root, flags);
+				res = getResizeDirection(wwin, tx, ty, orig_y - event.xmotion.y_root, flags);
 
 				if (res == (UP | LEFT))
 					XChangeActivePointerGrab(dpy, ButtonMotionMask

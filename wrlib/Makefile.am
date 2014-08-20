@@ -33,11 +33,14 @@ libwraster_la_SOURCES = 	\
 	context.c 	\
 	misc.c 		\
 	scale.c		\
+	scale.h		\
 	rotate.c	\
+	rotate.h	\
 	flip.c		\
 	convolve.c	\
 	save_xpm.c	\
 	xutil.c		\
+	xutil.h		\
 	load_ppm.c
 
 if USE_GIF

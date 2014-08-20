@@ -20,105 +20,130 @@
  *  MA 02110-1301, USA.
  */
 
-#include <config.h>
+#include "config.h"
 
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
 #include <X11/Xlib.h>
+
 #include "wraster.h"
+#include "rotate.h"
 
-RImage *RVerticalFlipImage(RImage *image)
+
+static RImage *r_flip_vertically(RImage *source);
+static RImage *r_flip_horizontally(RImage *source);
+
+/* Flip an image in the direction(s) specified */
+RImage *RFlipImage(RImage *source, int mode)
 {
-	RImage *img;
-	int nwidth, nheight;
-	int x, y;
-	int bpp = image->format == RRGBAFormat ? 4 : 3;
-
-	nwidth = image->width;
-	nheight = image->height;
-
-	img = RCreateImage(nwidth, nheight, True);
-	if (!img)
+	/* Security */
+	if (source == NULL)
 		return NULL;
 
-	if (bpp == 3) {
-		unsigned char *optr, *nptr;
+	switch (mode & (RVerticalFlip | RHorizontalFlip)) {
+	case RHorizontalFlip:
+		return r_flip_horizontally(source);
 
-		optr = image->data;
-		nptr = img->data + 4 * (nwidth * nheight - nwidth);
+	case RVerticalFlip:
+		return r_flip_vertically(source);
 
-		for (y = 0; y < nheight; y++) {
-			for (x = 0; x < nwidth; x++) {
-				nptr[0] = optr[0];
-				nptr[1] = optr[1];
-				nptr[2] = optr[2];
-				nptr[3] = 255;
+	case RHorizontalFlip | RVerticalFlip:
+		return wraster_rotate_image_180(source);
 
-				optr += 3;
-				nptr += 4;
-			}
-			nptr -= nwidth*8;
-		}
-	} else {
-		unsigned char *optr, *nptr;
-
-		optr = image->data;
-		nptr = img->data + 4 * (nwidth * nheight - nwidth);
-
-		for (y = 0; y < nheight; y++) {
-			for (x = 0; x < nwidth; x++) {
-				nptr[0] = optr[0];
-				nptr[1] = optr[1];
-				nptr[2] = optr[2];
-				nptr[3] = optr[3];
-
-				optr += 4;
-				nptr += 4;
-			}
-			nptr -= nwidth * 8;
-		}
+	default:
+		return RRetainImage(source);
 	}
-	return img;
 }
 
-RImage *RHorizontalFlipImage(RImage *image)
+RImage *r_flip_vertically(RImage *source)
 {
-	RImage *img;
+	RImage *target;
 	int nwidth, nheight;
 	int x, y;
-	int bpp = image->format == RRGBAFormat ? 4 : 3;
 
-	nwidth = image->width;
-	nheight = image->height;
+	nwidth = source->width;
+	nheight = source->height;
 
-	img = RCreateImage(nwidth, nheight, True);
-	if (!img)
+	target = RCreateImage(nwidth, nheight, (source->format != RRGBFormat));
+	if (!target)
 		return NULL;
 
-	if (bpp == 3) {
+	if (source->format == RRGBFormat) {
 		unsigned char *optr, *nptr;
 
-		optr = image->data;
-		nptr = img->data + 4 * (nwidth - 1);
+		optr = source->data;
+		nptr = target->data + 3 * (nwidth * nheight - nwidth);
+
+		for (y = 0; y < nheight; y++) {
+			for (x = 0; x < nwidth; x++) {
+				nptr[0] = optr[0];
+				nptr[1] = optr[1];
+				nptr[2] = optr[2];
+
+				optr += 3;
+				nptr += 3;
+			}
+			nptr -= (nwidth * 3) * 2;
+		}
+	} else {
+		unsigned char *optr, *nptr;
+
+		optr = source->data;
+		nptr = target->data + 4 * (nwidth * nheight - nwidth);
+
+		for (y = 0; y < nheight; y++) {
+			for (x = 0; x < nwidth; x++) {
+				nptr[0] = optr[0];
+				nptr[1] = optr[1];
+				nptr[2] = optr[2];
+				nptr[3] = optr[3];
+
+				optr += 4;
+				nptr += 4;
+			}
+			nptr -= (nwidth * 4) * 2;
+		}
+	}
+	return target;
+}
+
+RImage *r_flip_horizontally(RImage *source)
+{
+	RImage *target;
+	int nwidth, nheight;
+	int x, y;
+
+	nwidth = source->width;
+	nheight = source->height;
+
+	target = RCreateImage(nwidth, nheight, (source->format != RRGBFormat));
+	if (!target)
+		return NULL;
+
+	if (source->format == RRGBFormat) {
+		unsigned char *optr, *nptr;
+
+		optr = source->data;
+		nptr = target->data + 3 * (nwidth - 1);
 
 		for (y = nheight; y; y--) {
 			for (x = 0; x < nwidth; x++) {
 				nptr[0] = optr[0];
 				nptr[1] = optr[1];
 				nptr[2] = optr[2];
-				nptr[3] = 255;
 
 				optr += 3;
-				nptr -= 4;
+				nptr -= 3;
 			}
-			nptr += 8 * nwidth;
+			nptr += (nwidth * 3) * 2;
 		}
 	} else {
 		unsigned char *optr, *nptr;
 
-		optr = image->data;
-		nptr = img->data + 4 * (nwidth - 1);
+		optr = source->data;
+		nptr = target->data + 4 * (nwidth - 1);
 
 		for (y = nheight; y; y--) {
 			for (x = 0; x < nwidth; x++) {
@@ -130,8 +155,8 @@ RImage *RHorizontalFlipImage(RImage *image)
 				optr += 4;
 				nptr -= 4;
 			}
-			nptr += 8 * nwidth;
+			nptr += (nwidth * 4) * 2;
 		}
 	}
-	return img;
+	return target;
 }

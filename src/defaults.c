@@ -458,7 +458,9 @@ WDefaultEntry optionList[] = {
 	{"WindowTitleBalloons", "NO", NULL,
 	    &wPreferences.window_balloon, getBool, NULL, NULL, NULL},
 	{"MiniwindowTitleBalloons", "NO", NULL,
-	    &wPreferences.miniwin_balloon, getBool, NULL, NULL, NULL},
+	    &wPreferences.miniwin_title_balloon, getBool, NULL, NULL, NULL},
+	{"MiniwindowApercuBalloons", "NO", NULL,
+	    &wPreferences.miniwin_apercu_balloon, getBool, NULL, NULL, NULL},
 	{"AppIconBalloons", "NO", NULL,
 	    &wPreferences.appicon_balloon, getBool, NULL, NULL, NULL},
 	{"HelpBalloons", "NO", NULL,
@@ -477,6 +479,8 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.strict_windoze_cycle, getBool, NULL, NULL, NULL},
 	{"SwitchPanelOnlyOpen",	"NO",	NULL,
 	    &wPreferences.panel_only_open, getBool, NULL, NULL, NULL},
+	{"ApercuSize", "2", NULL,
+	    &wPreferences.apercu_size, getInt, NULL, NULL, NULL},
 
 	/* style options */
 
@@ -3317,7 +3321,7 @@ static int setSwPOptions(WScreen * scr, WDefaultEntry * entry, void *tdata, void
 
 				if (cwidth <= 0 || cheight <= 0 ||
 				    cwidth >= bgimage->width - 2 || cheight >= bgimage->height - 2)
-					wwarning(_("Invalid split sizes for SwitchPanel back image."));
+					wwarning(_("Invalid split sizes for switch panel back image."));
 				else {
 					int i;
 					int swidth, theight;

@@ -40,21 +40,21 @@ dnl 6. If any interfaces have been removed or changed since the last
 dnl public release, then set age to 0.
 dnl
 dnl libwraster
-WRASTER_CURRENT=4
-WRASTER_REVISION=1
-WRASTER_AGE=1
+WRASTER_CURRENT=5
+WRASTER_REVISION=0
+WRASTER_AGE=0
 WRASTER_VERSION=$WRASTER_CURRENT:$WRASTER_REVISION:$WRASTER_AGE
 AC_SUBST(WRASTER_VERSION)
 dnl
 dnl libWINGs
-WINGS_CURRENT=2
-WINGS_REVISION=1
+WINGS_CURRENT=3
+WINGS_REVISION=0
 WINGS_AGE=0
 WINGS_VERSION=$WINGS_CURRENT:$WINGS_REVISION:$WINGS_AGE
 AC_SUBST(WINGS_VERSION)
 dnl
 dnl libWUtil
-WUTIL_CURRENT=4
+WUTIL_CURRENT=5
 WUTIL_REVISION=0
 WUTIL_AGE=0
 WUTIL_VERSION=$WUTIL_CURRENT:$WUTIL_REVISION:$WUTIL_AGE
@@ -500,6 +500,18 @@ dnl XKB keyboard language status
 dnl ============================
 AC_ARG_ENABLE(modelock, AS_HELP_STRING([--enable-modelock], [XKB keyboard language status support]),
 		AC_DEFINE(XKB_MODELOCK, 1, [whether XKB language MODELOCK should be enabled]))
+
+dnl XDND Drag-nd-Drop support
+dnl ============================
+AC_ARG_ENABLE([xdnd],
+    [AS_HELP_STRING([--disable-xdnd], [disable Drag-nd-Drop support])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --disable-xdnd]) ]) ],
+    [enable_xdnd=yes
+  supported_xext="$supported_xext XDnD"
+  AC_DEFINE(XDND, 1, [whether Drag-nd-Drop support should be enabled])
+])
 
 dnl XShape support
 dnl ==============
