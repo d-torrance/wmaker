@@ -1,4 +1,4 @@
-libWINGs.so.2 libwings2 #MINVER#
+libWINGs.so.3 libwings3 #MINVER#
  WINGsConfiguration@Base 0.95.0
  WMAddBoxSubview@Base 0.95.0
  WMAddBoxSubviewAtEnd@Base 0.95.0
@@ -359,6 +359,7 @@ libWINGs.so.2 libwings2 #MINVER#
  WMSetFontPanelFont@Base 0.95.0
  WMSetFrameRelief@Base 0.95.0
  WMSetFrameTitle@Base 0.95.0
+ WMSetFrameTitleColor@Base 0.95.5+20140820
  WMSetFrameTitlePosition@Base 0.95.0
  WMSetLabelFont@Base 0.95.0
  WMSetLabelImage@Base 0.95.0

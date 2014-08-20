@@ -1,4 +1,4 @@
-libWUtil.so.4 libwutil4 #MINVER#
+libWUtil.so.5 libwutil5 #MINVER#
  WHandleEvents@Base 0.95.5+20140509
  WMAddIdleHandler@Base 0.95.5+20140509
  WMAddInputHandler@Base 0.95.5+20140509

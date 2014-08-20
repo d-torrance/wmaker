@@ -40,10 +40,10 @@ Description: Window Maker - Architecture independent files
  .
  This package contains the architecture independent files.
 
-Package: libwraster3-dev
+Package: libwraster5-dev
 Architecture: any
 Section: libdevel
-Depends: libwraster3 (= ${binary:Version}), libc6-dev, libx11-dev,
+Depends: libwraster5 (= ${binary:Version}), libc6-dev, libx11-dev,
  libxext-dev, libxpm-dev, libjpeg-dev, libpng-dev, libgif-dev,
  libtiff5-dev, ${misc:Depends}
 Provides: libwraster-dev
@@ -55,7 +55,7 @@ Description: Static libraries and headers of Window Maker rasterizer
  Contains libwraster and header files, for manipulating and
  rasterizing images.
 
-Package: libwraster3
+Package: libwraster5
 Architecture: any
 Section: libs
 Depends: ${shlibs:Depends}, ${misc:Depends}
@@ -67,9 +67,9 @@ Description: Shared libraries of Window Maker rasterizer
 Package: libwings-dev
 Architecture: any
 Section: libdevel
-Depends: libc6-dev, libx11-dev, libxext-dev, libwraster3-dev, libxft-dev,
- libfontconfig1-dev, libwutil4 (= ${binary:Version}),
- libwings2 (= ${binary:Version}), ${misc:Depends}
+Depends: libc6-dev, libx11-dev, libxext-dev, libwraster5-dev, libxft-dev,
+ libfontconfig1-dev, libwutil5 (= ${binary:Version}),
+ libwings3 (= ${binary:Version}), ${misc:Depends}
 Description: Window Maker's own widget set
  WINGs Is Not GNUstep (WINGs) is a small widget set with the NeXTSTEP
  look and feel. Its API is inspired in OpenSTEP and its
@@ -78,7 +78,7 @@ Description: Window Maker's own widget set
  or hacking something like rxvt. It is used for basic widgets in
  the WindowMaker window manager.
 
-Package: libwutil4
+Package: libwutil5
 Architecture: any
 Section: libs
 Depends: ${shlibs:Depends}, ${misc:Depends}
@@ -92,7 +92,7 @@ Description: Window Maker's own widget set - utility library
  .
  This package contains the libWUtils runtime library.
 
-Package: libwings2
+Package: libwings3
 Architecture: any
 Section: libs
 Depends: ${shlibs:Depends}, ${misc:Depends}
@@ -110,8 +110,8 @@ Package: wmaker-dbg
 Architecture: any
 Section: debug
 Priority: extra
-Depends: libwraster3 (= ${binary:Version}) | libwings2 (= ${binary:Version}) |
- libwutil4 (= ${binary:Version}) | wmaker (= ${binary:Version}),
+Depends: libwraster5 (= ${binary:Version}) | libwings3 (= ${binary:Version}) |
+ libwutil5 (= ${binary:Version}) | wmaker (= ${binary:Version}),
  ${misc:Depends}
 Description: Debugging symbols for WindowMaker packages
  Written by Alfredo Kojima almost from scratch, resembles the NeXTStep look
