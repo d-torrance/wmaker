@@ -13,7 +13,7 @@ Homepage: http://windowmaker.org/
 
 Package: wmaker
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, wmaker-common (>= 0.95.0+20111028-3)
+Depends: ${shlibs:Depends}, ${misc:Depends}, wmaker-common(= ${binary:Version})
 Provides: x-window-manager
 Suggests: wmaker-data, menu, x11-apps, x-terminal-emulator, desktop-base
 Description: NeXTSTEP-like window manager for X
