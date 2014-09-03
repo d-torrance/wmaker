@@ -199,7 +199,7 @@ void WMSetColorInGC(WMColor * color, GC gc)
 WMColor *WMWhiteColor(WMScreen * scr)
 {
 	if (!scr->white) {
-		scr->white = scr->theme->highlight;
+		scr->white = WMCreateRGBColor(scr, 0xffff, 0xffff, 0xffff, True);
 		if (!scr->white->flags.exact)
 			wwarning(_("could not allocate %s color"), _("white"));
 	}
@@ -209,7 +209,7 @@ WMColor *WMWhiteColor(WMScreen * scr)
 WMColor *WMBlackColor(WMScreen * scr)
 {
 	if (!scr->black) {
-		scr->black = scr->theme->foreground;
+		scr->black = WMCreateRGBColor(scr, 0, 0, 0, True);
 		if (!scr->black->flags.exact)
 			wwarning(_("could not allocate %s color"), _("black"));
 	}
@@ -245,7 +245,7 @@ WMColor *WMGrayColor(WMScreen * scr)
 			WMReleaseColor(white);
 			WMReleaseColor(black);
 		} else {
-			color = scr->theme->background;
+			color = WMCreateRGBColor(scr, 0xaeba, 0xaaaa, 0xaeba, True);
 			if (!color->flags.exact)
 				wwarning(_("could not allocate %s color"), _("gray"));
 		}
@@ -283,7 +283,7 @@ WMColor *WMDarkGrayColor(WMScreen * scr)
 			WMReleaseColor(white);
 			WMReleaseColor(black);
 		} else {
-			color = scr->theme->shadow;
+			color = WMCreateRGBColor(scr, 0x5144, 0x5555, 0x5144, True);
 			if (!color->flags.exact)
 				wwarning(_("could not allocate %s color"), _("dark gray"));
 		}
@@ -323,57 +323,4 @@ char *WMGetColorRGBDescription(WMColor * color)
 	}
 
 	return str;
-}
-
-WMTheme *W_GetTheme(WMScreen *scr)
-{
-	WMTheme *theme;
-	WMUserDefaults *defaults;
-
-	char *background;
-	char *foreground;
-	char *shadow;
-	char *highlight;
-	char *unselectedTabBackground;
-	char *unselectedTabHighlight;
-	
-	defaults = WMGetStandardUserDefaults();
-
-	if (defaults) {
-		background = WMGetUDStringForKey(defaults, "Background");
-		foreground = WMGetUDStringForKey(defaults, "Foreground");
-		shadow = WMGetUDStringForKey(defaults, "Shadow");
-		highlight = WMGetUDStringForKey(defaults, "Highlight");
-		unselectedTabBackground = WMGetUDStringForKey(defaults, "UnselectedTabBackground");
-		unselectedTabHighlight = WMGetUDStringForKey(defaults, "UnselectedTabHighlight");
-	}
-
-
-	theme = wmalloc(sizeof(WMTheme));
-	
-	theme->background = WMCreateNamedColor(scr,background,True);
-	if (!theme->background)
-		theme->background = WMCreateRGBColor(scr, 0xaeba, 0xaaaa, 0xaeba, True);
-	
-	theme->foreground = WMCreateNamedColor(scr,foreground,True);
-	if (!theme->foreground)
-		theme->foreground = WMCreateRGBColor(scr, 0, 0, 0, True);
-
-	theme->shadow = WMCreateNamedColor(scr,shadow,True);
-	if (!theme->shadow)
-		theme->shadow = WMCreateRGBColor(scr, 0x5144, 0x5555, 0x5144, True);
-
-	theme->highlight = WMCreateNamedColor(scr,highlight,True);
-	if (!theme->highlight)
-		theme->highlight = WMCreateRGBColor(scr, 0xffff, 0xffff, 0xffff, True);
-
-	theme->unselectedTabBackground = WMCreateNamedColor(scr,unselectedTabBackground,True);
-	if (!theme->unselectedTabBackground)
-		theme->unselectedTabBackground = WMCreateRGBColor(scr, 0x8420, 0x8420, 0x8420, False);
-
-	theme->unselectedTabHighlight = WMCreateNamedColor(scr,unselectedTabHighlight,True);
-	if (!theme->unselectedTabHighlight)
-		theme->unselectedTabHighlight = WMCreateRGBColor(scr, 0xd9d9, 0xd9d9, 0xd9d9, False);
-
-	return theme;
 }
