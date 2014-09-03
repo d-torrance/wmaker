@@ -68,3 +68,20 @@ override_dh_install:
 
 override_dh_strip:
 	dh_strip --dbg-package=wmaker-dbg
+
+unexport CFLAGS
+unexport CPPFLAGS
+unexport LDFLAGS
+get-orig-source:
+	@git checkout next
+	@git pull git://repo.or.cz/wmaker-crm.git next
+	@autoreconf -fvi
+	@./configure
+	@make dist
+	@git checkout ppa
+	@grep -Po '(?<=AC_INIT\(WindowMaker, ).*(?=, ,)' configure.ac \
+		> version
+	@echo `date -d @\`git log -1 --pretty=format:%ct next\` +%Y%m%d` > date
+	@mv -v WindowMaker-`cat version`.tar.gz \
+		../wmaker_`cat version`+`cat date`.orig.tar.gz
+	@rm date version
