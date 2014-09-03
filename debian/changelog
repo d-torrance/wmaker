@@ -1,6 +1,9 @@
 wmaker (0.95.6+20140902-0ppa1) trusty; urgency=medium
 
   * Git snapshot (several commits after release of version 0.95.6).
+  * debian/control
+    - Convert version of wmaker-common in wmaker Depends from binary:Version to
+      source:Version (fixes "not-binnmuable-any-depends-all" Lintian warning).
   * debian/rules
     - Add get-orig-source target; runs "make dist" in next branch.
     - Add update-version target; determines date of most recent commit in next
