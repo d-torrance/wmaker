@@ -85,3 +85,18 @@ get-orig-source:
 	@mv -v WindowMaker-`cat version`.tar.gz \
 		../wmaker_`cat version`+`cat date`.orig.tar.gz
 	@rm date version
+
+update-version:
+	@echo -n `grep -Po '(?<=AC_INIT\(WindowMaker, ).*(?=, ,)' configure.ac` \
+		> version
+	@quilt push git_snapshot_version.patch
+	@echo -n `date -d @\`git log -1 --pretty=format:%ct next\` +%Y%m%d` \
+		> date
+	@echo "Updating version to `cat version`+`cat date`...."
+	@perl -pi -e 's/(?<=AC_INIT\(WindowMaker, ).*(?=, ,)/`cat version`."+".`cat date`/e' configure.ac
+	@perl -pi -e 's/(?<=Last-Update: ).*\n/`date +%Y-%m-%d`/e' \
+		debian/patches/git_snapshot_version.patch
+	@quilt refresh
+	@quilt pop -a
+	@git-dch --auto --new-version=`cat version`+`cat date`-0ppa1
+	@rm date version

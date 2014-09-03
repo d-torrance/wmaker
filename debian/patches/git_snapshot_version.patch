@@ -1,0 +1,19 @@
+Description: Set git snapshot version.
+ Use the date of the most recent commit in the next branch of the Window Maker
+ git repository for the version number of the PPA package.
+ .
+ Update this patch by running ./debian/rules update-version.
+Author: Doug Torrance
+Last-Update: 2014-09-02
+
+--- a/configure.ac
++++ b/configure.ac
+@@ -11,7 +11,7 @@
+ dnl
+ 
+ 
+-AC_INIT(WindowMaker, 0.95.6, , WindowMaker, http://www.windowmaker.org/)
++AC_INIT(WindowMaker, 0.95.6+20140902, , WindowMaker, http://www.windowmaker.org/)
+ AC_CONFIG_SRCDIR(src/WindowMaker.h)
+ AC_CONFIG_MACRO_DIR([m4])
+ AC_CONFIG_HEADERS(config.h)
