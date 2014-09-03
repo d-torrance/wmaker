@@ -731,50 +731,28 @@ static char *keysymToString(KeySym keysym, unsigned int state)
 char *GetShortcutString(const char *shortcut)
 {
 	char *buffer = NULL;
-	char *k;
-	/*    KeySym ksym; */
-	int control = 0;
-	char *tmp, *text;
+	char *k, *tmp, *text;
 
 	tmp = text = wstrdup(shortcut);
 
 	/* get modifiers */
 	while ((k = strchr(text, '+')) != NULL) {
 		int mod;
+		char *lbl;
 
 		*k = 0;
 		mod = wXModifierFromKey(text);
 		if (mod < 0) {
 			return wstrdup("bug");
 		}
-
-		if (strcasecmp(text, "Meta") == 0) {
-			buffer = wstrappend(buffer, "M+");
-		} else if (strcasecmp(text, "Alt") == 0) {
-			buffer = wstrappend(buffer, "A+");
-		} else if (strcasecmp(text, "Shift") == 0) {
-			buffer = wstrappend(buffer, "Sh+");
-		} else if (strcasecmp(text, "Mod1") == 0) {
-			buffer = wstrappend(buffer, "M1+");
-		} else if (strcasecmp(text, "Mod2") == 0) {
-			buffer = wstrappend(buffer, "M2+");
-		} else if (strcasecmp(text, "Mod3") == 0) {
-			buffer = wstrappend(buffer, "M3+");
-		} else if (strcasecmp(text, "Mod4") == 0) {
-			buffer = wstrappend(buffer, "M4+");
-		} else if (strcasecmp(text, "Mod5") == 0) {
-			buffer = wstrappend(buffer, "M5+");
-		} else if (strcasecmp(text, "Control") == 0) {
-			control = 1;
-		} else {
+		lbl = wXModifierToShortcutLabel(mod);
+		if (lbl)
+			buffer = wstrappend(buffer, lbl);
+		else
 			buffer = wstrappend(buffer, text);
-		}
 		text = k + 1;
 	}
 
-	if (control) {
-		buffer = wstrappend(buffer, "^");
-	}
 	buffer = wstrappend(buffer, text);
 	wfree(tmp);
 
@@ -788,7 +766,7 @@ char *GetShortcutKey(WShortKey key)
 	if (!k) return NULL;
 
 	char **m = wPreferences.modifier_labels;
-	if (key.modifier & ControlMask) tmp = wstrappend(tmp, m[1] ? m[1] : "Ctrl+");
+	if (key.modifier & ControlMask) tmp = wstrappend(tmp, m[1] ? m[1] : "Control+");
 	if (key.modifier & ShiftMask)   tmp = wstrappend(tmp, m[0] ? m[0] : "Shift+");
 	if (key.modifier & Mod1Mask)    tmp = wstrappend(tmp, m[2] ? m[2] : "Mod1+");
 	if (key.modifier & Mod2Mask)    tmp = wstrappend(tmp, m[3] ? m[3] : "Mod2+");
