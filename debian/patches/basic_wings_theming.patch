@@ -1,0 +1,183 @@
+Description: Basic WINGs theming
+ WINGs widgets use a palette of six colors.  (Essentially, just four.  There are
+ two colors used only for unselected tabs in tabviews.)  This patch allows a
+ user to declare these six colors in ~/GNUstep/Defaults/WMGLOBAL, e.g.,
+ {
+   Background = color1;
+   Foreground = color2;
+   Shadow = color3;
+   Highlight = color4;
+   UnselectedTabBackground = color5;
+   UnselectedTabHighlight = color6;
+ }
+Author: Doug Torrance <dtorrance@monmouthcollege.edu>
+Last-Update: 2014-09-02
+
+--- a/WINGs/WINGs/WINGs.h
++++ b/WINGs/WINGs/WINGs.h
+@@ -365,6 +365,8 @@
+ typedef struct W_Font	WMFont;
+ typedef struct W_Color	WMColor;
+ 
++typedef struct WMTheme WMTheme;
++
+ typedef struct W_Screen WMScreen;
+ 
+ typedef struct W_View WMView;
+@@ -904,6 +906,8 @@
+ 
+ char* WMGetColorRGBDescription(WMColor *color);
+ 
++WMTheme* W_GetTheme(WMScreen *scr);
++
+ /* ---[ WINGs/widgets.c ]------------------------------------------------- */
+ 
+ WMScreen* WMWidgetScreen(WMWidget *w);
+--- a/WINGs/WINGs/WINGsP.h
++++ b/WINGs/WINGs/WINGsP.h
+@@ -64,6 +64,17 @@
+     struct W_DragDestinationInfo* destInfo; /* infos needed by destination */
+ } W_DraggingInfo;
+ 
++/* ---[ wcolor.c ]----------------------------------------------------- */
++
++typedef struct WMTheme {
++	WMColor *background;
++	WMColor *foreground;
++	WMColor *shadow;
++	WMColor *highlight;
++	WMColor *unselectedTabBackground;
++	WMColor *unselectedTabHighlight;
++} WMTheme;
++
+ /* ---[ Structures from WINGs.h ]----------------------------------------- */
+ 
+ /* Pre-definition of internal structs */
+@@ -265,6 +276,8 @@
+     struct W_View *modalView;
+     unsigned modalLoop:1;
+     unsigned ignoreNextDoubleClick:1;
++
++    WMTheme *theme;
+ } W_Screen;
+ 
+ #define W_DRAWABLE(scr)		(scr)->rcontext->drawable
+--- a/WINGs/wcolor.c
++++ b/WINGs/wcolor.c
+@@ -199,7 +199,7 @@
+ WMColor *WMWhiteColor(WMScreen * scr)
+ {
+ 	if (!scr->white) {
+-		scr->white = WMCreateRGBColor(scr, 0xffff, 0xffff, 0xffff, True);
++		scr->white = scr->theme->highlight;
+ 		if (!scr->white->flags.exact)
+ 			wwarning(_("could not allocate %s color"), _("white"));
+ 	}
+@@ -209,7 +209,7 @@
+ WMColor *WMBlackColor(WMScreen * scr)
+ {
+ 	if (!scr->black) {
+-		scr->black = WMCreateRGBColor(scr, 0, 0, 0, True);
++		scr->black = scr->theme->foreground;
+ 		if (!scr->black->flags.exact)
+ 			wwarning(_("could not allocate %s color"), _("black"));
+ 	}
+@@ -245,7 +245,7 @@
+ 			WMReleaseColor(white);
+ 			WMReleaseColor(black);
+ 		} else {
+-			color = WMCreateRGBColor(scr, 0xaeba, 0xaaaa, 0xaeba, True);
++			color = scr->theme->background;
+ 			if (!color->flags.exact)
+ 				wwarning(_("could not allocate %s color"), _("gray"));
+ 		}
+@@ -283,7 +283,7 @@
+ 			WMReleaseColor(white);
+ 			WMReleaseColor(black);
+ 		} else {
+-			color = WMCreateRGBColor(scr, 0x5144, 0x5555, 0x5144, True);
++			color = scr->theme->shadow;
+ 			if (!color->flags.exact)
+ 				wwarning(_("could not allocate %s color"), _("dark gray"));
+ 		}
+@@ -324,3 +324,56 @@
+ 
+ 	return str;
+ }
++
++WMTheme *W_GetTheme(WMScreen *scr)
++{
++	WMTheme *theme;
++	WMUserDefaults *defaults;
++
++	char *background;
++	char *foreground;
++	char *shadow;
++	char *highlight;
++	char *unselectedTabBackground;
++	char *unselectedTabHighlight;
++	
++	defaults = WMGetStandardUserDefaults();
++
++	if (defaults) {
++		background = WMGetUDStringForKey(defaults, "Background");
++		foreground = WMGetUDStringForKey(defaults, "Foreground");
++		shadow = WMGetUDStringForKey(defaults, "Shadow");
++		highlight = WMGetUDStringForKey(defaults, "Highlight");
++		unselectedTabBackground = WMGetUDStringForKey(defaults, "UnselectedTabBackground");
++		unselectedTabHighlight = WMGetUDStringForKey(defaults, "UnselectedTabHighlight");
++	}
++
++
++	theme = wmalloc(sizeof(WMTheme));
++	
++	theme->background = WMCreateNamedColor(scr,background,True);
++	if (!theme->background)
++		theme->background = WMCreateRGBColor(scr, 0xaeba, 0xaaaa, 0xaeba, True);
++	
++	theme->foreground = WMCreateNamedColor(scr,foreground,True);
++	if (!theme->foreground)
++		theme->foreground = WMCreateRGBColor(scr, 0, 0, 0, True);
++
++	theme->shadow = WMCreateNamedColor(scr,shadow,True);
++	if (!theme->shadow)
++		theme->shadow = WMCreateRGBColor(scr, 0x5144, 0x5555, 0x5144, True);
++
++	theme->highlight = WMCreateNamedColor(scr,highlight,True);
++	if (!theme->highlight)
++		theme->highlight = WMCreateRGBColor(scr, 0xffff, 0xffff, 0xffff, True);
++
++	theme->unselectedTabBackground = WMCreateNamedColor(scr,unselectedTabBackground,True);
++	if (!theme->unselectedTabBackground)
++		theme->unselectedTabBackground = WMCreateRGBColor(scr, 0x8420, 0x8420, 0x8420, False);
++
++	theme->unselectedTabHighlight = WMCreateNamedColor(scr,unselectedTabHighlight,True);
++	if (!theme->unselectedTabHighlight)
++		theme->unselectedTabHighlight = WMCreateRGBColor(scr, 0xd9d9, 0xd9d9, 0xd9d9, False);
++
++	return theme;
++}
+--- a/WINGs/widgets.c
++++ b/WINGs/widgets.c
+@@ -668,6 +668,8 @@
+ 		scrPtr->ignoredModifierMask = numLockMask | scrollLockMask | LockMask;
+ 	}
+ 
++	scrPtr->theme = W_GetTheme(scrPtr);
++
+ 	/* initially allocate some colors */
+ 	WMWhiteColor(scrPtr);
+ 	WMBlackColor(scrPtr);
+--- a/WINGs/wtabview.c
++++ b/WINGs/wtabview.c
+@@ -200,8 +200,8 @@
+ 	tPtr->view->self = tPtr;
+ 	tPtr->view->delegate = &delegate;
+ 
+-	tPtr->lightGray = WMCreateRGBColor(scr, 0xd9d9, 0xd9d9, 0xd9d9, False);
+-	tPtr->tabColor = WMCreateRGBColor(scr, 0x8420, 0x8420, 0x8420, False);
++	tPtr->lightGray = scr->theme->unselectedTabHighlight;
++	tPtr->tabColor = scr->theme->unselectedTabBackground;
+ 
+ 	tPtr->font = WMRetainFont(scr->normalFont);
+ 

@@ -200,8 +200,8 @@ WMTabView *WMCreateTabView(WMWidget * parent)
 	tPtr->view->self = tPtr;
 	tPtr->view->delegate = &delegate;
 
-	tPtr->lightGray = scr->theme->unselectedTabHighlight;
-	tPtr->tabColor = scr->theme->unselectedTabBackground;
+	tPtr->lightGray = WMCreateRGBColor(scr, 0xd9d9, 0xd9d9, 0xd9d9, False);
+	tPtr->tabColor = WMCreateRGBColor(scr, 0x8420, 0x8420, 0x8420, False);
 
 	tPtr->font = WMRetainFont(scr->normalFont);
 
