@@ -1,3 +1,18 @@
+wmaker (0.95.6+20140902-0ppa1) trusty; urgency=medium
+
+  * Git snapshot (several commits after release of version 0.95.6).
+  * debian/rules
+    - Add get-orig-source target; runs "make dist" in next branch.
+    - Add update-version target; determines date of most recent commit in next
+      and appends to version (I had being doing this manually).  Also runs git
+      dch.
+  * debian/patches/(basic_wings_theming|git_snapshot_version).patch
+    - Two patches which previously had been maintained outside of the debian
+      directory have been converted to quilt.  Now the ppa and next branches
+      should match up exactly outside of the debian directory.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Wed, 03 Sep 2014 00:07:51 -0500
+
 wmaker (0.95.5+20140820-0ppa1) trusty; urgency=low
 
   * Git snapshot.
