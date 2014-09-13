@@ -18,18 +18,11 @@ A little GNUstep icon appears when you select Window Maker at login in
 Unity Greeter.  Note that this is also available in the main Ubuntu
 package.
 
-(If you previously installed the wmaker-unity-greeter-badge package from my PPA,
-you must remove it before installing wmaker-common.)
-
-
 ################################
 ## Ubuntu Window Maker themes ##
 ################################
 Two new themes are available, approximating Ubuntu's Ambiance and Radiance
 themes.
-
-(If you previously installed the wmaker-ubuntu-themes package from my PPA,
-you must remove it before installing wmaker-common.)
 
 ########################
 ## Basic WINGs themes ##
