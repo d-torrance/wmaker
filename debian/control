@@ -28,8 +28,8 @@ Package: wmaker-common
 Architecture: all
 Depends: ${misc:Depends}
 Suggests: wmaker
-Replaces: wmaker (<< 0.95.0+20111028-3)
-Breaks: wmaker (<< 0.95.0+20111028-3)
+Replaces: wmaker (<< 0.95.0+20111028-3), wmaker-ubuntu-themes, wmaker-unity-greeter-badge
+Breaks: wmaker (<< 0.95.0+20111028-3), wmaker-ubuntu-themes, wmaker-unity-greeter-badge
 Description: Window Maker - Architecture independent files
  Written by Alfredo Kojima almost from scratch, resembles the NeXTStep look
  very closely, and it is now an official GNU project. Window Maker (originally
