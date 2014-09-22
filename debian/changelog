@@ -1,3 +1,9 @@
+wmaker (0.95.6+20140921-0ppa1) trusty; urgency=medium
+
+  * Git snapshot.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Mon, 22 Sep 2014 00:25:42 -0500
+
 wmaker (0.95.6+20140912-0ppa1) trusty; urgency=medium
 
   * Git snapshot.
