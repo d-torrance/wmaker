@@ -1,3 +1,10 @@
+wmaker (0.95.6+20140925-0ppa2~precise1) precise; urgency=medium
+
+  * debian/control
+    - Switch Build-Depends on libtiff5-dev to libtiff4-dev for precise.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Sat, 25 Oct 2014 02:24:50 -0500
+
 wmaker (0.95.6+20140925-0ppa1) trusty; urgency=medium
 
   * Git snapshot.
