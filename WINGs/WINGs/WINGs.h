@@ -904,6 +904,8 @@ unsigned short WMGetColorAlpha(WMColor *color);
 
 char* WMGetColorRGBDescription(WMColor *color);
 
+WMColor *WMGetUserDefinedColor(WMScreen *scr, char *key, WMColor *default_color);
+
 /* ---[ WINGs/widgets.c ]------------------------------------------------- */
 
 WMScreen* WMWidgetScreen(WMWidget *w);

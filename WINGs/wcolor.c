@@ -292,6 +292,31 @@ WMColor *WMDarkGrayColor(WMScreen * scr)
 	return WMRetainColor(scr->darkGray);
 }
 
+WMColor *WMGetUserDefinedColor(WMScreen *scr, char *key, WMColor *default_color)
+{
+	WMColor *color;
+	WMUserDefaults *defaults;
+
+	defaults = WMGetStandardUserDefaults();
+	if (defaults) {
+		char *color_string;
+
+		color_string = WMGetUDStringForKey(defaults, key);
+		if (color_string) {
+			color = WMCreateNamedColor(scr, color_string, True);
+			if (!color) {
+				wwarning(_("could not create %s color"), color_string);
+				color = default_color;
+			}
+		} else {
+			color = default_color;
+		}
+	} else {
+		color = default_color;
+	}
+	return color;
+}
+
 unsigned short WMRedComponentOfColor(WMColor * color)
 {
 	return color->color.red;
