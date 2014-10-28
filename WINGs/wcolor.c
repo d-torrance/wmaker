@@ -317,6 +317,13 @@ WMColor *WMGetUserDefinedColor(WMScreen *scr, char *key, WMColor *default_color)
 	return color;
 }
 
+WMColor *WMBackgroundColor(WMScreen *scr)
+{
+	if (!scr->background)
+		scr->background = WMGetUserDefinedColor(scr, "Background", WMGrayColor(scr));
+	return WMRetainColor(scr->background);
+}
+
 unsigned short WMRedComponentOfColor(WMColor * color)
 {
 	return color->color.red;

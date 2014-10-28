@@ -101,11 +101,11 @@ static W_View *createView(W_Screen * screen, W_View * parent)
 		view->attribs = defAtts;
 
 		view->attribFlags |= CWBackPixel | CWColormap | CWBorderPixel;
-		view->attribs.background_pixel = W_PIXEL(screen->gray);
+		view->attribs.background_pixel = W_PIXEL(screen->background);
 		view->attribs.border_pixel = W_PIXEL(screen->black);
 		view->attribs.colormap = screen->colormap;
 
-		view->backColor = WMRetainColor(screen->gray);
+		view->backColor = WMRetainColor(screen->background);
 
 		adoptChildView(parent, view);
 	}

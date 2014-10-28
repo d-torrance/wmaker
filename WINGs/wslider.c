@@ -208,7 +208,7 @@ static void makeKnobPixmap(Slider * sPtr)
 	}
 
 	pix = XCreatePixmap(scr->display, sPtr->view->window, w, h, scr->depth);
-	XFillRectangle(scr->display, pix, WMColorGC(scr->gray), 0, 0, w, h);
+	XFillRectangle(scr->display, pix, WMColorGC(scr->background), 0, 0, w, h);
 
 	if (sPtr->knobThickness < 10) {
 		W_DrawRelief(scr, pix, 0, 0, w, h, WRRaised);
@@ -295,7 +295,7 @@ static void paintSlider(Slider * sPtr)
 
 	bgc = WMColorGC(scr->black);
 	wgc = WMColorGC(scr->white);
-	lgc = WMColorGC(scr->gray);
+	lgc = WMColorGC(scr->background);
 
 	buffer = XCreatePixmap(scr->display, sPtr->view->window, size.width, size.height, scr->depth);
 

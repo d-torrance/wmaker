@@ -368,12 +368,12 @@ static void paintScroller(Scroller * sPtr)
 
 #ifdef DOUBLE_BUFFER
 	d = XCreatePixmap(scr->display, view->window, view->size.width, view->size.height, scr->depth);
-	XFillRectangle(scr->display, d, WMColorGC(scr->gray), 0, 0, view->size.width, view->size.height);
+	XFillRectangle(scr->display, d, WMColorGC(scr->background), 0, 0, view->size.width, view->size.height);
 #endif
 
 	XDrawRectangle(scr->display, d, WMColorGC(scr->black), 0, 0, view->size.width - 1, view->size.height - 1);
 #ifndef DOUBLE_BUFFER
-	XDrawRectangle(scr->display, d, WMColorGC(scr->gray), 1, 1, view->size.width - 3, view->size.height - 3);
+	XDrawRectangle(scr->display, d, WMColorGC(scr->background), 1, 1, view->size.width - 3, view->size.height - 3);
 #endif
 
 	if (sPtr->flags.horizontal)

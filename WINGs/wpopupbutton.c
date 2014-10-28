@@ -271,7 +271,7 @@ static void paintPopUpButton(PopUpButton * bPtr)
 
 	pixmap = XCreatePixmap(scr->display, bPtr->view->window,
 			       bPtr->view->size.width, bPtr->view->size.height, scr->depth);
-	XFillRectangle(scr->display, pixmap, WMColorGC(scr->gray), 0, 0,
+	XFillRectangle(scr->display, pixmap, WMColorGC(scr->background), 0, 0,
 		       bPtr->view->size.width, bPtr->view->size.height);
 
 	W_DrawRelief(scr, pixmap, 0, 0, bPtr->view->size.width, bPtr->view->size.height, WRRaised);
@@ -381,7 +381,7 @@ static Pixmap makeMenuPixmap(PopUpButton * bPtr)
 
 	pixmap = XCreatePixmap(scr->display, bPtr->view->window, width, height, scr->depth);
 
-	XFillRectangle(scr->display, pixmap, WMColorGC(scr->gray), 0, 0, width, height);
+	XFillRectangle(scr->display, pixmap, WMColorGC(scr->background), 0, 0, width, height);
 
 	i = 0;
 	WM_ITERATE_ARRAY(bPtr->items, item, iter) {

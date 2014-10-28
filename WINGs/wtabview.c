@@ -545,7 +545,7 @@ static void drawTab(TabView * tPtr, Drawable d, int x, int y, unsigned width, un
 	GC white = WMColorGC(selected ? scr->white : tPtr->lightGray);
 	GC black = WMColorGC(scr->black);
 	GC dark = WMColorGC(scr->darkGray);
-	GC light = WMColorGC(scr->gray);
+	GC light = WMColorGC(scr->background);
 	XPoint trap[8];
 
 	trap[0].x = x + (selected ? 0 : 1);

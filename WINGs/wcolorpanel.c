@@ -2013,7 +2013,7 @@ static void wheelRender(W_ColorPanel * panel)
 	int x, y;
 	RImage *image;
 	unsigned char *ptr;
-	RColor gray;
+	RColor background;
 	unsigned long ofs = 0;
 	/*unsigned char     shift = getShift(sizeof(unsigned char)); */
 
@@ -2025,9 +2025,7 @@ static void wheelRender(W_ColorPanel * panel)
 
 	ptr = image->data;
 
-	/* TODO Make this transparent istead of gray */
-	gray.red = gray.blue = 0xae;
-	gray.green = 0xaa;
+	background = WMGetRColorFromColor(scr->background);
 
 	for (y = 0; y < colorWheelSize + 4; y++) {
 		for (x = 0; x < colorWheelSize + 4; x++) {
@@ -2040,9 +2038,9 @@ static void wheelRender(W_ColorPanel * panel)
 				    (unsigned char)(panel->wheelMtrx->values[panel->wheelMtrx->data[2][ofs]]);
 				*(ptr++) = 0;
 			} else {
-				*(ptr++) = (unsigned char)(gray.red);
-				*(ptr++) = (unsigned char)(gray.green);
-				*(ptr++) = (unsigned char)(gray.blue);
+				*(ptr++) = (unsigned char)(background.red);
+				*(ptr++) = (unsigned char)(background.green);
+				*(ptr++) = (unsigned char)(background.blue);
 				*(ptr++) = 255;
 			}
 			ofs++;

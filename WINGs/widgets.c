@@ -307,7 +307,7 @@ static void renderPixmap(W_Screen * screen, Pixmap d, Pixmap mask, char **data, 
 	int x, y;
 	GC whiteGC = WMColorGC(screen->white);
 	GC blackGC = WMColorGC(screen->black);
-	GC lightGC = WMColorGC(screen->gray);
+	GC lightGC = WMColorGC(screen->background);
 	GC darkGC = WMColorGC(screen->darkGray);
 
 	if (mask)
@@ -673,6 +673,7 @@ WMScreen *WMCreateScreenWithRContext(Display * display, int screen, RContext * c
 	WMBlackColor(scrPtr);
 	WMGrayColor(scrPtr);
 	WMDarkGrayColor(scrPtr);
+	WMBackgroundColor(scrPtr);
 
 	gcv.graphics_exposures = False;
 
