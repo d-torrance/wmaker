@@ -99,13 +99,6 @@ static const struct {
 	{ "NoMove",          N_("...do not move the window")            }
 };
 
-static const char *const dragMaximizedWindowOptions[] = {
-	"Move",
-	"RestoreGeometry",
-	"Unmaximize",
-	"NoMove"
-};
-
 static void sliderCallback(WMWidget * w, void *data)
 {
 	_Panel *panel = (_Panel *) data;
