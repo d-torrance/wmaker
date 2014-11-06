@@ -5,7 +5,7 @@ Maintainer: Doug Torrance <dtorrance@monmouthcollege.edu>
 XSBC-Original-Maintainer: Rodolfo García Peñas (kix) <kix@debian.org>
 Standards-Version: 3.9.5
 Build-Depends: debhelper (>= 9), automake (>= 1:1.11), gettext,
- libfontconfig1-dev, libjpeg-dev, libpng-dev, libsm-dev, libtiff4-dev,
+ libfontconfig1-dev, libjpeg-dev, libpng-dev, libsm-dev, libtiff5-dev,
  libtool, libgif-dev, libx11-dev, libxext-dev, libxft-dev, libxinerama-dev,
  libxkbfile-dev, libxpm-dev, libxt-dev, libxrender-dev, sharutils, libxmu-dev,
  libxrandr-dev, dctrl-tools, autotools-dev
