@@ -78,7 +78,7 @@ get-orig-source:
 	@autoreconf -fvi
 	@./configure
 	@make dist
-	@git checkout ppa
+	@git checkout ppa-precise
 	@grep -Po '(?<=AC_INIT\(WindowMaker, ).*(?=, ,)' configure.ac \
 		> version
 	@echo `date -d @\`git log -1 --pretty=format:%ct next\` +%Y%m%d` > date
@@ -98,5 +98,5 @@ update-version:
 		debian/patches/git_snapshot_version.patch
 	@quilt refresh
 	@quilt pop -a
-	@git-dch --auto --new-version=`cat version`+`cat date`-0ppa1
+	@git-dch --auto --new-version=`cat version`+`cat date`-0ppa1~precise1 --debian-branch ppa-precise
 	@rm date version
