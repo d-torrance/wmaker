@@ -1,3 +1,9 @@
+wmaker (0.95.6+20141104-0ppa1~utopic1) utopic; urgency=low
+
+  * Git snapshot (build for utopic).
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Thu, 06 Nov 2014 11:19:16 -0600
+
 wmaker (0.95.6+20141104-0ppa1~precise1) precise; urgency=medium
 
   * Git snapshot (build for precise).
