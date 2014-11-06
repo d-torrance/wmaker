@@ -4,7 +4,7 @@ Description: Set git snapshot version.
  .
  Update this patch by running ./debian/rules update-version.
 Author: Doug Torrance
-Last-Update: 2014-09-25
+Last-Update: 2014-11-06
 
 --- a/configure.ac
 +++ b/configure.ac
@@ -13,7 +13,7 @@ Last-Update: 2014-09-25
  
  
 -AC_INIT(WindowMaker, 0.95.6, , WindowMaker, http://www.windowmaker.org/)
-+AC_INIT(WindowMaker, 0.95.6+20140925, , WindowMaker, http://www.windowmaker.org/)
++AC_INIT(WindowMaker, 0.95.6+20141104, , WindowMaker, http://www.windowmaker.org/)
  AC_CONFIG_SRCDIR(src/WindowMaker.h)
  AC_CONFIG_MACRO_DIR([m4])
  AC_CONFIG_HEADERS(config.h)
