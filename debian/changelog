@@ -1,3 +1,9 @@
+wmaker (0.95.6+20141104-0ppa1~precise1) precise; urgency=medium
+
+  * Git snapshot (build for precise).
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Thu, 06 Nov 2014 09:53:17 -0600
+
 wmaker (0.95.6+20140925-0ppa2~precise1) precise; urgency=medium
 
   * debian/control
