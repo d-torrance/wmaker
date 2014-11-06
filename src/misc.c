@@ -586,7 +586,7 @@ char *ExpandOptions(WScreen *scr, const char *cmdline)
 				break;
 
 			case 'W':
-				snprintf(tmpbuf, sizeof(tmpbuf), "0x%x", (unsigned int)w_global.workspace.current + 1);
+				snprintf(tmpbuf, sizeof(tmpbuf), "0x%x", (unsigned int)scr->current_workspace + 1);
 				slen = strlen(tmpbuf);
 				olen += slen;
 				nout = realloc(out, olen);
@@ -738,7 +738,7 @@ char *GetShortcutString(const char *shortcut)
 	/* get modifiers */
 	while ((k = strchr(text, '+')) != NULL) {
 		int mod;
-		char *lbl;
+		const char *lbl;
 
 		*k = 0;
 		mod = wXModifierFromKey(text);

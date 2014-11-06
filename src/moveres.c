@@ -589,15 +589,16 @@ typedef struct {
 	int omouseX, omouseY;	/* old mouse position */
 	int mouseX, mouseY;	/* last known position of the pointer */
 
-	enum {SNAP_NONE,
-	      SNAP_LEFT,
-	      SNAP_RIGHT,
-	      SNAP_TOP,
-	      SNAP_BOTTOM,
-	      SNAP_TOPLEFT,
-	      SNAP_TOPRIGHT,
-	      SNAP_BOTTOMLEFT,
-	      SNAP_BOTTOMRIGHT
+	enum {
+		SNAP_NONE,
+		SNAP_LEFT,
+		SNAP_RIGHT,
+		SNAP_TOP,
+		SNAP_BOTTOM,
+		SNAP_TOPLEFT,
+		SNAP_TOPRIGHT,
+		SNAP_BOTTOMLEFT,
+		SNAP_BOTTOMRIGHT
 	} snap;
 } MoveData;
 
@@ -753,7 +754,7 @@ static void updateMoveData(WWindow * wwin, MoveData * data)
 	data->count = 0;
 	tmp = scr->focused_window;
 	while (tmp) {
-		if (tmp != wwin && w_global.workspace.current == tmp->frame->workspace
+		if (tmp != wwin && scr->current_workspace == tmp->frame->workspace
 		    && !tmp->flags.miniaturized
 		    && !tmp->flags.hidden && !tmp->flags.obscured && !WFLAGP(tmp, sunken)) {
 			data->topList[data->count] = tmp;
@@ -850,18 +851,18 @@ static Bool checkWorkspaceChange(WWindow * wwin, MoveData * data, Bool opaqueMov
 	Bool changed = False;
 
 	if (data->mouseX <= 1) {
-		if (w_global.workspace.current > 0) {
-			crossWorkspace(scr, wwin, opaqueMove, w_global.workspace.current - 1, True);
+		if (scr->current_workspace > 0) {
+			crossWorkspace(scr, wwin, opaqueMove, scr->current_workspace - 1, True);
 			changed = True;
 			data->rubCount = 0;
-		} else if (w_global.workspace.current == 0 && wPreferences.ws_cycle) {
-			crossWorkspace(scr, wwin, opaqueMove, w_global.workspace.count - 1, True);
+		} else if (scr->current_workspace == 0 && wPreferences.ws_cycle) {
+			crossWorkspace(scr, wwin, opaqueMove, scr->workspace_count - 1, True);
 			changed = True;
 			data->rubCount = 0;
 		}
 	} else if (data->mouseX >= scr->scr_width - 2) {
-		if (w_global.workspace.current == w_global.workspace.count - 1) {
-			if (wPreferences.ws_cycle || w_global.workspace.count == MAX_WORKSPACES) {
+		if (scr->current_workspace == scr->workspace_count - 1) {
+			if (wPreferences.ws_cycle || scr->workspace_count == MAX_WORKSPACES) {
 				crossWorkspace(scr, wwin, opaqueMove, 0, False);
 				changed = True;
 				data->rubCount = 0;
@@ -885,13 +886,13 @@ static Bool checkWorkspaceChange(WWindow * wwin, MoveData * data, Bool opaqueMov
 				/* go to next workspace */
 				wWorkspaceNew(scr);
 
-				crossWorkspace(scr, wwin, opaqueMove, w_global.workspace.current + 1, False);
+				crossWorkspace(scr, wwin, opaqueMove, scr->current_workspace + 1, False);
 				changed = True;
 				data->rubCount = 0;
 			}
-		} else if (w_global.workspace.current < w_global.workspace.count) {
+		} else if (scr->current_workspace < scr->workspace_count) {
 			/* go to next workspace */
-			crossWorkspace(scr, wwin, opaqueMove, w_global.workspace.current + 1, False);
+			crossWorkspace(scr, wwin, opaqueMove, scr->current_workspace + 1, False);
 			changed = True;
 			data->rubCount = 0;
 		}
@@ -1197,7 +1198,7 @@ updateWindowPosition(WWindow * wwin, MoveData * data, Bool doResistance,
 	data->realY = newY;
 }
 
-static void drawSnapFrame(WWindow *wwin, int direction)
+static void draw_snap_frame(WWindow *wwin, int direction)
 {
 	WScreen *scr;
 
@@ -1239,7 +1240,7 @@ static void drawSnapFrame(WWindow *wwin, int direction)
 	}
 }
 
-static int getSnapDirection(WScreen *scr, int x, int y)
+static int get_snap_direction(WScreen *scr, int x, int y)
 {
 	if (x < 1) {
 		if (y < 1)
@@ -1262,7 +1263,7 @@ static int getSnapDirection(WScreen *scr, int x, int y)
 	return SNAP_NONE;
 }
 
-static void doSnap(WWindow *wwin, MoveData *data, Bool opaqueMove)
+static void do_snap(WWindow *wwin, MoveData *data, Bool opaqueMove)
 {
 	int directions;
 	WScreen *scr;
@@ -1273,7 +1274,7 @@ static void doSnap(WWindow *wwin, MoveData *data, Bool opaqueMove)
 	/* erase frames */
 	if (!opaqueMove)
 		drawFrames(wwin, scr->selected_windows, data->realX - wwin->frame_x, data->realY - wwin->frame_y);
-	drawSnapFrame(wwin, data->snap);
+	draw_snap_frame(wwin, data->snap);
 
 	switch (data->snap) {
 	case SNAP_NONE:
@@ -1512,17 +1513,17 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 
 				if (wPreferences.ws_cycle) {
 					if (src_x + off_x + ww < 20) {
-						if (!w_global.workspace.current)
-							wWorkspaceChange(scr, w_global.workspace.count - 1);
+						if (!scr->current_workspace)
+							wWorkspaceChange(scr, scr->workspace_count - 1);
 						else
-							wWorkspaceChange(scr, w_global.workspace.current - 1);
+							wWorkspaceChange(scr, scr->current_workspace - 1);
 
 						off_x += scr_width;
 					} else if (src_x + off_x + 20 > scr_width) {
-						if (w_global.workspace.current == w_global.workspace.count - 1)
+						if (scr->current_workspace == scr->workspace_count - 1)
 							wWorkspaceChange(scr, 0);
 						else
-							wWorkspaceChange(scr, w_global.workspace.current + 1);
+							wWorkspaceChange(scr, scr->current_workspace + 1);
 
 						off_x -= scr_width;
 					}
@@ -1641,7 +1642,7 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 					wWindowConfigure(wwin, src_x + off_x, src_y + off_y, ww, wh - vert_border);
 					wWindowSynthConfigureNotify(wwin);
 				}
-				wWindowChangeWorkspace(wwin, w_global.workspace.current);
+				wWindowChangeWorkspace(wwin, scr->current_workspace);
 				wSetFocusTo(scr, wwin);
 			}
 
@@ -1770,15 +1771,15 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 			if (IS_RESIZABLE(wwin) && wPreferences.window_snapping && wPreferences.no_autowrap) {
 				int snap_direction;
 
-				snap_direction = getSnapDirection(scr, moveData.mouseX, moveData.mouseY);
+				snap_direction = get_snap_direction(scr, moveData.mouseX, moveData.mouseY);
 
 				if (moveData.snap != snap_direction) {
 					/* erase old frame */
 					if (moveData.snap)
-						drawSnapFrame(wwin, moveData.snap);
+						draw_snap_frame(wwin, moveData.snap);
 					/* draw new frame */
 					if (snap_direction)
-						drawSnapFrame(wwin, snap_direction);
+						draw_snap_frame(wwin, snap_direction);
 					moveData.snap = snap_direction;
 				}
 			}
@@ -1786,7 +1787,7 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 			if (started) {
 				/* erase snap frame */
 				if (moveData.snap)
-					drawSnapFrame(wwin, moveData.snap);
+					draw_snap_frame(wwin, moveData.snap);
 
 				updateWindowPosition(wwin, &moveData,
 						     scr->selected_windows == NULL
@@ -1795,10 +1796,10 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 
 				/* redraw snap frame */
 				if (moveData.snap)
-					drawSnapFrame(wwin, moveData.snap);
+					draw_snap_frame(wwin, moveData.snap);
 
 				if (!warped && !wPreferences.no_autowrap) {
-					int oldWorkspace = w_global.workspace.current;
+					int oldWorkspace = scr->current_workspace;
 
 					if (wPreferences.move_display == WDIS_NEW && !scr->selected_windows) {
 						showPosition(wwin, moveData.realX, moveData.realY);
@@ -1810,7 +1811,7 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 							   moveData.realY - wwin->frame_y);
 					}
 					if (checkWorkspaceChange(wwin, &moveData, opaqueMove)) {
-						if (w_global.workspace.current != oldWorkspace
+						if (scr->current_workspace != oldWorkspace
 						    && wPreferences.edge_resistance > 0
 						    && scr->selected_windows == NULL)
 							updateMoveData(wwin, &moveData);
@@ -1886,7 +1887,7 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 				XEvent e;
 
 				if (moveData.snap)
-					doSnap(wwin, &moveData, opaqueMove);
+					do_snap(wwin, &moveData, opaqueMove);
 				else if (!opaqueMove) {
 					drawFrames(wwin, scr->selected_windows,
 						   moveData.realX - wwin->frame_x, moveData.realY - wwin->frame_y);
@@ -1901,7 +1902,7 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 				XUngrabKeyboard(dpy, CurrentTime);
 				XUngrabServer(dpy);
 				if (!opaqueMove) {
-					wWindowChangeWorkspace(wwin, w_global.workspace.current);
+					wWindowChangeWorkspace(wwin, scr->current_workspace);
 					wSetFocusTo(scr, wwin);
 				}
 				if (wPreferences.move_display == WDIS_NEW)
@@ -2300,7 +2301,7 @@ static void selectWindowsInside(WScreen * scr, int x1, int y1, int x2, int y2)
 	tmpw = scr->focused_window;
 	while (tmpw != NULL) {
 		if (!(tmpw->flags.miniaturized || tmpw->flags.hidden)) {
-			if ((tmpw->frame->workspace == w_global.workspace.current || IS_OMNIPRESENT(tmpw))
+			if ((tmpw->frame->workspace == scr->current_workspace || IS_OMNIPRESENT(tmpw))
 			    && (tmpw->frame_x >= x1) && (tmpw->frame_y >= y1)
 			    && (tmpw->frame->core->width + tmpw->frame_x <= x2)
 			    && (tmpw->frame->core->height + tmpw->frame_y <= y2)) {

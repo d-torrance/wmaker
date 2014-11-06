@@ -262,7 +262,7 @@ static void x_reset_modifier_mapping(Display * display)
 	XFreeModifiermap(x_modifier_keymap);
 }
 
-char *wXModifierToShortcutLabel(int mask)
+const char *wXModifierToShortcutLabel(int mask)
 {
 	if (mask < 0)
 		return NULL;
@@ -286,7 +286,7 @@ char *wXModifierToShortcutLabel(int mask)
 	if (mask ==  MetaMask)
 		return "M+";
 
-	wwarning("Can't convert keymask to shortcut label");
+	wwarning("Can't convert keymask %d to shortcut label", mask);
 	return NULL;
 }
 
