@@ -13,7 +13,8 @@ Homepage: http://windowmaker.org/
 
 Package: wmaker
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, wmaker-common(= ${source:Version})
+Depends: ${shlibs:Depends}, ${misc:Depends}, wmaker-common(= ${source:Version}),
+ libwings3 (=${binary:Version})
 Provides: x-window-manager
 Suggests: wmaker-data, menu, x11-apps, x-terminal-emulator, desktop-base
 Description: NeXTSTEP-like window manager for X
@@ -95,7 +96,8 @@ Description: Window Maker's own widget set - utility library
 Package: libwings3
 Architecture: any
 Section: libs
-Depends: ${shlibs:Depends}, ${misc:Depends}
+Depends: ${shlibs:Depends}, ${misc:Depends}, libwutil5 (=${binary:Version}),
+ libwraster5 (=${binary:Version})
 Description: Window Maker's own widget set - runtime library
  WINGs Is Not GNUstep (WINGs) is a small widget set with the NeXTSTEP
  look and feel. Its API is inspired in OpenSTEP and its
