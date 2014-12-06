@@ -39,6 +39,10 @@ COMMON_OPTIONS    := --prefix=$(BASEDIR)              \
 	dh $@ --parallel --with autotools-dev 
 
 override_dh_auto_configure:
+	dpkg-parsechangelog --show-field Version | sed 's/+.*//' > oldversion
+	dpkg-parsechangelog --show-field Version | sed 's/-.*//' > newversion
+	sed -i "s/`cat oldversion`/`cat newversion`/" configure.ac
+	rm oldversion newversion
 	./autogen.sh
 	LINGUAS="$(LINGUAS)" ./configure $(COMMON_OPTIONS) \
 	$(WMAKER_OPTIONS) $(shell dpkg-buildflags --export=configure)
