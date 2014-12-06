@@ -1,3 +1,19 @@
+wmaker (0.95.6+20141104-0ppa2~utopic1) unstable; urgency=medium
+
+  * debian/control
+    - Rename Build-Depends on libtiff5-dev to libtiff-dev; this will allow
+      building precise and post-precise packages from the same source.
+  * debian/patches
+    - (git_snapshot_version.patch) Remove file; no longer needed
+      with Launchpad builds.
+  * debian/rules
+    - Remove get-orig-source and update-version targets; no longer
+      needed with Launchpad builds.
+    - Patch configure.ac with git snapshot version number immediately before
+      running autogen.sh.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Fri, 05 Dec 2014 23:57:42 -0600
+
 wmaker (0.95.6+20141104-0ppa1~utopic1) utopic; urgency=low
 
   * Git snapshot (build for utopic).
