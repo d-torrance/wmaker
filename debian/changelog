@@ -1,3 +1,13 @@
+wmaker (0.95.6+20141104-0ppa3~utopic1) utopic; urgency=medium
+
+  * Note that new versions are now built automatically by a Launchpad build
+    recipe, rather than whenever I feel like it. :)
+  * debian/rules
+    - Use sed instead of --show-field to get version, since precise has an
+      older dpkg-parsechangelog.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Sun, 07 Dec 2014 20:27:22 -0600
+
 wmaker (0.95.6+20141104-0ppa2~utopic1) unstable; urgency=medium
 
   * debian/control
