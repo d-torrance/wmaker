@@ -1,3 +1,16 @@
+wmaker (0.95.6+20150105-0ppa1) UNRELEASED; urgency=medium
+
+  * debian/control
+    - Add ${binary:Version} versions of libwings3 to wmaker Depends and
+      libwutil5 and libwraster5 to libwings3 Depends.  Forces installation of
+      latest versions of these libraries when wmaker is upgraded.
+  * debian/rules
+    - Restore get-orig-source target; still handy for manual test builds. Use
+      autogen.sh instead of original autoreconf and adjust for new AC_INIT
+      syntax.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Mon, 05 Jan 2015 10:55:05 -0600
+
 wmaker (0.95.6+20141104-0ppa3~utopic1) utopic; urgency=medium
 
   * Note that new versions are now built automatically by a Launchpad build
