@@ -335,8 +335,8 @@ msgid "Cancel"
 msgstr "Abbrechen"
 
 #: ../src/dialog.c:563
-msgid "Could not open directory "
-msgstr "Verzeichnis konnte nicht geöffnet werden"
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Verzeichnis konnte nicht geöffnet werden \"%s\":\n%s"
 
 #: ../src/dialog.c:613
 msgid "Could not load image file "
@@ -1164,8 +1164,8 @@ msgstr "%s: Menüdatei konnte nicht geöffnet/bearbeitet werden"
 
 #: ../src/rootmenu.c:1106 ../src/rootmenu.c:1203
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s: Menüdatei konnte nicht geöffnet werden"
+msgid "could not open menu file \"%s\": %s"
+msgstr "Menüdatei \"%s\" konnte nicht geöffnet werden: %s"
 
 #: ../src/rootmenu.c:1132
 #, c-format
@@ -1622,7 +1622,7 @@ msgstr "Kein Mausklicks abfangen"
 #, fuzzy
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you have\n"
+"in the window (when Alt is the modifier you have\n"
 "configured)."
 msgstr ""
 "Für dieses Fenster keine Mausaktionen abfangen,\n"
@@ -1735,7 +1735,7 @@ msgid "Initial Workspace"
 msgstr "Start-Arbeitsfläche"
 
 #: ../src/winspector.c:1463
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr "Die Arbeitsfläche, auf dem das Fenster beim Start erscheinen soll"
 
 #: ../src/winspector.c:1469

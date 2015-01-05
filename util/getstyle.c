@@ -54,9 +54,6 @@
 
 #include "../src/wconfig.h"
 
-#ifndef GLOBAL_DEFAULTS_SUBDIR
-#define GLOBAL_DEFAULTS_SUBDIR "WindowMaker"
-#endif
 
 /* table of style related options */
 static char *options[] = {
@@ -172,9 +169,10 @@ static void findCopyFile(const char *dir, const char *file)
 		wwarning("Could not find file %s", file);
 		if (ThemePath)
 			(void)wrmdirhier(ThemePath);
+		return;
 	}
 	wcopy_file(dir, fullPath, fullPath);
-	free(fullPath);
+	wfree(fullPath);
 }
 
 #define THEME_SUBPATH "/Library/WindowMaker/Themes/"

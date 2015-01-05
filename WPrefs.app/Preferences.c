@@ -22,13 +22,36 @@
 #include "WPrefs.h"
 
 
+/* Possible choices to display window information during a resize */
+static const struct {
+	const char *db_value;
+	const char *label;
+} resize_display[] = {
+	{ "corner",   N_("Corner of screen") },
+	{ "center",   N_("Center of screen") },
+	{ "floating", N_("Center of resized window") },
+	{ "line",     N_("Technical drawing-like") },
+	{ "none",     N_("Disabled") }
+};
+
+/* Possible choices to display window information while a window is being moved */
+static const struct {
+	const char *db_value;
+	const char *label;
+} move_display[] = {
+	{ "corner",   N_("Corner of screen") },
+	{ "center",   N_("Center of screen") },
+	{ "floating", N_("Center of resized window") },
+	{ "none",     N_("Disabled") }
+};
+
+/* All the places where a balloon can be used to display more stuff to user */
 static const struct {
 	const char *db_key;
 	const char *label;
 } balloon_choices[] = {
 	{ "WindowTitleBalloons",       N_("incomplete window titles"), },
 	{ "MiniwindowTitleBalloons",   N_("miniwindow titles"), },
-	{ "MiniwindowApercuBalloons",  N_("miniwindow apercus"), },
 	{ "AppIconBalloons",           N_("application/dock icons"), },
 	{ "HelpBalloons",              N_("internal help"), }
 };
@@ -37,10 +60,16 @@ static const struct {
 	const char *db_key;
 	int default_value;
 	const char *label;
+	const char *balloon_msg;
 } appicon_bouncing[] = {
-	{ "DoNotMakeAppIconsBounce",   False, N_("Disable AppIcon bounce.") },
-	{ "BounceAppIconsWhenUrgent",  True,  N_("Bounce AppIcon when the application wants attention.") },
-	{ "RaiseAppIconsWhenBouncing", False, N_("Raise AppIcons when bouncing.") }
+	{ "DoNotMakeAppIconsBounce",   False, N_("Disable AppIcon bounce"),
+	  N_("By default, the AppIcon bounces when the application is launched") },
+
+	{ "BounceAppIconsWhenUrgent",  True,  N_("Bounce when the application wants attention"),
+	  NULL },
+
+	{ "RaiseAppIconsWhenBouncing", False, N_("Raise AppIcon when bouncing"),
+	  N_("Otherwise you will not see it bouncing if\nthere is a window in front of the AppIcon") }
 };
 
 typedef struct _Panel {
@@ -106,30 +135,32 @@ static void showData(_Panel * panel)
 	int x;
 
 	str = GetStringForKey("ResizeDisplay");
-	if (!str)
-		str = "corner";
-	if (strcasecmp(str, "corner") == 0)
-		WMSetPopUpButtonSelectedItem(panel->sizeP, 0);
-	else if (strcasecmp(str, "center") == 0)
-		WMSetPopUpButtonSelectedItem(panel->sizeP, 1);
-	else if (strcasecmp(str, "floating") == 0)
-		WMSetPopUpButtonSelectedItem(panel->sizeP, 2);
-	else if (strcasecmp(str, "line") == 0)
-		WMSetPopUpButtonSelectedItem(panel->sizeP, 3);
-	else if (strcasecmp(str, "none") == 0)
-		WMSetPopUpButtonSelectedItem(panel->sizeP, 4);
+	if (str != NULL) {
+		for (x = 0; x < wlengthof(resize_display); x++) {
+			if (strcasecmp(str, resize_display[x].db_value) == 0) {
+				WMSetPopUpButtonSelectedItem(panel->sizeP, x);
+				goto found_valid_resize_display;
+			}
+		}
+		wwarning(_("bad value \"%s\" for option %s, using default \"%s\""),
+		         str, "ResizeDisplay", resize_display[0].db_value);
+	}
+	WMSetPopUpButtonSelectedItem(panel->sizeP, 0);
+ found_valid_resize_display:
 
 	str = GetStringForKey("MoveDisplay");
-	if (!str)
-		str = "corner";
-	if (strcasecmp(str, "corner") == 0)
-		WMSetPopUpButtonSelectedItem(panel->posiP, 0);
-	else if (strcasecmp(str, "center") == 0)
-		WMSetPopUpButtonSelectedItem(panel->posiP, 1);
-	else if (strcasecmp(str, "floating") == 0)
-		WMSetPopUpButtonSelectedItem(panel->posiP, 2);
-	else if (strcasecmp(str, "none") == 0)
-		WMSetPopUpButtonSelectedItem(panel->posiP, 3);
+	if (str != NULL) {
+		for (x = 0; x < wlengthof(move_display); x++) {
+			if (strcasecmp(str, move_display[x].db_value) == 0) {
+				WMSetPopUpButtonSelectedItem(panel->posiP, x);
+				goto found_valid_move_display;
+			}
+		}
+		wwarning(_("bad value \"%s\" for option %s, using default \"%s\""),
+		         str, "MoveDisplay", move_display[0].db_value);
+	}
+	WMSetPopUpButtonSelectedItem(panel->posiP, 0);
+ found_valid_move_display:
 
 	x = GetIntegerForKey("WorkspaceBorderSize");
 	x = x < 0 ? 0 : x;
@@ -164,40 +195,11 @@ static void storeData(_Panel * panel)
 	Bool lr, tb;
 	int i;
 
-	switch (WMGetPopUpButtonSelectedItem(panel->sizeP)) {
-	case 0:
-		str = "corner";
-		break;
-	case 1:
-		str = "center";
-		break;
-	case 2:
-		str = "floating";
-		break;
-	case 4:
-		str = "none";
-		break;
-	default:
-		str = "line";
-		break;
-	}
-	SetStringForKey(str, "ResizeDisplay");
+	i = WMGetPopUpButtonSelectedItem(panel->sizeP);
+	SetStringForKey(resize_display[i].db_value, "ResizeDisplay");
 
-	switch (WMGetPopUpButtonSelectedItem(panel->posiP)) {
-	case 0:
-		str = "corner";
-		break;
-	case 1:
-		str = "center";
-		break;
-	case 3:
-		str = "none";
-		break;
-	default:
-		str = "floating";
-		break;
-	}
-	SetStringForKey(str, "MoveDisplay");
+	i = WMGetPopUpButtonSelectedItem(panel->posiP);
+	SetStringForKey(move_display[i].db_value, "MoveDisplay");
 
 	lr = WMGetButtonSelected(panel->lrB);
 	tb = WMGetButtonSelected(panel->tbB);
@@ -229,53 +231,48 @@ static void createPanel(Panel * p)
 
     /***************** Size Display ****************/
 	panel->sizeF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->sizeF, 240, 60);
-	WMMoveWidget(panel->sizeF, 15, 10);
+	WMResizeWidget(panel->sizeF, 255, 52);
+	WMMoveWidget(panel->sizeF, 15, 7);
 	WMSetFrameTitle(panel->sizeF, _("Size Display"));
 
 	WMSetBalloonTextForView(_("The position or style of the window size\n"
 				  "display that's shown when a window is resized."), WMWidgetView(panel->sizeF));
 
 	panel->sizeP = WMCreatePopUpButton(panel->sizeF);
-	WMResizeWidget(panel->sizeP, 200, 20);
-	WMMoveWidget(panel->sizeP, 20, 24);
-	WMAddPopUpButtonItem(panel->sizeP, _("Corner of screen"));
-	WMAddPopUpButtonItem(panel->sizeP, _("Center of screen"));
-	WMAddPopUpButtonItem(panel->sizeP, _("Center of resized window"));
-	WMAddPopUpButtonItem(panel->sizeP, _("Technical drawing-like"));
-	WMAddPopUpButtonItem(panel->sizeP, _("Disabled"));
+	WMResizeWidget(panel->sizeP, 227, 20);
+	WMMoveWidget(panel->sizeP, 14, 20);
+	for (i = 0; i < wlengthof(resize_display); i++)
+		WMAddPopUpButtonItem(panel->sizeP, _(resize_display[i].label));
 
 	WMMapSubwidgets(panel->sizeF);
 
     /***************** Position Display ****************/
 	panel->posiF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->posiF, 240, 60);
-	WMMoveWidget(panel->posiF, 15, 75);
+	WMResizeWidget(panel->posiF, 255, 52);
+	WMMoveWidget(panel->posiF, 15, 66);
 	WMSetFrameTitle(panel->posiF, _("Position Display"));
 
 	WMSetBalloonTextForView(_("The position or style of the window position\n"
 				  "display that's shown when a window is moved."), WMWidgetView(panel->posiF));
 
 	panel->posiP = WMCreatePopUpButton(panel->posiF);
-	WMResizeWidget(panel->posiP, 200, 20);
-	WMMoveWidget(panel->posiP, 20, 24);
-	WMAddPopUpButtonItem(panel->posiP, _("Corner of screen"));
-	WMAddPopUpButtonItem(panel->posiP, _("Center of screen"));
-	WMAddPopUpButtonItem(panel->posiP, _("Center of resized window"));
-	WMAddPopUpButtonItem(panel->posiP, _("Disabled"));
+	WMResizeWidget(panel->posiP, 227, 20);
+	WMMoveWidget(panel->posiP, 14, 20);
+	for (i = 0; i < wlengthof(move_display); i++)
+		WMAddPopUpButtonItem(panel->posiP, _(move_display[i].label));
 
 	WMMapSubwidgets(panel->posiF);
 
     /***************** Balloon Text ****************/
 	panel->ballF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->ballF, 240, 126);
-	WMMoveWidget(panel->ballF, 265, 10);
+	WMResizeWidget(panel->ballF, 220, 130);
+	WMMoveWidget(panel->ballF, 285, 7);
 	WMSetFrameTitle(panel->ballF, _("Show balloon for..."));
 
 	for (i = 0; i < wlengthof(balloon_choices); i++) {
 		panel->ballB[i] = WMCreateSwitchButton(panel->ballF);
-		WMResizeWidget(panel->ballB[i], 210, 20);
-		WMMoveWidget(panel->ballB[i], 15, 16 + i * 22);
+		WMResizeWidget(panel->ballB[i], 198, 20);
+		WMMoveWidget(panel->ballB[i], 11, 20 + i * 26);
 		WMSetButtonText(panel->ballB[i], _(balloon_choices[i].label));
 	}
 
@@ -283,47 +280,51 @@ static void createPanel(Panel * p)
 
     /***************** Options ****************/
 	panel->optF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->optF, 240, 91);
-	WMMoveWidget(panel->optF, 265, 136);
+	WMResizeWidget(panel->optF, 255, 94);
+	WMMoveWidget(panel->optF, 15, 125);
 	WMSetFrameTitle(panel->optF, _("AppIcon bouncing"));
 
 	for (i = 0; i < wlengthof(appicon_bouncing); i++) {
 		panel->bounceB[i] = WMCreateSwitchButton(panel->optF);
-		WMResizeWidget(panel->bounceB[i], 210, 26);
-		WMMoveWidget(panel->bounceB[i], 15, 12 + i * 25);
+		WMResizeWidget(panel->bounceB[i], 237, 26);
+		WMMoveWidget(panel->bounceB[i], 9, 14 + i * 25);
 		WMSetButtonText(panel->bounceB[i], _(appicon_bouncing[i].label));
 
 		if (appicon_bouncing[i].default_value)
 			WMSetButtonSelected(panel->bounceB[i], True);
+
+		if (appicon_bouncing[i].balloon_msg)
+			WMSetBalloonTextForView(_(appicon_bouncing[i].balloon_msg),
+			                        WMWidgetView(panel->bounceB[i]));
 	}
 
 	WMMapSubwidgets(panel->optF);
 
     /***************** Workspace border ****************/
 	panel->borderF = WMCreateFrame(panel->box);
-	WMResizeWidget(panel->borderF, 240, 82);
-	WMMoveWidget(panel->borderF, 15, 145);
+	WMResizeWidget(panel->borderF, 220, 75);
+	WMMoveWidget(panel->borderF, 285, 144);
 	WMSetFrameTitle(panel->borderF, _("Workspace border"));
 
 	panel->borderS = WMCreateSlider(panel->borderF);
 	WMResizeWidget(panel->borderS, 80, 15);
-	WMMoveWidget(panel->borderS, 20, 20);
+	WMMoveWidget(panel->borderS, 11, 22);
 	WMSetSliderMinValue(panel->borderS, 0);
 	WMSetSliderMaxValue(panel->borderS, 5);
 	WMSetSliderAction(panel->borderS, borderCallback, panel);
 
 	panel->borderL = WMCreateLabel(panel->borderF);
 	WMResizeWidget(panel->borderL, 100, 15);
-	WMMoveWidget(panel->borderL, 105, 20);
+	WMMoveWidget(panel->borderL, 105, 22);
 
 	panel->lrB = WMCreateSwitchButton(panel->borderF);
-	WMMoveWidget(panel->lrB, 20, 40);
-	WMResizeWidget(panel->lrB, 100, 30);
+	WMMoveWidget(panel->lrB, 11, 40);
+	WMResizeWidget(panel->lrB, 95, 30);
 	WMSetButtonText(panel->lrB, _("Left/Right"));
 
 	panel->tbB = WMCreateSwitchButton(panel->borderF);
-	WMMoveWidget(panel->tbB, 120, 40);
-	WMResizeWidget(panel->tbB, 100, 30);
+	WMMoveWidget(panel->tbB, 110, 40);
+	WMResizeWidget(panel->tbB, 105, 30);
 	WMSetButtonText(panel->tbB, _("Top/Bottom"));
 
 	WMMapSubwidgets(panel->borderF);

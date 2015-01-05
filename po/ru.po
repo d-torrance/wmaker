@@ -324,8 +324,8 @@ msgstr "Отказ"
 
 #
 #: ../src/dialog.c:299
-msgid "Could not open directory "
-msgstr "Невозможно открыть каталог "
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Невозможно открыть каталог \"%s\":\n%s"
 
 #: ../src/dialog.c:354
 msgid "Could not load image file "
@@ -1260,8 +1260,8 @@ msgstr "%s:не удалось открыть/предобработать фа�
 
 #: ../src/rootmenu.c:1212 ../src/rootmenu.c:1315
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s:не удалось открыть файл меню"
+msgid "could not open menu file \"%s\": %s"
+msgstr "не удалось открыть файл меню \"%s\": %s"
 
 #: ../src/rootmenu.c:1239
 #, c-format
@@ -1779,7 +1779,8 @@ msgstr "Не проверять щелчки мыши"
 #: ../src/winspector.c:1438
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you haveconfigured)."
+"in the window (when Alt is the modifier you have\n"
+"configured)."
 msgstr ""
 
 #: ../src/winspector.c:1443
@@ -1878,7 +1879,7 @@ msgid "Initial Workspace"
 msgstr "Начальное рабочее пространство"
 
 #: ../src/winspector.c:1550
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr ""
 "Рабочее пространство, на которое помещать окно,\n"
 "когда оно открывается в первый раз."

@@ -312,8 +312,8 @@ msgid "Cancel"
 msgstr "Zrušit"
 
 #: ../src/dialog.c:219
-msgid "Could not open directory "
-msgstr "Nelze otevřít adresář"
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Nelze otevřít adresář \"%s\":\n%s"
 
 #: ../src/dialog.c:274
 msgid "Could not load image file "
@@ -1221,8 +1221,8 @@ msgstr "%s: nelze otevřít nebo předzpracovat soubor s menu"
 
 #: ../src/rootmenu.c:1175 ../src/rootmenu.c:1277
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s:nelze otevřít soubor s menu"
+msgid "could not open menu file \"%s\": %s"
+msgstr "nelze otevřít soubor s menu \"%s\": %s"
 
 #: ../src/rootmenu.c:1202
 #, c-format
@@ -1721,10 +1721,11 @@ msgstr "Myš jen pro aplikaci"
 #: ../src/winspector.c:1455
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you haveconfigured)."
+"in the window (when Alt is the modifier you have\n"
+"configured)."
 msgstr ""
 "Pro okno nepoužívat akce myši jako např. \n"
-"'Alt'+táhni (s myší:), je-li alt modifikátorem, \n"
+"'Alt'+táhni (s myší:), je-li Alt modifikátorem, \n"
 "který jste si nastavili."
 
 #: ../src/winspector.c:1460
@@ -1821,7 +1822,7 @@ msgid "Initial Workspace"
 msgstr "Počáteční plocha"
 
 #: ../src/winspector.c:1567
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr "Plocha, kam umístit okno při prvním ukázání."
 
 #: ../src/winspector.c:1573

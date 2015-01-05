@@ -385,8 +385,8 @@ msgstr "Annullér"
 
 # ../src/dialog.c:218
 #: ../src/dialog.c:277
-msgid "Could not open directory "
-msgstr "Kunne ikke åbne mappe "
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Kunne ikke åbne mappe \"%s\":\n%s"
 
 # ../src/dialog.c:271
 #: ../src/dialog.c:332
@@ -1483,8 +1483,8 @@ msgstr "%s:kunne ikke åbne/forbehandle menufil"
 # ../src/rootmenu.c:1126 ../src/rootmenu.c:1227
 #: ../src/rootmenu.c:1212 ../src/rootmenu.c:1314
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s:kunne ikke åbne menufil"
+msgid "could not open menu file \"%s\": %s"
+msgstr "kunne ikke åbne menufil \"%s\": %s"
 
 # ../src/rootmenu.c:1153
 #: ../src/rootmenu.c:1239
@@ -2092,7 +2092,8 @@ msgstr "Museklik gælder ikke"
 #: ../src/winspector.c:1440
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you haveconfigured)."
+"in the window (when Alt is the modifier you have\n"
+"configured)."
 msgstr ""
 "Musehandlinger såsom 'Alt'+træk gælder ikke for dette\n"
 "vindue (hvis du har valgt Alt som modificeringstast)."
@@ -2215,7 +2216,7 @@ msgstr "Første arbejdsbord"
 
 # ../src/winspector.c:1394
 #: ../src/winspector.c:1552
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr "Hvilket arbejdsbord vinduet først skal dukke op på."
 
 # ../src/winspector.c:1400

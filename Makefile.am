@@ -30,13 +30,15 @@ config-paths.h: Makefile
 
 ACLOCAL_AMFLAGS = -I m4
 
-SUBDIRS = wrlib WINGs src util po WindowMaker wmlib WPrefs.app doc test
+SUBDIRS = wrlib WINGs src util po WindowMaker wmlib WPrefs.app doc
+DIST_SUBDIRS = $(SUBDIRS) test
 
 EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N INSTALL \
 	INSTALL-WMAKER README.definable-cursor \
 	The-perfect-Window-Maker-patch.txt \
 	README COPYING.WTFPL autogen.sh \
-	email-clients.txt checkpatch.pl update-changelog.pl
+	email-clients.txt checkpatch.pl update-changelog.pl \
+	script/nested-func-to-macro.sh
 
 if USE_LCOV
 coverage-reset:

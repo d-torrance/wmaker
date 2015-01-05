@@ -211,8 +211,8 @@ msgid "Cancel"
 msgstr "Otkaži"
 
 #: ../src/dialog.c:210
-msgid "Could not open directory "
-msgstr "Ne mogu otvoriti direktorij "
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Ne mogu otvoriti direktorij \"%s\":\n%s"
 
 #: ../src/dialog.c:266
 msgid "Could not load image file "
@@ -744,8 +744,8 @@ msgid "%s:could not open/preprocess menu file"
 msgstr "%s:ne mogu otvoriti/preprocesirati datoteku izbornika"
 
 #: ../src/rootmenu.c:1079 ../src/rootmenu.c:1180
-msgid "%s:could not open menu file"
-msgstr "%s: ne mogu otvoriti datoteku izbornika"
+msgid "could not open menu file \"%s\": %s"
+msgstr "ne mogu otvoriti datoteku izbornika \"%s\": %s"
 
 #: ../src/rootmenu.c:1106
 msgid "%s:invalid menu file. MENU command is missing"

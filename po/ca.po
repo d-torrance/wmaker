@@ -321,8 +321,8 @@ msgid "Cancel"
 msgstr "Cancel·la"
 
 #: ../src/dialog.c:290
-msgid "Could not open directory "
-msgstr "No s'ha pogut obrir el directori"
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "No s'ha pogut obrir el directori \"%s\":\n%s"
 
 #: ../src/dialog.c:345
 msgid "Could not load image file "
@@ -1299,8 +1299,8 @@ msgstr "%s: no s'ha pogut obrir/preprocessar el fitxer de menú"
 
 #: ../src/rootmenu.c:1217 ../src/rootmenu.c:1321
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s: no s'ha pogut obrir el fitxer de menú"
+msgid "could not open menu file \"%s\": %s"
+msgstr "no s'ha pogut obrir el fitxer de menú \"%s\": %s"
 
 #: ../src/rootmenu.c:1244
 #, c-format
@@ -1816,7 +1816,8 @@ msgstr "Deshabilitar els vincles del ratolí"
 #: ../src/winspector.c:1438
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you haveconfigured)."
+"in the window (when Alt is the modifier you have\n"
+"configured)."
 msgstr ""
 "Deshabilita els vincles i accions de ratolí de\n"
 "Window Maker, com ara Alt+arrossegar, en aquesta\n"
@@ -1920,7 +1921,7 @@ msgid "Initial Workspace"
 msgstr "Àrea de treball inicial"
 
 #: ../src/winspector.c:1550
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr "Àrea de treball on posar la finestra quan apareix per primer cop."
 
 #: ../src/winspector.c:1556

@@ -97,9 +97,9 @@ static const struct {
 	const char *db_value;
 	const char *file_name;
 } menu_style[] = {
-	[MSTYLE_NORMAL] { "normal",        "msty1" },
-	[MSTYLE_SINGLE] { "singletexture", "msty2" },
-	[MSTYLE_FLAT]   { "flat",          "msty3" }
+	[MSTYLE_NORMAL] = { "normal",        "msty1" },
+	[MSTYLE_SINGLE] = { "singletexture", "msty2" },
+	[MSTYLE_FLAT]   = { "flat",          "msty3" }
 };
 
 /********************************************************************/
@@ -107,9 +107,9 @@ static const struct {
 	const char *label;
 	const char *db_value;
 } wintitle_align[] = {
-	[WALeft]   { N_("Left"),   "left"   },
-	[WACenter] { N_("Center"), "center" },
-	[WARight]  { N_("Right"),  "right"  }
+	[WALeft]   = { N_("Left"),   "left"   },
+	[WACenter] = { N_("Center"), "center" },
+	[WARight]  = { N_("Right"),  "right"  }
 };
 
 /********************************************************************/
@@ -1310,10 +1310,22 @@ static Pixmap loadRImage(WMScreen * scr, const char *path)
 
 	cnt = fscanf(f, "%02x%02x%1x", &w, &h, &d);
 	if (cnt != 3) {
+		wwarning(_("could not read size of image from '%s', ignoring"), path);
+		fclose(f);
+		return None;
+	}
+	if (d < 3 || d > 4) {
+		wwarning(_("image \"%s\" has an invalid depth of %d, ignoring"), path, d);
 		fclose(f);
 		return None;
 	}
 	image = RCreateImage(w, h, d == 4);
+	if (image == NULL) {
+		wwarning(_("could not create RImage for \"%s\": %s"),
+		         path, RMessageForError(RErrorCode));
+		fclose(f);
+		return None;
+	}
 	read_size = w * h * d;
 	if (fread(image->data, 1, read_size, f) == read_size)
 		RConvertImage(WMScreenRContext(scr), image, &pixmap);
@@ -1612,7 +1624,9 @@ static void updateColorPreviewBox(_Panel * panel, int elements)
 			     panel->smallFont, 155, 130, 64, 13, WALeft,
 			     _("Icon Text"));
 
-	   }
+		WMReleaseColor(light);
+		WMReleaseColor(dim);
+	}
 
 	if (elements & (1 << CLIP_COL) || elements & (1 << CCLIP_COL)) {
 		Pixmap pix;
@@ -2193,11 +2207,16 @@ static void prepareForClose(_Panel * panel)
 
 	/* store list of textures */
 	for (i = 8; i < WMGetListNumberOfRows(panel->texLs); i++) {
+		WMPropList *pl_title, *pl_path;
+
 		item = WMGetListItem(panel->texLs, i);
 		titem = (TextureListItem *) item->clientData;
 
-		texture = WMCreatePLArray(WMCreatePLString(titem->title),
-					  WMRetainPropList(titem->prop), WMCreatePLString(titem->path), NULL);
+		pl_title = WMCreatePLString(titem->title);
+		pl_path = WMCreatePLString(titem->path);
+		texture = WMCreatePLArray(pl_title, titem->prop, pl_path, NULL);
+		WMReleasePropList(pl_title);
+		WMReleasePropList(pl_path);
 
 		WMAddToPLArray(textureList, texture);
 	}
@@ -2210,11 +2229,14 @@ static void prepareForClose(_Panel * panel)
 	for (i = 0; i < wlengthof(sample_colors); i++) {
 		WMColor *color;
 		char *str;
+		WMPropList *pl_color;
 
 		color = WMGetColorWellColor(panel->sampW[i]);
 
 		str = WMGetColorRGBDescription(color);
-		WMAddToPLArray(textureList, WMCreatePLString(str));
+		pl_color = WMCreatePLString(str);
+		WMAddToPLArray(textureList, pl_color);
+		WMReleasePropList(pl_color);
 		wfree(str);
 	}
 	WMSetUDObjectForKey(udb, textureList, "ColorList");

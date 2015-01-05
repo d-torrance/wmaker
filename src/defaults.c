@@ -4,6 +4,8 @@
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
  *  Copyright (c) 1998-2003 Dan Pascu
+ *  Copyright (c) 2014 Window Maker Team
+
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -32,7 +34,6 @@
 #include <time.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <fcntl.h>
 #include <limits.h>
 #include <signal.h>
 
@@ -62,7 +63,6 @@
 #include "workspace.h"
 #include "properties.h"
 #include "misc.h"
-#include "event.h"
 #include "winmenu.h"
 
 #define MAX_SHORTCUT_LENGTH 32
@@ -146,6 +146,7 @@ static WDECallbackUpdate setHightlightText;
 static WDECallbackUpdate setKeyGrab;
 static WDECallbackUpdate setDoubleClick;
 static WDECallbackUpdate setIconPosition;
+static WDECallbackUpdate setWorkspaceMapBackground;
 
 static WDECallbackUpdate setClipTitleFont;
 static WDECallbackUpdate setClipTitleColor;
@@ -318,6 +319,17 @@ static WOptionEnumeration seDragMaximizedWindow[] = {
 };
 
 /*
+ * Backward Compatibility:
+ * The Mini-Previews were introduced in 0.95.6 under the name "Apercu".
+ * For compatibility, we still support the old names in configuration files,
+ * which are loaded in this structure, so this should stay for at least
+ * 2 years (that means until 2017) */
+static struct {
+	char enable;
+	int  size;
+} legacy_minipreview_config;
+
+/*
  * ALL entries in the tables bellow, NEED to have a default value
  * defined, and this value needs to be correct.
  */
@@ -350,7 +362,9 @@ WDefaultEntry staticOptionList[] = {
 	{"ClipMergedInDock", "NO", NULL,
 	    NULL, getBool, setClipMergedInDock, NULL, NULL},
 	{"DisableMiniwindows", "NO", NULL,
-	    &wPreferences.disable_miniwindows, getBool, NULL, NULL, NULL}
+	    &wPreferences.disable_miniwindows, getBool, NULL, NULL, NULL},
+	{"DisableWorkspacePager", "NO", NULL,
+	    &wPreferences.disable_workspace_pager, getBool, NULL, NULL, NULL}
 };
 
 #define NUM2STRING_(x) #x
@@ -482,8 +496,8 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.window_balloon, getBool, NULL, NULL, NULL},
 	{"MiniwindowTitleBalloons", "NO", NULL,
 	    &wPreferences.miniwin_title_balloon, getBool, NULL, NULL, NULL},
-	{"MiniwindowApercuBalloons", "NO", NULL,
-	    &wPreferences.miniwin_apercu_balloon, getBool, NULL, NULL, NULL},
+	{"MiniwindowPreviewBalloons", "NO", NULL,
+	    &wPreferences.miniwin_preview_balloon, getBool, NULL, NULL, NULL},
 	{"AppIconBalloons", "NO", NULL,
 	    &wPreferences.appicon_balloon, getBool, NULL, NULL, NULL},
 	{"HelpBalloons", "NO", NULL,
@@ -502,8 +516,19 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.strict_windoze_cycle, getBool, NULL, NULL, NULL},
 	{"SwitchPanelOnlyOpen",	"NO",	NULL,
 	    &wPreferences.panel_only_open, getBool, NULL, NULL, NULL},
-	{"ApercuSize", "2", NULL,
-	    &wPreferences.apercu_size, getInt, NULL, NULL, NULL},
+	{"MiniPreviewSize", "128", NULL,
+	    &wPreferences.minipreview_size, getInt, NULL, NULL, NULL},
+
+	/*
+	 * Backward Compatibility:
+	 * The Mini-Previews were introduced in 0.95.6 under the name "Apercu".
+	 * For compatibility, we still support the old names in configuration files,
+	 * so this should stay for at least 2 years (that means until 2017)
+	 */
+	{"MiniwindowApercuBalloons", "NO", NULL,
+	    &legacy_minipreview_config.enable, getBool, NULL, NULL, NULL},
+	{"ApercuSize", "128", NULL,
+	    &legacy_minipreview_config.size, getInt, NULL, NULL, NULL},
 
 	/* style options */
 
@@ -600,6 +625,8 @@ WDefaultEntry optionList[] = {
 	    NULL, getColor, setFrameFocusedBorderColor, NULL, NULL},
 	{"FrameSelectedBorderColor", "white", NULL,
 	    NULL, getColor, setFrameSelectedBorderColor, NULL, NULL},
+	{"WorkspaceMapBack", "(solid, black)", NULL,
+	    NULL, getTexture, setWorkspaceMapBackground, NULL, NULL},
 
 	/* keybindings */
 
@@ -649,6 +676,8 @@ WDefaultEntry optionList[] = {
 		NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"MaximusKey", "None", (void*)WKBD_MAXIMUS,
 		NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"OmnipresentKey", "None", (void *)WKBD_OMNIPRESENT,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"RaiseKey", "\"Meta+Up\"", (void *)WKBD_RAISE,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"LowerKey", "\"Meta+Down\"", (void *)WKBD_LOWER,
@@ -658,6 +687,8 @@ WDefaultEntry optionList[] = {
 	{"ShadeKey", "None", (void *)WKBD_SHADE,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"SelectKey", "None", (void *)WKBD_SELECT,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"WorkspaceMapKey", "None", (void *)WKBD_WORKSPACEMAP,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"FocusNextKey", "None", (void *)WKBD_FOCUSNEXT,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
@@ -1122,6 +1153,10 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 	void *tdata;
 	WMPropList *old_dict = (w_global.domain.wmaker->dictionary != new_dict ? w_global.domain.wmaker->dictionary : NULL);
 
+	/* Backward Compatibility: init array to special value to detect if they changed */
+	legacy_minipreview_config.enable = 99;
+	legacy_minipreview_config.size   = -1;
+
 	needs_refresh = 0;
 
 	for (i = 0; i < wlengthof(optionList); i++) {
@@ -1175,6 +1210,32 @@ void wReadDefaults(WScreen * scr, WMPropList * new_dict)
 				if (entry->update)
 					needs_refresh |= (*entry->update) (scr, entry, tdata, entry->extra_data);
 
+			}
+		}
+	}
+
+	/*
+	 * Backward Compatibility:
+	 * Support the old setting names for Apercu, now called Mini-Preview
+	 *
+	 * This code should probably stay for at least 2 years, you should not consider removing
+	 * it before year 2017
+	 */
+	if (legacy_minipreview_config.enable != 99) {
+		wwarning(_("your configuration is using old syntax for Mini-Preview settings; consider running WPrefs.app to update"));
+		wPreferences.miniwin_preview_balloon = legacy_minipreview_config.enable;
+
+		if (legacy_minipreview_config.size >= 0) {
+			/*
+			 * the option 'ApercuSize' used to be coded as a multiple of the icon size in v0.95.6
+			 * it is now expressed directly in pixels, but to avoid breaking user's setting we check
+			 * for old coding and convert it now.
+			 */
+			if (legacy_minipreview_config.size < 24) {
+				/* 24 is the minimum icon size proposed in WPref's settings */
+				wPreferences.minipreview_size = legacy_minipreview_config.size * wPreferences.icon_size;
+			} else {
+				wPreferences.minipreview_size = legacy_minipreview_config.size;
 			}
 		}
 	}
@@ -2953,20 +3014,6 @@ static int setFrameSelectedBorderColor(WScreen * scr, WDefaultEntry * entry, voi
 	return REFRESH_FRAME_BORDER;
 }
 
-static void trackDeadProcess(pid_t pid, unsigned int status, void *client_data)
-{
-	WScreen *scr = (WScreen *) client_data;
-
-	/* Parameter not used, but tell the compiler that it is ok */
-	(void) pid;
-	(void) status;
-
-	close(scr->helper_fd);
-	scr->helper_fd = 0;
-	scr->helper_pid = 0;
-	scr->flags.backimage_helper_launched = 0;
-}
-
 static int setWorkspaceSpecificBack(WScreen * scr, WDefaultEntry * entry, void *tdata, void *bar)
 {
 	WMPropList *value = tdata;
@@ -2987,62 +3034,15 @@ static int setWorkspaceSpecificBack(WScreen * scr, WDefaultEntry * entry, void *
 			return 0;
 		}
 	} else {
-		pid_t pid;
-		int filedes[2];
-
 		if (WMGetPropListItemCount(value) == 0)
 			return 0;
 
-		if (pipe(filedes) < 0) {
-			werror("pipe() failed:can't set workspace specific background image");
-
+		if (!start_bg_helper(scr)) {
 			WMReleasePropList(value);
 			return 0;
 		}
 
-		pid = fork();
-		if (pid < 0) {
-			werror("fork() failed:can't set workspace specific background image");
-			if (close(filedes[0]) < 0)
-				werror("could not close pipe");
-			if (close(filedes[1]) < 0)
-				werror("could not close pipe");
-
-		} else if (pid == 0) {
-			char *dither;
-
-			SetupEnvironment(scr);
-
-			if (close(0) < 0)
-				werror("could not close pipe");
-			if (dup(filedes[0]) < 0) {
-				werror("dup() failed:can't set workspace specific background image");
-			}
-			dither = wPreferences.no_dithering ? "-m" : "-d";
-			if (wPreferences.smooth_workspace_back)
-				execlp("wmsetbg", "wmsetbg", "-helper", "-S", dither, NULL);
-			else
-				execlp("wmsetbg", "wmsetbg", "-helper", dither, NULL);
-			werror("could not execute wmsetbg");
-			exit(1);
-		} else {
-
-			if (fcntl(filedes[0], F_SETFD, FD_CLOEXEC) < 0) {
-				werror("error setting close-on-exec flag");
-			}
-			if (fcntl(filedes[1], F_SETFD, FD_CLOEXEC) < 0) {
-				werror("error setting close-on-exec flag");
-			}
-
-			scr->helper_fd = filedes[1];
-			scr->helper_pid = pid;
-			scr->flags.backimage_helper_launched = 1;
-
-			wAddDeathHandler(pid, trackDeadProcess, scr);
-
-			SendHelperMessage(scr, 'P', -1, wPreferences.pixmap_path);
-		}
-
+		SendHelperMessage(scr, 'P', -1, wPreferences.pixmap_path);
 	}
 
 	for (i = 0; i < WMGetPropListItemCount(value); i++) {
@@ -3285,6 +3285,22 @@ static int updateUsableArea(WScreen * scr, WDefaultEntry * entry, void *bar, voi
 	wScreenUpdateUsableArea(scr);
 
 	return 0;
+}
+
+static int setWorkspaceMapBackground(WScreen *scr, WDefaultEntry *entry, void *tdata, void *foo)
+{
+	WTexture **texture = tdata;
+
+	/* Parameter not used, but tell the compiler that it is ok */
+	(void) entry;
+	(void) foo;
+
+	if (wPreferences.wsmbackTexture)
+		wTextureDestroy(scr, wPreferences.wsmbackTexture);
+
+	wPreferences.wsmbackTexture = *texture;
+
+	return REFRESH_WINDOW_TEXTURES;
 }
 
 static int setMenuStyle(WScreen * scr, WDefaultEntry * entry, void *tdata, void *foo)

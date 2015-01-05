@@ -393,6 +393,8 @@ extern struct WPreferences {
 	char sticky_icons;                 /* If miniwindows will be onmipresent */
 	char dont_confirm_kill;            /* do not confirm Kill application */
 	char disable_miniwindows;
+	char disable_workspace_pager;
+
 	char dont_blink;                   /* do not blink icon selection */
 
 	/* Appearance options */
@@ -411,7 +413,7 @@ extern struct WPreferences {
 	/* balloon text */
 	char window_balloon;
 	char miniwin_title_balloon;
-	char miniwin_apercu_balloon;
+	char miniwin_preview_balloon;
 	char appicon_balloon;
 	char help_balloon;
 
@@ -444,7 +446,7 @@ extern struct WPreferences {
 	char cycle_ignore_minimized;        /* Ignore minimized windows when cycling */
 	char strict_windoze_cycle;          /* don't close switch panel when shift is released */
 	char panel_only_open;               /* Only open the switch panel; don't switch */
-	char apercu_size;                   /* Size of apercu preview as a multiple of icon size */
+	int minipreview_size;               /* Size of Mini-Previews in pixels */
 
 	/* All delays here are in ms. 0 means instant auto-action. */
 	int clip_auto_raise_delay;          /* Delay after which the clip will be raised when entered */
@@ -454,6 +456,8 @@ extern struct WPreferences {
 
 	RImage *swtileImage;
 	RImage *swbackImage[9];
+
+	union WTexture *wsmbackTexture;
 
 	int show_clip_title;
 
@@ -466,9 +470,6 @@ extern struct WPreferences {
 		unsigned int noupdates:1;             /* don't require ~/GNUstep (-static) */
 		unsigned int noautolaunch:1;          /* don't autolaunch apps */
 		unsigned int norestore:1;             /* don't restore session */
-#ifndef HAVE_INOTIFY
-		unsigned int nopolling:1;             /* don't poll the defaults database for changes */
-#endif
 		unsigned int restarting:2;
 	} flags;                                      /* internal flags */
 
@@ -517,6 +518,13 @@ extern struct wmaker_global_variables {
 	 * operations are ongoing.
 	 */
 	Bool ignore_workspace_change;
+
+	/*
+	 * Process WorkspaceMap Event:
+	 * this variable is set when the Workspace Map window is being displayed,
+	 * it is mainly used to avoid re-opening another one at the same time
+	 */
+	Bool process_workspacemap_event;
 
 #ifdef HAVE_INOTIFY
 	struct {

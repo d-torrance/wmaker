@@ -126,7 +126,7 @@ WAppIcon *wAppIconCreateForDock(WScreen *scr, const char *command, const char *w
 	if (wm_instance)
 		aicon->wm_instance = wstrdup(wm_instance);
 
-	if (strcmp(wm_class, "WMDock") == 0 && wPreferences.flags.clip_merged_in_dock)
+	if (wPreferences.flags.clip_merged_in_dock && wm_class != NULL && strcmp(wm_class, "WMDock") == 0)
 		tile = TILE_CLIP;
 	aicon->icon = icon_create_for_dock(scr, command, wm_instance, wm_class, tile);
 
@@ -411,7 +411,7 @@ void wAppIconPaint(WAppIcon *aicon)
 	if (aicon->docked && scr->dock && scr->dock == aicon->dock && aicon->yindex == 0)
 		updateDockNumbers(scr);
 # endif
-	if (scr->dock_dots && aicon->docked && !aicon->running && aicon->command != NULL) {
+	if (aicon->docked && !aicon->running && aicon->command != NULL) {
 		XSetClipMask(dpy, scr->copy_gc, scr->dock_dots->mask);
 		XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
 		XCopyArea(dpy, scr->dock_dots->image, aicon->icon->core->window,

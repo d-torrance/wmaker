@@ -332,8 +332,8 @@ msgid "Cancel"
 msgstr "Mégsem"
 
 #: ../../wmaker-crm/src/dialog.c:576
-msgid "Could not open directory "
-msgstr "Nem sikerült megnyitni ezt a könyvtárat: "
+msgid "Could not open directory \"%s\":\n%s"
+msgstr "Nem sikerült megnyitni ezt a könyvtárat \"%s\":\n%s"
 
 #: ../../wmaker-crm/src/dialog.c:626
 msgid "Could not load image file "
@@ -931,7 +931,7 @@ msgstr "Nem sikerült inotify példányt létrehozni. A beállítások változá
 #: ../../wmaker-crm/src/main.c:481
 #, c-format
 msgid ""
-"could not add an inotify watch on path %s.Changes to the defaults database "
+"could not add an inotify watch on path %s. Changes to the defaults database "
 "will require a restart to take effect."
 msgstr "Nem sikerült inotify figyelőt adni ehhez az útvonalhoz: %s. A beállítások változásai csak újraindítás után fognak érvényesülni."
 
@@ -1179,8 +1179,8 @@ msgstr "szintaktikai hiba a menü fájlban: hiányzó END kulcsszó"
 
 #: ../../wmaker-crm/src/rootmenu.c:1049 ../../wmaker-crm/src/rootmenu.c:1138
 #, c-format
-msgid "%s:could not open menu file"
-msgstr "%s: nem tudom megnyitni a menü fájlt"
+msgid "could not open menu file \"%s\": %s"
+msgstr "nem tudom megnyitni a menü fájlt \"%s\": %s"
 
 #: ../../wmaker-crm/src/rootmenu.c:1072
 msgid "invalid menu file, MENU command is missing"
@@ -1693,7 +1693,7 @@ msgstr "Ne értelmezze az egérkattintásokat"
 #: ../../wmaker-crm/src/winspector.c:1412
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
-"in the window (when alt is the modifier you have\n"
+"in the window (when Alt is the modifier you have\n"
 "configured)."
 msgstr ""
 "Nem próbálja meg értelmezni az egér tevékenységét,\n"
@@ -1830,7 +1830,7 @@ msgid "Initial Workspace"
 msgstr "Kezdeti munkafelület"
 
 #: ../../wmaker-crm/src/winspector.c:1529
-msgid "The workspace to place the window when it'sfirst shown."
+msgid "The workspace to place the window when it's first shown."
 msgstr "Amikor megjelenik, melyik munkafelületre helyezze az ablakot"
 
 #: ../../wmaker-crm/src/winspector.c:1535

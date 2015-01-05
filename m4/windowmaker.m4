@@ -24,12 +24,11 @@ m4_pattern_forbid([^_?WM_])
 m4_pattern_allow([^WM_OSDEP(_[A-Z]*)?$])
 
 
-dnl
-dnl WM_CHECK_XFT_VERSION(MIN_VERSION, [ACTION-IF-FOUND [,ACTION-IF-NOT-FOUND]])
-dnl
-dnl # $XFTFLAGS should be defined before calling this macro,
-dnl # else it will not be able to find Xft.h
-dnl
+# WM_CHECK_XFT_VERSION(MIN_VERSION, [ACTION-IF-FOUND [,ACTION-IF-NOT-FOUND]])
+#
+# $XFTFLAGS should be defined before calling this macro,
+# else it will not be able to find Xft.h
+#
 AC_DEFUN([WM_CHECK_XFT_VERSION],
 [
 CPPFLAGS_old="$CPPFLAGS"
@@ -61,14 +60,14 @@ CPPFLAGS="$CPPFLAGS_old"
 ])
 
 
-dnl _WM_LIB_CHECK_FUNCTS
-dnl -----------------------
-dnl (internal shell functions)
-dnl
-dnl Create 2 shell functions:
-dnl  wm_fn_imgfmt_try_link: try to link against library
-dnl  wm_fn_imgfmt_try_compile: try to compile against header
-dnl
+# _WM_LIB_CHECK_FUNCTS
+# --------------------
+# (internal shell functions)
+#
+# Create 2 shell functions:
+#  wm_fn_imgfmt_try_link: try to link against library
+#  wm_fn_imgfmt_try_compile: try to compile against header
+#
 AC_DEFUN_ONCE([_WM_LIB_CHECK_FUNCTS],
 [@%:@ wm_fn_lib_try_link FUNCTION LFLAGS
 @%:@ ----------------------------------
@@ -206,4 +205,63 @@ AS_IF([test "x$wm_cv_func_secure_getenv" != "xno"],
          [WM_APPEND_ONCE([$wm_cv_func_secure_getenv], [CPPFLAGS])])
      AC_DEFINE([HAVE_SECURE_GETENV], [1],
          [defined when GNU's secure_getenv function is available])])
+])
+
+
+# WM_FUNC_OPEN_NOFOLLOW
+# ---------------------
+#
+# Check if the flag 'O_NOFOLLOW' is supported, for the function 'open'
+AC_DEFUN_ONCE([WM_FUNC_OPEN_NOFOLLOW],
+[AC_CACHE_CHECK([for O_NOFOLLOW], [wm_cv_func_open_nofollow],
+    [wm_cv_func_open_nofollow=no
+     wm_save_CPPFLAGS="$CPPFLAGS"
+     for wm_arg in dnl
+"yes"  dnl natively supported, nothing to do
+"-D_POSIX_C_SOURCE=200809L"  dnl the flag was officially added in POSIX.1-2008
+"-D_XOPEN_SOURCE=700"  dnl for recent glibc
+"-D_GNU_SOURCE"  dnl for older glibc
+     ; do
+         AS_IF([test "x$wm_arg" != "xyes"], [CPPFLAGS="$wm_save_CPPFLAGS $wm_arg"])
+         AC_LINK_IFELSE([AC_LANG_PROGRAM([dnl
+@%:@include <sys/types.h>
+@%:@include <sys/stat.h>
+@%:@include <fcntl.h>], [dnl
+  int fd;
+
+  fd = open("/dev/null", O_RDONLY | O_NOFOLLOW);
+  return fd;])], [found=1], [found=0])
+         AS_IF([test $found = 1],
+             [wm_cv_func_open_nofollow="$wm_arg"
+              break])
+     done
+     CPPFLAGS="$wm_save_CPPFLAGS"])
+AS_CASE([$wm_cv_func_open_nofollow],
+    [yes], [],
+    [no],  [AC_DEFINE([O_NOFOLLOW], [0],
+                [defined by configure if the attribute is not defined on your platform])
+            AC_MSG_WARN([flag O_NOFOLLOW is not defined on your platform])],
+    [CPPFLAGS="$CPPFLAGS $wm_cv_func_open_nofollow"])
+])
+
+
+# WM_TYPE_SIGNAL
+# --------------
+#
+# Check the return type for the function 'signal'
+# Autoconf now claims we can assume the type is 'void' as it is in the C89 standard,
+# but as Window Maker is supposed to be lightweight enough for old machines, we
+# prefer to keep the check for portability
+AC_DEFUN_ONCE([WM_TYPE_SIGNAL],
+[AC_CACHE_CHECK([return type of signal handlers], [wm_cv_type_signal],
+    [AC_COMPILE_IFELSE(
+        [AC_LANG_PROGRAM([#include <sys/types.h>
+#include <signal.h>
+],
+            [return *(signal (0, 0)) (0) == 1;])],
+        [wm_cv_type_signal=int],
+        [wm_cv_type_signal=void])dnl
+    ])
+AC_DEFINE_UNQUOTED([RETSIGTYPE], [$wm_cv_type_signal],
+    [Define as the return type of signal handlers (`int' or `void')])dnl
 ])

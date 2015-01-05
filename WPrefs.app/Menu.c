@@ -42,7 +42,6 @@ typedef enum {
 } InfoType;
 
 #define MAX_SECTION_SIZE 4
-#define PATH_LEN 256
 
 typedef struct _Panel {
 	WMBox *box;
@@ -1299,7 +1298,7 @@ static Bool shouldRemoveItem(struct WEditMenuDelegate *delegate, WEditMenu * men
 				      _("Remove Submenu"),
 				      _("Removing this item will destroy all items inside\n"
 					"the submenu. Do you really want to do that?"),
-				      _("Yes"), _("No"), _("Yes, don't ask again."));
+				      _("Yes"), _("No"), _("Yes, don't ask again"));
 		switch (res) {
 		case WAPRDefault:
 			return True;

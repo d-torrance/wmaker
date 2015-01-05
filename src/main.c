@@ -246,9 +246,22 @@ void SetupEnvironment(WScreen * scr)
 		int len = strlen(DisplayName) + 64;
 		tmp = wmalloc(len);
 		snprintf(tmp, len, "DISPLAY=%s", XDisplayName(DisplayName));
-		ptr = strchr(strchr(tmp, ':'), '.');
-		if (ptr)
-			*ptr = 0;
+
+		/* Search from the end to be compatible with ipv6 address */
+		ptr = strrchr(tmp, ':');
+		if (ptr == NULL) {
+			static Bool message_already_displayed = False;
+
+			if (!message_already_displayed)
+				wwarning(_("the display name has an unexpected syntax: \"%s\""),
+				         XDisplayName(DisplayName));
+			message_already_displayed = True;
+		} else {
+			/* If found, remove the screen specification from the display variable */
+			ptr = strchr(ptr, '.');
+			if (ptr)
+				*ptr = 0;
+		}
 		snprintf(buf, sizeof(buf), ".%i", scr->screen);
 		strcat(tmp, buf);
 		putenv(tmp);
@@ -482,7 +495,7 @@ static void inotifyWatchConfig(void)
 		w_global.inotify.wd_defaults = inotify_add_watch(w_global.inotify.fd_event_queue, watchPath, IN_ALL_EVENTS);
 		if (w_global.inotify.wd_defaults < 0) {
 			wwarning(_("could not add an inotify watch on path %s."
-				   "Changes to the defaults database will require"
+				   " Changes to the defaults database will require"
 				   " a restart to take effect."), watchPath);
 			close(w_global.inotify.fd_event_queue);
 			w_global.inotify.fd_event_queue = -1;
@@ -666,12 +679,14 @@ static int real_main(int argc, char **argv)
 					wwarning(_("bad value for visualid: \"%s\""), argv[i]);
 					exit(0);
 				}
-			} else if (strcmp(argv[i], "-static") == 0 || strcmp(argv[i], "--static") == 0
-#ifndef HAVE_INOTIFY
-				    || strcmp(argv[i], "--no-polling") == 0
-#endif
-				    ) {
+			} else if (strcmp(argv[i], "-static") == 0 || strcmp(argv[i], "--static") == 0) {
 				wPreferences.flags.noupdates = 1;
+			} else if (strcmp(argv[i], "--no-polling") == 0) {
+#ifndef HAVE_INOTIFY
+				wPreferences.flags.noupdates = 1;
+#else
+				wmessage(_("your version of Window Maker was compiler with INotify support, so \"--no-polling\" has no effect"));
+#endif
 			} else if (strcmp(argv[i], "--help") == 0) {
 				print_help();
 				exit(0);

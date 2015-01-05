@@ -33,6 +33,7 @@
 #include <string.h>
 #include <strings.h>
 #include <time.h>
+#include <errno.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -76,6 +77,7 @@
 #include "event.h"
 #include "winmenu.h"
 #include "switchmenu.h"
+#include "wsmap.h"
 
 
 #define MOD_MASK wPreferences.modifier_mask
@@ -294,7 +296,8 @@ void DispatchEvent(XEvent * event)
  */
 static void handle_inotify_events(void)
 {
-	ssize_t eventQLength, i = 0;
+	ssize_t eventQLength;
+	size_t i = 0;
 	/* Make room for at lease 5 simultaneous events, with path + filenames */
 	char buff[ (sizeof(struct inotify_event) + NAME_MAX + 1) * 5 ];
 	/* Check config only once per read of the event queue */
@@ -309,6 +312,11 @@ static void handle_inotify_events(void)
 	 */
 	eventQLength = read(w_global.inotify.fd_event_queue,
 	                    buff, sizeof(buff) );
+
+	if (eventQLength < 0) {
+		wwarning(_("read problem when trying to get INotify event: %s"), strerror(errno));
+		return;
+	}
 
 	/* check what events occured */
 	/* Should really check wd here too, but for now we only have one watch! */
@@ -1543,6 +1551,13 @@ static void handleKeyPress(XEvent * event)
 			handleMaximize(wwin, MAX_MAXIMUS | MAX_KEYBOARD);
 		}
 		break;
+	case WKBD_OMNIPRESENT:
+		if (ISMAPPED(wwin) && ISFOCUSED(wwin)) {
+			CloseWindowMenu(scr);
+
+			wWindowSetOmnipresent(wwin, !wwin->flags.omnipresent);
+		}
+		break;
 	case WKBD_RAISE:
 		if (ISMAPPED(wwin) && ISFOCUSED(wwin)) {
 			CloseWindowMenu(scr);
@@ -1592,6 +1607,12 @@ static void handleKeyPress(XEvent * event)
 			wSelectWindow(wwin, !wwin->flags.selected);
 		}
 		break;
+
+	case WKBD_WORKSPACEMAP:
+		if (!wPreferences.disable_workspace_pager)
+			StartWorkspaceMap(scr);
+		break;
+
 	case WKBD_FOCUSNEXT:
 		StartWindozeCycle(wwin, event, True, False);
 		break;

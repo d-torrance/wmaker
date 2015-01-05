@@ -948,7 +948,6 @@ static void launchDockedApplication(WAppIcon *btn, Bool withSelection)
 static void updateWorkspaceMenu(WMenu *menu, WAppIcon *icon)
 {
 	WScreen *scr = menu->frame->screen_ptr;
-	char title[MAX_WORKSPACENAME_WIDTH + 1];
 	int i;
 
 	if (!menu || !icon)
@@ -958,15 +957,12 @@ static void updateWorkspaceMenu(WMenu *menu, WAppIcon *icon)
 		if (i < menu->entry_no) {
 			if (strcmp(menu->entries[i]->text, scr->workspaces[i]->name) != 0) {
 				wfree(menu->entries[i]->text);
-				strcpy(title, scr->workspaces[i]->name);
-				menu->entries[i]->text = wstrdup(title);
+				menu->entries[i]->text = wstrdup(scr->workspaces[i]->name);
 				menu->flags.realized = 0;
 			}
 			menu->entries[i]->clientdata = (void *)icon;
 		} else {
-			strcpy(title, scr->workspaces[i]->name);
-
-			wMenuAddCallback(menu, title, switchWSCommand, (void *)icon);
+			wMenuAddCallback(menu, scr->workspaces[i]->name, switchWSCommand, (void *)icon);
 
 			menu->flags.realized = 0;
 		}
@@ -1224,9 +1220,9 @@ static WMenu *dockMenuCreate(WScreen *scr, int type)
 			scr->dock_pos_menu = makeDockPositionMenu(scr);
 		wMenuEntrySetCascade(menu, entry, scr->dock_pos_menu);
 
-		if (!wPreferences.flags.nodrawer) {
-			entry = wMenuAddCallback(menu, _("Add a drawer"), addADrawerCallback, NULL);
-		}
+		if (!wPreferences.flags.nodrawer)
+			wMenuAddCallback(menu, _("Add a drawer"), addADrawerCallback, NULL);
+
 	} else {
 		if (type == WM_CLIP)
 			entry = wMenuAddCallback(menu, _("Clip Options"), NULL, NULL);
@@ -1659,14 +1655,11 @@ static WAppIcon *restore_icon_state(WScreen *scr, WMPropList *info, int type, in
 		return NULL;
 
 	/* get commands */
-	if (cmd)
-		command = wstrdup(WMGetFromPLString(cmd));
-	else
-		command = NULL;
+	command = wstrdup(WMGetFromPLString(cmd));
 
-	if (!command || strcmp(command, "-") == 0) {
-		if (command)
-			wfree(command);
+	if (strcmp(command, "-") == 0) {
+		wfree(command);
+
 		if (wclass)
 			wfree(wclass);
 		if (winstance)
@@ -1680,8 +1673,8 @@ static WAppIcon *restore_icon_state(WScreen *scr, WMPropList *info, int type, in
 		wfree(wclass);
 	if (winstance)
 		wfree(winstance);
-	if (command)
-		wfree(command);
+
+	wfree(command);
 
 	aicon->icon->core->descriptor.handle_mousedown = iconMouseDown;
 	aicon->icon->core->descriptor.handle_enternotify = clipEnterNotify;

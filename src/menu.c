@@ -56,10 +56,6 @@
 
 /***** Local Stuff ******/
 
-#define WSS_ROOTMENU	(1<<0)
-#define WSS_SWITCHMENU	(1<<1)
-#define WSS_WSMENU	(1<<2)
-
 static struct {
 	int steps;
 	int delay;
@@ -1543,8 +1539,10 @@ typedef struct _delay {
 	int ox, oy;
 } _delay;
 
-static void leaving(_delay * dl)
+static void callback_leaving(void *user_param)
 {
+	_delay *dl = (_delay *) user_param;
+
 	wMenuMove(dl->menu, dl->ox, dl->oy, True);
 	dl->menu->jump_back = NULL;
 	dl->menu->menu->screen_ptr->flags.jump_back_pending = 0;
@@ -1652,6 +1650,7 @@ void wMenuScroll(WMenu *menu)
 
 	if (jump_back) {
 		_delay *delayer;
+
 		if (!omenu->jump_back) {
 			delayer = wmalloc(sizeof(_delay));
 			delayer->menu = omenu;
@@ -1661,7 +1660,7 @@ void wMenuScroll(WMenu *menu)
 			scr->flags.jump_back_pending = 1;
 		} else
 			delayer = omenu->jump_back;
-		WMAddTimerHandler(MENU_JUMP_BACK_DELAY, (WMCallback *) leaving, delayer);
+		WMAddTimerHandler(MENU_JUMP_BACK_DELAY, callback_leaving, delayer);
 	}
 }
 
@@ -2379,7 +2378,7 @@ static Bool getMenuInfo(WMPropList * info, int *x, int *y, Bool * lowered)
 	return True;
 }
 
-static int restoreMenu(WScreen * scr, WMPropList * menu, int which)
+static int restoreMenu(WScreen *scr, WMPropList *menu)
 {
 	int x, y;
 	Bool lowered = False;
@@ -2391,10 +2390,8 @@ static int restoreMenu(WScreen * scr, WMPropList * menu, int which)
 	if (!getMenuInfo(menu, &x, &y, &lowered))
 		return False;
 
-	if (which & WSS_SWITCHMENU) {
-		OpenSwitchMenu(scr, x, y, False);
-		pmenu = scr->switch_menu;
-	}
+	OpenSwitchMenu(scr, x, y, False);
+	pmenu = scr->switch_menu;
 
 	if (pmenu) {
 		int width = MENUW(pmenu);
@@ -2505,7 +2502,7 @@ void wMenuRestoreState(WScreen * scr)
 	skey = WMCreatePLString("SwitchMenu");
 	menu = WMGetFromPLDictionary(menus, skey);
 	WMReleasePropList(skey);
-	restoreMenu(scr, menu, WSS_SWITCHMENU);
+	restoreMenu(scr, menu);
 
 	if (!scr->root_menu) {
 		OpenRootMenu(scr, scr->scr_width * 2, 0, False);

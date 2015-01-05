@@ -217,6 +217,22 @@ static atomitem_t atomNames[] = {
 #define _NET_WM_STATE_ADD 1
 #define _NET_WM_STATE_TOGGLE 2
 
+#if 0
+/*
+ * These constant provide information on the kind of window move/resize when
+ * it is initiated by the application instead of by WindowMaker. They are
+ * parameter for the client message _NET_WM_MOVERESIZE, as defined by the
+ * FreeDesktop wm-spec standard:
+ *   http://standards.freedesktop.org/wm-spec/1.5/ar01s04.html
+ *
+ * Today, WindowMaker does not support this at all (the corresponding Atom
+ * is not added to the list in setSupportedHints), probably because there is
+ * nothing it needs to do about it, the application is assumed to know what
+ * it is doing, and WindowMaker won't get in the way.
+ *
+ * The definition of the constants (taken from the standard) are disabled to
+ * avoid a spurious warning (-Wunused-macros).
+ */
 #define _NET_WM_MOVERESIZE_SIZE_TOPLEFT      0
 #define _NET_WM_MOVERESIZE_SIZE_TOP          1
 #define _NET_WM_MOVERESIZE_SIZE_TOPRIGHT     2
@@ -228,6 +244,7 @@ static atomitem_t atomNames[] = {
 #define _NET_WM_MOVERESIZE_MOVE              8	/* movement only */
 #define _NET_WM_MOVERESIZE_SIZE_KEYBOARD     9	/* size via keyboard */
 #define _NET_WM_MOVERESIZE_MOVE_KEYBOARD    10	/* move via keyboard */
+#endif
 
 static void observer(void *self, WMNotification *notif);
 static void wsobserver(void *self, WMNotification *notif);
@@ -685,25 +702,67 @@ void wNETWMUpdateActions(WWindow *wwin, Bool del)
 
 void wNETWMUpdateWorkarea(WScreen *scr)
 {
-	long *area;
-	int count, i;
+	WArea total_usable;
+	int nb_workspace;
 
-	if (!scr->netdata || scr->workspace_count == 0 || !scr->usableArea)
+	if (!scr->netdata) {
+		/* If the _NET_xxx were not initialised, it not necessary to do anything */
 		return;
-
-	count = scr->workspace_count * 4;
-	area = wmalloc(sizeof(long) * count);
-
-	for (i = 0; i < scr->workspace_count; i++) {
-		area[4 * i + 0] = scr->usableArea[0].x1;
-		area[4 * i + 1] = scr->usableArea[0].y1;
-		area[4 * i + 2] = scr->usableArea[0].x2 - scr->usableArea[0].x1;
-		area[4 * i + 3] = scr->usableArea[0].y2 - scr->usableArea[0].y1;
 	}
 
-	XChangeProperty(dpy, scr->root_win, net_workarea, XA_CARDINAL, 32,
-				PropModeReplace, (unsigned char *)area, count);
-	wfree(area);
+	if (!scr->usableArea) {
+		/* If we don't have any info, we fall back on using the complete screen area */
+		total_usable.x1 = 0;
+		total_usable.y1 = 0;
+		total_usable.x2 = scr->scr_width;
+		total_usable.y2 = scr->scr_height;
+
+	} else {
+		int i;
+
+		/*
+		 * the _NET_WORKAREA is supposed to contain the total area of the screen that
+		 * is usable, so we merge the areas from all xrandr sub-screens
+		 */
+		total_usable = scr->usableArea[0];
+
+		for (i = 1; i < wXineramaHeads(scr); i++) {
+			/* The merge is not subtle because _NET_WORKAREA does not need more */
+			if (scr->usableArea[i].x1 < total_usable.x1)
+				total_usable.x1 = scr->usableArea[i].x1;
+
+			if (scr->usableArea[i].y1 < total_usable.y1)
+				total_usable.y1 = scr->usableArea[i].y1;
+
+			if (scr->usableArea[i].x2 > total_usable.x2)
+				total_usable.x2 = scr->usableArea[i].x2;
+
+			if (scr->usableArea[i].y2 > total_usable.y2)
+				total_usable.y2 = scr->usableArea[i].y2;
+		}
+
+	}
+
+	/* We are expected to repeat the information for each workspace */
+	if (scr->workspace_count == 0)
+		nb_workspace = 1;
+	else
+		nb_workspace = scr->workspace_count;
+
+	{
+		long property_value[nb_workspace * 4];
+		int i;
+
+		for (i = 0; i < nb_workspace; i++) {
+			property_value[4 * i + 0] = total_usable.x1;
+			property_value[4 * i + 1] = total_usable.y1;
+			property_value[4 * i + 2] = total_usable.x2 - total_usable.x1;
+			property_value[4 * i + 3] = total_usable.y2 - total_usable.y1;
+		}
+
+		XChangeProperty(dpy, scr->root_win, net_workarea, XA_CARDINAL, 32, PropModeReplace,
+		                (unsigned char *) property_value, nb_workspace * 4);
+	}
 }
 
 Bool wNETWMGetUsableArea(WScreen *scr, int head, WArea *area)
@@ -1175,8 +1234,8 @@ static Bool handleWindowType(WWindow *wwin, Atom type, int *layer)
 		wwin->client_flags.skip_switchpanel = 1;
 		wwin->client_flags.dont_move_off = 1;
 		wwin->flags.net_skip_pager = 1;
-	} else if (type == net_wm_window_type_toolbar) {
-		wwin->client_flags.no_titlebar = 1;
+	} else if (type == net_wm_window_type_toolbar ||
+	           type == net_wm_window_type_menu) {
 		wwin->client_flags.no_resizable = 1;
 		wwin->client_flags.no_miniaturizable = 1;
 		wwin->client_flags.no_resizebar = 1;
@@ -1185,8 +1244,7 @@ static Bool handleWindowType(WWindow *wwin, Atom type, int *layer)
 		wwin->client_flags.skip_switchpanel = 1;
 		wwin->client_flags.dont_move_off = 1;
 		wwin->client_flags.no_appicon = 1;
-	} else if (type == net_wm_window_type_menu ||
-			type == net_wm_window_type_dropdown_menu ||
+	} else if (type == net_wm_window_type_dropdown_menu ||
 			type == net_wm_window_type_popup_menu ||
 			type == net_wm_window_type_combo) {
 		wwin->client_flags.no_titlebar = 1;
@@ -1473,7 +1531,6 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 {
 	WScreen *scr;
 	WWindow *wwin;
-	Bool done = True;
 
 #ifdef DEBUG_WMSPEC
 	wmessage("processClientMessage type %s", XGetAtomName(dpy, event->message_type));
@@ -1484,6 +1541,8 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 		/* generic client messages */
 		if (event->message_type == net_current_desktop) {
 			wWorkspaceChange(scr, event->data.l[0]);
+			return True;
+
 		} else if (event->message_type == net_number_of_desktops) {
 			long value;
 
@@ -1504,16 +1563,16 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 				if (rebuild)
 					updateWorkspaceCount(scr);
 			}
+			return True;
+
 		} else if (event->message_type == net_showing_desktop) {
 			wNETWMShowingDesktop(scr, event->data.l[0]);
+			return True;
+
 		} else if (event->message_type == net_desktop_names) {
 			handleDesktopNames(scr);
-		} else {
-			done = False;
-		}
-
-		if (done)
 			return True;
+		}
 	}
 
 	/* window specific client messages */
@@ -1536,12 +1595,16 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 				wNETWMShowingDesktop(scr, False);
 				wMakeWindowVisible(wwin);
 		}
+		return True;
+
 	} else if (event->message_type == net_close_window) {
 		if (!WFLAGP(wwin, no_closable)) {
 			if (wwin->protocols.DELETE_WINDOW)
 				wClientSendProtocol(wwin, w_global.atom.wm.delete_window,
 										  w_global.timestamp.last_event);
 		}
+		return True;
+
 	} else if (event->message_type == net_wm_state) {
 		int maximized = wwin->flags.maximized;
 		long set = event->data.l[0];
@@ -1564,10 +1627,15 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 			}
 		}
 		updateStateHint(wwin, False, False);
+		return True;
+
 	} else if (event->message_type == net_wm_handled_icons || event->message_type == net_wm_icon_geometry) {
 		updateNetIconInfo(wwin);
+		return True;
+
 	} else if (event->message_type == net_wm_desktop) {
 		long desktop = event->data.l[0];
+
 		if (desktop == -1) {
 			wWindowSetOmnipresent(wwin, True);
 		} else {
@@ -1575,11 +1643,10 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 				wWindowSetOmnipresent(wwin, False);
 			wWindowChangeWorkspace(wwin, desktop);
 		}
-	} else {
-		done = False;
+		return True;
 	}
 
-	return done;
+	return False;
 }
 
 void wNETWMCheckClientHintChange(WWindow *wwin, XPropertyEvent *event)

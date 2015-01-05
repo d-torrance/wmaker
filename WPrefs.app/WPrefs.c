@@ -29,9 +29,6 @@
 #endif
 
 
-#define ICON_TITLE_FONT "sans serif:pixelsize=9"
-#define ICON_TITLE_VFONT "sans serif:pixelsize=9:weight=100"
-
 #define MAX_SECTIONS 16
 
 typedef struct _WPrefs {
@@ -216,7 +213,7 @@ static void createMainWindow(WMScreen * scr)
 	WMSetWindowCloseAction(WPrefs.win, quit, NULL);
 	WMSetWindowMaxSize(WPrefs.win, 520, 390);
 	WMSetWindowMinSize(WPrefs.win, 520, 390);
-	WMSetWindowMiniwindowTitle(WPrefs.win, "Preferences");
+	WMSetWindowMiniwindowTitle(WPrefs.win, _("Preferences"));
 
 	WPrefs.scrollV = WMCreateScrollView(WPrefs.win);
 	WMResizeWidget(WPrefs.scrollV, 500, 87);

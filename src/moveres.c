@@ -50,10 +50,8 @@
 
 #define LEFT            1
 #define RIGHT           2
-#define HORIZONTAL      (LEFT|RIGHT)
 #define UP              4
 #define DOWN            8
-#define VERTICAL        (UP|DOWN)
 
 /* True if window currently has a border. This also includes borderless
  * windows which are currently selected
@@ -776,10 +774,10 @@ static void updateMoveData(WWindow * wwin, MoveData * data)
 
 	/* order from closest to the border of the screen to farthest */
 
-	qsort(data->topList, data->count, sizeof(WWindow **), compareWTop);
-	qsort(data->leftList, data->count, sizeof(WWindow **), compareWLeft);
-	qsort(data->rightList, data->count, sizeof(WWindow **), compareWRight);
-	qsort(data->bottomList, data->count, sizeof(WWindow **), compareWBottom);
+	qsort(data->topList, data->count, sizeof(data->topList[0]), compareWTop);
+	qsort(data->leftList, data->count, sizeof(data->leftList[0]), compareWLeft);
+	qsort(data->rightList, data->count, sizeof(data->rightList[0]), compareWRight);
+	qsort(data->bottomList, data->count, sizeof(data->bottomList[0]), compareWBottom);
 
 	/* figure the position of the window relative to the others */
 
@@ -2268,10 +2266,8 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 
 #undef LEFT
 #undef RIGHT
-#undef HORIZONTAL
 #undef UP
 #undef DOWN
-#undef VERTICAL
 #undef HCONSTRAIN
 #undef RESIZEBAR
 

@@ -16,8 +16,9 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+
 # WM_PROG_CC_C11
-# ---------------------
+# --------------
 #
 # Check if the compiler supports C11 standard natively, or if any
 # option may help enabling the support
@@ -45,4 +46,42 @@ fail_because_stdc_version_is_older_than_C11;
 AS_CASE([$wm_cv_prog_cc_c11],
     [no|native], [],
     [CFLAGS="$CFLAGS $wm_cv_prog_cc_c11"])
+])
+
+
+# WM_PROG_CC_NESTEDFUNC
+# ---------------------
+#
+# Check if the compiler support declaring Nested Functions (that means
+# declaring a function inside another function).
+#
+# If the compiler does not support them, then the Automake conditional
+# USE_NESTED_FUNC will be set to false, in which case the Makefile will
+# use the script 'scripts/nested-func-to-macro.sh' to generate a modified
+# source with the nested function transformed into a Preprocessor Macro.
+AC_DEFUN_ONCE([WM_PROG_CC_NESTEDFUNC],
+[AC_CACHE_CHECK([if compiler supports nested functions], [wm_cv_prog_cc_nestedfunc],
+    [AC_COMPILE_IFELSE(
+        [AC_LANG_SOURCE([[
+int main(int narg, char **argv)
+{
+	int local_variable;
+
+	int nested_function(int argument)
+	{
+		/* Checking we have access to upper level's scope, otherwise it is of no use */
+		return local_variable + argument;
+	}
+
+	/* To avoid a warning for unused parameter, that may falsely fail */
+	(void) argv;
+
+	/* Initialise using the parameter to main so the compiler won't be tempted to optimise too much */
+	local_variable = narg + 1;
+
+	return nested_function(2);
+}]]) ],
+        [wm_cv_prog_cc_nestedfunc=yes],
+        [wm_cv_prog_cc_nestedfunc=no]) ])
+AM_CONDITIONAL([USE_NESTED_FUNC], [test "x$wm_cv_prog_cc_nestedfunc" != "xno"])dnl
 ])
