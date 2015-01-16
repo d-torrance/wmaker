@@ -132,8 +132,6 @@ debian/debianfiles/Theme/Debian			usr/share/WindowMaker/Themes
 debian/debianfiles/Theme/debian.tiff		usr/share/WindowMaker/Backgrounds
 debian/debianfiles/Theme/Ambiance.style		usr/share/WindowMaker/Themes
 debian/debianfiles/Theme/Radiance.style		usr/share/WindowMaker/Themes
-# Unity Greeter icon
-debian/debianfiles/custom_wmaker-common_badge.png	usr/share/unity-greeter
 # Configuration
 etc/WindowMaker/WMGLOBAL			etc/GNUstep/Defaults
 etc/WindowMaker/WMState				etc/GNUstep/Defaults
