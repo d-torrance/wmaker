@@ -1,3 +1,9 @@
+wmaker (0.95.6+20150116-0ppa1) vivid; urgency=medium
+
+  * Remove Unity Greeter badge; moved to new unity-greeter-badges package.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Fri, 16 Jan 2015 07:37:52 -0600
+
 wmaker (0.95.6+20150105-0ppa1) utopic; urgency=medium
 
   * debian/control
