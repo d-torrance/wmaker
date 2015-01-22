@@ -1,3 +1,10 @@
+wmaker (0.95.6+20150120-0ppa1) vivid; urgency=medium
+
+  * debian/README.ppa
+    - Update info regarding Unity Greeter badge.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Wed, 21 Jan 2015 18:16:55 -0600
+
 wmaker (0.95.6+20150116-0ppa1) vivid; urgency=medium
 
   * Remove Unity Greeter badge; moved to new unity-greeter-badges package.
