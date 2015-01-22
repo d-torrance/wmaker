@@ -12,12 +12,8 @@ config-paths.h: Makefile
 	@echo "Generating $@"
 	@echo '/* this is a generated file - do not edit */' > $@
 	@echo '' >> $@
-	@echo '/* gettext domain used for menu translations */' >> $@
-	@if test -z "$(menutextdomain)"; then \
-	  echo '/* #undef MENU_TEXTDOMAIN "$(menutextdomain)" */' >> $@; \
-	else \
-	  echo '#define MENU_TEXTDOMAIN "$(menutextdomain)"' >> $@; \
-	fi
+	@echo '/* define where the translations are stored */' >> $@
+	@echo '#define LOCALEDIR "$(localedir)"' >> $@
 	@echo '' >> $@
 	@echo '/* define an extra path for pixmaps */' >> $@
 	@echo '#define PIXMAPDIR "$(pixmapdir)"' >> $@
@@ -30,16 +26,26 @@ config-paths.h: Makefile
 
 ACLOCAL_AMFLAGS = -I m4
 
+# Improve coverage in 'make distcheck' by checking that translations work
+AM_DISTCHECK_CONFIGURE_FLAGS = --enable-silent-rules LINGUAS='*'
+
+
 SUBDIRS = wrlib WINGs src util po WindowMaker wmlib WPrefs.app doc
 DIST_SUBDIRS = $(SUBDIRS) test
 
-EXTRA_DIST = TODO BUGS BUGFORM FAQ FAQ.I18N INSTALL \
-	INSTALL-WMAKER README.definable-cursor \
+EXTRA_DIST = TODO BUGS BUGFORM FAQ INSTALL \
+	INSTALL-WMAKER README.i18n README.definable-cursor \
 	The-perfect-Window-Maker-patch.txt \
 	README COPYING.WTFPL autogen.sh \
 	email-clients.txt checkpatch.pl update-changelog.pl \
+	script/check-translation-sources.sh \
 	script/generate-mapfile-from-header.sh \
+	script/generate-po-from-template.sh \
+	script/generate-txt-from-texi.sh \
 	script/nested-func-to-macro.sh
+
+
+.PHONY:	coverage-reset coverage
 
 if USE_LCOV
 coverage-reset:
@@ -51,6 +57,29 @@ coverage:
 	-mkdir -p coverage @lcov_output_directory@
 	lcov --compat-libtool --capture --directory . --output-file coverage/coverage.info
 	genhtml --output-directory @lcov_output_directory@ coverage/coverage.info
-
-.PHONY:	coverage-reset coverage
 endif
+
+# make update-lang PO=<lang>
+# ==========================
+# Update the PO files against the POT file in all the translation sub-directories
+#
+# We do not use an automatic recursive target from Automake (AM_EXTRA_RECURSIVE_TARGETS)
+# because we want to check only once that the variable PO was defined; the added bonus
+# being that we do not process all directories but only the related ones, which is
+# faster and a lot less verbose
+
+update-lang:
+if HAVE_XGETTEXT
+	@if echo "$(PO)" | grep -v '^[a-z][a-z]\(_[A-Z][A-Z]\)\?$$' > /dev/null ; then \
+	  echo "Error: invalid value \"$(PO)\" for update-lang, use PO=<lang>" >&2 ; exit 1 ; \
+	fi ; \
+	for subdir in $(SUBDIRS_PO); do \
+	  ($(am__cd) $$subdir && $(MAKE) $(AM_MAKEFLAGS) update-lang || exit $$?); \
+	done
+
+SUBDIRS_PO = WINGs/po po util/po WPrefs.app/po
+else
+	@echo "Error: the program 'xgettext' was not found by configure, it is mandatory for this operation" >&2 ; exit 1
+endif
+
+.PHONY: update-lang
