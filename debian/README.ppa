@@ -11,13 +11,6 @@ http://repo.or.cz/w/wmaker-crm.git
 
 I have added a few extra features:
 
-#########################
-## Unity greeter badge ##
-#########################
-A little GNUstep icon appears when you select Window Maker at login in
-Unity Greeter.  Note that this is also available in the main Ubuntu
-package.
-
 ################################
 ## Ubuntu Window Maker themes ##
 ################################
@@ -40,6 +33,14 @@ Here is an example that approximates the Radiance GTK theme:
  UnselectedTabBackground = "#f2f1f0";
  UnselectedTabShadow = "#cdc6c3";
 }
+
+#########################
+## Unity greeter badge ##
+#########################
+Previous versions of this package featured a little GNUstep icon that appeared
+when you selected Window Maker at login in Unity Greeter.  This has been
+removed as it will soon appear in the new unity-greeter-badges package,
+available in Ubuntu starting with 15.04 (Vivid Vervet).
 
 ###############
 ## Questions ##
