@@ -21,7 +21,7 @@ CONFDIR           := /etc
 INCLUDEDIR        := $(BASEDIR)/include
 SHAREDIR          := $(BASEDIR)/share
 MANDIR            := $(SHAREDIR)/man
-NLSDIR            := $(SHAREDIR)/locale
+LOCALEDIR         := $(SHAREDIR)/locale
 GNUSTEPDIR        := $(SHAREDIR)/lib/GNUstep/System
 WMSHAREDIR        := $(SHAREDIR)/WindowMaker
 PIXMAPDIR         := $(INCLUDEDIR)/X11/pixmaps
@@ -31,7 +31,7 @@ COMMON_OPTIONS    := --prefix=$(BASEDIR)              \
                      --includedir=$(INCLUDEDIR)       \
                      --sysconfdir=$(CONFDIR)          \
                      --datadir=$(SHAREDIR)            \
-                     --with-nlsdir=$(NLSDIR)          \
+                     --localedir=$(LOCALEDIR)          \
                      --with-pixmapdir=$(PIXMAPDIR)    \
                      --with-gnustepdir=$(GNUSTEPDIR)
 
