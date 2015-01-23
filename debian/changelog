@@ -1,3 +1,12 @@
+wmaker (0.95.6+20150120-0ppa2) vivid; urgency=medium
+
+  * debian/rules
+    - Replace deprecated --with-nlsdir with --localedir.
+  * debian/wmaker-common.docs
+    - Replace FAQ.I18N with README.i18n.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Thu, 22 Jan 2015 21:39:07 -0600
+
 wmaker (0.95.6+20150120-0ppa1) vivid; urgency=medium
 
   * debian/README.ppa
