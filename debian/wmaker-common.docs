@@ -3,9 +3,9 @@ BUGFORM
 BUGS
 NEWS
 README
+README.i18n
 TODO
 FAQ
-FAQ.I18N
 debian/debianfiles/Theme/Debian.theme.txt
 debian/copyright
 # Place wm-oldmenu2new under a more appropiate directory
