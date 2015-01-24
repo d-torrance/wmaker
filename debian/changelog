@@ -1,3 +1,15 @@
+wmaker (0.95.6+20150120-0ppa3) vivid; urgency=medium
+
+  * debian/control
+    - Add gawk to Build-Depends; needed for generate-txt-from-texi.sh.
+  * debian/patches
+    - (basic_wings_theming.patch) Refresh.
+  * debian/rules
+    - Restore configure.ac after patching in version number and running
+      autogen.sh. Then dpkg-source won't complain during a second build.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Fri, 23 Jan 2015 20:45:36 -0600
+
 wmaker (0.95.6+20150120-0ppa2) vivid; urgency=medium
 
   * debian/rules
