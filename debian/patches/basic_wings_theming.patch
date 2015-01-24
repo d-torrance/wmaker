@@ -35,7 +35,7 @@ Last-Update: 2014-09-02
  WMScreen* WMWidgetScreen(WMWidget *w);
 --- a/WINGs/WINGs/WINGsP.h
 +++ b/WINGs/WINGs/WINGsP.h
-@@ -64,6 +64,17 @@
+@@ -67,6 +67,17 @@
      struct W_DragDestinationInfo* destInfo; /* infos needed by destination */
  } W_DraggingInfo;
  
@@ -53,7 +53,7 @@ Last-Update: 2014-09-02
  /* ---[ Structures from WINGs.h ]----------------------------------------- */
  
  /* Pre-definition of internal structs */
-@@ -265,6 +276,8 @@
+@@ -268,6 +279,8 @@
      struct W_View *modalView;
      unsigned modalLoop:1;
      unsigned ignoreNextDoubleClick:1;
@@ -159,7 +159,7 @@ Last-Update: 2014-09-02
 +}
 --- a/WINGs/widgets.c
 +++ b/WINGs/widgets.c
-@@ -668,6 +668,8 @@
+@@ -655,6 +655,8 @@
  		scrPtr->ignoredModifierMask = numLockMask | scrollLockMask | LockMask;
  	}
  
