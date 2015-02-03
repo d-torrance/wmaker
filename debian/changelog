@@ -1,3 +1,10 @@
+wmaker (0.95.6+20150131-0ppa1) vivid; urgency=medium
+
+  * debian/control
+    - Remove gawk from Build-Depends; no longer needed.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Tue, 03 Feb 2015 00:36:24 -0600
+
 wmaker (0.95.6+20150120-0ppa3) vivid; urgency=medium
 
   * debian/control
