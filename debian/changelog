@@ -1,3 +1,14 @@
+wmaker (0.95.6+20150131-0ppa2) vivid; urgency=medium
+
+  * debian/clean
+    - Clean generated file README.i18n.
+  * debian/rules
+    - Move restoration of configure.ac to override_dh_auto_install target.
+      Otherwise, it is restored too soon and the appended version number never
+      appears.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Sat, 21 Feb 2015 21:49:21 -0600
+
 wmaker (0.95.6+20150131-0ppa1) vivid; urgency=medium
 
   * debian/control
