@@ -39,16 +39,12 @@ COMMON_OPTIONS    := --prefix=$(BASEDIR)              \
 	dh $@ --parallel --with autotools-dev 
 
 override_dh_auto_configure:
-	# dpkg-parsechangelog --show-field Version | sed 's/+.*//' > oldversion
-	# dpkg-parsechangelog --show-field Version | sed 's/-.*//' > newversion
-	# since precise has an older dpkg-parsechangelog without --show-field,
-	# we need:
+	# Append git snapshot date to version number
 	dpkg-parsechangelog | sed -n 's/^Version: //p' | sed 's/+.*//' > oldversion
 	dpkg-parsechangelog | sed -n 's/^Version: //p' | sed 's/-.*//' > newversion
 	sed -i "s/`cat oldversion`/`cat newversion`/" configure.ac
+
 	./autogen.sh
-	sed -i "s/`cat newversion`/`cat oldversion`/" configure.ac
-	rm oldversion newversion
 	LINGUAS="$(LINGUAS)" ./configure $(COMMON_OPTIONS) \
 	$(WMAKER_OPTIONS) $(shell dpkg-buildflags --export=configure)
 
@@ -74,6 +70,10 @@ override_dh_install:
 
 	# Install files
 	dh_install
+
+	# Restore version numer
+	sed -i "s/`cat newversion`/`cat oldversion`/" configure.ac
+	rm oldversion newversion
 
 override_dh_strip:
 	dh_strip --dbg-package=wmaker-dbg
