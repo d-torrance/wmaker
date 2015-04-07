@@ -1,3 +1,14 @@
+wmaker (0.95.6+20150406-0ppa1) vivid; urgency=medium
+
+  * debian/clean
+    - Add INSTALL-WMAKER; changed during build.
+  * debian/patches/51_wmaker_man.diff
+    - Refresh for upstream changes.
+  * debian/wmaker.manpages
+    - Rename wdread.1 to wdread.1x.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Mon, 06 Apr 2015 22:03:49 -0500
+
 wmaker (0.95.6+20150131-0ppa2) vivid; urgency=medium
 
   * debian/clean
