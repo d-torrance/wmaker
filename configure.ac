@@ -237,6 +237,7 @@ AX_PTHREAD
 dnl Tracking on what is detected for final status
 dnl =============================================
 unsupported=""
+supported_core=""
 supported_xext=""
 supported_gfx=""
 
@@ -284,6 +285,21 @@ AC_ARG_WITH(libs-from, AS_HELP_STRING([--with-libs-from], [pass compiler flags t
 
 AC_ARG_WITH(incs-from, AS_HELP_STRING([--with-incs-from], [pass compiler flags to look for header files]),
 	[inc_search_path="$withval $inc_search_path"])
+
+
+dnl Features Configuration
+dnl ======================
+AC_ARG_ENABLE([mwm-hints],
+    [AS_HELP_STRING([--disable-mwm-hints], [disable support for Motif WM hints @<:@default=enabled@:>@])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-mwm-hints])])],
+    [enable_mwm_hints="yes"])
+AS_IF([test "x$enable_mwm_hints" = "xno"],
+    [unsupported="$unsupported MWMHints"],
+    [AC_DEFINE([USE_MWM_HINTS], [1], [Defined when used did not request to disable Motif WM hints])
+     supported_core="$supported_core MWMHints"])
+AM_CONDITIONAL([USE_MWM_HINTS], [test "x$enable_mwm_hints" != "xno"])
 
 
 dnl Boehm GC
@@ -486,15 +502,16 @@ AS_IF([test "x$enable_modelock" = "xyes"],
 dnl XDND Drag-nd-Drop support
 dnl =========================
 AC_ARG_ENABLE([xdnd],
-    [AS_HELP_STRING([--disable-xdnd], [disable Drag-nd-Drop support])],
+    [AS_HELP_STRING([--disable-xdnd], [disable support for Drag-and-Drop on the dock @<:@default=enabled@:>@])],
     [AS_CASE(["$enableval"],
         [yes|no], [],
         [AC_MSG_ERROR([bad value $enableval for --disable-xdnd]) ]) ],
     [enable_xdnd=yes])
 AS_IF([test "x$enable_xdnd" = "xyes"],
-    [supported_xext="$supported_xext XDnD"
-     AC_DEFINE([XDND], [1], [whether Drag-nd-Drop support should be enabled])],
+    [supported_core="$supported_core XDnD"
+     AC_DEFINE([USE_DOCK_XDND], [1], [whether Drag-and-Drop on the dock should be enabled])],
     [unsupported="$unsupported XDnd"])
+AM_CONDITIONAL([USE_DOCK_XDND], [test "x$enable_dock_xdnd" != "xno"])
 
 
 dnl XShape support
@@ -887,6 +904,7 @@ echo "Installation path prefix            : $prefix"
 echo "Installation path for binaries      : $_bindir"
 echo "Installation path for libraries     : $libdir"
 echo "Installation path for WPrefs.app    : $wprefs_base_dir" | sed -e 's|\${prefix}|'"$prefix|"
+echo "Supported core features:            :$supported_core"
 echo "Supported X extensions:             :$supported_xext"
 echo "Supported graphic format libraries  :$supported_gfx"
 echo "Unsupported features                :$unsupported"

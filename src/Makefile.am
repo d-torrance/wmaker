@@ -52,8 +52,6 @@ wmaker_SOURCES = 	\
 	misc.h \
 	monitor.c \
 	monitor.h \
-	motif.c \
-	motif.h \
 	moveres.c \
 	pixmap.c \
 	pixmap.h \
@@ -86,7 +84,6 @@ wmaker_SOURCES = 	\
 	usermenu.c \
 	usermenu.h \
 	xdnd.h \
-	xdnd.c \
 	xinerama.h \
 	xinerama.c \
 	xmodifier.h \
@@ -109,6 +106,13 @@ wmaker_SOURCES = 	\
 	workspace.h \
 	wsmap.c \
 	wsmap.h
+
+if USE_DOCK_XDND
+wmaker_SOURCES += xdnd.c
+endif
+if USE_MWM_HINTS
+wmaker_SOURCES += motif.h motif.c
+endif
 
 if WM_OSDEP_BSD
 wmaker_SOURCES += osdep_bsd.c
