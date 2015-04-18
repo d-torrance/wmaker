@@ -224,7 +224,7 @@ Get the @emph{GNU} version from @uref{http://www.gnu.org/software/gettext/}
 
 This library can be used by the @emph{WINGs} toolkit to improve support for @emph{UTF-8} and for
 languages written in right-to-left direction, in some widgets.
-You have to explicitly ask for its support though (@pxref{Configure Options}).
+You have to explicitly ask for its support through (@pxref{Configure Options}).
 You can get it from @uref{http://www.pango.org/Download}
 
 @item @emph{libbsd}
