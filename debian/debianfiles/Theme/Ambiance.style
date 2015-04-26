@@ -23,5 +23,5 @@
   	MenuTitleBack = (vgradient, "#474642", "#3c3b37");
 	MenuTextBack = (solid, "#41403b");
 	IconBack = (vgradient, "#474642", "#3c3b37");
-	WorkspaceBack = (cpixmap, "/usr/share/backgrounds/warty-final-ubuntu.png", black);
+	WorkspaceBack = (spixmap, "/usr/share/backgrounds/warty-final-ubuntu.png", black);
 }
