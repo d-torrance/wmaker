@@ -1,3 +1,10 @@
+wmaker (0.95.6+20150425-0ppa1) vivid; urgency=medium
+
+  * debian/debianfiles/{Theme/*iance.style,conf/WindowMaker}
+    - Change cpixmap back to spixmap to match Unity Greeter background.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Sun, 26 Apr 2015 14:22:03 -0500
+
 wmaker (0.95.6+20150418-0ppa1) vivid; urgency=medium
 
   * debian/control
