@@ -57,6 +57,7 @@ static void find_Maximus_geometry(WWindow *wwin, WArea usableArea, int *new_x, i
 static void save_old_geometry(WWindow *wwin, int directions);
 
 /******* Local Variables *******/
+#ifdef USE_ANIMATIONS
 static struct {
 	int steps;
 	int delay;
@@ -68,10 +69,12 @@ static struct {
 	{ SHADE_STEPS_US, SHADE_DELAY_US }
 };
 
-#define UNSHADE         0
-#define SHADE           1
 #define SHADE_STEPS	shadePars[(int)wPreferences.shade_speed].steps
 #define SHADE_DELAY	shadePars[(int)wPreferences.shade_speed].delay
+#endif
+
+#define UNSHADE         0
+#define SHADE           1
 
 static int compareTimes(Time t1, Time t2)
 {
@@ -82,7 +85,7 @@ static int compareTimes(Time t1, Time t2)
 	return (diff < 60000) ? 1 : -1;
 }
 
-#ifdef ANIMATIONS
+#ifdef USE_ANIMATIONS
 static void shade_animate(WWindow *wwin, Bool what);
 #else
 static inline void shade_animate(WWindow *wwin, Bool what)
@@ -254,7 +257,7 @@ void wShadeWindow(WWindow *wwin)
 
 	WMPostNotificationName(WMNChangedState, wwin, "shade");
 
-#ifdef ANIMATIONS
+#ifdef USE_ANIMATIONS
 	if (!wwin->screen_ptr->flags.startup) {
 		/* Catch up with events not processed while animation was running */
 		ProcessPendingEvents();
@@ -763,7 +766,7 @@ void wUnfullscreenWindow(WWindow *wwin)
 	}
 }
 
-#ifdef ANIMATIONS
+#ifdef USE_ANIMATIONS
 static void animateResizeFlip(WScreen *scr, int x, int y, int w, int h, int fx, int fy, int fw, int fh, int steps)
 {
 #define FRAMES (MINIATURIZE_ANIMATION_FRAMES_F)
@@ -974,7 +977,7 @@ void animateResize(WScreen *scr, int x, int y, int w, int h, int fx, int fy, int
 		break;
 	}
 }
-#endif				/* ANIMATIONS */
+#endif /* USE_ANIMATIONS */
 
 static void flushExpose(void)
 {
@@ -1061,6 +1064,7 @@ static WWindow *recursiveTransientFor(WWindow *wwin)
 	return wwin;
 }
 
+#ifdef USE_ANIMATIONS
 static int getAnimationGeometry(WWindow *wwin, int *ix, int *iy, int *iw, int *ih)
 {
 	if (wwin->screen_ptr->flags.startup || wPreferences.no_animations
@@ -1087,6 +1091,7 @@ static int getAnimationGeometry(WWindow *wwin, int *ix, int *iy, int *iw, int *i
 	}
 	return 1;
 }
+#endif	/* USE_ANIMATIONS */
 
 void wIconifyWindow(WWindow *wwin)
 {
@@ -1174,7 +1179,7 @@ void wIconifyWindow(WWindow *wwin)
 	unmapTransientsFor(wwin);
 
 	if (present) {
-#ifdef ANIMATIONS
+#ifdef USE_ANIMATIONS
 		int ix, iy, iw, ih;
 #endif
 		XUngrabPointer(dpy, CurrentTime);
@@ -1189,7 +1194,7 @@ void wIconifyWindow(WWindow *wwin)
 			wClientSetState(wwin, IconicState, wwin->icon->icon_win);
 
 		flushExpose();
-#ifdef ANIMATIONS
+#ifdef USE_ANIMATIONS
 		if (getAnimationGeometry(wwin, &ix, &iy, &iw, &ih))
 			animateResize(wwin->screen_ptr, wwin->frame_x, wwin->frame_y,
 				      wwin->frame->core->width, wwin->frame->core->height, ix, iy, iw, ih);
@@ -1231,7 +1236,7 @@ void wIconifyWindow(WWindow *wwin)
 		} else if (wPreferences.focus_mode != WKF_CLICK) {
 			wSetFocusTo(wwin->screen_ptr, NULL);
 		}
-#ifdef ANIMATIONS
+#ifdef USE_ANIMATIONS
 		if (!wwin->screen_ptr->flags.startup) {
 			/* Catch up with events not processed while animation was running */
 			Window clientwin = wwin->client_win;
@@ -1307,7 +1312,7 @@ void wDeiconifyWindow(WWindow *wwin)
 
 	/* if the window is in another workspace, do it silently */
 	if (!netwm_hidden) {
-#ifdef ANIMATIONS
+#ifdef USE_ANIMATIONS
 		int ix, iy, iw, ih;
 		if (getAnimationGeometry(wwin, &ix, &iy, &iw, &ih))
 			animateResize(wwin->screen_ptr, ix, iy, iw, ih,
@@ -1340,7 +1345,7 @@ void wDeiconifyWindow(WWindow *wwin)
 
 		wSetFocusTo(wwin->screen_ptr, wwin);
 
-#ifdef ANIMATIONS
+#ifdef USE_ANIMATIONS
 		if (!wwin->screen_ptr->flags.startup) {
 			/* Catch up with events not processed while animation was running */
 			Window clientwin = wwin->client_win;
@@ -1390,13 +1395,18 @@ static void hideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int a
 	wClientSetState(wwin, IconicState, icon->icon_win);
 	flushExpose();
 
-#ifdef ANIMATIONS
+#ifdef USE_ANIMATIONS
 	if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations &&
 	    !wwin->flags.skip_next_animation && animate) {
 		animateResize(wwin->screen_ptr, wwin->frame_x, wwin->frame_y,
 			      wwin->frame->core->width, wwin->frame->core->height,
 			      icon_x, icon_y, icon->core->width, icon->core->height);
 	}
+#else
+	/* Tell the compiler it is normal that those parameters are not used in this case */
+	(void) icon_x;
+	(void) icon_y;
+	(void) animate;
 #endif
 	wwin->flags.skip_next_animation = 0;
 
@@ -1568,13 +1578,19 @@ static void unhideWindow(WIcon *icon, int icon_x, int icon_y, WWindow *wwin, int
 
 	wwin->flags.hidden = 0;
 
-#ifdef ANIMATIONS
+#ifdef USE_ANIMATIONS
 	if (!wwin->screen_ptr->flags.startup && !wPreferences.no_animations && animate) {
 		animateResize(wwin->screen_ptr, icon_x, icon_y,
 			      icon->core->width, icon->core->height,
 			      wwin->frame_x, wwin->frame_y,
 			      wwin->frame->core->width, wwin->frame->core->height);
 	}
+#else
+	/* Tell the compiler it is normal that those parameters are not used in this case */
+	(void) icon;
+	(void) icon_x;
+	(void) icon_y;
+	(void) animate;
 #endif
 	wwin->flags.skip_next_animation = 0;
 	if (wwin->screen_ptr->current_workspace == wwin->frame->workspace) {
@@ -1825,10 +1841,10 @@ void wArrangeIcons(WScreen *scr, Bool arrangeAll)
 			head = wGetHeadForWindow(aicon->icon->owner);
 
 			if (aicon->x_pos != X || aicon->y_pos != Y) {
-#ifdef ANIMATIONS
+#ifdef USE_ANIMATIONS
 				if (!wPreferences.no_animations)
-					SlideWindow(aicon->icon->core->window, aicon->x_pos, aicon->y_pos, X, Y);
-#endif				/* ANIMATIONS */
+					slide_window(aicon->icon->core->window, aicon->x_pos, aicon->y_pos, X, Y);
+#endif /* USE_ANIMATIONS */
 			}
 			wAppIconMove(aicon, X, Y);
 			vars[head].pi++;
@@ -1946,7 +1962,7 @@ void wMakeWindowVisible(WWindow *wwin)
  * Do the animation while shading (called with what = SHADE)
  * or unshading (what = UNSHADE).
  */
-#ifdef ANIMATIONS
+#ifdef USE_ANIMATIONS
 static void shade_animate(WWindow *wwin, Bool what)
 {
 	int y, s, w, h;

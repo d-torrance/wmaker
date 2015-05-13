@@ -139,8 +139,9 @@ static WMenu *parseMenuCommand(WScreen * scr, Window win, char **slist, int coun
 				}
 				wstrlcpy(title, &slist[*index][pos], sizeof(title));
 			}
-			if (!(data = malloc(sizeof(WAppMenuData)))) {
-				wwarning(_("appmenu: out of memory making menu for window %lx"), win);
+			data = malloc(sizeof(WAppMenuData));
+			if (data == NULL) {
+				wwarning(_("appmenu: out of memory creating menu for window %lx"), win);
 				wMenuDestroy(menu, True);
 				return NULL;
 			}
