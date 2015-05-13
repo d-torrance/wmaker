@@ -78,6 +78,8 @@ override_dh_install:
 override_dh_strip:
 	dh_strip --dbg-package=wmaker-dbg
 
+override_dh_auto_test:
+
 unexport CFLAGS
 unexport CPPFLAGS
 unexport LDFLAGS
