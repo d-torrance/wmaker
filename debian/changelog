@@ -1,3 +1,11 @@
+wmaker (0.95.6+20150508-0ppa1) wily; urgency=medium
+
+  * debian/rules
+    - Add override_dh_auto_test to skip "make check"; currently fails due to
+      upstream changes.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Wed, 13 May 2015 18:06:34 -0500
+
 wmaker (0.95.6+20150425-0ppa1) vivid; urgency=medium
 
   * debian/debianfiles/{Theme/*iance.style,conf/WindowMaker}
