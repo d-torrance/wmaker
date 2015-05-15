@@ -15,7 +15,7 @@ Last-Update: 2014-09-02
 
 --- a/WINGs/WINGs/WINGs.h
 +++ b/WINGs/WINGs/WINGs.h
-@@ -365,6 +365,8 @@
+@@ -366,6 +366,8 @@
  typedef struct W_Font	WMFont;
  typedef struct W_Color	WMColor;
  
@@ -24,7 +24,7 @@ Last-Update: 2014-09-02
  typedef struct W_Screen WMScreen;
  
  typedef struct W_View WMView;
-@@ -904,6 +906,8 @@
+@@ -905,6 +907,8 @@
  
  char* WMGetColorRGBDescription(WMColor *color);
  
@@ -53,15 +53,15 @@ Last-Update: 2014-09-02
  /* ---[ Structures from WINGs.h ]----------------------------------------- */
  
  /* Pre-definition of internal structs */
-@@ -268,6 +279,8 @@
-     struct W_View *modalView;
+@@ -269,6 +280,8 @@
      unsigned modalLoop:1;
      unsigned ignoreNextDoubleClick:1;
-+
-+    WMTheme *theme;
- } W_Screen;
  
- #define W_DRAWABLE(scr)		(scr)->rcontext->drawable
++    WMTheme *theme;
++
+     /*
+      * New stuff in Window Maker 0.95.7
+      * Added at the end of the structure to avoid breaking binary compatibility
 --- a/WINGs/wcolor.c
 +++ b/WINGs/wcolor.c
 @@ -199,7 +199,7 @@
@@ -159,7 +159,7 @@ Last-Update: 2014-09-02
 +}
 --- a/WINGs/widgets.c
 +++ b/WINGs/widgets.c
-@@ -655,6 +655,8 @@
+@@ -715,6 +715,8 @@
  		scrPtr->ignoredModifierMask = numLockMask | scrollLockMask | LockMask;
  	}
  
