@@ -67,114 +67,114 @@ static const struct {
 	const char *caption;
 	const char *description;
 } window_attribute[] = {
-	{ "NoTitlebar", { .no_titlebar = 1 }, M_("Disable titlebar"),
-	  M_("Remove the titlebar of this window.\n"
+	{ "NoTitlebar", { .no_titlebar = 1 }, N_("Disable titlebar"),
+	  N_("Remove the titlebar of this window.\n"
 	     "To access the window commands menu of a window\n"
 	     "without it's titlebar, press Control+Esc (or the\n"
 	     "equivalent shortcut, if you changed the default\n"
 	     "settings).") },
 
-	{ "NoResizebar", { .no_resizebar = 1 }, M_("Disable resizebar"),
-	  M_("Remove the resizebar of this window.") },
+	{ "NoResizebar", { .no_resizebar = 1 }, N_("Disable resizebar"),
+	  N_("Remove the resizebar of this window.") },
 
-	{ "NoCloseButton", { .no_close_button = 1 }, M_("Disable close button"),
-	  M_("Remove the `close window' button of this window.") },
+	{ "NoCloseButton", { .no_close_button = 1 }, N_("Disable close button"),
+	  N_("Remove the `close window' button of this window.") },
 
-	{ "NoMiniaturizeButton", { .no_miniaturize_button = 1 }, M_("Disable miniaturize button"),
-	  M_("Remove the `miniaturize window' button of the window.") },
+	{ "NoMiniaturizeButton", { .no_miniaturize_button = 1 }, N_("Disable miniaturize button"),
+	  N_("Remove the `miniaturize window' button of the window.") },
 
-	{ "NoBorder", { .no_border = 1 }, M_("Disable border"),
-	  M_("Remove the 1 pixel black border around the window.") },
+	{ "NoBorder", { .no_border = 1 }, N_("Disable border"),
+	  N_("Remove the 1 pixel black border around the window.") },
 
-	{ "KeepOnTop", { .floating = 1 }, M_("Keep on top (floating)"),
-	  M_("Keep the window over other windows, not allowing\n"
+	{ "KeepOnTop", { .floating = 1 }, N_("Keep on top (floating)"),
+	  N_("Keep the window over other windows, not allowing\n"
 	     "them to cover it.") },
 
-	{ "KeepOnBottom", { .sunken = 1 }, M_("Keep at bottom (sunken)"),
-	  M_("Keep the window under all other windows.") },
+	{ "KeepOnBottom", { .sunken = 1 }, N_("Keep at bottom (sunken)"),
+	  N_("Keep the window under all other windows.") },
 
-	{ "Omnipresent", { .omnipresent = 1 }, M_("Omnipresent"),
-	  M_("Make window present in all workspaces.") },
+	{ "Omnipresent", { .omnipresent = 1 }, N_("Omnipresent"),
+	  N_("Make window present in all workspaces.") },
 
-	{ "StartMiniaturized", { .start_miniaturized = 1 }, M_("Start miniaturized"),
-	  M_("Make the window be automatically miniaturized when it's\n"
+	{ "StartMiniaturized", { .start_miniaturized = 1 }, N_("Start miniaturized"),
+	  N_("Make the window be automatically miniaturized when it's\n"
 	     "first shown.") },
 
-	{ "StartMaximized", { .start_maximized = 1 }, M_("Start maximized"),
-	  M_("Make the window be automatically maximized when it's\n"
+	{ "StartMaximized", { .start_maximized = 1 }, N_("Start maximized"),
+	  N_("Make the window be automatically maximized when it's\n"
 	     "first shown.") },
 
-	{ "FullMaximize", { .full_maximize = 1 }, M_("Full screen maximization"),
-	  M_("Make the window use the whole screen space when it's\n"
+	{ "FullMaximize", { .full_maximize = 1 }, N_("Full screen maximization"),
+	  N_("Make the window use the whole screen space when it's\n"
 				  "maximized. The titlebar and resizebar will be moved\n"
 				  "to outside the screen.") }
 
 }, advanced_option[] = {
-	{ "NoKeyBindings", { .no_bind_keys = 1 }, M_("Do not bind keyboard shortcuts"),
-	  M_("Do not bind keyboard shortcuts from Window Maker\n"
+	{ "NoKeyBindings", { .no_bind_keys = 1 }, N_("Do not bind keyboard shortcuts"),
+	  N_("Do not bind keyboard shortcuts from Window Maker\n"
 	     "when this window is focused. This will allow the\n"
 	     "window to receive all key combinations regardless\n"
 	     "of your shortcut configuration.") },
 
-	{ "NoMouseBindings", { .no_bind_mouse = 1 }, M_("Do not bind mouse clicks"),
-	  M_("Do not bind mouse actions, such as `Alt'+drag\n"
+	{ "NoMouseBindings", { .no_bind_mouse = 1 }, N_("Do not bind mouse clicks"),
+	  N_("Do not bind mouse actions, such as `Alt'+drag\n"
 	     "in the window (when Alt is the modifier you have\n"
 	     "configured).") },
 
-	{ "SkipWindowList", { .skip_window_list = 1 }, M_("Do not show in the window list"),
-	  M_("Do not list the window in the window list menu.") },
+	{ "SkipWindowList", { .skip_window_list = 1 }, N_("Do not show in the window list"),
+	  N_("Do not list the window in the window list menu.") },
 
-	{ "SkipSwitchPanel", { .skip_switchpanel = 1 }, M_("Do not show in the switch panel"),
-	  M_("Do not include in switch panel while cycling windows.") },
+	{ "SkipSwitchPanel", { .skip_switchpanel = 1 }, N_("Do not show in the switch panel"),
+	  N_("Do not include in switch panel while cycling windows.") },
 
-	{ "Unfocusable", { .no_focusable = 1 }, M_("Do not let it take focus"),
-	  M_("Do not let the window take keyboard focus when you\n"
+	{ "Unfocusable", { .no_focusable = 1 }, N_("Do not let it take focus"),
+	  N_("Do not let the window take keyboard focus when you\n"
 	     "click on it.") },
 
-	{ "KeepInsideScreen", { .dont_move_off = 1 }, M_("Keep inside screen"),
-	  M_("Do not allow the window to move itself completely\n"
+	{ "KeepInsideScreen", { .dont_move_off = 1 }, N_("Keep inside screen"),
+	  N_("Do not allow the window to move itself completely\n"
 	     "outside the screen. For bug compatibility.\n") },
 
-	{ "NoHideOthers", { .no_hide_others = 1 }, M_("Ignore 'Hide Others'"),
-	  M_("Do not hide the window when issuing the\n"
+	{ "NoHideOthers", { .no_hide_others = 1 }, N_("Ignore 'Hide Others'"),
+	  N_("Do not hide the window when issuing the\n"
 	     "`HideOthers' command.") },
 
-	{ "DontSaveSession", { .dont_save_session = 1 }, M_("Ignore 'Save Session'"),
-	  M_("Do not save the associated application in the\n"
+	{ "DontSaveSession", { .dont_save_session = 1 }, N_("Ignore 'Save Session'"),
+	  N_("Do not save the associated application in the\n"
 	     "session's state, so that it won't be restarted\n"
 	     "together with other applications when Window Maker\n"
 	     "starts.") },
 
-	{ "EmulateAppIcon", { .emulate_appicon = 1 }, M_("Emulate application icon"),
-	  M_("Make this window act as an application that provides\n"
+	{ "EmulateAppIcon", { .emulate_appicon = 1 }, N_("Emulate application icon"),
+	  N_("Make this window act as an application that provides\n"
 	     "enough information to Window Maker for a dockable\n"
 	     "application icon to be created.") },
 
-	{ "FocusAcrossWorkspace", { .focus_across_wksp = 1 }, M_("Focus across workspaces"),
-	  M_("Allow Window Maker to switch workspace to satisfy\n"
+	{ "FocusAcrossWorkspace", { .focus_across_wksp = 1 }, N_("Focus across workspaces"),
+	  N_("Allow Window Maker to switch workspace to satisfy\n"
 	     "a focus request (annoying).") },
 
-	{ "NoMiniaturizable", { .no_miniaturizable = 1 }, M_("Do not let it be minimized"),
-	  M_("Do not let the window of this application be\n"
+	{ "NoMiniaturizable", { .no_miniaturizable = 1 }, N_("Do not let it be minimized"),
+	  N_("Do not let the window of this application be\n"
 	     "minimized.\n") }
 
 #ifdef XKB_BUTTON_HINT
-	,{ "NoLanguageButton", { .no_language_button = 1 }, M_("Disable language button"),
-	   M_("Remove the `toggle language' button of the window.") }
+	,{ "NoLanguageButton", { .no_language_button = 1 }, N_("Disable language button"),
+	   N_("Remove the `toggle language' button of the window.") }
 #endif
 
 }, application_attr[] = {
-	{ "StartHidden", { .start_hidden = 1 }, M_("Start hidden"),
-	  M_("Automatically hide application when it's started.") },
+	{ "StartHidden", { .start_hidden = 1 }, N_("Start hidden"),
+	  N_("Automatically hide application when it's started.") },
 
-	{ "NoAppIcon", { .no_appicon = 1 }, M_("No application icon"),
-	  M_("Disable the application icon for the application.\n"
+	{ "NoAppIcon", { .no_appicon = 1 }, N_("No application icon"),
+	  N_("Disable the application icon for the application.\n"
 	     "Note that you won't be able to dock it anymore,\n"
 	     "and any icons that are already docked will stop\n"
 	     "working correctly.") },
 
-	{ "SharedAppIcon", { .shared_appicon = 1 }, M_("Shared application icon"),
-	  M_("Use a single shared application icon for all of\n"
+	{ "SharedAppIcon", { .shared_appicon = 1 }, N_("Shared application icon"),
+	  N_("Use a single shared application icon for all of\n"
 	     "the instances of this application.\n") }
 };
 
