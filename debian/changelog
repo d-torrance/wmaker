@@ -1,4 +1,11 @@
-wmaker (0.95.6+20150514-0ppa1) UNRELEASED; urgency=medium
+wmaker (0.95.6+20150523-0ppa1) wily; urgency=medium
+
+  * debian/wmaker{,-common}.manpages
+    - Change sections from 1x to 1 to match upstream.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Sat, 23 May 2015 17:49:10 -0500
+
+wmaker (0.95.6+20150514-0ppa1) wily; urgency=medium
 
   * debian/patches/basic_wings_theming.patch
     - Refresh for upstream changes.
