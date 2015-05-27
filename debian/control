@@ -3,7 +3,7 @@ Section: x11
 Priority: optional
 Maintainer: Doug Torrance <dtorrance@monmouthcollege.edu>
 XSBC-Original-Maintainer: Rodolfo García Peñas (kix) <kix@debian.org>
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 Build-Depends: debhelper (>= 9), automake (>= 1:1.11), gettext,
  libfontconfig1-dev, libjpeg-dev, libpng-dev, libsm-dev, libtiff-dev,
  libtool, libgif-dev, libx11-dev, libxext-dev, libxft-dev, libxinerama-dev,
@@ -41,13 +41,14 @@ Description: Window Maker - Architecture independent files
  .
  This package contains the architecture independent files.
 
-Package: libwraster5-dev
+Package: libwraster-dev
 Architecture: any
 Section: libdevel
 Depends: libwraster5 (= ${binary:Version}), libc6-dev, libx11-dev,
  libxext-dev, libxpm-dev, libjpeg-dev, libpng-dev, libgif-dev,
  libtiff5-dev, ${misc:Depends}
-Provides: libwraster-dev
+Breaks: libwraster3-dev, libwraster5-dev
+Replaces: libwraster3-dev, libwraster5-dev
 Description: Static libraries and headers of Window Maker rasterizer
  This library is used to manipulate images and convert them to
  a format that can be displayed through the X window system.
@@ -68,7 +69,7 @@ Description: Shared libraries of Window Maker rasterizer
 Package: libwings-dev
 Architecture: any
 Section: libdevel
-Depends: libc6-dev, libx11-dev, libxext-dev, libwraster5-dev, libxft-dev,
+Depends: libc6-dev, libx11-dev, libxext-dev, libwraster-dev, libxft-dev,
  libfontconfig1-dev, libwutil5 (= ${binary:Version}),
  libwings3 (= ${binary:Version}), ${misc:Depends}
 Description: Window Maker's own widget set
