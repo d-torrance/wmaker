@@ -1,8 +1,10 @@
 wmaker (0.95.6+20150526-0ppa1) wily; urgency=medium
 
   * Merge official 0.95.6 Debian packaging files.
+  * debian/control
+    - Add Breaks/Replaces for libwraster5-dev to libwraster-dev.
 
- -- Doug Torrance <dtorrance@monmouthcollege.edu>  Tue, 26 May 2015 21:31:25 -0500
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Wed, 27 May 2015 00:22:41 -0500
 
 wmaker (0.95.6+20150523-0ppa1) wily; urgency=medium
 
