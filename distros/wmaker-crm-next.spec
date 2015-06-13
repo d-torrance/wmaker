@@ -16,11 +16,7 @@ Provides:       WindowMaker
 Source0:        wmaker-crm-next-%{version}.tar.gz
 Source1:        WindowMaker-xsession.desktop
 Source2:        WindowMaker-application.desktop
-
-Source3:        WindowMaker-uk.po
-Source4:        WPrefs-uk.po
-
-Source5:        WindowMaker-WMRootMenu-fedora
+Source3:        WindowMaker-WMRootMenu-fedora
 
 
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -107,10 +103,6 @@ Development files for the WINGs library.
 %prep
 %setup -q -n %{name}-%{commitish}
 
-# add uk translation
-cp %{SOURCE3} po/uk.po
-cp %{SOURCE4} WPrefs.app/po/uk.po
-
 # cleanup menu entries
 for i in WindowMaker/*menu*; do
 echo $i
@@ -167,7 +159,7 @@ install -D -m0644 -p %{SOURCE2} \
 %{buildroot}%{_datadir}/applications/WindowMaker.desktop
 
 # make first login fedora specific
-install -D -m0644 -p %{SOURCE5} \
+install -D -m0644 -p %{SOURCE3} \
 %{buildroot}%{_sysconfdir}/WindowMaker/WMRootMenu
 sed -i \
   -e 's:WorkspaceBack = (solid:WorkspaceBack = (mpixmap, "/usr/share/backgrounds/default.png":' \

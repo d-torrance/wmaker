@@ -6,18 +6,18 @@ msgstr ""
 "Last-Translator: Victor Forsyuk <victor@ksi-linux.com>\n"
 "Language-Team: KSI Linux Ukrainian <uk@ksi-linux.com>\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=koi8-u\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
 #: ../src/appicon.c:426 ../src/dialog.c:282 ../src/dock.c:3325
 #: ../src/dockedapp.c:230 ../src/main.c:273 ../src/rootmenu.c:1853
 #: ../src/winspector.c:389 ../src/winspector.c:406
 msgid "Error"
-msgstr "Помилка"
+msgstr "п÷п╬п╪п╦п╩п╨п╟"
 
 #: ../src/appicon.c:427
 msgid "Could not open specified icon file"
-msgstr "Неможливо в╕дкрити вказаний файл ╕конки"
+msgstr "п²п╣п╪п╬п╤п╩п╦п╡п╬ п╡я√п╢п╨я─п╦я┌п╦ п╡п╨п╟п╥п╟п╫п╦п╧ я└п╟п╧п╩ я√п╨п╬п╫п╨п╦"
 
 #: ../src/appicon.c:428 ../src/dialog.c:179 ../src/dialog.c:282
 #: ../src/dialog.c:729 ../src/dialog.c:1818 ../src/dock.c:526
@@ -33,44 +33,44 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-" примусово завершиться.\n"
-"Вс╕ незбережен╕ зм╕ни будуть втрачен╕.\n"
-"Будь ласка, п╕дтверд╕ть."
+" п©я─п╦п╪я┐я│п╬п╡п╬ п╥п╟п╡п╣я─я┬п╦я┌я▄я│я▐.\n"
+"п▓я│я√ п╫п╣п╥п╠п╣я─п╣п╤п╣п╫я√ п╥п╪я√п╫п╦ п╠я┐п╢я┐я┌я▄ п╡я┌я─п╟я┤п╣п╫я√.\n"
+"п▒я┐п╢я▄ п╩п╟я│п╨п╟, п©я√п╢я┌п╡п╣я─п╢я√я┌я▄."
 
 #
 #: ../src/appicon.c:464 ../src/dock.c:283 ../src/winmenu.c:125
 msgid "Kill Application"
-msgstr "Примусове завершення"
+msgstr "п÷я─п╦п╪я┐я│п╬п╡п╣ п╥п╟п╡п╣я─я┬п╣п╫п╫я▐"
 
 #: ../src/appicon.c:465 ../src/dock.c:284 ../src/winmenu.c:127
 msgid "Yes"
-msgstr "Так"
+msgstr "п╒п╟п╨"
 
 #: ../src/appicon.c:465 ../src/dock.c:284 ../src/winmenu.c:127
 msgid "No"
-msgstr "Н╕"
+msgstr "п²я√"
 
 #: ../src/appicon.c:495 ../src/dock.c:1177 ../src/dock.c:3491
 msgid "Unhide Here"
-msgstr "Розкрити тут"
+msgstr "п═п╬п╥п╨я─п╦я┌п╦ я┌я┐я┌"
 
 #: ../src/appicon.c:496 ../src/appicon.c:521 ../src/dock.c:1179
 #: ../src/dock.c:1181 ../src/dock.c:3503 ../src/winmenu.c:465
 msgid "Hide"
-msgstr "Приховати"
+msgstr "п÷я─п╦я┘п╬п╡п╟я┌п╦"
 
 #: ../src/appicon.c:497
 msgid "Set Icon..."
-msgstr "Встановити ╕конку..."
+msgstr "п▓я│я┌п╟п╫п╬п╡п╦я┌п╦ я√п╨п╬п╫п╨я┐..."
 
 #: ../src/appicon.c:498 ../src/dock.c:1185 ../src/rootmenu.c:248
 #: ../src/rootmenu.c:264 ../src/winmenu.c:520
 msgid "Kill"
-msgstr "Убити"
+msgstr "пёп╠п╦я┌п╦"
 
 #: ../src/appicon.c:519 ../src/dock.c:3501
 msgid "Unhide"
-msgstr "Розкрити"
+msgstr "п═п╬п╥п╨я─п╦я┌п╦"
 
 #: ../src/application.c:398
 #, c-format
@@ -80,50 +80,50 @@ msgstr ""
 #: ../src/defaults.c:922 ../src/defaults.c:1011
 #, c-format
 msgid "Domain %s (%s) of global defaults database is corrupted!"
-msgstr "Домен %s (%s) в глобальн╕й баз╕ умовчань пошкоджений!"
+msgstr "п■п╬п╪п╣п╫ %s (%s) п╡ пЁп╩п╬п╠п╟п╩я▄п╫я√п╧ п╠п╟п╥я√ я┐п╪п╬п╡я┤п╟п╫я▄ п©п╬я┬п╨п╬п╢п╤п╣п╫п╦п╧!"
 
 #: ../src/defaults.c:927
 #, c-format
 msgid "could not load domain %s from global defaults database"
-msgstr "не вдалось завантажити домен %s з глобально╖ бази умовчань"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╟п╡п╟п╫я┌п╟п╤п╦я┌п╦ п╢п╬п╪п╣п╫ %s п╥ пЁп╩п╬п╠п╟п╩я▄п╫п╬я≈ п╠п╟п╥п╦ я┐п╪п╬п╡я┤п╟п╫я▄"
 
 #: ../src/defaults.c:949 ../src/startup.c:884 ../src/startup.c:902
 #: ../src/startup.c:908
 #, c-format
 msgid "could not read domain \"%s\" from defaults database"
-msgstr "не вдалось прочитати домен \"%s\" з бази даних умовчань"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п©я─п╬я┤п╦я┌п╟я┌п╦ п╢п╬п╪п╣п╫ \"%s\" п╥ п╠п╟п╥п╦ п╢п╟п╫п╦я┘ я┐п╪п╬п╡я┤п╟п╫я▄"
 
 #: ../src/defaults.c:995 ../src/defaults.c:1099 ../src/defaults.c:1140
 #: ../src/defaults.c:1196
 #, c-format
 msgid "Domain %s (%s) of defaults database is corrupted!"
-msgstr "Домен %s (%s) в баз╕ даних умовчань пошкоджений!"
+msgstr "п■п╬п╪п╣п╫ %s (%s) п╡ п╠п╟п╥я√ п╢п╟п╫п╦я┘ я┐п╪п╬п╡я┤п╟п╫я▄ п©п╬я┬п╨п╬п╢п╤п╣п╫п╦п╧!"
 
 #: ../src/defaults.c:1000 ../src/defaults.c:1119 ../src/defaults.c:1176
 #: ../src/defaults.c:1205 ../src/menureader.c:397
 #, c-format
 msgid "could not load domain %s from user defaults database"
-msgstr "не вдалось завантажити домен \"%s\" з бази умовчань користувача"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╟п╡п╟п╫я┌п╟п╤п╦я┌п╦ п╢п╬п╪п╣п╫ \"%s\" п╥ п╠п╟п╥п╦ я┐п╪п╬п╡я┤п╟п╫я▄ п╨п╬я─п╦я│я┌я┐п╡п╟я┤п╟"
 
 #: ../src/defaults.c:1030
 #, c-format
 msgid "could not load domain %s from global defaults database (%s)"
-msgstr "не вдалось завантажити домен %s з глобально╖ бази умовчань (%s)"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╟п╡п╟п╫я┌п╟п╤п╦я┌п╦ п╢п╬п╪п╣п╫ %s п╥ пЁп╩п╬п╠п╟п╩я▄п╫п╬я≈ п╠п╟п╥п╦ я┐п╪п╬п╡я┤п╟п╫я▄ (%s)"
 
 #: ../src/defaults.c:1166 ../src/screen.c:458
 #, c-format
 msgid "could not load logo image for panels: %s"
-msgstr "не вдалось завантажити заставку для панелей: %s"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╟п╡п╟п╫я┌п╟п╤п╦я┌п╦ п╥п╟я│я┌п╟п╡п╨я┐ п╢п╩я▐ п©п╟п╫п╣п╩п╣п╧: %s"
 
 #: ../src/defaults.c:1447
 #, c-format
 msgid "wrong option value for key \"%s\". Should be one of %s"
-msgstr "неправильне значення для ключа \"%s\". Ма╓ бути одне з %s."
+msgstr "п╫п╣п©я─п╟п╡п╦п╩я▄п╫п╣ п╥п╫п╟я┤п╣п╫п╫я▐ п╢п╩я▐ п╨п╩я▌я┤п╟ \"%s\". п°п╟я■ п╠я┐я┌п╦ п╬п╢п╫п╣ п╥ %s."
 
 #: ../src/defaults.c:1492
 #, c-format
 msgid "can't convert \"%s\" to boolean for key \"%s\""
-msgstr "не вдалось перетворити \"%s\" в бул╕вське значення для ключа \"%s\""
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п©п╣я─п╣я┌п╡п╬я─п╦я┌п╦ \"%s\" п╡ п╠я┐п╩я√п╡я│я▄п╨п╣ п╥п╫п╟я┤п╣п╫п╫я▐ п╢п╩я▐ п╨п╩я▌я┤п╟ \"%s\""
 
 #: ../src/defaults.c:1497 ../src/defaults.c:1529 ../src/defaults.c:1561
 #: ../src/defaults.c:1574 ../src/defaults.c:1589 ../src/defaults.c:1603
@@ -133,149 +133,149 @@ msgstr "не вдалось перетворити \"%s\" в бул╕вське значення для ключа \"%s\""
 #: ../src/defaults.c:2734 ../src/defaults.c:2745
 #, c-format
 msgid "using default \"%s\" instead"
-msgstr "використову╓мо значення за умовчанням (%s)"
+msgstr "п╡п╦п╨п╬я─п╦я│я┌п╬п╡я┐я■п╪п╬ п╥п╫п╟я┤п╣п╫п╫я▐ п╥п╟ я┐п╪п╬п╡я┤п╟п╫п╫я▐п╪ (%s)"
 
 #: ../src/defaults.c:1526
 #, c-format
 msgid "can't convert \"%s\" to integer for key \"%s\""
-msgstr "неможливо перетворити \"%s\" в ц╕ле значення для ключа \"%s\""
+msgstr "п╫п╣п╪п╬п╤п╩п╦п╡п╬ п©п╣я─п╣я┌п╡п╬я─п╦я┌п╦ \"%s\" п╡ я├я√п╩п╣ п╥п╫п╟я┤п╣п╫п╫я▐ п╢п╩я▐ п╨п╩я▌я┤п╟ \"%s\""
 
 #: ../src/defaults.c:1556 ../src/defaults.c:1668 ../src/defaults.c:2147
 #: ../src/defaults.c:2164 ../src/defaults.c:2209 ../src/defaults.c:2256
 #: ../src/defaults.c:2729 ../src/wdefaults.c:571 ../src/wdefaults.c:607
 #, c-format
 msgid "Wrong option format for key \"%s\". Should be %s."
-msgstr "Неправильний формат параметра для ключа \"%s\". Ма╓ бути %s."
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫п╦п╧ я└п╬я─п╪п╟я┌ п©п╟я─п╟п╪п╣я┌я─п╟ п╢п╩я▐ п╨п╩я▌я┤п╟ \"%s\". п°п╟я■ п╠я┐я┌п╦ %s."
 
 #: ../src/defaults.c:1569
 #, c-format
 msgid "Incorrect number of elements in array for key \"%s\"."
-msgstr "Некоректна к╕льк╕сть елемент╕в в масив╕ для ключа \"%s\"."
+msgstr "п²п╣п╨п╬я─п╣п╨я┌п╫п╟ п╨я√п╩я▄п╨я√я│я┌я▄ п╣п╩п╣п╪п╣п╫я┌я√п╡ п╡ п╪п╟я│п╦п╡я√ п╢п╩я▐ п╨п╩я▌я┤п╟ \"%s\"."
 
 #: ../src/defaults.c:1584
 #, c-format
 msgid "Wrong value for key \"%s\". Should be Coordinate."
-msgstr "Неправильне значення параметра для ключа \"%s\". Ма╓ бути Coordinate."
+msgstr "п²п╣п©я─п╟п╡п╦п╩я▄п╫п╣ п╥п╫п╟я┤п╣п╫п╫я▐ п©п╟я─п╟п╪п╣я┌я─п╟ п╢п╩я▐ п╨п╩я▌я┤п╟ \"%s\". п°п╟я■ п╠я┐я┌п╦ Coordinate."
 
 #: ../src/defaults.c:1599
 #, c-format
 msgid "can't convert array to integers for \"%s\"."
-msgstr "не вдалось перетворити масив в ц╕л╕ значення для \"%s\"."
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п©п╣я─п╣я┌п╡п╬я─п╦я┌п╦ п╪п╟я│п╦п╡ п╡ я├я√п╩я√ п╥п╫п╟я┤п╣п╫п╫я▐ п╢п╩я▐ \"%s\"."
 
 #: ../src/defaults.c:1797 ../src/defaults.c:1829 ../src/defaults.c:1845
 #: ../src/defaults.c:1874 ../src/defaults.c:1897 ../src/defaults.c:1950
 #: ../src/defaults.c:1990 ../src/defaults.c:2028 ../src/defaults.c:2044
 #, c-format
 msgid "\"%s\" is not a valid color name"
-msgstr "\"%s\" не ╓ в╕домою назвою кольору"
+msgstr "\"%s\" п╫п╣ я■ п╡я√п╢п╬п╪п╬я▌ п╫п╟п╥п╡п╬я▌ п╨п╬п╩я▄п╬я─я┐"
 
 #: ../src/defaults.c:1810 ../src/defaults.c:1862
 msgid "bad number of arguments in gradient specification"
-msgstr "неправильна к╕льк╕сть аргумент╕в у визначенн╕ град╕╓нта"
+msgstr "п╫п╣п©я─п╟п╡п╦п╩я▄п╫п╟ п╨я√п╩я▄п╨я√я│я┌я▄ п╟я─пЁя┐п╪п╣п╫я┌я√п╡ я┐ п╡п╦п╥п╫п╟я┤п╣п╫п╫я√ пЁя─п╟п╢я√я■п╫я┌п╟"
 
 #: ../src/defaults.c:1923
 msgid "too few arguments in multicolor gradient specification"
-msgstr "надто мало аргумент╕в у визначенн╕ багатокол╕рного град╕╓нта"
+msgstr "п╫п╟п╢я┌п╬ п╪п╟п╩п╬ п╟я─пЁя┐п╪п╣п╫я┌я√п╡ я┐ п╡п╦п╥п╫п╟я┤п╣п╫п╫я√ п╠п╟пЁп╟я┌п╬п╨п╬п╩я√я─п╫п╬пЁп╬ пЁя─п╟п╢я√я■п╫я┌п╟"
 
 #: ../src/defaults.c:2017
 msgid "bad number of arguments in textured gradient specification"
-msgstr "неправильна к╕льк╕сть аргумент╕в у визначенн╕ град╕╓нта з текстурою"
+msgstr "п╫п╣п©я─п╟п╡п╦п╩я▄п╫п╟ п╨я√п╩я▄п╨я√я│я┌я▄ п╟я─пЁя┐п╪п╣п╫я┌я√п╡ я┐ п╡п╦п╥п╫п╟я┤п╣п╫п╫я√ пЁя─п╟п╢я√я■п╫я┌п╟ п╥ я┌п╣п╨я│я┌я┐я─п╬я▌"
 
 #: ../src/defaults.c:2060
 #, c-format
 msgid "bad opacity value for tgradient texture \"%s\". Should be [0..255]"
 msgstr ""
-"неправильне значення прозорост╕ для t-град╕╓нта з текстурою \"%s\"; ма╓ бути "
+"п╫п╣п©я─п╟п╡п╦п╩я▄п╫п╣ п╥п╫п╟я┤п╣п╫п╫я▐ п©я─п╬п╥п╬я─п╬я│я┌я√ п╢п╩я▐ t-пЁя─п╟п╢я√я■п╫я┌п╟ п╥ я┌п╣п╨я│я┌я┐я─п╬я▌ \"%s\"; п╪п╟я■ п╠я┐я┌п╦ "
 "[0..255]"
 
 #: ../src/defaults.c:2120
 #, c-format
 msgid "could not initialize library %s"
-msgstr "не вдалось ╕н╕ц╕ал╕зувати б╕бл╕отеку %s"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ я√п╫я√я├я√п╟п╩я√п╥я┐п╡п╟я┌п╦ п╠я√п╠п╩я√п╬я┌п╣п╨я┐ %s"
 
 #: ../src/defaults.c:2123
 #, c-format
 msgid "could not find function %s::%s"
-msgstr "не вдалось знайти функц╕ю %s::%s"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╫п╟п╧я┌п╦ я└я┐п╫п╨я├я√я▌ %s::%s"
 
 #: ../src/defaults.c:2130
 #, c-format
 msgid "invalid texture type %s"
-msgstr "неправильний тип текстури (%s)"
+msgstr "п╫п╣п©я─п╟п╡п╦п╩я▄п╫п╦п╧ я┌п╦п© я┌п╣п╨я│я┌я┐я─п╦ (%s)"
 
 #: ../src/defaults.c:2177
 #, c-format
 msgid "Error in texture specification for key \"%s\""
-msgstr "Помилка у визначенн╕ текстури для ключа \"%s\""
+msgstr "п÷п╬п╪п╦п╩п╨п╟ я┐ п╡п╦п╥п╫п╟я┤п╣п╫п╫я√ я┌п╣п╨я│я┌я┐я─п╦ п╢п╩я▐ п╨п╩я▌я┤п╟ \"%s\""
 
 #: ../src/defaults.c:2226
 msgid "Wrong type for workspace background. Should be a texture type."
 msgstr ""
-"Неправильний тип для фону Робочого столу; ма╓ бути значення типу "
-"\"текстура\"."
+"п²п╣п©я─п╟п╡п╦п╩я▄п╫п╦п╧ я┌п╦п© п╢п╩я▐ я└п╬п╫я┐ п═п╬п╠п╬я┤п╬пЁп╬ я│я┌п╬п╩я┐; п╪п╟я■ п╠я┐я┌п╦ п╥п╫п╟я┤п╣п╫п╫я▐ я┌п╦п©я┐ \"я┌п╣п╨я│я┌я┐я─п╟"
+"\"."
 
 #: ../src/defaults.c:2274
 #, c-format
 msgid "Wrong type for background of workspace %i. Should be a texture."
 msgstr ""
-"Неправильний тип для фону Рабочого столу %i; ма╓ бути значення типу "
-"\"текстура\"."
+"п²п╣п©я─п╟п╡п╦п╩я▄п╫п╦п╧ я┌п╦п© п╢п╩я▐ я└п╬п╫я┐ п═п╟п╠п╬я┤п╬пЁп╬ я│я┌п╬п╩я┐ %i; п╪п╟я■ п╠я┐я┌п╦ п╥п╫п╟я┤п╣п╫п╫я▐ я┌п╦п©я┐ "
+"\"я┌п╣п╨я│я┌я┐я─п╟\"."
 
 #: ../src/defaults.c:2316
 msgid "could not load any usable font!!!"
-msgstr "не вдалось завантажити шрифт!!!"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╟п╡п╟п╫я┌п╟п╤п╦я┌п╦ я┬я─п╦я└я┌!!!"
 
 #: ../src/defaults.c:2343
 #, c-format
 msgid "could not get color for key \"%s\""
-msgstr "не вдалось визначити кол╕р для ключа \"%s\""
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╡п╦п╥п╫п╟я┤п╦я┌п╦ п╨п╬п╩я√я─ п╢п╩я▐ п╨п╩я▌я┤п╟ \"%s\""
 
 #: ../src/defaults.c:2401 ../src/rootmenu.c:526
 #, c-format
 msgid "%s:invalid key modifier \"%s\""
-msgstr "%s:неправильний модиф╕катор клав╕ш╕ \"%s\""
+msgstr "%s:п╫п╣п©я─п╟п╡п╦п╩я▄п╫п╦п╧ п╪п╬п╢п╦я└я√п╨п╟я┌п╬я─ п╨п╩п╟п╡я√я┬я√ \"%s\""
 
 #
 #: ../src/defaults.c:2413
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\""
-msgstr "%s:неправильне визначення комб╕нац╕╖ клав╕ш \"%s\""
+msgstr "%s:п╫п╣п©я─п╟п╡п╦п╩я▄п╫п╣ п╡п╦п╥п╫п╟я┤п╣п╫п╫я▐ п╨п╬п╪п╠я√п╫п╟я├я√я≈ п╨п╩п╟п╡я√я┬ \"%s\""
 
 #
 #: ../src/defaults.c:2420
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\""
-msgstr "%s:неправильна клав╕ша в комб╕нац╕╖ \"%s\""
+msgstr "%s:п╫п╣п©я─п╟п╡п╦п╩я▄п╫п╟ п╨п╩п╟п╡я√я┬п╟ п╡ п╨п╬п╪п╠я√п╫п╟я├я√я≈ \"%s\""
 
 #: ../src/defaults.c:2445
 #, c-format
 msgid "%s: modifier key %s is not valid"
-msgstr "%s: модиф╕катор %s неправильний"
+msgstr "%s: п╪п╬п╢п╦я└я√п╨п╟я┌п╬я─ %s п╫п╣п©я─п╟п╡п╦п╩я▄п╫п╦п╧"
 
 #: ../src/defaults.c:2477
 #, c-format
 msgid "could not load image in option %s: %s"
-msgstr "не вдалось завантажити зображення для параметра %s: %s"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╟п╡п╟п╫я┌п╟п╤п╦я┌п╦ п╥п╬п╠я─п╟п╤п╣п╫п╫я▐ п╢п╩я▐ п©п╟я─п╟п╪п╣я┌я─п╟ %s: %s"
 
 #
 #: ../src/defaults.c:2594
 #, c-format
 msgid "failed to open bitmap file \"%s\""
-msgstr "не вдалось в╕дкрити растровий файл \"%s\""
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╡я√п╢п╨я─п╦я┌п╦ я─п╟я│я┌я─п╬п╡п╦п╧ я└п╟п╧п╩ \"%s\""
 
 #: ../src/defaults.c:2597
 #, c-format
 msgid "\"%s\" is not a valid bitmap file"
-msgstr "\"%s\" не ╓ насправд╕ растровим файлом"
+msgstr "\"%s\" п╫п╣ я■ п╫п╟я│п©я─п╟п╡п╢я√ я─п╟я│я┌я─п╬п╡п╦п╪ я└п╟п╧п╩п╬п╪"
 
 #: ../src/defaults.c:2600
 #, c-format
 msgid "out of memory reading bitmap file \"%s\""
-msgstr "вичерпана пам'ять п╕д час читання растрового файлу \"%s\""
+msgstr "п╡п╦я┤п╣я─п©п╟п╫п╟ п©п╟п╪'я▐я┌я▄ п©я√п╢ я┤п╟я│ я┤п╦я┌п╟п╫п╫я▐ я─п╟я│я┌я─п╬п╡п╬пЁп╬ я└п╟п╧п╩я┐ \"%s\""
 
 #: ../src/defaults.c:2639 ../src/defaults.c:2672
 msgid "bad number of arguments in cursor specification"
-msgstr "неправильна к╕льк╕сть аргумент╕в у визначенн╕ курсора"
+msgstr "п╫п╣п©я─п╟п╡п╦п╩я▄п╫п╟ п╨я√п╩я▄п╨я√я│я┌я▄ п╟я─пЁя┐п╪п╣п╫я┌я√п╡ я┐ п╡п╦п╥п╫п╟я┤п╣п╫п╫я√ п╨я┐я─я│п╬я─п╟"
 
 #: ../src/defaults.c:2655
 #, c-format
@@ -285,44 +285,44 @@ msgstr ""
 #: ../src/defaults.c:2682 ../src/defaults.c:2694
 #, c-format
 msgid "could not find cursor bitmap file \"%s\""
-msgstr "не вдалось знайти растровий файл курсора \"%s\""
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╫п╟п╧я┌п╦ я─п╟я│я┌я─п╬п╡п╦п╧ я└п╟п╧п╩ п╨я┐я─я│п╬я─п╟ \"%s\""
 
 #: ../src/defaults.c:2741
 #, c-format
 msgid "Error in cursor specification for key \"%s\""
-msgstr "Помилка у визначенн╕ курсора для ключа \"%s\""
+msgstr "п÷п╬п╪п╦п╩п╨п╟ я┐ п╡п╦п╥п╫п╟я┤п╣п╫п╫я√ п╨я┐я─я│п╬я─п╟ п╢п╩я▐ п╨п╩я▌я┤п╟ \"%s\""
 
 #: ../src/defaults.c:2826
 msgid "could not render texture for icon background"
-msgstr "не вдалось п╕дготувати текстуру для фону ╕конки"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п©я√п╢пЁп╬я┌я┐п╡п╟я┌п╦ я┌п╣п╨я│я┌я┐я─я┐ п╢п╩я▐ я└п╬п╫я┐ я√п╨п╬п╫п╨п╦"
 
 #
 #: ../src/dialog.c:135
 msgid "Save workspace state"
-msgstr "Зберегти стан Робочого столу"
+msgstr "п≈п╠п╣я─п╣пЁя┌п╦ я│я┌п╟п╫ п═п╬п╠п╬я┤п╬пЁп╬ я│я┌п╬п╩я┐"
 
 #: ../src/dialog.c:179 ../src/dialog.c:736 ../src/dock.c:558
 #: ../src/dockedapp.c:431 ../src/rootmenu.c:198 ../src/rootmenu.c:248
 #: ../src/rootmenu.c:264
 msgid "Cancel"
-msgstr "В╕дм╕на"
+msgstr "п▓я√п╢п╪я√п╫п╟"
 
 #
 #: ../src/dialog.c:277
 msgid "Could not open directory "
-msgstr "Неможливо в╕дкрити каталог "
+msgstr "п²п╣п╪п╬п╤п╩п╦п╡п╬ п╡я√п╢п╨я─п╦я┌п╦ п╨п╟я┌п╟п╩п╬пЁ "
 
 #: ../src/dialog.c:332
 msgid "Could not load image file "
-msgstr "Неможливо завантажити файл зображення "
+msgstr "п²п╣п╪п╬п╤п╩п╦п╡п╬ п╥п╟п╡п╟п╫я┌п╟п╤п╦я┌п╦ я└п╟п╧п╩ п╥п╬п╠я─п╟п╤п╣п╫п╫я▐ "
 
 #: ../src/dialog.c:663
 msgid "Directories"
-msgstr "Каталоги"
+msgstr "п п╟я┌п╟п╩п╬пЁп╦"
 
 #: ../src/dialog.c:672
 msgid "Icons"
-msgstr "╤конки"
+msgstr "п├п╨п╬п╫п╨п╦"
 
 #: ../src/dialog.c:705
 msgid "Preview"
@@ -331,24 +331,24 @@ msgstr ""
 #
 #: ../src/dialog.c:718
 msgid "File Name:"
-msgstr "╤м'я файлу:"
+msgstr "п├п╪'я▐ я└п╟п╧п╩я┐:"
 
 #: ../src/dialog.c:742
 msgid "Choose File"
-msgstr "Вибер╕ть файл"
+msgstr "п▓п╦п╠п╣я─я√я┌я▄ я└п╟п╧п╩"
 
 #: ../src/dialog.c:760 ../src/dialog.c:762
 msgid "Icon Chooser"
-msgstr "Виб╕р ╕конки"
+msgstr "п▓п╦п╠я√я─ я√п╨п╬п╫п╨п╦"
 
 #: ../src/dialog.c:1241 ../src/dialog.c:1351
 #, c-format
 msgid "Version %s"
-msgstr "Верс╕я %s"
+msgstr "п▓п╣я─я│я√я▐ %s"
 
 #: ../src/dialog.c:1348
 msgid "Window Manager for X"
-msgstr "Менеджер в╕кон для X"
+msgstr "п°п╣п╫п╣п╢п╤п╣я─ п╡я√п╨п╬п╫ п╢п╩я▐ X"
 
 #: ../src/dialog.c:1373
 #, c-format
@@ -357,29 +357,29 @@ msgstr ""
 
 #: ../src/dialog.c:1381
 msgid "(32 thousand colors)\n"
-msgstr "(32 тисяч╕ кольор╕в)\n"
+msgstr "(32 я┌п╦я│я▐я┤я√ п╨п╬п╩я▄п╬я─я√п╡)\n"
 
 #: ../src/dialog.c:1384
 msgid "(64 thousand colors)\n"
-msgstr "(64 тисяч╕ кольор╕в)\n"
+msgstr "(64 я┌п╦я│я▐я┤я√ п╨п╬п╩я▄п╬я─я√п╡)\n"
 
 #: ../src/dialog.c:1388
 msgid "(16 million colors)\n"
-msgstr "(16 м╕льйон╕в кольор╕в)\n"
+msgstr "(16 п╪я√п╩я▄п╧п╬п╫я√п╡ п╨п╬п╩я▄п╬я─я√п╡)\n"
 
 #: ../src/dialog.c:1391
 #, c-format
 msgid "(%d colors)\n"
-msgstr "(%d кольор╕в)\n"
+msgstr "(%d п╨п╬п╩я▄п╬я─я√п╡)\n"
 
 #: ../src/dialog.c:1401
 #, c-format
 msgid "Total allocated memory: %i kB. Total memory in use: %i kB.\n"
-msgstr "Всього вид╕лено пам'ят╕: %i kB. Всього використано пам'ят╕: %i kB.\n"
+msgstr "п▓я│я▄п╬пЁп╬ п╡п╦п╢я√п╩п╣п╫п╬ п©п╟п╪'я▐я┌я√: %i kB. п▓я│я▄п╬пЁп╬ п╡п╦п╨п╬я─п╦я│я┌п╟п╫п╬ п©п╟п╪'я▐я┌я√: %i kB.\n"
 
 #: ../src/dialog.c:1408
 msgid "Supported image formats: "
-msgstr "П╕дтримуються формати зображень: "
+msgstr "п÷я√п╢я┌я─п╦п╪я┐я▌я┌я▄я│я▐ я└п╬я─п╪п╟я┌п╦ п╥п╬п╠я─п╟п╤п╣п╫я▄: "
 
 #: ../src/dialog.c:1415
 msgid ""
@@ -387,11 +387,11 @@ msgid ""
 "Additional support for: "
 msgstr ""
 "\n"
-"Додаткова п╕дтримка для: "
+"п■п╬п╢п╟я┌п╨п╬п╡п╟ п©я√п╢я┌я─п╦п╪п╨п╟ п╢п╩я▐: "
 
 #: ../src/dialog.c:1438
 msgid " and "
-msgstr " та "
+msgstr " я┌п╟ "
 
 #: ../src/dialog.c:1448
 msgid ""
@@ -399,7 +399,7 @@ msgid ""
 "Sound disabled"
 msgstr ""
 "\n"
-"П╕дтримку звуку вимкнено"
+"п÷я√п╢я┌я─п╦п╪п╨я┐ п╥п╡я┐п╨я┐ п╡п╦п╪п╨п╫п╣п╫п╬"
 
 #: ../src/dialog.c:1450
 msgid ""
@@ -407,15 +407,15 @@ msgid ""
 "Sound enabled"
 msgstr ""
 "\n"
-"П╕дтримку звуку ув╕мкнено"
+"п÷я√п╢я┌я─п╦п╪п╨я┐ п╥п╡я┐п╨я┐ я┐п╡я√п╪п╨п╫п╣п╫п╬"
 
 #: ../src/dialog.c:1476
 msgid "Info"
-msgstr "╤нформац╕я"
+msgstr "п├п╫я└п╬я─п╪п╟я├я√я▐"
 
 #: ../src/dialog.c:1499
 msgid "Merry Christmas!"
-msgstr "Щасливого Р╕здва!"
+msgstr "п╘п╟я│п╩п╦п╡п╬пЁп╬ п═я√п╥п╢п╡п╟!"
 
 #: ../src/dialog.c:1569
 msgid ""
@@ -434,34 +434,34 @@ msgid ""
 "Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA\n"
 "02110-1301, USA."
 msgstr ""
-"    Window Maker ╓ в╕льним програмним забезпеченням; Ви можете\n"
-"розповсюджувати та/або модиф╕кувати його у в╕дпов╕дност╕ з умовами\n"
-"л╕ценз╕╖ GNU General Public License (GPL) опубл╕ковано╖ орган╕зац╕╓ю\n"
-"Free Software Foundation; верс╕╖ 2 ц╕╓╖ Л╕ценз╕╖, чи (на Ваш виб╕р)\n"
-"будь-яко╖ наступно╖ верс╕╖.\n"
+"    Window Maker я■ п╡я√п╩я▄п╫п╦п╪ п©я─п╬пЁя─п╟п╪п╫п╦п╪ п╥п╟п╠п╣п╥п©п╣я┤п╣п╫п╫я▐п╪; п▓п╦ п╪п╬п╤п╣я┌п╣\n"
+"я─п╬п╥п©п╬п╡я│я▌п╢п╤я┐п╡п╟я┌п╦ я┌п╟/п╟п╠п╬ п╪п╬п╢п╦я└я√п╨я┐п╡п╟я┌п╦ п╧п╬пЁп╬ я┐ п╡я√п╢п©п╬п╡я√п╢п╫п╬я│я┌я√ п╥ я┐п╪п╬п╡п╟п╪п╦\n"
+"п╩я√я├п╣п╫п╥я√я≈ GNU General Public License (GPL) п╬п©я┐п╠п╩я√п╨п╬п╡п╟п╫п╬я≈ п╬я─пЁп╟п╫я√п╥п╟я├я√я■я▌\n"
+"Free Software Foundation; п╡п╣я─я│я√я≈ 2 я├я√я■я≈ п⌡я√я├п╣п╫п╥я√я≈, я┤п╦ (п╫п╟ п▓п╟я┬ п╡п╦п╠я√я─)\n"
+"п╠я┐п╢я▄-я▐п╨п╬я≈ п╫п╟я│я┌я┐п©п╫п╬я≈ п╡п╣я─я│я√я≈.\n"
 "\n"
-"    Window Maker розповсюджу╓ться з над╕╓ю на те, що в╕н буде\n"
-"корисним, але БЕЗ БУДЬ-ЯКО╥ ГАРАНТ╤╥; нав╕ть без неявно╖ гарант╕╖\n"
-"КОМЕРЦ╤ЙНО╥ Ц╤ННОСТ╤ чи ПРИДАТНОСТ╤ ДЛЯ ПЕВНОГО ВИКОРИСТАННЯ.\n"
-"Див╕ться GNU General Public License за подальшими подробицями.\n"
+"    Window Maker я─п╬п╥п©п╬п╡я│я▌п╢п╤я┐я■я┌я▄я│я▐ п╥ п╫п╟п╢я√я■я▌ п╫п╟ я┌п╣, я┴п╬ п╡я√п╫ п╠я┐п╢п╣\n"
+"п╨п╬я─п╦я│п╫п╦п╪, п╟п╩п╣ п▒п∙п≈ п▒пёп■п╛-п╞п п·п┤ п⌠п░п═п░п²п╒п├п┤; п╫п╟п╡я√я┌я▄ п╠п╣п╥ п╫п╣я▐п╡п╫п╬я≈ пЁп╟я─п╟п╫я┌я√я≈\n"
+"п п·п°п∙п═п╕п├п≥п²п·п┤ п╕п├п²п²п·п║п╒п├ я┤п╦ п÷п═п≤п■п░п╒п²п·п║п╒п├ п■п⌡п╞ п÷п∙п▓п²п·п⌠п· п▓п≤п п·п═п≤п║п╒п░п²п²п╞.\n"
+"п■п╦п╡я√я┌я▄я│я▐ GNU General Public License п╥п╟ п©п╬п╢п╟п╩я▄я┬п╦п╪п╦ п©п╬п╢я─п╬п╠п╦я├я▐п╪п╦.\n"
 "\n"
-"    Ви мали отримати коп╕ю GNU General Public License разом з ц╕╓ю\n"
-"програмою; якщо н╕ - напиш╕ть до Free Software Foundation, Inc.,\n"
+"    п▓п╦ п╪п╟п╩п╦ п╬я┌я─п╦п╪п╟я┌п╦ п╨п╬п©я√я▌ GNU General Public License я─п╟п╥п╬п╪ п╥ я├я√я■я▌\n"
+"п©я─п╬пЁя─п╟п╪п╬я▌; я▐п╨я┴п╬ п╫я√ - п╫п╟п©п╦я┬я√я┌я▄ п╢п╬ Free Software Foundation, Inc.,\n"
 "51 Franklin St, Fifth Floor, Boston, MA 02110-1301, USA."
 
 #: ../src/dialog.c:1590
 msgid "Legal"
-msgstr "Правова ╕нформац╕я"
+msgstr "п÷я─п╟п╡п╬п╡п╟ я√п╫я└п╬я─п╪п╟я├я√я▐"
 
 #: ../src/dialog.c:1741 ../src/startup.c:394
 msgid "cannot open connection for crashing dialog panel. Aborting."
 msgstr ""
-"не вдалось в╕дкрити з'╓днання для панел╕ авар╕йного д╕алогу. Завершення "
-"роботи."
+"п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╡я√п╢п╨я─п╦я┌п╦ п╥'я■п╢п╫п╟п╫п╫я▐ п╢п╩я▐ п©п╟п╫п╣п╩я√ п╟п╡п╟я─я√п╧п╫п╬пЁп╬ п╢я√п╟п╩п╬пЁя┐. п≈п╟п╡п╣я─я┬п╣п╫п╫я▐ "
+"я─п╬п╠п╬я┌п╦."
 
 #: ../src/dialog.c:1767
 msgid "Fatal error"
-msgstr "Критична помилка"
+msgstr "п я─п╦я┌п╦я┤п╫п╟ п©п╬п╪п╦п╩п╨п╟"
 
 #: ../src/dialog.c:1778
 #, c-format
@@ -469,41 +469,41 @@ msgid ""
 "Window Maker received signal %i\n"
 "(%s)."
 msgstr ""
-"Window Maker: отримано сигнал %i\n"
+"Window Maker: п╬я┌я─п╦п╪п╟п╫п╬ я│п╦пЁп╫п╟п╩ %i\n"
 "(%s)."
 
 #: ../src/dialog.c:1781
 #, c-format
 msgid "Window Maker received signal %i."
-msgstr "Window Maker: отримано сигнал %i."
+msgstr "Window Maker: п╬я┌я─п╦п╪п╟п╫п╬ я│п╦пЁп╫п╟п╩ %i."
 
 #: ../src/dialog.c:1790
 msgid ""
 " This fatal error occured probably due to a bug. Please fill the included "
-"BUGFORM and report it to bugs@windowmaker.org."
+"BUGFORM and report it to %s."
 msgstr ""
-" Ця критична помилка, можливо, ╓ результатом помилки в програм╕. Будь ласка, "
-"заповн╕ть форму BUGFORM ╕ в╕дправте ╖╖ за адресою bugs@windowmaker.org."
+" п╕я▐ п╨я─п╦я┌п╦я┤п╫п╟ п©п╬п╪п╦п╩п╨п╟, п╪п╬п╤п╩п╦п╡п╬, я■ я─п╣п╥я┐п╩я▄я┌п╟я┌п╬п╪ п©п╬п╪п╦п╩п╨п╦ п╡ п©я─п╬пЁя─п╟п╪я√. п▒я┐п╢я▄ п╩п╟я│п╨п╟, "
+"п╥п╟п©п╬п╡п╫я√я┌я▄ я└п╬я─п╪я┐ BUGFORM я√ п╡я√п╢п©я─п╟п╡я┌п╣ я≈я≈ п╥п╟ п╟п╢я─п╣я│п╬я▌ %s."
 
 #: ../src/dialog.c:1799
 msgid "What do you want to do now?"
-msgstr "Що робити?"
+msgstr "п╘п╬ я─п╬п╠п╦я┌п╦?"
 
 #: ../src/dialog.c:1805
 msgid "Select action"
-msgstr "Вибер╕ть д╕ю"
+msgstr "п▓п╦п╠п╣я─я√я┌я▄ п╢я√я▌"
 
 #: ../src/dialog.c:1806
 msgid "Abort and leave a core file"
-msgstr "Завершити роботу, залишивши файл core"
+msgstr "п≈п╟п╡п╣я─я┬п╦я┌п╦ я─п╬п╠п╬я┌я┐, п╥п╟п╩п╦я┬п╦п╡я┬п╦ я└п╟п╧п╩ core"
 
 #: ../src/dialog.c:1807
 msgid "Restart Window Maker"
-msgstr "Перезапустити Window Maker"
+msgstr "п÷п╣я─п╣п╥п╟п©я┐я│я┌п╦я┌п╦ Window Maker"
 
 #: ../src/dialog.c:1808
 msgid "Start alternate window manager"
-msgstr "Запустити альтернативний менеджер в╕кон"
+msgstr "п≈п╟п©я┐я│я┌п╦я┌п╦ п╟п╩я▄я┌п╣я─п╫п╟я┌п╦п╡п╫п╦п╧ п╪п╣п╫п╣п╢п╤п╣я─ п╡я√п╨п╬п╫"
 
 #: ../src/dialog.c:1986
 msgid ""
@@ -517,33 +517,33 @@ msgid ""
 "of the framework. For more information about\n"
 "GNUstep, please visit: www.gnustep.org"
 msgstr ""
-"Window Maker - це частина проекту GNUstep.\n"
-"Проект GNUstep ма╓ на мет╕ створити в╕льну\n"
-"реал╕зац╕ю специф╕кац╕╖ OpenStep(tm), яка ╓\n"
-"об'╓ктно-ор╕╓нтованою основою для створення\n"
-"вдосконалених граф╕чних незалежних в╕д платформи\n"
-"прикладних програм. На ц╕й основ╕ буде створено\n"
-"середовище розробки та середовище робочого столу\n"
-"користувача. За додатковими подробицями щодо\n"
-"GNUstep, будь ласка, в╕дв╕дайте: www.gnustep.org"
+"Window Maker - я├п╣ я┤п╟я│я┌п╦п╫п╟ п©я─п╬п╣п╨я┌я┐ GNUstep.\n"
+"п÷я─п╬п╣п╨я┌ GNUstep п╪п╟я■ п╫п╟ п╪п╣я┌я√ я│я┌п╡п╬я─п╦я┌п╦ п╡я√п╩я▄п╫я┐\n"
+"я─п╣п╟п╩я√п╥п╟я├я√я▌ я│п©п╣я├п╦я└я√п╨п╟я├я√я≈ OpenStep(tm), я▐п╨п╟ я■\n"
+"п╬п╠'я■п╨я┌п╫п╬-п╬я─я√я■п╫я┌п╬п╡п╟п╫п╬я▌ п╬я│п╫п╬п╡п╬я▌ п╢п╩я▐ я│я┌п╡п╬я─п╣п╫п╫я▐\n"
+"п╡п╢п╬я│п╨п╬п╫п╟п╩п╣п╫п╦я┘ пЁя─п╟я└я√я┤п╫п╦я┘ п╫п╣п╥п╟п╩п╣п╤п╫п╦я┘ п╡я√п╢ п©п╩п╟я┌я└п╬я─п╪п╦\n"
+"п©я─п╦п╨п╩п╟п╢п╫п╦я┘ п©я─п╬пЁя─п╟п╪. п²п╟ я├я√п╧ п╬я│п╫п╬п╡я√ п╠я┐п╢п╣ я│я┌п╡п╬я─п╣п╫п╬\n"
+"я│п╣я─п╣п╢п╬п╡п╦я┴п╣ я─п╬п╥я─п╬п╠п╨п╦ я┌п╟ я│п╣я─п╣п╢п╬п╡п╦я┴п╣ я─п╬п╠п╬я┤п╬пЁп╬ я│я┌п╬п╩я┐\n"
+"п╨п╬я─п╦я│я┌я┐п╡п╟я┤п╟. п≈п╟ п╢п╬п╢п╟я┌п╨п╬п╡п╦п╪п╦ п©п╬п╢я─п╬п╠п╦я├я▐п╪п╦ я┴п╬п╢п╬\n"
+"GNUstep, п╠я┐п╢я▄ п╩п╟я│п╨п╟, п╡я√п╢п╡я√п╢п╟п╧я┌п╣: www.gnustep.org"
 
 #: ../src/dialog.c:2006
 msgid "About GNUstep"
-msgstr "Про GNUstep"
+msgstr "п÷я─п╬ GNUstep"
 
 #: ../src/dock.c:213
 #, c-format
 msgid "Type the name for workspace %i:"
-msgstr "Введ╕ть ╕м'я для %i-го робочого столу:"
+msgstr "п▓п╡п╣п╢я√я┌я▄ я√п╪'я▐ п╢п╩я▐ %i-пЁп╬ я─п╬п╠п╬я┤п╬пЁп╬ я│я┌п╬п╩я┐:"
 
 #
 #: ../src/dock.c:214 ../src/dock.c:1141 ../src/dock.c:1144 ../src/dock.c:3409
 msgid "Rename Workspace"
-msgstr "Перейменувати ст╕л"
+msgstr "п÷п╣я─п╣п╧п╪п╣п╫я┐п╡п╟я┌п╦ я│я┌я√п╩"
 
 #: ../src/dock.c:520 ../src/dock.c:528
 msgid "Warning"
-msgstr "Попередження"
+msgstr "п÷п╬п©п╣я─п╣п╢п╤п╣п╫п╫я▐"
 
 #: ../src/dock.c:521
 msgid ""
@@ -551,9 +551,9 @@ msgid ""
 "is docked in the same positions on the other workspaces and the Clip is not "
 "full in some workspace."
 msgstr ""
-"Деяк╕ ╕конки неможливо зробити присутн╕ми на вс╕х робочих столах. "
-"Впевн╕ться, що на ц╕й же позиц╕╖ на ╕нших робочих столах не прикр╕плена ╕нша "
-"╕конка ╕ що в Скр╕пц╕ ╓ м╕сце для нових ╕конок на вс╕х робочих столах."
+"п■п╣я▐п╨я√ я√п╨п╬п╫п╨п╦ п╫п╣п╪п╬п╤п╩п╦п╡п╬ п╥я─п╬п╠п╦я┌п╦ п©я─п╦я│я┐я┌п╫я√п╪п╦ п╫п╟ п╡я│я√я┘ я─п╬п╠п╬я┤п╦я┘ я│я┌п╬п╩п╟я┘. "
+"п▓п©п╣п╡п╫я√я┌я▄я│я▐, я┴п╬ п╫п╟ я├я√п╧ п╤п╣ п©п╬п╥п╦я├я√я≈ п╫п╟ я√п╫я┬п╦я┘ я─п╬п╠п╬я┤п╦я┘ я│я┌п╬п╩п╟я┘ п╫п╣ п©я─п╦п╨я─я√п©п╩п╣п╫п╟ я√п╫я┬п╟ "
+"я√п╨п╬п╫п╨п╟ я√ я┴п╬ п╡ п║п╨я─я√п©я├я√ я■ п╪я√я│я├п╣ п╢п╩я▐ п╫п╬п╡п╦я┘ я√п╨п╬п╫п╬п╨ п╫п╟ п╡я│я√я┘ я─п╬п╠п╬я┤п╦я┘ я│я┌п╬п╩п╟я┘."
 
 #: ../src/dock.c:529
 msgid ""
@@ -561,251 +561,251 @@ msgid ""
 "docked in the same position on the other workspaces and the Clip is not full "
 "in some workspace."
 msgstr ""
-"╤конку неможливо зробити присутньою на вс╕х робочих столах. Впевн╕ться, що "
-"на ц╕й же позиц╕╖ на ╕нших робочих столах не прикр╕плена ╕нша ╕конка ╕ що в "
-"Скр╕пц╕ ╓ м╕сце для нових ╕конок на вс╕х робочих столах."
+"п├п╨п╬п╫п╨я┐ п╫п╣п╪п╬п╤п╩п╦п╡п╬ п╥я─п╬п╠п╦я┌п╦ п©я─п╦я│я┐я┌п╫я▄п╬я▌ п╫п╟ п╡я│я√я┘ я─п╬п╠п╬я┤п╦я┘ я│я┌п╬п╩п╟я┘. п▓п©п╣п╡п╫я√я┌я▄я│я▐, я┴п╬ "
+"п╫п╟ я├я√п╧ п╤п╣ п©п╬п╥п╦я├я√я≈ п╫п╟ я√п╫я┬п╦я┘ я─п╬п╠п╬я┤п╦я┘ я│я┌п╬п╩п╟я┘ п╫п╣ п©я─п╦п╨я─я√п©п╩п╣п╫п╟ я√п╫я┬п╟ я√п╨п╬п╫п╨п╟ я√ я┴п╬ п╡ "
+"п║п╨я─я√п©я├я√ я■ п╪я√я│я├п╣ п╢п╩я▐ п╫п╬п╡п╦я┘ я√п╨п╬п╫п╬п╨ п╫п╟ п╡я│я√я┘ я─п╬п╠п╬я┤п╦я┘ я│я┌п╬п╩п╟я┘."
 
 #: ../src/dock.c:556
 msgid "Workspace Clip"
-msgstr "Скр╕пка Робочого столу"
+msgstr "п║п╨я─я√п©п╨п╟ п═п╬п╠п╬я┤п╬пЁп╬ я│я┌п╬п╩я┐"
 
 #: ../src/dock.c:557
 msgid "All selected icons will be removed!"
-msgstr "Вс╕ вибран╕ ╕конки будуть видален╕!"
+msgstr "п▓я│я√ п╡п╦п╠я─п╟п╫я√ я√п╨п╬п╫п╨п╦ п╠я┐п╢я┐я┌я▄ п╡п╦п╢п╟п╩п╣п╫я√!"
 
 #: ../src/dock.c:608 ../src/dock.c:1156 ../src/dock.c:1158 ../src/dock.c:3445
 msgid "Keep Icon"
-msgstr "Утримувати ╕конку"
+msgstr "пёя┌я─п╦п╪я┐п╡п╟я┌п╦ я√п╨п╬п╫п╨я┐"
 
 #
 #: ../src/dock.c:609 ../src/dock.c:2137 ../src/dock.c:2278
 msgid "Type the command used to launch the application"
-msgstr "Введ╕ть команду, що використову╓ться для запуску програми"
+msgstr "п▓п╡п╣п╢я√я┌я▄ п╨п╬п╪п╟п╫п╢я┐, я┴п╬ п╡п╦п╨п╬я─п╦я│я┌п╬п╡я┐я■я┌я▄я│я▐ п╢п╩я▐ п╥п╟п©я┐я│п╨я┐ п©я─п╬пЁя─п╟п╪п╦"
 
 #
 #: ../src/dock.c:965
 #, c-format
 msgid "could not launch application %s\n"
-msgstr "не вдалось запустити програму %s\n"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╟п©я┐я│я┌п╦я┌п╦ п©я─п╬пЁя─п╟п╪я┐ %s\n"
 
 #: ../src/dock.c:1020
 msgid "could not create workspace submenu for Clip menu"
-msgstr "не вдалось створити п╕дменю робочих м╕сць для меню Скр╕пки"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ я│я┌п╡п╬я─п╦я┌п╦ п©я√п╢п╪п╣п╫я▌ я─п╬п╠п╬я┤п╦я┘ п╪я√я│я├я▄ п╢п╩я▐ п╪п╣п╫я▌ п║п╨я─я√п©п╨п╦"
 
 #: ../src/dock.c:1078
 msgid "could not create options submenu for Clip menu"
-msgstr "не вдалось створити п╕дменю параметр╕в для меню Скр╕пки"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ я│я┌п╡п╬я─п╦я┌п╦ п©я√п╢п╪п╣п╫я▌ п©п╟я─п╟п╪п╣я┌я─я√п╡ п╢п╩я▐ п╪п╣п╫я▌ п║п╨я─я√п©п╨п╦"
 
 #: ../src/dock.c:1082 ../src/dock.c:1130
 msgid "Keep on Top"
-msgstr "Завжди на плаву"
+msgstr "п≈п╟п╡п╤п╢п╦ п╫п╟ п©п╩п╟п╡я┐"
 
 #: ../src/dock.c:1088
 msgid "Collapsed"
-msgstr "Звернуто"
+msgstr "п≈п╡п╣я─п╫я┐я┌п╬"
 
 #: ../src/dock.c:1094
 msgid "Autocollapse"
-msgstr "Автозвертати"
+msgstr "п░п╡я┌п╬п╥п╡п╣я─я┌п╟я┌п╦"
 
 #: ../src/dock.c:1100
 msgid "Autoraise"
-msgstr "Автоп╕дн╕мати"
+msgstr "п░п╡я┌п╬п©я√п╢п╫я√п╪п╟я┌п╦"
 
 #: ../src/dock.c:1106
 msgid "Autoattract Icons"
-msgstr "Автопритягати ╕конки"
+msgstr "п░п╡я┌п╬п©я─п╦я┌я▐пЁп╟я┌п╦ я√п╨п╬п╫п╨п╦"
 
 #: ../src/dock.c:1136
 msgid "Clip Options"
-msgstr "Параметри Скр╕пки"
+msgstr "п÷п╟я─п╟п╪п╣я┌я─п╦ п║п╨я─я√п©п╨п╦"
 
 #: ../src/dock.c:1146
 msgid "Selected"
-msgstr "Вибране"
+msgstr "п▓п╦п╠я─п╟п╫п╣"
 
 #: ../src/dock.c:1151 ../src/dock.c:1154 ../src/dock.c:3436
 msgid "Select All Icons"
-msgstr "Виб╕р вс╕х ╕конок"
+msgstr "п▓п╦п╠я√я─ п╡я│я√я┘ я√п╨п╬п╫п╬п╨"
 
 #: ../src/dock.c:1160 ../src/dock.c:1162 ../src/dock.c:3453
 msgid "Move Icon To"
-msgstr "Перем╕стити ╕конку на..."
+msgstr "п÷п╣я─п╣п╪я√я│я┌п╦я┌п╦ я√п╨п╬п╫п╨я┐ п╫п╟..."
 
 #: ../src/dock.c:1167 ../src/dock.c:1170 ../src/dock.c:3464
 msgid "Remove Icon"
-msgstr "Видалити ╕конку"
+msgstr "п▓п╦п╢п╟п╩п╦я┌п╦ я√п╨п╬п╫п╨я┐"
 
 #: ../src/dock.c:1172
 msgid "Attract Icons"
-msgstr "Притягати ╕конки"
+msgstr "п÷я─п╦я┌я▐пЁп╟я┌п╦ я√п╨п╬п╫п╨п╦"
 
 #: ../src/dock.c:1175
 msgid "Launch"
-msgstr "Запуск"
+msgstr "п≈п╟п©я┐я│п╨"
 
 #: ../src/dock.c:1183
 msgid "Settings..."
-msgstr "Установки..."
+msgstr "пёя│я┌п╟п╫п╬п╡п╨п╦..."
 
 #: ../src/dock.c:1548 ../src/dock.c:1655
 #, c-format
 msgid "bad value in docked icon state info %s"
-msgstr "помилкове значення в стан╕ прикр╕плено╖ ╕конки -- %s"
+msgstr "п©п╬п╪п╦п╩п╨п╬п╡п╣ п╥п╫п╟я┤п╣п╫п╫я▐ п╡ я│я┌п╟п╫я√ п©я─п╦п╨я─я√п©п╩п╣п╫п╬я≈ я√п╨п╬п╫п╨п╦ -- %s"
 
 #: ../src/dock.c:1663
 #, c-format
 msgid "bad value in docked icon position %i,%i"
-msgstr "помилкове значення в позиц╕╖ прикр╕плено╖ ╕конки %i,%i"
+msgstr "п©п╬п╪п╦п╩п╨п╬п╡п╣ п╥п╫п╟я┤п╣п╫п╫я▐ п╡ п©п╬п╥п╦я├я√я≈ п©я─п╦п╨я─я√п©п╩п╣п╫п╬я≈ я√п╨п╬п╫п╨п╦ %i,%i"
 
 #: ../src/dock.c:1919
 msgid "there are too many icons stored in dock. Ignoring what doesn't fit"
-msgstr "прикр╕плено надто багато ╕конок. Зайв╕ будуть про╕гнорован╕"
+msgstr "п©я─п╦п╨я─я√п©п╩п╣п╫п╬ п╫п╟п╢я┌п╬ п╠п╟пЁп╟я┌п╬ я√п╨п╬п╫п╬п╨. п≈п╟п╧п╡я√ п╠я┐п╢я┐я┌я▄ п©я─п╬я√пЁп╫п╬я─п╬п╡п╟п╫я√"
 
 #. icon->forced_dock = 1;
 #: ../src/dock.c:2136 ../src/dock.c:2277
 msgid "Dock Icon"
-msgstr "╤конка Доку"
+msgstr "п├п╨п╬п╫п╨п╟ п■п╬п╨я┐"
 
 #: ../src/dock.c:3323
 #, c-format
 msgid "Could not execute command \"%s\""
-msgstr "Неможливо виконати команду \"%s\""
+msgstr "п²п╣п╪п╬п╤п╩п╦п╡п╬ п╡п╦п╨п╬п╫п╟я┌п╦ п╨п╬п╪п╟п╫п╢я┐ \"%s\""
 
 #: ../src/dock.c:3415
 msgid "Toggle Omnipresent"
-msgstr "Присутн╕сть на вс╕х столах"
+msgstr "п÷я─п╦я│я┐я┌п╫я√я│я┌я▄ п╫п╟ п╡я│я√я┘ я│я┌п╬п╩п╟я┘"
 
 #: ../src/dock.c:3420 ../src/kwm.c:637 ../src/winmenu.c:418
 #: ../src/winspector.c:1377
 msgid "Omnipresent"
-msgstr "На вс╕х столах"
+msgstr "п²п╟ п╡я│я√я┘ я│я┌п╬п╩п╟я┘"
 
 #: ../src/dock.c:3434
 msgid "Unselect All Icons"
-msgstr "Зняття вибору вс╕х ╕конок"
+msgstr "п≈п╫я▐я┌я┌я▐ п╡п╦п╠п╬я─я┐ п╡я│я√я┘ я√п╨п╬п╫п╬п╨"
 
 #: ../src/dock.c:3443
 msgid "Keep Icons"
-msgstr "Утримувати ╕конки"
+msgstr "пёя┌я─п╦п╪я┐п╡п╟я┌п╦ я√п╨п╬п╫п╨п╦"
 
 #: ../src/dock.c:3451
 msgid "Move Icons To"
-msgstr "Перем╕стити ╕конки на..."
+msgstr "п÷п╣я─п╣п╪я√я│я┌п╦я┌п╦ я√п╨п╬п╫п╨п╦ п╫п╟..."
 
 #: ../src/dock.c:3462
 msgid "Remove Icons"
-msgstr "Видалити ╕конки"
+msgstr "п▓п╦п╢п╟п╩п╦я┌п╦ я√п╨п╬п╫п╨п╦"
 
 #: ../src/dock.c:3493 ../src/kwm.c:643
 msgid "Bring Here"
-msgstr "Принести сюди"
+msgstr "п÷я─п╦п╫п╣я│я┌п╦ я│я▌п╢п╦"
 
 #: ../src/dockedapp.c:149
 #, c-format
 msgid "could not find icon %s, used in a docked application"
-msgstr "не вдалось знайти ╕конку %s, використану в пришвартован╕й програм╕"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╫п╟п╧я┌п╦ я√п╨п╬п╫п╨я┐ %s, п╡п╦п╨п╬я─п╦я│я┌п╟п╫я┐ п╡ п©я─п╦я┬п╡п╟я─я┌п╬п╡п╟п╫я√п╧ п©я─п╬пЁя─п╟п╪я√"
 
 #
 #: ../src/dockedapp.c:229
 #, c-format
 msgid "Could not open specified icon file: %s"
-msgstr "Не вдалось в╕дкрити вказаний файл ╕конки: %s"
+msgstr "п²п╣ п╡п╢п╟п╩п╬я│я▄ п╡я√п╢п╨я─п╦я┌п╦ п╡п╨п╟п╥п╟п╫п╦п╧ я└п╟п╧п╩ я√п╨п╬п╫п╨п╦: %s"
 
 #: ../src/dockedapp.c:231
 msgid "Ignore"
-msgstr "╤гнорувати"
+msgstr "п├пЁп╫п╬я─я┐п╡п╟я┌п╦"
 
 #: ../src/dockedapp.c:333
 msgid "Start when Window Maker is started"
-msgstr "Запустити при запуску WindowMaker'а"
+msgstr "п≈п╟п©я┐я│я┌п╦я┌п╦ п©я─п╦ п╥п╟п©я┐я│п╨я┐ WindowMaker'п╟"
 
 #: ../src/dockedapp.c:340
 msgid "Lock (prevent accidental removal)"
-msgstr "Заф╕ксувати (перешкодити випадковому видаленню)"
+msgstr "п≈п╟я└я√п╨я│я┐п╡п╟я┌п╦ (п©п╣я─п╣я┬п╨п╬п╢п╦я┌п╦ п╡п╦п©п╟п╢п╨п╬п╡п╬п╪я┐ п╡п╦п╢п╟п╩п╣п╫п╫я▌)"
 
 #
 #: ../src/dockedapp.c:344
 msgid "Application path and arguments"
-msgstr "Шлях до програми ╕ аргументи"
+msgstr "п╗п╩я▐я┘ п╢п╬ п©я─п╬пЁя─п╟п╪п╦ я√ п╟я─пЁя┐п╪п╣п╫я┌п╦"
 
 #: ../src/dockedapp.c:357
 msgid "Command for middle-click launch"
-msgstr "Команда для запуску по середн╕й кнопц╕ миш╕"
+msgstr "п п╬п╪п╟п╫п╢п╟ п╢п╩я▐ п╥п╟п©я┐я│п╨я┐ п©п╬ я│п╣я─п╣п╢п╫я√п╧ п╨п╫п╬п©я├я√ п╪п╦я┬я√"
 
 #: ../src/dockedapp.c:371
 #, c-format
 msgid "%s will be replaced with current selection"
-msgstr "%s буде зам╕нено на поточне вид╕лення"
+msgstr "%s п╠я┐п╢п╣ п╥п╟п╪я√п╫п╣п╫п╬ п╫п╟ п©п╬я┌п╬я┤п╫п╣ п╡п╦п╢я√п╩п╣п╫п╫я▐"
 
 #: ../src/dockedapp.c:376
 msgid "Command for files dropped with DND"
-msgstr "Команда для \"перетягнутих\" файл╕в"
+msgstr "п п╬п╪п╟п╫п╢п╟ п╢п╩я▐ \"п©п╣я─п╣я┌я▐пЁп╫я┐я┌п╦я┘\" я└п╟п╧п╩я√п╡"
 
 #: ../src/dockedapp.c:390
 #, c-format
 msgid "%d will be replaced with the file name"
-msgstr "%d буде зам╕нено на ╕м'я файла"
+msgstr "%d п╠я┐п╢п╣ п╥п╟п╪я√п╫п╣п╫п╬ п╫п╟ я√п╪'я▐ я└п╟п╧п╩п╟"
 
 #: ../src/dockedapp.c:394
 msgid "DND support was not compiled in"
-msgstr "П╕дтримка перетягування даних не була включена при комп╕ляц╕╖"
+msgstr "п÷я√п╢я┌я─п╦п╪п╨п╟ п©п╣я─п╣я┌я▐пЁя┐п╡п╟п╫п╫я▐ п╢п╟п╫п╦я┘ п╫п╣ п╠я┐п╩п╟ п╡п╨п╩я▌я┤п╣п╫п╟ п©я─п╦ п╨п╬п╪п©я√п╩я▐я├я√я≈"
 
 #: ../src/dockedapp.c:399
 msgid "Icon Image"
-msgstr "Зображення ╕конки"
+msgstr "п≈п╬п╠я─п╟п╤п╣п╫п╫я▐ я√п╨п╬п╫п╨п╦"
 
 #: ../src/dockedapp.c:413 ../src/winspector.c:1515
 msgid "Browse..."
-msgstr "Вибрати..."
+msgstr "п▓п╦п╠я─п╟я┌п╦..."
 
 #
 #: ../src/dockedapp.c:466
 msgid "Docked Application Settings"
-msgstr "Параметри пришвартовано╖ програми"
+msgstr "п÷п╟я─п╟п╪п╣я┌я─п╦ п©я─п╦я┬п╡п╟я─я┌п╬п╡п╟п╫п╬я≈ п©я─п╬пЁя─п╟п╪п╦"
 
 #: ../src/framewin.c:649 ../src/framewin.c:744 ../src/menu.c:456
 #: ../src/texture.c:594
 #, c-format
 msgid "could not render texture: %s"
-msgstr "не вдалось п╕дготувати текстуру: %s"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п©я√п╢пЁп╬я┌я┐п╡п╟я┌п╦ я┌п╣п╨я│я┌я┐я─я┐: %s"
 
 #: ../src/framewin.c:672 ../src/framewin.c:683 ../src/framewin.c:699
 #: ../src/framewin.c:710 ../src/framewin.c:717 ../src/framewin.c:724
 #: ../src/icon.c:350 ../src/menu.c:485
 #, c-format
 msgid "error rendering image:%s"
-msgstr "помилка при п╕дготовц╕ зображення:%s"
+msgstr "п©п╬п╪п╦п╩п╨п╟ п©я─п╦ п©я√п╢пЁп╬я┌п╬п╡я├я√ п╥п╬п╠я─п╟п╤п╣п╫п╫я▐:%s"
 
 #: ../src/framewin.c:777
 #, c-format
 msgid "error rendering image: %s"
-msgstr "помилка при п╕дготовц╕ зображення: %s"
+msgstr "п©п╬п╪п╦п╩п╨п╟ п©я─п╦ п©я√п╢пЁп╬я┌п╬п╡я├я√ п╥п╬п╠я─п╟п╤п╣п╫п╫я▐: %s"
 
 #: ../src/gnome.c:216 ../src/gnome.c:343 ../src/gnome.c:401
 msgid "out of memory while updating GNOME hints"
-msgstr "вичерпана пам'ять при оновленн╕ GNOME hints"
+msgstr "п╡п╦я┤п╣я─п©п╟п╫п╟ п©п╟п╪'я▐я┌я▄ п©я─п╦ п╬п╫п╬п╡п╩п╣п╫п╫я√ GNOME hints"
 
 #: ../src/icon.c:229 ../src/wdefaults.c:443
 #, c-format
 msgid "error loading image file \"%s\""
-msgstr "помилка завантаження файлу зображення \"%s\""
+msgstr "п©п╬п╪п╦п╩п╨п╟ п╥п╟п╡п╟п╫я┌п╟п╤п╣п╫п╫я▐ я└п╟п╧п╩я┐ п╥п╬п╠я─п╟п╤п╣п╫п╫я▐ \"%s\""
 
 #
 #: ../src/icon.c:491 ../src/icon.c:500
 #, c-format
 msgid "could not create directory %s"
-msgstr "не вдалось створити каталог %s"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ я│я┌п╡п╬я─п╦я┌п╦ п╨п╟я┌п╟п╩п╬пЁ %s"
 
 #: ../src/icon.c:767
 #, c-format
 msgid "could not find default icon \"%s\""
-msgstr "не вдалось знайти ╕конку за умовчанням \"%s\""
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╫п╟п╧я┌п╦ я√п╨п╬п╫п╨я┐ п╥п╟ я┐п╪п╬п╡я┤п╟п╫п╫я▐п╪ \"%s\""
 
 #: ../src/icon.c:773
 #, c-format
 msgid "could not load default icon \"%s\":%s"
-msgstr "не вдалось завантажити ╕конку за умовчанням \"%s\":%s"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╟п╡п╟п╫я┌п╟п╤п╦я┌п╦ я√п╨п╬п╫п╨я┐ п╥п╟ я┐п╪п╬п╡я┤п╟п╫п╫я▐п╪ \"%s\":%s"
 
 #.
 #. * Warning: If you make some change that affects the order of the
@@ -814,31 +814,31 @@ msgstr "не вдалось завантажити ╕конку за умовчанням \"%s\":%s"
 #.
 #: ../src/kwm.c:633 ../src/winmenu.c:441 ../src/winmenu.c:583
 msgid "Maximize"
-msgstr "Максим╕зувати"
+msgstr "п°п╟п╨я│п╦п╪я√п╥я┐п╡п╟я┌п╦"
 
 #: ../src/kwm.c:634 ../src/winmenu.c:578
 msgid "Unmaximize"
-msgstr "Демаксим╕зувати"
+msgstr "п■п╣п╪п╟п╨я│п╦п╪я√п╥я┐п╡п╟я┌п╦"
 
 #: ../src/kwm.c:635 ../src/winmenu.c:449 ../src/winmenu.c:569
 msgid "Miniaturize"
-msgstr "М╕н╕м╕зувати"
+msgstr "п°я√п╫я√п╪я√п╥я┐п╡п╟я┌п╦"
 
 #: ../src/kwm.c:636 ../src/winmenu.c:564
 msgid "Deminiaturize"
-msgstr "Дем╕н╕м╕зувати"
+msgstr "п■п╣п╪я√п╫я√п╪я√п╥я┐п╡п╟я┌п╦"
 
 #: ../src/kwm.c:638
 msgid "Not Omnipresent"
-msgstr "Не на вс╕х столах"
+msgstr "п²п╣ п╫п╟ п╡я│я√я┘ я│я┌п╬п╩п╟я┘"
 
 #: ../src/kwm.c:639
 msgid "Move"
-msgstr "Перем╕стити"
+msgstr "п÷п╣я─п╣п╪я√я│я┌п╦я┌п╦"
 
 #: ../src/kwm.c:640
 msgid "Resize"
-msgstr "Зм╕нити розм╕р"
+msgstr "п≈п╪я√п╫п╦я┌п╦ я─п╬п╥п╪я√я─"
 
 #.
 #. entry = wMenuAddCallback(menu, _("Select Shortcut"), NULL, NULL);
@@ -846,71 +846,71 @@ msgstr "Зм╕нити розм╕р"
 #.
 #: ../src/kwm.c:641 ../src/rootmenu.c:248 ../src/winmenu.c:513
 msgid "Close"
-msgstr "Закрити"
+msgstr "п≈п╟п╨я─п╦я┌п╦"
 
 #: ../src/kwm.c:642 ../src/winmenu.c:497
 msgid "Move To"
-msgstr "Перем╕стити на..."
+msgstr "п÷п╣я─п╣п╪я√я│я┌п╦я┌п╦ п╫п╟..."
 
 #: ../src/kwm.c:1096
 msgid "%a(Run Command,Type the command to run:)"
-msgstr "%a(Запустити команду,Введ╕ть команду:)"
+msgstr "%a(п≈п╟п©я┐я│я┌п╦я┌п╦ п╨п╬п╪п╟п╫п╢я┐,п▓п╡п╣п╢я√я┌я▄ п╨п╬п╪п╟п╫п╢я┐:)"
 
 #: ../src/main.c:222
 msgid "failed to restart Window Maker."
-msgstr "не вдалось перезапустити Window Maker."
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п©п╣я─п╣п╥п╟п©я┐я│я┌п╦я┌п╦ Window Maker."
 
 #: ../src/main.c:225
 #, c-format
 msgid "could not exec %s"
-msgstr "не вдалось виконати %s"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╡п╦п╨п╬п╫п╟я┌п╦ %s"
 
 #: ../src/main.c:271
 msgid "Could not execute command: "
-msgstr "Неможливо виконати команду: "
+msgstr "п²п╣п╪п╬п╤п╩п╦п╡п╬ п╡п╦п╨п╬п╫п╟я┌п╦ п╨п╬п╪п╟п╫п╢я┐: "
 
 #: ../src/main.c:428
 #, c-format
 msgid "%s aborted.\n"
-msgstr "%s перервано.\n"
+msgstr "%s п©п╣я─п╣я─п╡п╟п╫п╬.\n"
 
 #: ../src/main.c:439
 #, c-format
 msgid "Usage: %s [options]\n"
-msgstr "Запуск: %s [параметри]\n"
+msgstr "п≈п╟п©я┐я│п╨: %s [п©п╟я─п╟п╪п╣я┌я─п╦]\n"
 
 #: ../src/main.c:440
 msgid "The Window Maker window manager for the X window system"
-msgstr "Менеджер в╕кон Window Maker для в╕конно╖ системи X Window"
+msgstr "п°п╣п╫п╣п╢п╤п╣я─ п╡я√п╨п╬п╫ Window Maker п╢п╩я▐ п╡я√п╨п╬п╫п╫п╬я≈ я│п╦я│я┌п╣п╪п╦ X Window"
 
 #: ../src/main.c:442
 msgid " -display host:dpy\tdisplay to use"
-msgstr " -display хост:дисплей\tвикористовувати вказаний дисплей"
+msgstr " -display я┘п╬я│я┌:п╢п╦я│п©п╩п╣п╧\tп╡п╦п╨п╬я─п╦я│я┌п╬п╡я┐п╡п╟я┌п╦ п╡п╨п╟п╥п╟п╫п╦п╧ п╢п╦я│п©п╩п╣п╧"
 
 #: ../src/main.c:444
 msgid " --no-cpp \t\tdisable preprocessing of configuration files"
-msgstr " --no-cpp \t\tзаборонити попередню обробку файл╕в конф╕гурац╕╖"
+msgstr " --no-cpp \t\tп╥п╟п╠п╬я─п╬п╫п╦я┌п╦ п©п╬п©п╣я─п╣п╢п╫я▌ п╬п╠я─п╬п╠п╨я┐ я└п╟п╧п╩я√п╡ п╨п╬п╫я└я√пЁя┐я─п╟я├я√я≈"
 
 #: ../src/main.c:446
 msgid " --no-dock\t\tdo not open the application Dock"
-msgstr " --no-dock\t\tне в╕дкривати Док програм"
+msgstr " --no-dock\t\tп╫п╣ п╡я√п╢п╨я─п╦п╡п╟я┌п╦ п■п╬п╨ п©я─п╬пЁя─п╟п╪"
 
 #: ../src/main.c:447
 msgid " --no-clip\t\tdo not open the workspace Clip"
-msgstr " --no-clip\t\tне в╕дкривати Скр╕пку"
+msgstr " --no-clip\t\tп╫п╣ п╡я√п╢п╨я─п╦п╡п╟я┌п╦ п║п╨я─я√п©п╨я┐"
 
 #
 #: ../src/main.c:448
 msgid " --no-autolaunch\tdo not autolaunch applications"
-msgstr " --no-autolaunch\tне виконувати автозапуск програм"
+msgstr " --no-autolaunch\tп╫п╣ п╡п╦п╨п╬п╫я┐п╡п╟я┌п╦ п╟п╡я┌п╬п╥п╟п©я┐я│п╨ п©я─п╬пЁя─п╟п╪"
 
 #: ../src/main.c:449
 msgid " --dont-restore\t\tdo not restore saved session"
-msgstr " --dont-restore\t\tне в╕дтворювати збережен╕ сеанси"
+msgstr " --dont-restore\t\tп╫п╣ п╡я√п╢я┌п╡п╬я─я▌п╡п╟я┌п╦ п╥п╠п╣я─п╣п╤п╣п╫я√ я│п╣п╟п╫я│п╦"
 
 #: ../src/main.c:451
 msgid " --locale locale\tlocale to use"
-msgstr " --locale locale\tвикористовувати локаль locale"
+msgstr " --locale locale\tп╡п╦п╨п╬я─п╦я│я┌п╬п╡я┐п╡п╟я┌п╦ п╩п╬п╨п╟п╩я▄ locale"
 
 #: ../src/main.c:453
 msgid ""
@@ -921,27 +921,27 @@ msgstr ""
 #: ../src/main.c:454
 msgid " --visual-id visualid\tvisual id of visual to use"
 msgstr ""
-" --visual-id visualid\tвикористовувати вказаний кольоровий клас в╕дображення"
+" --visual-id visualid\tп╡п╦п╨п╬я─п╦я│я┌п╬п╡я┐п╡п╟я┌п╦ п╡п╨п╟п╥п╟п╫п╦п╧ п╨п╬п╩я▄п╬я─п╬п╡п╦п╧ п╨п╩п╟я│ п╡я√п╢п╬п╠я─п╟п╤п╣п╫п╫я▐"
 
 #: ../src/main.c:455
 msgid " --static\t\tdo not update or save configurations"
-msgstr " --static\t\tне проводити оновлення чи збереження конф╕гурац╕й"
+msgstr " --static\t\tп╫п╣ п©я─п╬п╡п╬п╢п╦я┌п╦ п╬п╫п╬п╡п╩п╣п╫п╫я▐ я┤п╦ п╥п╠п╣я─п╣п╤п╣п╫п╫я▐ п╨п╬п╫я└я√пЁя┐я─п╟я├я√п╧"
 
 #: ../src/main.c:456
 msgid " --no-polling\t\tdo not periodically check for configuration updates"
-msgstr " --no-polling\t\tне робити пер╕одичних перев╕рок зм╕н конф╕гурац╕╖"
+msgstr " --no-polling\t\tп╫п╣ я─п╬п╠п╦я┌п╦ п©п╣я─я√п╬п╢п╦я┤п╫п╦я┘ п©п╣я─п╣п╡я√я─п╬п╨ п╥п╪я√п╫ п╨п╬п╫я└я√пЁя┐я─п╟я├я√я≈"
 
 #: ../src/main.c:458
 msgid " --synchronous\t\tturn on synchronous display mode"
-msgstr " --synchronous\t\tвключити синхронний режим показу"
+msgstr " --synchronous\t\tп╡п╨п╩я▌я┤п╦я┌п╦ я│п╦п╫я┘я─п╬п╫п╫п╦п╧ я─п╣п╤п╦п╪ п©п╬п╨п╟п╥я┐"
 
 #: ../src/main.c:460
 msgid " --version\t\tprint version and exit"
-msgstr " --version\t\tвивести номер верс╕╖ та вийти"
+msgstr " --version\t\tп╡п╦п╡п╣я│я┌п╦ п╫п╬п╪п╣я─ п╡п╣я─я│я√я≈ я┌п╟ п╡п╦п╧я┌п╦"
 
 #: ../src/main.c:461
 msgid " --help\t\t\tshow this message"
-msgstr " --help\t\t\tвивести цей текст"
+msgstr " --help\t\t\tп╡п╦п╡п╣я│я┌п╦ я├п╣п╧ я┌п╣п╨я│я┌"
 
 #: ../src/main.c:474
 #, c-format
@@ -949,96 +949,96 @@ msgid ""
 "could not find user GNUstep directory (%s).\n"
 "Make sure you have installed Window Maker correctly and run wmaker.inst"
 msgstr ""
-"не вдалось знайти каталог GNUstep користувача (%s).\n"
-"Впевн╕ться, що WindowMaker встановлено правильно ╕ запуст╕ть wmaker.inst"
+"п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╫п╟п╧я┌п╦ п╨п╟я┌п╟п╩п╬пЁ GNUstep п╨п╬я─п╦я│я┌я┐п╡п╟я┤п╟ (%s).\n"
+"п▓п©п╣п╡п╫я√я┌я▄я│я▐, я┴п╬ WindowMaker п╡я│я┌п╟п╫п╬п╡п╩п╣п╫п╬ п©я─п╟п╡п╦п╩я▄п╫п╬ я√ п╥п╟п©я┐я│я┌я√я┌я▄ wmaker.inst"
 
 #
 #: ../src/main.c:479
 #, c-format
 msgid "could not find user GNUstep directory (%s)."
-msgstr "не вдалось знайти каталог GNUstep користувача (%s)."
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╫п╟п╧я┌п╦ п╨п╟я┌п╟п╩п╬пЁ GNUstep п╨п╬я─п╦я│я┌я┐п╡п╟я┤п╟ (%s)."
 
 #: ../src/main.c:482
 msgid ""
 "There was an error while creating GNUstep directory, please make sure you "
 "have installed Window Maker correctly and run wmaker.inst"
 msgstr ""
-"Невдача при створенн╕ каталогу GNUstep, впевн╕ться, що WindowMaker "
-"встановлено правильно ╕ запуст╕ть wmaker.inst"
+"п²п╣п╡п╢п╟я┤п╟ п©я─п╦ я│я┌п╡п╬я─п╣п╫п╫я√ п╨п╟я┌п╟п╩п╬пЁя┐ GNUstep, п╡п©п╣п╡п╫я√я┌я▄я│я▐, я┴п╬ WindowMaker "
+"п╡я│я┌п╟п╫п╬п╡п╩п╣п╫п╬ п©я─п╟п╡п╦п╩я▄п╫п╬ я√ п╥п╟п©я┐я│я┌я√я┌я▄ wmaker.inst"
 
 #: ../src/main.c:485
 #, c-format
 msgid "%s directory created with default configuration."
-msgstr "Каталог %s створено з конф╕гурац╕╓ю за умовчанням."
+msgstr "п п╟я┌п╟п╩п╬пЁ %s я│я┌п╡п╬я─п╣п╫п╬ п╥ п╨п╬п╫я└я√пЁя┐я─п╟я├я√я■я▌ п╥п╟ я┐п╪п╬п╡я┤п╟п╫п╫я▐п╪."
 
 #: ../src/main.c:505 ../src/main.c:510
 #, c-format
 msgid "%s:could not execute initialization script"
-msgstr "%s:не вдалось виконати сценар╕й ╕н╕ц╕ал╕зац╕╖"
+msgstr "%s:п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╡п╦п╨п╬п╫п╟я┌п╦ я│я├п╣п╫п╟я─я√п╧ я√п╫я√я├я√п╟п╩я√п╥п╟я├я√я≈"
 
 #: ../src/main.c:530 ../src/main.c:535
 #, c-format
 msgid "%s:could not execute exit script"
-msgstr "%s:не вдалось виконати сценар╕й завершення роботи"
+msgstr "%s:п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╡п╦п╨п╬п╫п╟я┌п╦ я│я├п╣п╫п╟я─я√п╧ п╥п╟п╡п╣я─я┬п╣п╫п╫я▐ я─п╬п╠п╬я┌п╦"
 
 #: ../src/main.c:663 ../src/main.c:671 ../src/main.c:679 ../src/main.c:699
 #, c-format
 msgid "too few arguments for %s"
-msgstr "надто мало аргумент╕в для %s"
+msgstr "п╫п╟п╢я┌п╬ п╪п╟п╩п╬ п╟я─пЁя┐п╪п╣п╫я┌я√п╡ п╢п╩я▐ %s"
 
 #: ../src/main.c:683
 #, c-format
 msgid "bad value for visualid: \"%s\""
-msgstr "помилкове значення для visualid: \"%s\""
+msgstr "п©п╬п╪п╦п╩п╨п╬п╡п╣ п╥п╫п╟я┤п╣п╫п╫я▐ п╢п╩я▐ visualid: \"%s\""
 
 #
 #: ../src/main.c:707
 #, c-format
 msgid "%s: invalid argument '%s'\n"
-msgstr "%s: неправильний аргумент '%s'\n"
+msgstr "%s: п╫п╣п©я─п╟п╡п╦п╩я▄п╫п╦п╧ п╟я─пЁя┐п╪п╣п╫я┌ '%s'\n"
 
 #: ../src/main.c:708
 #, c-format
 msgid "Try '%s --help' for more information\n"
-msgstr "Спробуйте '%s --help' для отримання додатково╖ ╕нформац╕╖\n"
+msgstr "п║п©я─п╬п╠я┐п╧я┌п╣ '%s --help' п╢п╩я▐ п╬я┌я─п╦п╪п╟п╫п╫я▐ п╢п╬п╢п╟я┌п╨п╬п╡п╬я≈ я√п╫я└п╬я─п╪п╟я├я√я≈\n"
 
 #: ../src/main.c:736
 msgid "X server does not support locale"
-msgstr "X сервер не п╕дтриму╓ локал╕зац╕ю"
+msgstr "X я│п╣я─п╡п╣я─ п╫п╣ п©я√п╢я┌я─п╦п╪я┐я■ п╩п╬п╨п╟п╩я√п╥п╟я├я√я▌"
 
 #: ../src/main.c:740
 msgid "cannot set locale modifiers"
-msgstr "не вдалось встановити параметри локал╕зац╕╖"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╡я│я┌п╟п╫п╬п╡п╦я┌п╦ п©п╟я─п╟п╪п╣я┌я─п╦ п╩п╬п╨п╟п╩я√п╥п╟я├я√я≈"
 
 #: ../src/main.c:756
 #, c-format
 msgid "could not open display \"%s\""
-msgstr "не вдалось в╕дкрити дисплей \"%s\""
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╡я√п╢п╨я─п╦я┌п╦ п╢п╦я│п©п╩п╣п╧ \"%s\""
 
 #
 #: ../src/menu.c:1255
 msgid "could not grab keyboard"
-msgstr "не вдалось захопити клав╕атуру"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╟я┘п╬п©п╦я┌п╦ п╨п╩п╟п╡я√п╟я┌я┐я─я┐"
 
 #: ../src/menureader.c:264 ../src/rootmenu.c:733
 #, c-format
 msgid "%s:could not stat menu"
-msgstr "%s:не вдалось отримати меню"
+msgstr "%s:п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╬я┌я─п╦п╪п╟я┌п╦ п╪п╣п╫я▌"
 
 #: ../src/menureader.c:341 ../src/menureader.c:380
 #, c-format
 msgid "could not stat() menu file '%s'"
-msgstr "не вдалось отримати файл меню '%s'"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╬я┌я─п╦п╪п╟я┌п╦ я└п╟п╧п╩ п╪п╣п╫я▌ '%s'"
 
 #: ../src/menureader.c:416
 #, c-format
 msgid "could not find menu file '%s' referenced in WMRootMenu"
-msgstr "не вдалось знайти файл меню '%s' вказаний в WMRootMenu"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╫п╟п╧я┌п╦ я└п╟п╧п╩ п╪п╣п╫я▌ '%s' п╡п╨п╟п╥п╟п╫п╦п╧ п╡ WMRootMenu"
 
 #: ../src/menureader.c:423
 #, c-format
 msgid "could not find any usable menu files. Please check '%s'"
-msgstr "не вдалось знайти файл╕в меню. Будь ласка, перев╕рте '%s'"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╫п╟п╧я┌п╦ я└п╟п╧п╩я√п╡ п╪п╣п╫я▌. п▒я┐п╢я▄ п╩п╟я│п╨п╟, п©п╣я─п╣п╡я√я─я┌п╣ '%s'"
 
 #: ../src/menureader.c:438 ../src/rootmenu.c:1667
 #, c-format
@@ -1046,8 +1046,8 @@ msgid ""
 "using default menu file \"%s\" as the menu referenced in WMRootMenu could "
 "not be found "
 msgstr ""
-"використову╓ться меню за умовчанням \"%s\", тому що меню, вказане в файл╕ "
-"WMRootMenu, не вдалось знайти "
+"п╡п╦п╨п╬я─п╦я│я┌п╬п╡я┐я■я┌я▄я│я▐ п╪п╣п╫я▌ п╥п╟ я┐п╪п╬п╡я┤п╟п╫п╫я▐п╪ \"%s\", я┌п╬п╪я┐ я┴п╬ п╪п╣п╫я▌, п╡п╨п╟п╥п╟п╫п╣ п╡ я└п╟п╧п╩я√ "
+"WMRootMenu, п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╫п╟п╧я┌п╦ "
 
 #: ../src/menureader.c:457
 #, c-format
@@ -1056,317 +1056,317 @@ msgid ""
 "It should either be a property list menu or the path to the file, enclosed "
 "in \"."
 msgstr ""
-"некоректна ╕нформац╕я в файл╕ меню '%s'.\n"
-"Це ма╓ бути або меню в формат╕ property list, або шлях до файлу, взятий "
-"в \"."
+"п╫п╣п╨п╬я─п╣п╨я┌п╫п╟ я√п╫я└п╬я─п╪п╟я├я√я▐ п╡ я└п╟п╧п╩я√ п╪п╣п╫я▌ '%s'.\n"
+"п╕п╣ п╪п╟я■ п╠я┐я┌п╦ п╟п╠п╬ п╪п╣п╫я▌ п╡ я└п╬я─п╪п╟я┌я√ property list, п╟п╠п╬ я┬п╩я▐я┘ п╢п╬ я└п╟п╧п╩я┐, п╡п╥я▐я┌п╦п╧ п╡ \"."
 
 #: ../src/misc.c:71
 #, c-format
 msgid "could not define value for %s for cpp"
-msgstr "не вдалось визначити значення для %s для cpp"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╡п╦п╥п╫п╟я┤п╦я┌п╦ п╥п╫п╟я┤п╣п╫п╫я▐ п╢п╩я▐ %s п╢п╩я▐ cpp"
 
 #: ../src/misc.c:101
 #, c-format
 msgid "could not get password entry for UID %i"
-msgstr "не вдалось отримати ╕нформац╕ю про користувача для UID %i"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╬я┌я─п╦п╪п╟я┌п╦ я√п╫я└п╬я─п╪п╟я├я√я▌ п©я─п╬ п╨п╬я─п╦я│я┌я┐п╡п╟я┤п╟ п╢п╩я▐ UID %i"
 
 #: ../src/misc.c:126
 #, c-format
 msgid "your machine is misconfigured. HOSTNAME is set to %s"
-msgstr "Ваша система погано зконф╕гурована. Зм╕нна HOSTNAME встановлена в %s"
+msgstr "п▓п╟я┬п╟ я│п╦я│я┌п╣п╪п╟ п©п╬пЁп╟п╫п╬ п╥п╨п╬п╫я└я√пЁя┐я─п╬п╡п╟п╫п╟. п≈п╪я√п╫п╫п╟ HOSTNAME п╡я│я┌п╟п╫п╬п╡п╩п╣п╫п╟ п╡ %s"
 
 #: ../src/misc.c:132
 #, c-format
 msgid "your machine is misconfigured. HOST is set to %s"
-msgstr "Ваша система погано зконф╕гурована. Зм╕нна HOST встановлена в %s"
+msgstr "п▓п╟я┬п╟ я│п╦я│я┌п╣п╪п╟ п©п╬пЁп╟п╫п╬ п╥п╨п╬п╫я└я√пЁя┐я─п╬п╡п╟п╫п╟. п≈п╪я√п╫п╫п╟ HOST п╡я│я┌п╟п╫п╬п╡п╩п╣п╫п╟ п╡ %s"
 
 #: ../src/misc.c:630
 msgid "Program Arguments"
-msgstr "Аргументи програми"
+msgstr "п░я─пЁя┐п╪п╣п╫я┌п╦ п©я─п╬пЁя─п╟п╪п╦"
 
 #: ../src/misc.c:631
 msgid "Enter command arguments:"
-msgstr "Введ╕ть аргументи команди:"
+msgstr "п▓п╡п╣п╢я√я┌я▄ п╟я─пЁя┐п╪п╣п╫я┌п╦ п╨п╬п╪п╟п╫п╢п╦:"
 
 #: ../src/misc.c:724
 msgid "unable to get dropped data from DND drop"
-msgstr "не вдалось отримати в╕д DND drop перетягнут╕ дан╕"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╬я┌я─п╦п╪п╟я┌п╦ п╡я√п╢ DND drop п©п╣я─п╣я┌я▐пЁп╫я┐я┌я√ п╢п╟п╫я√"
 
 #: ../src/misc.c:732
 msgid "error getting dropped data from DND drop"
-msgstr "помилка при отриманн╕ даних в╕д DND drop"
+msgstr "п©п╬п╪п╦п╩п╨п╟ п©я─п╦ п╬я┌я─п╦п╪п╟п╫п╫я√ п╢п╟п╫п╦я┘ п╡я√п╢ DND drop"
 
 #: ../src/misc.c:738
 msgid "out of memory while getting data from DND drop"
-msgstr "вичерпана пам'ять при отриманн╕ даних в╕д DND drop"
+msgstr "п╡п╦я┤п╣я─п©п╟п╫п╟ п©п╟п╪'я▐я┌я▄ п©я─п╦ п╬я┌я─п╦п╪п╟п╫п╫я√ п╢п╟п╫п╦я┘ п╡я√п╢ DND drop"
 
 #: ../src/misc.c:783 ../src/misc.c:923
 #, c-format
 msgid "out of memory during expansion of \"%s\""
-msgstr "вичерпана пам'ять п╕д час розширення \"%s\""
+msgstr "п╡п╦я┤п╣я─п©п╟п╫п╟ п©п╟п╪'я▐я┌я▄ п©я√п╢ я┤п╟я│ я─п╬п╥я┬п╦я─п╣п╫п╫я▐ \"%s\""
 
 #: ../src/misc.c:837
 msgid "out of memory during expansion of \"%w\""
-msgstr "вичерпана пам'ять п╕д час розширення \"%w\""
+msgstr "п╡п╦я┤п╣я─п©п╟п╫п╟ п©п╟п╪'я▐я┌я▄ п©я√п╢ я┤п╟я│ я─п╬п╥я┬п╦я─п╣п╫п╫я▐ \"%w\""
 
 #: ../src/misc.c:855
 msgid "out of memory during expansion of \"%W\""
-msgstr "вичерпана пам'ять п╕д час розширення \"%W\""
+msgstr "п╡п╦я┤п╣я─п©п╟п╫п╟ п©п╟п╪'я▐я┌я▄ п©я√п╢ я┤п╟я│ я─п╬п╥я┬п╦я─п╣п╫п╫я▐ \"%W\""
 
 #: ../src/misc.c:871
 msgid "out of memory during expansion of \"%a\""
-msgstr "вичерпана пам'ять п╕д час розширення \"%a\""
+msgstr "п╡п╦я┤п╣я─п©п╟п╫п╟ п©п╟п╪'я▐я┌я▄ п©я√п╢ я┤п╟я│ я─п╬п╥я┬п╦я─п╣п╫п╫я▐ \"%a\""
 
 #: ../src/misc.c:902
 #, c-format
 msgid "out of memory during expansion of \"%d\""
-msgstr "вичерпана пам'ять п╕д час розширення \"%d\""
+msgstr "п╡п╦я┤п╣я─п©п╟п╫п╟ п©п╟п╪'я▐я┌я▄ п©я√п╢ я┤п╟я│ я─п╬п╥я┬п╦я─п╣п╫п╫я▐ \"%d\""
 
 #: ../src/misc.c:916
 msgid "selection not available"
-msgstr "недоступно вид╕лення"
+msgstr "п╫п╣п╢п╬я│я┌я┐п©п╫п╬ п╡п╦п╢я√п╩п╣п╫п╫я▐"
 
 #: ../src/misc.c:972 ../src/misc.c:978
 #, c-format
 msgid "bad window name value in %s state info"
-msgstr "помилкове значення ╕мен╕ в╕кна в ╕нформац╕╖ про стан для %s"
+msgstr "п©п╬п╪п╦п╩п╨п╬п╡п╣ п╥п╫п╟я┤п╣п╫п╫я▐ я√п╪п╣п╫я√ п╡я√п╨п╫п╟ п╡ я√п╫я└п╬я─п╪п╟я├я√я≈ п©я─п╬ я│я┌п╟п╫ п╢п╩я▐ %s"
 
 #: ../src/misc.c:1235
 msgid "could not send message to background image helper"
-msgstr "не вдалось послати пов╕домлення програм╕ фонового зображення"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п©п╬я│п╩п╟я┌п╦ п©п╬п╡я√п╢п╬п╪п╩п╣п╫п╫я▐ п©я─п╬пЁя─п╟п╪я√ я└п╬п╫п╬п╡п╬пЁп╬ п╥п╬п╠я─п╟п╤п╣п╫п╫я▐"
 
 #: ../src/pixmap.c:235
 #, c-format
 msgid "could not load mask bitmap file \"%s\". Won't use mask"
 msgstr ""
-"не вдалось завантажити растровий файл маски \"%s\". Маска не буде використана."
+"п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╟п╡п╟п╫я┌п╟п╤п╦я┌п╦ я─п╟я│я┌я─п╬п╡п╦п╧ я└п╟п╧п╩ п╪п╟я│п╨п╦ \"%s\". п°п╟я│п╨п╟ п╫п╣ п╠я┐п╢п╣ "
+"п╡п╦п╨п╬я─п╦я│я┌п╟п╫п╟."
 
 #: ../src/resources.c:44
 #, c-format
 msgid "could not parse color \"%s\""
-msgstr "не вдалось роз╕брати кол╕р \"%s\""
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ я─п╬п╥я√п╠я─п╟я┌п╦ п╨п╬п╩я√я─ \"%s\""
 
 #: ../src/resources.c:48
 #, c-format
 msgid "could not allocate color \"%s\""
-msgstr "не вдалось зарезервувати кол╕р \"%s\""
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╟я─п╣п╥п╣я─п╡я┐п╡п╟я┌п╦ п╨п╬п╩я√я─ \"%s\""
 
 #: ../src/rootmenu.c:196 ../src/rootmenu.c:198
 msgid "Exit"
-msgstr "Вих╕д"
+msgstr "п▓п╦я┘я√п╢"
 
 #: ../src/rootmenu.c:197
 msgid "Exit window manager?"
-msgstr "Вийти з менеджера в╕кон?"
+msgstr "п▓п╦п╧я┌п╦ п╥ п╪п╣п╫п╣п╢п╤п╣я─п╟ п╡я√п╨п╬п╫?"
 
 #: ../src/rootmenu.c:245
 msgid "Close X session"
-msgstr "Завершити сеанс роботи"
+msgstr "п≈п╟п╡п╣я─я┬п╦я┌п╦ я│п╣п╟п╫я│ я─п╬п╠п╬я┌п╦"
 
 #: ../src/rootmenu.c:246
 msgid ""
 "Close Window System session?\n"
 "Kill might close applications with unsaved data."
 msgstr ""
-"Закрити сеанс В╕конно╖ Системи?\n"
-"Це може завершити програми з незбереженими даними."
+"п≈п╟п╨я─п╦я┌п╦ я│п╣п╟п╫я│ п▓я√п╨п╬п╫п╫п╬я≈ п║п╦я│я┌п╣п╪п╦?\n"
+"п╕п╣ п╪п╬п╤п╣ п╥п╟п╡п╣я─я┬п╦я┌п╦ п©я─п╬пЁя─п╟п╪п╦ п╥ п╫п╣п╥п╠п╣я─п╣п╤п╣п╫п╦п╪п╦ п╢п╟п╫п╦п╪п╦."
 
 #: ../src/rootmenu.c:261
 msgid "Kill X session"
-msgstr "Авар╕йне завершення сеансу роботи"
+msgstr "п░п╡п╟я─я√п╧п╫п╣ п╥п╟п╡п╣я─я┬п╣п╫п╫я▐ я│п╣п╟п╫я│я┐ я─п╬п╠п╬я┌п╦"
 
 #: ../src/rootmenu.c:262
 msgid ""
 "Kill Window System session?\n"
 "(all applications will be closed)"
 msgstr ""
-"Закрити сеанс В╕конно╖ Системи?\n"
-"(вс╕ програми будуть завершен╕)"
+"п≈п╟п╨я─п╦я┌п╦ я│п╣п╟п╫я│ п▓я√п╨п╬п╫п╫п╬я≈ п║п╦я│я┌п╣п╪п╦?\n"
+"(п╡я│я√ п©я─п╬пЁя─п╟п╪п╦ п╠я┐п╢я┐я┌я▄ п╥п╟п╡п╣я─я┬п╣п╫я√)"
 
 #: ../src/rootmenu.c:539
 #, c-format
 msgid "%s:invalid kbd shortcut specification \"%s\" for entry %s"
-msgstr "%s:помилкове задання комб╕нац╕╖ клав╕ш \"%s\" для пункту %s"
+msgstr "%s:п©п╬п╪п╦п╩п╨п╬п╡п╣ п╥п╟п╢п╟п╫п╫я▐ п╨п╬п╪п╠я√п╫п╟я├я√я≈ п╨п╩п╟п╡я√я┬ \"%s\" п╢п╩я▐ п©я┐п╫п╨я┌я┐ %s"
 
 #: ../src/rootmenu.c:547
 #, c-format
 msgid "%s:invalid key in shortcut \"%s\" for entry %s"
-msgstr "%s:помилкова клав╕ша в комб╕нац╕╖ \"%s\" для пункту %s"
+msgstr "%s:п©п╬п╪п╦п╩п╨п╬п╡п╟ п╨п╩п╟п╡я√я┬п╟ п╡ п╨п╬п╪п╠я√п╫п╟я├я√я≈ \"%s\" п╢п╩я▐ п©я┐п╫п╨я┌я┐ %s"
 
 #: ../src/rootmenu.c:600
 #, c-format
 msgid "%s: unmatched '\"' in menu file"
-msgstr "%s: непарна '\"' в файл╕ меню"
+msgstr "%s: п╫п╣п©п╟я─п╫п╟ '\"' п╡ я└п╟п╧п╩я√ п╪п╣п╫я▌"
 
 #: ../src/rootmenu.c:650
 #, c-format
 msgid "%s: missing command"
-msgstr "%s: в╕дсутня команда"
+msgstr "%s: п╡я√п╢я│я┐я┌п╫я▐ п╨п╬п╪п╟п╫п╢п╟"
 
 #: ../src/rootmenu.c:682
 #, c-format
 msgid "invalid OPEN_MENU specification: %s"
-msgstr "помилкова специф╕кац╕я OPEN_MENU: %s"
+msgstr "п©п╬п╪п╦п╩п╨п╬п╡п╟ я│п©п╣я├п╦я└я√п╨п╟я├я√я▐ OPEN_MENU: %s"
 
 #: ../src/rootmenu.c:741
 #, c-format
 msgid "%s:could not stat menu:%s"
-msgstr "%s:не вдалось отримати меню:%s"
+msgstr "%s:п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╬я┌я─п╦п╪п╟я┌п╦ п╪п╣п╫я▌:%s"
 
 #: ../src/rootmenu.c:759
 #, c-format
 msgid "too many parameters in OPEN_MENU: %s"
-msgstr "надто багато параметр╕в в OPEN_MENU: %s"
+msgstr "п╫п╟п╢я┌п╬ п╠п╟пЁп╟я┌п╬ п©п╟я─п╟п╪п╣я┌я─я√п╡ п╡ OPEN_MENU: %s"
 
 #: ../src/rootmenu.c:803
 msgid ""
 "There are more than one WORKSPACE_MENU commands in the applications menu. "
 "Only one is allowed."
 msgstr ""
-"В головному меню вказано б╕льше одн╕╓╖ команди WORKSPACE_MENU. Дозволена "
-"лише одна"
+"п▓ пЁп╬п╩п╬п╡п╫п╬п╪я┐ п╪п╣п╫я▌ п╡п╨п╟п╥п╟п╫п╬ п╠я√п╩я▄я┬п╣ п╬п╢п╫я√я■я≈ п╨п╬п╪п╟п╫п╢п╦ WORKSPACE_MENU. п■п╬п╥п╡п╬п╩п╣п╫п╟ "
+"п╩п╦я┬п╣ п╬п╢п╫п╟"
 
 #: ../src/rootmenu.c:837
 msgid ""
 "There are more than one WINDOWS_MENU commands in the applications menu. Only "
 "one is allowed."
 msgstr ""
-"В головному меню вказано б╕льше одн╕╓╖ команди WINDOWS_MENU. Дозволена "
-"лише одна"
+"п▓ пЁп╬п╩п╬п╡п╫п╬п╪я┐ п╪п╣п╫я▌ п╡п╨п╟п╥п╟п╫п╬ п╠я√п╩я▄я┬п╣ п╬п╢п╫я√я■я≈ п╨п╬п╪п╟п╫п╢п╦ WINDOWS_MENU. п■п╬п╥п╡п╬п╩п╣п╫п╟ п╩п╦я┬п╣ "
+"п╬п╢п╫п╟"
 
 #: ../src/rootmenu.c:842
 msgid "Window List"
-msgstr "Список в╕кон"
+msgstr "п║п©п╦я│п╬п╨ п╡я√п╨п╬п╫"
 
 #: ../src/rootmenu.c:871 ../src/rootmenu.c:889 ../src/rootmenu.c:899
 #, c-format
 msgid "%s:missing parameter for menu command \"%s\""
-msgstr "%s:в╕дсутн╕й параметр для команди меню \"%s\""
+msgstr "%s:п╡я√п╢я│я┐я┌п╫я√п╧ п©п╟я─п╟п╪п╣я┌я─ п╢п╩я▐ п╨п╬п╪п╟п╫п╢п╦ п╪п╣п╫я▌ \"%s\""
 
 #: ../src/rootmenu.c:967
 #, c-format
 msgid "%s:unknown command \"%s\" in menu config."
-msgstr "%s:нев╕дома команда \"%s\" в конф╕гурац╕╖ меню"
+msgstr "%s:п╫п╣п╡я√п╢п╬п╪п╟ п╨п╬п╪п╟п╫п╢п╟ \"%s\" п╡ п╨п╬п╫я└я√пЁя┐я─п╟я├я√я≈ п╪п╣п╫я▌"
 
 #: ../src/rootmenu.c:975
 #, c-format
 msgid "%s:can't add shortcut for entry \"%s\""
-msgstr "%s:не вдалось додати комб╕нац╕ю клав╕ш для команди \"%s\""
+msgstr "%s:п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╢п╬п╢п╟я┌п╦ п╨п╬п╪п╠я√п╫п╟я├я√я▌ п╨п╩п╟п╡я√я┬ п╢п╩я▐ п╨п╬п╪п╟п╫п╢п╦ \"%s\""
 
 #: ../src/rootmenu.c:1112
 #, c-format
 msgid "%s:maximal line size exceeded in menu config: %s"
-msgstr "%s:перевищено максимальный розм╕р рядка в конф╕гурац╕╖ меню: %s"
+msgstr "%s:п©п╣я─п╣п╡п╦я┴п╣п╫п╬ п╪п╟п╨я│п╦п╪п╟п╩я▄п╫я▀п╧ я─п╬п╥п╪я√я─ я─я▐п╢п╨п╟ п╡ п╨п╬п╫я└я√пЁя┐я─п╟я├я√я≈ п╪п╣п╫я▌: %s"
 
 #: ../src/rootmenu.c:1134 ../src/rootmenu.c:1227 ../src/rootmenu.c:1329
 #, c-format
 msgid "%s:missing command in menu config: %s"
-msgstr "%s:в╕дсутня команда в конф╕гурац╕╖ меню: %s"
+msgstr "%s:п╡я√п╢я│я┐я┌п╫я▐ п╨п╬п╪п╟п╫п╢п╟ п╡ п╨п╬п╫я└я√пЁя┐я─п╟я├я√я≈ п╪п╣п╫я▌: %s"
 
 #: ../src/rootmenu.c:1164
 #, c-format
 msgid "%s:syntax error in menu file:END declaration missing"
-msgstr "%s:синтаксична помилка в файл╕ меню: в╕дсутня END"
+msgstr "%s:я│п╦п╫я┌п╟п╨я│п╦я┤п╫п╟ п©п╬п╪п╦п╩п╨п╟ п╡ я└п╟п╧п╩я√ п╪п╣п╫я▌: п╡я√п╢я│я┐я┌п╫я▐ END"
 
 #: ../src/rootmenu.c:1193 ../src/rootmenu.c:1293
 msgid "could not make arguments for menu file preprocessor"
-msgstr "не вдалось п╕дставити аргументи для препроцесора файлу меню"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п©я√п╢я│я┌п╟п╡п╦я┌п╦ п╟я─пЁя┐п╪п╣п╫я┌п╦ п╢п╩я▐ п©я─п╣п©я─п╬я├п╣я│п╬я─п╟ я└п╟п╧п╩я┐ п╪п╣п╫я▌"
 
 #: ../src/rootmenu.c:1200 ../src/rootmenu.c:1301
 #, c-format
 msgid "%s:could not open/preprocess menu file"
-msgstr "%s:не вдалось в╕дкрити/обробити файл меню"
+msgstr "%s:п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╡я√п╢п╨я─п╦я┌п╦/п╬п╠я─п╬п╠п╦я┌п╦ я└п╟п╧п╩ п╪п╣п╫я▌"
 
 #: ../src/rootmenu.c:1212 ../src/rootmenu.c:1314
 #, c-format
 msgid "%s:could not open menu file"
-msgstr "%s:не вдалось в╕дкрити файл меню"
+msgstr "%s:п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╡я√п╢п╨я─п╦я┌п╦ я└п╟п╧п╩ п╪п╣п╫я▌"
 
 #: ../src/rootmenu.c:1239
 #, c-format
 msgid "%s:invalid menu file. MENU command is missing"
-msgstr "%s:файл меню помилковий. В╕дсутня команда MENU"
+msgstr "%s:я└п╟п╧п╩ п╪п╣п╫я▌ п©п╬п╪п╦п╩п╨п╬п╡п╦п╧. п▓я√п╢я│я┐я┌п╫я▐ п╨п╬п╪п╟п╫п╢п╟ MENU"
 
 #: ../src/rootmenu.c:1248
 msgid "error reading preprocessed menu data"
-msgstr "помилка читання оброблених даних меню"
+msgstr "п©п╬п╪п╦п╩п╨п╟ я┤п╦я┌п╟п╫п╫я▐ п╬п╠я─п╬п╠п╩п╣п╫п╦я┘ п╢п╟п╫п╦я┘ п╪п╣п╫я▌"
 
 #: ../src/rootmenu.c:1341
 #, c-format
 msgid "%s:no title given for the root menu"
-msgstr "%s: не заданий заголовок кореневого меню"
+msgstr "%s: п╫п╣ п╥п╟п╢п╟п╫п╦п╧ п╥п╟пЁп╬п╩п╬п╡п╬п╨ п╨п╬я─п╣п╫п╣п╡п╬пЁп╬ п╪п╣п╫я▌"
 
 #: ../src/rootmenu.c:1432 ../src/rootmenu.c:1505 ../src/rootmenu.c:1546
 #, c-format
 msgid "out of memory while constructing directory menu %s"
-msgstr "вичерпана пам'ять при побудов╕ меню каталога %s"
+msgstr "п╡п╦я┤п╣я─п©п╟п╫п╟ п©п╟п╪'я▐я┌я▄ п©я─п╦ п©п╬п╠я┐п╢п╬п╡я√ п╪п╣п╫я▌ п╨п╟я┌п╟п╩п╬пЁп╟ %s"
 
 #: ../src/rootmenu.c:1442
 #, c-format
 msgid "%s:could not stat file \"%s\" in menu directory"
-msgstr "%s:не отриму╓ться файл \"%s\" в каталоз╕ меню"
+msgstr "%s:п╫п╣ п╬я┌я─п╦п╪я┐я■я┌я▄я│я▐ я└п╟п╧п╩ \"%s\" п╡ п╨п╟я┌п╟п╩п╬п╥я√ п╪п╣п╫я▌"
 
 #: ../src/rootmenu.c:1600
 msgid "Commands"
-msgstr "Команди"
+msgstr "п п╬п╪п╟п╫п╢п╦"
 
 #: ../src/rootmenu.c:1603
 msgid "Restart"
-msgstr "Перезапуск"
+msgstr "п÷п╣я─п╣п╥п╟п©я┐я│п╨"
 
 #: ../src/rootmenu.c:1604
 msgid "Exit..."
-msgstr "Вих╕д..."
+msgstr "п▓п╦я┘я√п╢..."
 
 #: ../src/rootmenu.c:1649
 #, c-format
 msgid "could not find menu file \"%s\" referenced in WMRootMenu"
-msgstr "не вдалось знайти файл меню \"%s\", вказаний в WMRootMenu"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╫п╟п╧я┌п╦ я└п╟п╧п╩ п╪п╣п╫я▌ \"%s\", п╡п╨п╟п╥п╟п╫п╦п╧ п╡ WMRootMenu"
 
 #: ../src/rootmenu.c:1656
 #, c-format
 msgid "could not access menu \"%s\" referenced in WMRootMenu"
-msgstr "не вдалось прочитати меню \"%s\", вказане в WMRootMenu"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п©я─п╬я┤п╦я┌п╟я┌п╦ п╪п╣п╫я▌ \"%s\", п╡п╨п╟п╥п╟п╫п╣ п╡ WMRootMenu"
 
 #: ../src/rootmenu.c:1690 ../src/rootmenu.c:1766
 #, c-format
 msgid "%s:format error in root menu configuration \"%s\""
-msgstr "%s:помилка формату в конф╕гурац╕╖ кореневого меню \"%s\""
+msgstr "%s:п©п╬п╪п╦п╩п╨п╟ я└п╬я─п╪п╟я┌я┐ п╡ п╨п╬п╫я└я√пЁя┐я─п╟я├я√я≈ п╨п╬я─п╣п╫п╣п╡п╬пЁп╬ п╪п╣п╫я▌ \"%s\""
 
 #: ../src/rootmenu.c:1854
 msgid ""
 "The applications menu could not be loaded. Look at the console output for a "
 "detailed description of the errors."
 msgstr ""
-"Не вдалось завантажити меню програм. Пов╕домлення на консол╕ системи м╕стять "
-"детальний опис проблеми."
+"п²п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╟п╡п╟п╫я┌п╟п╤п╦я┌п╦ п╪п╣п╫я▌ п©я─п╬пЁя─п╟п╪. п÷п╬п╡я√п╢п╬п╪п╩п╣п╫п╫я▐ п╫п╟ п╨п╬п╫я│п╬п╩я√ я│п╦я│я┌п╣п╪п╦ п╪я√я│я┌я▐я┌я▄ "
+"п╢п╣я┌п╟п╩я▄п╫п╦п╧ п╬п©п╦я│ п©я─п╬п╠п╩п╣п╪п╦."
 
 #: ../src/screen.c:740
 #, c-format
 msgid "could not initialize graphics library context: %s"
-msgstr "не вдалось ╕н╕ц╕ал╕зувати граф╕чну б╕бл╕отеку: %s"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ я√п╫я√я├я√п╟п╩я√п╥я┐п╡п╟я┌п╦ пЁя─п╟я└я√я┤п╫я┐ п╠я√п╠п╩я√п╬я┌п╣п╨я┐: %s"
 
 #: ../src/screen.c:771
 msgid "could not do initialization of WINGs widget set"
-msgstr "не вдалось ╕н╕ц╕ал╕зувати наб╕р в╕джет╕в WINGs"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ я√п╫я√я├я√п╟п╩я√п╥я┐п╡п╟я┌п╦ п╫п╟п╠я√я─ п╡я√п╢п╤п╣я┌я√п╡ WINGs"
 
 #: ../src/screen.c:1137
 #, c-format
 msgid "could not save session state in %s"
-msgstr "не вдалось зберегти стан сеансу в %s"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╠п╣я─п╣пЁя┌п╦ я│я┌п╟п╫ я│п╣п╟п╫я│я┐ п╡ %s"
 
 #: ../src/session.c:183 ../src/wdefaults.c:589 ../src/winspector.c:454
 #, c-format
 msgid "can't convert \"%s\" to boolean"
-msgstr "не вдалось перетворити \"%s\" в бул╕вське значення"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п©п╣я─п╣я┌п╡п╬я─п╦я┌п╦ \"%s\" п╡ п╠я┐п╩я√п╡я│я▄п╨п╣ п╥п╫п╟я┤п╣п╫п╫я▐"
 
 #: ../src/session.c:1023
 msgid "out of memory while saving session state"
-msgstr "вичерпана пам'ять при збереженн╕ стану сеансу"
+msgstr "п╡п╦я┤п╣я─п©п╟п╫п╟ п©п╟п╪'я▐я┌я▄ п©я─п╦ п╥п╠п╣я─п╣п╤п╣п╫п╫я√ я│я┌п╟п╫я┐ я│п╣п╟п╫я│я┐"
 
 #: ../src/session.c:1106
 msgid "end of memory while saving session state"
-msgstr "вичерпана пам'ять при збереженн╕ стану сеансу"
+msgstr "п╡п╦я┤п╣я─п©п╟п╫п╟ п©п╟п╪'я▐я┌я▄ п©я─п╦ п╥п╠п╣я─п╣п╤п╣п╫п╫я√ я│я┌п╟п╫я┐ я│п╣п╟п╫я│я┐"
 
 #. This is not fatal but can mean the session manager exited.
 #. * If the session manager exited normally we would get a
@@ -1376,151 +1376,151 @@ msgstr "вичерпана пам'ять при збереженн╕ стану сеансу"
 #.
 #: ../src/session.c:1244
 msgid "connection to the session manager was lost"
-msgstr "втрачено з'╓днання з менеджером сеанс╕в"
+msgstr "п╡я┌я─п╟я┤п╣п╫п╬ п╥'я■п╢п╫п╟п╫п╫я▐ п╥ п╪п╣п╫п╣п╢п╤п╣я─п╬п╪ я│п╣п╟п╫я│я√п╡"
 
 #: ../src/stacking.c:79
 msgid "could not get window list!!"
-msgstr "не вдалось отримати список в╕кон!!"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╬я┌я─п╦п╪п╟я┌п╦ я│п©п╦я│п╬п╨ п╡я√п╨п╬п╫!!"
 
 #: ../src/startup.c:202
 #, c-format
 msgid "internal X error: %s\n"
-msgstr "внутр╕шня помилка X сервера: %s\n"
+msgstr "п╡п╫я┐я┌я─я√я┬п╫я▐ п©п╬п╪п╦п╩п╨п╟ X я│п╣я─п╡п╣я─п╟: %s\n"
 
 #: ../src/startup.c:260
 #, c-format
 msgid "got signal %i (%s) - restarting\n"
-msgstr "отримано сигнал %i (%s) -- перезапуск\n"
+msgstr "п╬я┌я─п╦п╪п╟п╫п╬ я│п╦пЁп╫п╟п╩ %i (%s) -- п©п╣я─п╣п╥п╟п©я┐я│п╨\n"
 
 #: ../src/startup.c:262
 #, c-format
 msgid "got signal %i - restarting\n"
-msgstr "отримано сигнал %i - перезапуск\n"
+msgstr "п╬я┌я─п╦п╪п╟п╫п╬ я│п╦пЁп╫п╟п╩ %i - п©п╣я─п╣п╥п╟п©я┐я│п╨\n"
 
 #: ../src/startup.c:272
 #, c-format
 msgid "got signal %i (%s) - rereading defaults\n"
-msgstr "отримано сигнал %i (%s) -- перечитування умовчань\n"
+msgstr "п╬я┌я─п╦п╪п╟п╫п╬ я│п╦пЁп╫п╟п╩ %i (%s) -- п©п╣я─п╣я┤п╦я┌я┐п╡п╟п╫п╫я▐ я┐п╪п╬п╡я┤п╟п╫я▄\n"
 
 #: ../src/startup.c:274
 #, c-format
 msgid "got signal %i - rereading defaults\n"
-msgstr "отримано сигнал %i - перечитування умовчань\n"
+msgstr "п╬я┌я─п╦п╪п╟п╫п╬ я│п╦пЁп╫п╟п╩ %i - п©п╣я─п╣я┤п╦я┌я┐п╡п╟п╫п╫я▐ я┐п╪п╬п╡я┤п╟п╫я▄\n"
 
 #: ../src/startup.c:284
 #, c-format
 msgid "got signal %i (%s) - exiting...\n"
-msgstr "отримано сигнал %i (%s) -- завершення роботи...\n"
+msgstr "п╬я┌я─п╦п╪п╟п╫п╬ я│п╦пЁп╫п╟п╩ %i (%s) -- п╥п╟п╡п╣я─я┬п╣п╫п╫я▐ я─п╬п╠п╬я┌п╦...\n"
 
 #: ../src/startup.c:286
 #, c-format
 msgid "got signal %i - exiting...\n"
-msgstr "отримано сигнал %i -- завершення роботи...\n"
+msgstr "п╬я┌я─п╦п╪п╟п╫п╬ я│п╦пЁп╫п╟п╩ %i -- п╥п╟п╡п╣я─я┬п╣п╫п╫я▐ я─п╬п╠п╬я┌п╦...\n"
 
 #: ../src/startup.c:329
 #, c-format
 msgid "got signal %i (%s)\n"
-msgstr "отримано сигнал %i (%s)\n"
+msgstr "п╬я┌я─п╦п╪п╟п╫п╬ я│п╦пЁп╫п╟п╩ %i (%s)\n"
 
 #: ../src/startup.c:331
 #, c-format
 msgid "got signal %i\n"
-msgstr "отримано сигнал %i\n"
+msgstr "п╬я┌я─п╦п╪п╟п╫п╬ я│п╦пЁп╫п╟п╩ %i\n"
 
 #: ../src/startup.c:342
 msgid ""
 "crashed while trying to do some post-crash cleanup. Aborting immediatelly."
 msgstr ""
-"критична помилка п╕д час в╕дновлення п╕сля збою. НЕГАЙНЕ завершення роботи."
+"п╨я─п╦я┌п╦я┤п╫п╟ п©п╬п╪п╦п╩п╨п╟ п©я√п╢ я┤п╟я│ п╡я√п╢п╫п╬п╡п╩п╣п╫п╫я▐ п©я√я│п╩я▐ п╥п╠п╬я▌. п²п∙п⌠п░п≥п²п∙ п╥п╟п╡п╣я─я┬п╣п╫п╫я▐ я─п╬п╠п╬я┌п╦."
 
 #. we try to restart Window Maker
 #: ../src/startup.c:406
 msgid "trying to restart Window Maker..."
-msgstr "спроба перезапустити Window Maker..."
+msgstr "я│п©я─п╬п╠п╟ п©п╣я─п╣п╥п╟п©я┐я│я┌п╦я┌п╦ Window Maker..."
 
 #: ../src/startup.c:411
 msgid "trying to start alternate window manager..."
-msgstr "спроба запуску альтернативного менеджера в╕кон..."
+msgstr "я│п©я─п╬п╠п╟ п╥п╟п©я┐я│п╨я┐ п╟п╩я▄я┌п╣я─п╫п╟я┌п╦п╡п╫п╬пЁп╬ п╪п╣п╫п╣п╢п╤п╣я─п╟ п╡я√п╨п╬п╫..."
 
 #: ../src/startup.c:417
 msgid "failed to start alternate window manager. Aborting."
-msgstr "не вдалось запустити альтернативний менеджер в╕кон. Завершення."
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╟п©я┐я│я┌п╦я┌п╦ п╟п╩я▄я┌п╣я─п╫п╟я┌п╦п╡п╫п╦п╧ п╪п╣п╫п╣п╢п╤п╣я─ п╡я√п╨п╬п╫. п≈п╟п╡п╣я─я┬п╣п╫п╫я▐."
 
 #: ../src/startup.c:419
 msgid ""
 "a fatal error has occured, probably due to a bug. Please fill the included "
 "BUGFORM and report it."
 msgstr ""
-"виникла критична помилка. Можливо, це результат помилки в програм╕. Будь "
-"ласка, заповн╕ть форму BUGFORM ╕ в╕дправте автору."
+"п╡п╦п╫п╦п╨п╩п╟ п╨я─п╦я┌п╦я┤п╫п╟ п©п╬п╪п╦п╩п╨п╟. п°п╬п╤п╩п╦п╡п╬, я├п╣ я─п╣п╥я┐п╩я▄я┌п╟я┌ п©п╬п╪п╦п╩п╨п╦ п╡ п©я─п╬пЁя─п╟п╪я√. п▒я┐п╢я▄ "
+"п╩п╟я│п╨п╟, п╥п╟п©п╬п╡п╫я√я┌я▄ я└п╬я─п╪я┐ BUGFORM я√ п╡я√п╢п©я─п╟п╡я┌п╣ п╟п╡я┌п╬я─я┐."
 
 #: ../src/startup.c:894
 #, c-format
 msgid "icon size is configured to %i, but it's too small. Using 16, instead\n"
-msgstr "розм╕р ╕конки встановлено в %i, що надто мало. Використову╓ться 16.\n"
+msgstr "я─п╬п╥п╪я√я─ я√п╨п╬п╫п╨п╦ п╡я│я┌п╟п╫п╬п╡п╩п╣п╫п╬ п╡ %i, я┴п╬ п╫п╟п╢я┌п╬ п╪п╟п╩п╬. п▓п╦п╨п╬я─п╦я│я┌п╬п╡я┐я■я┌я▄я│я▐ 16.\n"
 
 #: ../src/startup.c:922
 msgid "XKB is not supported. KbdModeLock is automatically disabled."
-msgstr "XKB не п╕дтриму╓ться. KbdModeLock автоматично заборонено."
+msgstr "XKB п╫п╣ п©я√п╢я┌я─п╦п╪я┐я■я┌я▄я│я▐. KbdModeLock п╟п╡я┌п╬п╪п╟я┌п╦я┤п╫п╬ п╥п╟п╠п╬я─п╬п╫п╣п╫п╬."
 
 #: ../src/startup.c:941
 msgid "it seems that there is already a window manager running"
-msgstr "схоже, що вже працю╓ ╕нший менеджер в╕кон"
+msgstr "я│я┘п╬п╤п╣, я┴п╬ п╡п╤п╣ п©я─п╟я├я▌я■ я√п╫я┬п╦п╧ п╪п╣п╫п╣п╢п╤п╣я─ п╡я√п╨п╬п╫"
 
 #: ../src/startup.c:947
 #, c-format
 msgid "could not manage screen %i"
-msgstr "не вда╓ться керувати екраном %i"
+msgstr "п╫п╣ п╡п╢п╟я■я┌я▄я│я▐ п╨п╣я─я┐п╡п╟я┌п╦ п╣п╨я─п╟п╫п╬п╪ %i"
 
 #: ../src/startup.c:1015
 msgid "could not manage any screen"
-msgstr "не вда╓ться керувати жодним екраном"
+msgstr "п╫п╣ п╡п╢п╟я■я┌я▄я│я▐ п╨п╣я─я┐п╡п╟я┌п╦ п╤п╬п╢п╫п╦п╪ п╣п╨я─п╟п╫п╬п╪"
 
 #: ../src/switchmenu.c:137
 msgid "Windows"
-msgstr "В╕кна"
+msgstr "п▓я√п╨п╫п╟"
 
 #: ../src/texture.c:329 ../src/texture.c:371
 #, c-format
 msgid "image file \"%s\" used as texture could not be found."
-msgstr "файл зображення текстури \"%s\" не знайдено."
+msgstr "я└п╟п╧п╩ п╥п╬п╠я─п╟п╤п╣п╫п╫я▐ я┌п╣п╨я│я┌я┐я─п╦ \"%s\" п╫п╣ п╥п╫п╟п╧п╢п╣п╫п╬."
 
 #: ../src/texture.c:335 ../src/texture.c:377
 #, c-format
 msgid "could not load texture pixmap \"%s\":%s"
-msgstr "не вдалось завантажити растрове зображення з текстурою \"%s\":%s"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╟п╡п╟п╫я┌п╟п╤п╦я┌п╦ я─п╟я│я┌я─п╬п╡п╣ п╥п╬п╠я─п╟п╤п╣п╫п╫я▐ п╥ я┌п╣п╨я│я┌я┐я─п╬я▌ \"%s\":%s"
 
 #: ../src/texture.c:437
 #, c-format
 msgid "library \"%s\" cound not be opened."
-msgstr "не вдалось в╕дкрити б╕бл╕отеку \"%s\"."
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╡я√п╢п╨я─п╦я┌п╦ п╠я√п╠п╩я√п╬я┌п╣п╨я┐ \"%s\"."
 
 #: ../src/texture.c:446
 #, c-format
 msgid "function \"%s\" not found in library \"%s\""
-msgstr "функц╕я \"%s\" не знайдена в б╕бл╕отец╕ \"%s\""
+msgstr "я└я┐п╫п╨я├я√я▐ \"%s\" п╫п╣ п╥п╫п╟п╧п╢п╣п╫п╟ п╡ п╠я√п╠п╩я√п╬я┌п╣я├я√ \"%s\""
 
 #: ../src/texture.c:453
 msgid "function textures not supported on this system, sorry."
-msgstr "функц╕ональн╕ текстури не п╕дтримуються ц╕╓ю системою."
+msgstr "я└я┐п╫п╨я├я√п╬п╫п╟п╩я▄п╫я√ я┌п╣п╨я│я┌я┐я─п╦ п╫п╣ п©я√п╢я┌я─п╦п╪я┐я▌я┌я▄я│я▐ я├я√я■я▌ я│п╦я│я┌п╣п╪п╬я▌."
 
 #: ../src/texture.c:598
 msgid "could not allocate image buffer"
-msgstr "не вдалось вид╕лити буфер для зображення "
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╡п╦п╢я√п╩п╦я┌п╦ п╠я┐я└п╣я─ п╢п╩я▐ п╥п╬п╠я─п╟п╤п╣п╫п╫я▐ "
 
 #: ../src/wdefaults.c:437
 #, c-format
 msgid "could not find icon file \"%s\""
-msgstr "не вдалось знайти файл ╕конки \"%s\""
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ п╥п╫п╟п╧я┌п╦ я└п╟п╧п╩ я√п╨п╬п╫п╨п╦ \"%s\""
 
 #: ../src/window.c:2934 ../src/window.c:3073
 msgid ""
 "the NumLock, ScrollLock or similar key seems to be turned on.\n"
 "Turn it off or some mouse actions and keyboard shortcuts will not work."
 msgstr ""
-"Схоже, що NumLock, ScrollLock чи аналог╕чна клав╕ша ув╕мкнена.\n"
-"Деактивуйте ╖╖ або ж деяк╕ операц╕╖ мишою ╕ комб╕нац╕╖ клав╕ш не будуть "
-"працювати."
+"п║я┘п╬п╤п╣, я┴п╬ NumLock, ScrollLock я┤п╦ п╟п╫п╟п╩п╬пЁя√я┤п╫п╟ п╨п╩п╟п╡я√я┬п╟ я┐п╡я√п╪п╨п╫п╣п╫п╟.\n"
+"п■п╣п╟п╨я┌п╦п╡я┐п╧я┌п╣ я≈я≈ п╟п╠п╬ п╤ п╢п╣я▐п╨я√ п╬п©п╣я─п╟я├я√я≈ п╪п╦я┬п╬я▌ я√ п╨п╬п╪п╠я√п╫п╟я├я√я≈ п╨п╩п╟п╡я√я┬ п╫п╣ п╠я┐п╢я┐я┌я▄ "
+"п©я─п╟я├я▌п╡п╟я┌п╦."
 
 #: ../src/winmenu.c:126
 msgid ""
@@ -1528,72 +1528,72 @@ msgid ""
 "Any unsaved changes will be lost.\n"
 "Please confirm."
 msgstr ""
-"Це примусово завершить програму.\n"
-"Вс╕ незбережен╕ зм╕ни будуть втрачен╕.\n"
-"Будь ласка, п╕дтверд╕ть."
+"п╕п╣ п©я─п╦п╪я┐я│п╬п╡п╬ п╥п╟п╡п╣я─я┬п╦я┌я▄ п©я─п╬пЁя─п╟п╪я┐.\n"
+"п▓я│я√ п╫п╣п╥п╠п╣я─п╣п╤п╣п╫я√ п╥п╪я√п╫п╦ п╠я┐п╢я┐я┌я▄ п╡я┌я─п╟я┤п╣п╫я√.\n"
+"п▒я┐п╢я▄ п╩п╟я│п╨п╟, п©я√п╢я┌п╡п╣я─п╢я√я┌я▄."
 
 #: ../src/winmenu.c:272 ../src/winmenu.c:281
 msgid "Set Shortcut"
-msgstr "Встановити комб╕нац╕ю клав╕ш"
+msgstr "п▓я│я┌п╟п╫п╬п╡п╦я┌п╦ п╨п╬п╪п╠я√п╫п╟я├я√я▌ п╨п╩п╟п╡я√я┬"
 
 #: ../src/winmenu.c:359 ../src/winmenu.c:404
 msgid "could not create submenu for window menu"
-msgstr "не вдалось створити п╕дменю для меню в╕кна"
+msgstr "п╫п╣ п╡п╢п╟п╩п╬я│я▄ я│я┌п╡п╬я─п╦я┌п╦ п©я√п╢п╪п╣п╫я▌ п╢п╩я▐ п╪п╣п╫я▌ п╡я√п╨п╫п╟"
 
 #: ../src/winmenu.c:408
 msgid "Keep on top"
-msgstr "Тримати над в╕кнами"
+msgstr "п╒я─п╦п╪п╟я┌п╦ п╫п╟п╢ п╡я√п╨п╫п╟п╪п╦"
 
 #: ../src/winmenu.c:413
 msgid "Keep at bottom"
-msgstr "Тримати п╕д в╕кнами"
+msgstr "п╒я─п╦п╪п╟я┌п╦ п©я√п╢ п╡я√п╨п╫п╟п╪п╦"
 
 #: ../src/winmenu.c:457 ../src/winmenu.c:600
 msgid "Shade"
-msgstr "Звернути в смужку"
+msgstr "п≈п╡п╣я─п╫я┐я┌п╦ п╡ я│п╪я┐п╤п╨я┐"
 
 #: ../src/winmenu.c:473
 msgid "Hide Others"
-msgstr "Приховати ╕нш╕"
+msgstr "п÷я─п╦я┘п╬п╡п╟я┌п╦ я√п╫я┬я√"
 
 #: ../src/winmenu.c:481
 msgid "Resize/Move"
-msgstr "Зм╕нити розм╕р/перем╕стити"
+msgstr "п≈п╪я√п╫п╦я┌п╦ я─п╬п╥п╪я√я─/п©п╣я─п╣п╪я√я│я┌п╦я┌п╦"
 
 #: ../src/winmenu.c:489
 msgid "Select"
-msgstr "Вибрати"
+msgstr "п▓п╦п╠я─п╟я┌п╦"
 
 #: ../src/winmenu.c:502
 msgid "Attributes..."
-msgstr "Атрибути..."
+msgstr "п░я┌я─п╦п╠я┐я┌п╦..."
 
 #: ../src/winmenu.c:504
 msgid "Options"
-msgstr "Опц╕╖"
+msgstr "п·п©я├я√я≈"
 
 #: ../src/winmenu.c:595
 msgid "Unshade"
-msgstr "Витягти ╕з смужки"
+msgstr "п▓п╦я┌я▐пЁя┌п╦ я√п╥ я│п╪я┐п╤п╨п╦"
 
 #: ../src/winspector.c:387
 #, c-format
 msgid "Could not find icon \"%s\" specified for this window"
-msgstr "Неможливо знайти ╕конку \"%s\", вказану для цього в╕кна"
+msgstr "п²п╣п╪п╬п╤п╩п╦п╡п╬ п╥п╫п╟п╧я┌п╦ я√п╨п╬п╫п╨я┐ \"%s\", п╡п╨п╟п╥п╟п╫я┐ п╢п╩я▐ я├я▄п╬пЁп╬ п╡я√п╨п╫п╟"
 
 #: ../src/winspector.c:404
 #, c-format
 msgid "Could not open specified icon \"%s\":%s"
-msgstr "Неможливо в╕дкрити вказаний файл ╕конки \"%s\":%s"
+msgstr "п²п╣п╪п╬п╤п╩п╦п╡п╬ п╡я√п╢п╨я─п╦я┌п╦ п╡п╨п╟п╥п╟п╫п╦п╧ я└п╟п╧п╩ я√п╨п╬п╫п╨п╦ \"%s\":%s"
 
 #: ../src/winspector.c:1123
 #, c-format
 msgid "Inspecting  %s.%s"
-msgstr "╤нспекту╓ться  %s.%s"
+msgstr "п├п╫я│п©п╣п╨я┌я┐я■я┌я▄я│я▐  %s.%s"
 
 #: ../src/winspector.c:1149
 msgid "Click in the window you wish to inspect."
-msgstr "Натисн╕ть на в╕кн╕, яке хочете про╕нспектувати."
+msgstr "п²п╟я┌п╦я│п╫я√я┌я▄ п╫п╟ п╡я√п╨п╫я√, я▐п╨п╣ я┘п╬я┤п╣я┌п╣ п©я─п╬я√п╫я│п©п╣п╨я┌я┐п╡п╟я┌п╦."
 
 #: ../src/winspector.c:1188
 msgid ""
@@ -1602,57 +1602,57 @@ msgid ""
 "property set to the above selected\n"
 "name, when saved."
 msgstr ""
-"При збереженн╕ конф╕гурац╕я буде застосована\n"
-"до вс╕х в╕кон, у яких WM_CLASS встановлено у\n"
-"вибране значення."
+"п÷я─п╦ п╥п╠п╣я─п╣п╤п╣п╫п╫я√ п╨п╬п╫я└я√пЁя┐я─п╟я├я√я▐ п╠я┐п╢п╣ п╥п╟я│я┌п╬я│п╬п╡п╟п╫п╟\n"
+"п╢п╬ п╡я│я√я┘ п╡я√п╨п╬п╫, я┐ я▐п╨п╦я┘ WM_CLASS п╡я│я┌п╟п╫п╬п╡п╩п╣п╫п╬ я┐\n"
+"п╡п╦п╠я─п╟п╫п╣ п╥п╫п╟я┤п╣п╫п╫я▐."
 
 #: ../src/winspector.c:1217
 msgid "Save"
-msgstr "Зберегти"
+msgstr "п≈п╠п╣я─п╣пЁя┌п╦"
 
 #: ../src/winspector.c:1225
 msgid "Apply"
-msgstr "Застосувати"
+msgstr "п≈п╟я│я┌п╬я│я┐п╡п╟я┌п╦"
 
 #: ../src/winspector.c:1231
 msgid "Reload"
-msgstr "Перечитати"
+msgstr "п÷п╣я─п╣я┤п╦я┌п╟я┌п╦"
 
 #: ../src/winspector.c:1240 ../src/winspector.c:1250
 msgid "Window Specification"
-msgstr "Специф╕кац╕я в╕кна"
+msgstr "п║п©п╣я├п╦я└я√п╨п╟я├я√я▐ п╡я√п╨п╫п╟"
 
 #: ../src/winspector.c:1241
 msgid "Window Attributes"
-msgstr "Атрибути в╕кна"
+msgstr "п░я┌я─п╦п╠я┐я┌п╦ п╡я√п╨п╫п╟"
 
 #: ../src/winspector.c:1242
 msgid "Advanced Options"
-msgstr "Додатков╕ опц╕╖"
+msgstr "п■п╬п╢п╟я┌п╨п╬п╡я√ п╬п©я├я√я≈"
 
 #: ../src/winspector.c:1243
 msgid "Icon and Initial Workspace"
-msgstr "╤конка ╕ початковий ст╕л"
+msgstr "п├п╨п╬п╫п╨п╟ я√ п©п╬я┤п╟я┌п╨п╬п╡п╦п╧ я│я┌я√п╩"
 
 #: ../src/winspector.c:1244
 msgid "Application Specific"
-msgstr "Властивост╕ програми"
+msgstr "п▓п╩п╟я│я┌п╦п╡п╬я│я┌я√ п©я─п╬пЁя─п╟п╪п╦"
 
 #: ../src/winspector.c:1258
 msgid "Defaults for all windows"
-msgstr "Умовчання для вс╕х в╕кон"
+msgstr "пёп╪п╬п╡я┤п╟п╫п╫я▐ п╢п╩я▐ п╡я│я√я┘ п╡я√п╨п╬п╫"
 
 #: ../src/winspector.c:1312
 msgid "Select window"
-msgstr "Вибер╕ть в╕кно"
+msgstr "п▓п╦п╠п╣я─я√я┌я▄ п╡я√п╨п╫п╬"
 
 #: ../src/winspector.c:1326
 msgid "Attributes"
-msgstr "Атрибути"
+msgstr "п░я┌я─п╦п╠я┐я┌п╦"
 
 #: ../src/winspector.c:1337
 msgid "Disable titlebar"
-msgstr "Прибрати шапку в╕кна"
+msgstr "п÷я─п╦п╠я─п╟я┌п╦ я┬п╟п©п╨я┐ п╡я√п╨п╫п╟"
 
 #: ../src/winspector.c:1339
 msgid ""
@@ -1662,95 +1662,95 @@ msgid ""
 "equivalent shortcut, if you changed the default\n"
 "settings)."
 msgstr ""
-"Прибрати смужку заголовка цього в╕кна.\n"
-"Для доступу до меню команд в╕кна при в╕дсутност╕\n"
-"його шапки, натисн╕ть Control+Esc (чи екв╕валентну\n"
-"комб╕нац╕ю, якщо Ви зм╕нили установки за\n"
-"умовчанням)."
+"п÷я─п╦п╠я─п╟я┌п╦ я│п╪я┐п╤п╨я┐ п╥п╟пЁп╬п╩п╬п╡п╨п╟ я├я▄п╬пЁп╬ п╡я√п╨п╫п╟.\n"
+"п■п╩я▐ п╢п╬я│я┌я┐п©я┐ п╢п╬ п╪п╣п╫я▌ п╨п╬п╪п╟п╫п╢ п╡я√п╨п╫п╟ п©я─п╦ п╡я√п╢я│я┐я┌п╫п╬я│я┌я√\n"
+"п╧п╬пЁп╬ я┬п╟п©п╨п╦, п╫п╟я┌п╦я│п╫я√я┌я▄ Control+Esc (я┤п╦ п╣п╨п╡я√п╡п╟п╩п╣п╫я┌п╫я┐\n"
+"п╨п╬п╪п╠я√п╫п╟я├я√я▌, я▐п╨я┴п╬ п▓п╦ п╥п╪я√п╫п╦п╩п╦ я┐я│я┌п╟п╫п╬п╡п╨п╦ п╥п╟\n"
+"я┐п╪п╬п╡я┤п╟п╫п╫я▐п╪)."
 
 #: ../src/winspector.c:1346
 msgid "Disable resizebar"
-msgstr "Прибрати смужку зм╕ни розм╕ру"
+msgstr "п÷я─п╦п╠я─п╟я┌п╦ я│п╪я┐п╤п╨я┐ п╥п╪я√п╫п╦ я─п╬п╥п╪я√я─я┐"
 
 #: ../src/winspector.c:1348
 msgid "Remove the resizebar of this window."
-msgstr "Прибрати смужку зм╕ни розм╕ру цього в╕кна."
+msgstr "п÷я─п╦п╠я─п╟я┌п╦ я│п╪я┐п╤п╨я┐ п╥п╪я√п╫п╦ я─п╬п╥п╪я√я─я┐ я├я▄п╬пЁп╬ п╡я√п╨п╫п╟."
 
 #: ../src/winspector.c:1351
 msgid "Disable close button"
-msgstr "Прибрати кнопку закриття"
+msgstr "п÷я─п╦п╠я─п╟я┌п╦ п╨п╫п╬п©п╨я┐ п╥п╟п╨я─п╦я┌я┌я▐"
 
 #: ../src/winspector.c:1353
 msgid "Remove the `close window' button of this window."
-msgstr "Прибрати кнопку закриття для цього в╕кна."
+msgstr "п÷я─п╦п╠я─п╟я┌п╦ п╨п╫п╬п©п╨я┐ п╥п╟п╨я─п╦я┌я┌я▐ п╢п╩я▐ я├я▄п╬пЁп╬ п╡я√п╨п╫п╟."
 
 #: ../src/winspector.c:1356
 msgid "Disable miniaturize button"
-msgstr "Прибрати кнопку м╕н╕м╕зац╕╖"
+msgstr "п÷я─п╦п╠я─п╟я┌п╦ п╨п╫п╬п©п╨я┐ п╪я√п╫я√п╪я√п╥п╟я├я√я≈"
 
 #: ../src/winspector.c:1358
 msgid "Remove the `miniaturize window' button of the window."
-msgstr "Прибрати кнопку м╕н╕м╕зац╕╖ для цього в╕кна."
+msgstr "п÷я─п╦п╠я─п╟я┌п╦ п╨п╫п╬п©п╨я┐ п╪я√п╫я√п╪я√п╥п╟я├я√я≈ п╢п╩я▐ я├я▄п╬пЁп╬ п╡я√п╨п╫п╟."
 
 #: ../src/winspector.c:1361
 msgid "Disable border"
-msgstr "Прибрати бордюр в╕кна"
+msgstr "п÷я─п╦п╠я─п╟я┌п╦ п╠п╬я─п╢я▌я─ п╡я√п╨п╫п╟"
 
 #: ../src/winspector.c:1363
 msgid "Remove the 1 pixel black border around the window."
-msgstr "Прибрати 1-п╕ксельний чорний бордюр навколо в╕кна."
+msgstr "п÷я─п╦п╠я─п╟я┌п╦ 1-п©я√п╨я│п╣п╩я▄п╫п╦п╧ я┤п╬я─п╫п╦п╧ п╠п╬я─п╢я▌я─ п╫п╟п╡п╨п╬п╩п╬ п╡я√п╨п╫п╟."
 
 #: ../src/winspector.c:1366
 msgid "Keep on top (floating)"
-msgstr "Завжди зверху (плаваюче)"
+msgstr "п≈п╟п╡п╤п╢п╦ п╥п╡п╣я─я┘я┐ (п©п╩п╟п╡п╟я▌я┤п╣)"
 
 #: ../src/winspector.c:1368
 msgid ""
 "Keep the window over other windows, not allowing\n"
 "them to cover it."
 msgstr ""
-"Утримувати в╕кно поверх ╕нших в╕кон, не дозволяючи\n"
-"╖м покривати це в╕кно."
+"пёя┌я─п╦п╪я┐п╡п╟я┌п╦ п╡я√п╨п╫п╬ п©п╬п╡п╣я─я┘ я√п╫я┬п╦я┘ п╡я√п╨п╬п╫, п╫п╣ п╢п╬п╥п╡п╬п╩я▐я▌я┤п╦\n"
+"я≈п╪ п©п╬п╨я─п╦п╡п╟я┌п╦ я├п╣ п╡я√п╨п╫п╬."
 
 #: ../src/winspector.c:1372
 msgid "Keep at bottom (sunken)"
-msgstr "Завжди знизу (втоплене)"
+msgstr "п≈п╟п╡п╤п╢п╦ п╥п╫п╦п╥я┐ (п╡я┌п╬п©п╩п╣п╫п╣)"
 
 #: ../src/winspector.c:1374
 msgid "Keep the window under all other windows."
-msgstr "Утримувати в╕кно покритим ╕ншими перекриваючими в╕кнами."
+msgstr "пёя┌я─п╦п╪я┐п╡п╟я┌п╦ п╡я√п╨п╫п╬ п©п╬п╨я─п╦я┌п╦п╪ я√п╫я┬п╦п╪п╦ п©п╣я─п╣п╨я─п╦п╡п╟я▌я┤п╦п╪п╦ п╡я√п╨п╫п╟п╪п╦."
 
 #: ../src/winspector.c:1379
 msgid "Make window present in all workspaces."
-msgstr "Зробити в╕кно присутн╕м на вс╕х робочих столах."
+msgstr "п≈я─п╬п╠п╦я┌п╦ п╡я√п╨п╫п╬ п©я─п╦я│я┐я┌п╫я√п╪ п╫п╟ п╡я│я√я┘ я─п╬п╠п╬я┤п╦я┘ я│я┌п╬п╩п╟я┘."
 
 #: ../src/winspector.c:1382
 msgid "Start miniaturized"
-msgstr "Запуск м╕н╕м╕зованим"
+msgstr "п≈п╟п©я┐я│п╨ п╪я√п╫я√п╪я√п╥п╬п╡п╟п╫п╦п╪"
 
 #: ../src/winspector.c:1384
 msgid ""
 "Make the window be automatically miniaturized when it's\n"
 "first shown."
 msgstr ""
-"Зробити в╕кно автоматично м╕н╕м╕зуючимся при\n"
-"початковому розм╕щенн╕."
+"п≈я─п╬п╠п╦я┌п╦ п╡я√п╨п╫п╬ п╟п╡я┌п╬п╪п╟я┌п╦я┤п╫п╬ п╪я√п╫я√п╪я√п╥я┐я▌я┤п╦п╪я│я▐ п©я─п╦\n"
+"п©п╬я┤п╟я┌п╨п╬п╡п╬п╪я┐ я─п╬п╥п╪я√я┴п╣п╫п╫я√."
 
 #: ../src/winspector.c:1388
 msgid "Start maximized"
-msgstr "Запуск максим╕зованим"
+msgstr "п≈п╟п©я┐я│п╨ п╪п╟п╨я│п╦п╪я√п╥п╬п╡п╟п╫п╦п╪"
 
 #: ../src/winspector.c:1390
 msgid ""
 "Make the window be automatically maximized when it's\n"
 "first shown."
 msgstr ""
-"Зробити в╕кно автоматично максим╕зуючимся при\n"
-"початковому розм╕щенн╕."
+"п≈я─п╬п╠п╦я┌п╦ п╡я√п╨п╫п╬ п╟п╡я┌п╬п╪п╟я┌п╦я┤п╫п╬ п╪п╟п╨я│п╦п╪я√п╥я┐я▌я┤п╦п╪я│я▐ п©я─п╦\n"
+"п©п╬я┤п╟я┌п╨п╬п╡п╬п╪я┐ я─п╬п╥п╪я√я┴п╣п╫п╫я√."
 
 #: ../src/winspector.c:1394
 msgid "Full screen maximization"
-msgstr "Максим╕зувати на весь экран"
+msgstr "п°п╟п╨я│п╦п╪я√п╥я┐п╡п╟я┌п╦ п╫п╟ п╡п╣я│я▄ я█п╨я─п╟п╫"
 
 #: ../src/winspector.c:1396
 msgid ""
@@ -1758,17 +1758,17 @@ msgid ""
 "maximized. The titlebar and resizebar will be moved\n"
 "to outside the screen."
 msgstr ""
-"Зробити це в╕кно займаючим увесь прост╕р екрану при\n"
-"максим╕зац╕╖. Смужки заголовку ╕ зм╕ни розм╕ру будуть\n"
-"зм╕щен╕ за меж╕ екрану."
+"п≈я─п╬п╠п╦я┌п╦ я├п╣ п╡я√п╨п╫п╬ п╥п╟п╧п╪п╟я▌я┤п╦п╪ я┐п╡п╣я│я▄ п©я─п╬я│я┌я√я─ п╣п╨я─п╟п╫я┐ п©я─п╦\n"
+"п╪п╟п╨я│п╦п╪я√п╥п╟я├я√я≈. п║п╪я┐п╤п╨п╦ п╥п╟пЁп╬п╩п╬п╡п╨я┐ я√ п╥п╪я√п╫п╦ я─п╬п╥п╪я√я─я┐ п╠я┐п╢я┐я┌я▄\n"
+"п╥п╪я√я┴п╣п╫я√ п╥п╟ п╪п╣п╤я√ п╣п╨я─п╟п╫я┐."
 
 #: ../src/winspector.c:1413
 msgid "Advanced"
-msgstr "Додатково"
+msgstr "п■п╬п╢п╟я┌п╨п╬п╡п╬"
 
 #: ../src/winspector.c:1430
 msgid "Do not bind keyboard shortcuts"
-msgstr "Не прив'язувати комб╕нац╕╖ клав╕ш"
+msgstr "п²п╣ п©я─п╦п╡'я▐п╥я┐п╡п╟я┌п╦ п╨п╬п╪п╠я√п╫п╟я├я√я≈ п╨п╩п╟п╡я√я┬"
 
 #: ../src/winspector.c:1432
 msgid ""
@@ -1777,70 +1777,70 @@ msgid ""
 "window to receive all key combinations regardless\n"
 "of your shortcut configuration."
 msgstr ""
-"Не прив'язувати комб╕нац╕╖ клав╕ш Window Maker'а\n"
-"при отриманн╕ цим в╕кном фокусу вводу. Це дозволить\n"
-"в╕кну отримувати вс╕ комб╕нац╕╖ клав╕ш, незалежно\n"
-"в╕д конф╕гурац╕╖ ╖х прив'язки."
+"п²п╣ п©я─п╦п╡'я▐п╥я┐п╡п╟я┌п╦ п╨п╬п╪п╠я√п╫п╟я├я√я≈ п╨п╩п╟п╡я√я┬ Window Maker'п╟\n"
+"п©я─п╦ п╬я┌я─п╦п╪п╟п╫п╫я√ я├п╦п╪ п╡я√п╨п╫п╬п╪ я└п╬п╨я┐я│я┐ п╡п╡п╬п╢я┐. п╕п╣ п╢п╬п╥п╡п╬п╩п╦я┌я▄\n"
+"п╡я√п╨п╫я┐ п╬я┌я─п╦п╪я┐п╡п╟я┌п╦ п╡я│я√ п╨п╬п╪п╠я√п╫п╟я├я√я≈ п╨п╩п╟п╡я√я┬, п╫п╣п╥п╟п╩п╣п╤п╫п╬\n"
+"п╡я√п╢ п╨п╬п╫я└я√пЁя┐я─п╟я├я√я≈ я≈я┘ п©я─п╦п╡'я▐п╥п╨п╦."
 
 #: ../src/winspector.c:1438
 msgid "Do not bind mouse clicks"
-msgstr "Не прив'язувати натискання миш╕"
+msgstr "п²п╣ п©я─п╦п╡'я▐п╥я┐п╡п╟я┌п╦ п╫п╟я┌п╦я│п╨п╟п╫п╫я▐ п╪п╦я┬я√"
 
 #: ../src/winspector.c:1440
 msgid ""
 "Do not bind mouse actions, such as `Alt'+drag\n"
 "in the window (when alt is the modifier you haveconfigured)."
 msgstr ""
-"Не прив'язувати д╕╖ миш╕, так╕ як `Alt'+буксирування\n"
-"у в╕кн╕ (при встановленому модиф╕катор╕ `Alt')."
+"п²п╣ п©я─п╦п╡'я▐п╥я┐п╡п╟я┌п╦ п╢я√я≈ п╪п╦я┬я√, я┌п╟п╨я√ я▐п╨ `Alt'+п╠я┐п╨я│п╦я─я┐п╡п╟п╫п╫я▐\n"
+"я┐ п╡я√п╨п╫я√ (п©я─п╦ п╡я│я┌п╟п╫п╬п╡п╩п╣п╫п╬п╪я┐ п╪п╬п╢п╦я└я√п╨п╟я┌п╬я─я√ `Alt')."
 
 #: ../src/winspector.c:1445
 msgid "Do not show in the window list"
-msgstr "Не показувати в╕кно в списку в╕кон."
+msgstr "п²п╣ п©п╬п╨п╟п╥я┐п╡п╟я┌п╦ п╡я√п╨п╫п╬ п╡ я│п©п╦я│п╨я┐ п╡я√п╨п╬п╫."
 
 #: ../src/winspector.c:1447
 msgid "Do not list the window in the window list menu."
-msgstr "Не показувати це в╕кно в меню списку в╕кон."
+msgstr "п²п╣ п©п╬п╨п╟п╥я┐п╡п╟я┌п╦ я├п╣ п╡я√п╨п╫п╬ п╡ п╪п╣п╫я▌ я│п©п╦я│п╨я┐ п╡я√п╨п╬п╫."
 
 #: ../src/winspector.c:1450
 msgid "Do not let it take focus"
-msgstr "Не передавати фокус вводу"
+msgstr "п²п╣ п©п╣я─п╣п╢п╟п╡п╟я┌п╦ я└п╬п╨я┐я│ п╡п╡п╬п╢я┐"
 
 #: ../src/winspector.c:1452
 msgid ""
 "Do not let the window take keyboard focus when you\n"
 "click on it."
 msgstr ""
-"Не давати в╕кну отримувати фокус вводу з клав╕атури\n"
-"при натисканн╕ на ньому мишою."
+"п²п╣ п╢п╟п╡п╟я┌п╦ п╡я√п╨п╫я┐ п╬я┌я─п╦п╪я┐п╡п╟я┌п╦ я└п╬п╨я┐я│ п╡п╡п╬п╢я┐ п╥ п╨п╩п╟п╡я√п╟я┌я┐я─п╦\n"
+"п©я─п╦ п╫п╟я┌п╦я│п╨п╟п╫п╫я√ п╫п╟ п╫я▄п╬п╪я┐ п╪п╦я┬п╬я▌."
 
 #: ../src/winspector.c:1456
 msgid "Keep inside screen"
-msgstr "Завжди усередин╕ екрану"
+msgstr "п≈п╟п╡п╤п╢п╦ я┐я│п╣я─п╣п╢п╦п╫я√ п╣п╨я─п╟п╫я┐"
 
 #: ../src/winspector.c:1458
 msgid ""
 "Do not allow the window to move itself completely\n"
 "outside the screen. For bug compatibility.\n"
 msgstr ""
-"Не дозволяти в╕кну повн╕стю перем╕ститися\n"
-"за меж╕ екрану.\n"
+"п²п╣ п╢п╬п╥п╡п╬п╩я▐я┌п╦ п╡я√п╨п╫я┐ п©п╬п╡п╫я√я│я┌я▌ п©п╣я─п╣п╪я√я│я┌п╦я┌п╦я│я▐\n"
+"п╥п╟ п╪п╣п╤я√ п╣п╨я─п╟п╫я┐.\n"
 
 #: ../src/winspector.c:1462
 msgid "Ignore 'Hide Others'"
-msgstr "╤гнорувати 'Приховати ╕нш╕'"
+msgstr "п├пЁп╫п╬я─я┐п╡п╟я┌п╦ 'п÷я─п╦я┘п╬п╡п╟я┌п╦ я√п╫я┬я√'"
 
 #: ../src/winspector.c:1464
 msgid ""
 "Do not hide the window when issuing the\n"
 "`HideOthers' command."
 msgstr ""
-"Не приховувати це в╕кно при виконанн╕\n"
-"команди `Приховати ╕нш╕'."
+"п²п╣ п©я─п╦я┘п╬п╡я┐п╡п╟я┌п╦ я├п╣ п╡я√п╨п╫п╬ п©я─п╦ п╡п╦п╨п╬п╫п╟п╫п╫я√\n"
+"п╨п╬п╪п╟п╫п╢п╦ `п÷я─п╦я┘п╬п╡п╟я┌п╦ я√п╫я┬я√'."
 
 #: ../src/winspector.c:1468
 msgid "Ignore 'Save Session'"
-msgstr "╤гнорувати 'Зберегти сеанс'"
+msgstr "п├пЁп╫п╬я─я┐п╡п╟я┌п╦ 'п≈п╠п╣я─п╣пЁя┌п╦ я│п╣п╟п╫я│'"
 
 #: ../src/winspector.c:1470
 msgid ""
@@ -1849,15 +1849,15 @@ msgid ""
 "together with other applications when Window Maker\n"
 "starts."
 msgstr ""
-"Не збер╕гати асоц╕йовану програму в\n"
-"стан╕ сеансу, так що вона не буде\n"
-"перезапущена разом з ╕ншими програмами\n"
-"при запуску Window Maker'а."
+"п²п╣ п╥п╠п╣я─я√пЁп╟я┌п╦ п╟я│п╬я├я√п╧п╬п╡п╟п╫я┐ п©я─п╬пЁя─п╟п╪я┐ п╡\n"
+"я│я┌п╟п╫я√ я│п╣п╟п╫я│я┐, я┌п╟п╨ я┴п╬ п╡п╬п╫п╟ п╫п╣ п╠я┐п╢п╣\n"
+"п©п╣я─п╣п╥п╟п©я┐я┴п╣п╫п╟ я─п╟п╥п╬п╪ п╥ я√п╫я┬п╦п╪п╦ п©я─п╬пЁя─п╟п╪п╟п╪п╦\n"
+"п©я─п╦ п╥п╟п©я┐я│п╨я┐ Window Maker'п╟."
 
 #
 #: ../src/winspector.c:1476
 msgid "Emulate application icon"
-msgstr "Емулювати ╕конку програми"
+msgstr "п∙п╪я┐п╩я▌п╡п╟я┌п╦ я√п╨п╬п╫п╨я┐ п©я─п╬пЁя─п╟п╪п╦"
 
 #: ../src/winspector.c:1478
 msgid ""
@@ -1865,57 +1865,57 @@ msgid ""
 "enough information to Window Maker for a dockable\n"
 "application icon to be created."
 msgstr ""
-"Зробити це в╕кно ведучим себе як програма, що\n"
-"нада╓ достатньо ╕нформац╕╖ Window Maker'у для\n"
-"створення ╕конки програми, яка заноситься в Док."
+"п≈я─п╬п╠п╦я┌п╦ я├п╣ п╡я√п╨п╫п╬ п╡п╣п╢я┐я┤п╦п╪ я│п╣п╠п╣ я▐п╨ п©я─п╬пЁя─п╟п╪п╟, я┴п╬\n"
+"п╫п╟п╢п╟я■ п╢п╬я│я┌п╟я┌п╫я▄п╬ я√п╫я└п╬я─п╪п╟я├я√я≈ Window Maker'я┐ п╢п╩я▐\n"
+"я│я┌п╡п╬я─п╣п╫п╫я▐ я√п╨п╬п╫п╨п╦ п©я─п╬пЁя─п╟п╪п╦, я▐п╨п╟ п╥п╟п╫п╬я│п╦я┌я▄я│я▐ п╡ п■п╬п╨."
 
 #: ../src/winspector.c:1484
 msgid "Disable language button"
-msgstr "Прибрати кнопку мови"
+msgstr "п÷я─п╦п╠я─п╟я┌п╦ п╨п╫п╬п©п╨я┐ п╪п╬п╡п╦"
 
 #: ../src/winspector.c:1486
 msgid "Remove the `toggle language' button of the window."
-msgstr "Прибрати кнопку перемикання мови клав╕атури для в╕кна."
+msgstr "п÷я─п╦п╠я─п╟я┌п╦ п╨п╫п╬п©п╨я┐ п©п╣я─п╣п╪п╦п╨п╟п╫п╫я▐ п╪п╬п╡п╦ п╨п╩п╟п╡я√п╟я┌я┐я─п╦ п╢п╩я▐ п╡я√п╨п╫п╟."
 
 #: ../src/winspector.c:1503
 msgid "Miniwindow Image"
-msgstr "М╕н╕атюрне Зображення"
+msgstr "п°я√п╫я√п╟я┌я▌я─п╫п╣ п≈п╬п╠я─п╟п╤п╣п╫п╫я▐"
 
 #: ../src/winspector.c:1530
 msgid "Icon filename:"
-msgstr "╤м'я файлу ╕конки:"
+msgstr "п├п╪'я▐ я└п╟п╧п╩я┐ я√п╨п╬п╫п╨п╦:"
 
 #: ../src/winspector.c:1543
 msgid "Ignore client supplied icon"
-msgstr "╤гнорувати ╕конку кл╕╓нта"
+msgstr "п├пЁп╫п╬я─я┐п╡п╟я┌п╦ я√п╨п╬п╫п╨я┐ п╨п╩я√я■п╫я┌п╟"
 
 #: ../src/winspector.c:1550
 msgid "Initial Workspace"
-msgstr "Початковий Робочий ст╕л"
+msgstr "п÷п╬я┤п╟я┌п╨п╬п╡п╦п╧ п═п╬п╠п╬я┤п╦п╧ я│я┌я√п╩"
 
 #: ../src/winspector.c:1552
 msgid "The workspace to place the window when it'sfirst shown."
-msgstr "Робочий ст╕л, куди пом╕стити в╕кно при початков╕й його появ╕."
+msgstr "п═п╬п╠п╬я┤п╦п╧ я│я┌я√п╩, п╨я┐п╢п╦ п©п╬п╪я√я│я┌п╦я┌п╦ п╡я√п╨п╫п╬ п©я─п╦ п©п╬я┤п╟я┌п╨п╬п╡я√п╧ п╧п╬пЁп╬ п©п╬я▐п╡я√."
 
 #: ../src/winspector.c:1558
 msgid "Nowhere in particular"
-msgstr "Не зада╓ться"
+msgstr "п²п╣ п╥п╟п╢п╟я■я┌я▄я│я▐"
 
 #: ../src/winspector.c:1576
 msgid "Application Attributes"
-msgstr "В╕дноситься до програми"
+msgstr "п▓я√п╢п╫п╬я│п╦я┌я▄я│я▐ п╢п╬ п©я─п╬пЁя─п╟п╪п╦"
 
 #: ../src/winspector.c:1587
 msgid "Start hidden"
-msgstr "Запускати прихованою"
+msgstr "п≈п╟п©я┐я│п╨п╟я┌п╦ п©я─п╦я┘п╬п╡п╟п╫п╬я▌"
 
 #: ../src/winspector.c:1589
 msgid "Automatically hide application when it's started."
-msgstr "Автоматично приховувати програму при ╖╖ запуску."
+msgstr "п░п╡я┌п╬п╪п╟я┌п╦я┤п╫п╬ п©я─п╦я┘п╬п╡я┐п╡п╟я┌п╦ п©я─п╬пЁя─п╟п╪я┐ п©я─п╦ я≈я≈ п╥п╟п©я┐я│п╨я┐."
 
 #: ../src/winspector.c:1592
 msgid "No application icon"
-msgstr "Не показувати ╕конку"
+msgstr "п²п╣ п©п╬п╨п╟п╥я┐п╡п╟я┌п╦ я√п╨п╬п╫п╨я┐"
 
 #: ../src/winspector.c:1594
 msgid ""
@@ -1924,46 +1924,45 @@ msgid ""
 "and any icons that are already docked will stop\n"
 "working correctly."
 msgstr ""
-"Заборонити ╕конку програми для ц╕╓╖ програми.\n"
-"Увага: ви не зможете п╕сля цього пом╕стити ╖╖ в Док,\n"
-"╕ вс╕ ╖╖ ╕конки, що вже в ньому знаходяться, припинять\n"
-"коректно працювати."
+"п≈п╟п╠п╬я─п╬п╫п╦я┌п╦ я√п╨п╬п╫п╨я┐ п©я─п╬пЁя─п╟п╪п╦ п╢п╩я▐ я├я√я■я≈ п©я─п╬пЁя─п╟п╪п╦.\n"
+"пёп╡п╟пЁп╟: п╡п╦ п╫п╣ п╥п╪п╬п╤п╣я┌п╣ п©я√я│п╩я▐ я├я▄п╬пЁп╬ п©п╬п╪я√я│я┌п╦я┌п╦ я≈я≈ п╡ п■п╬п╨,\n"
+"я√ п╡я│я√ я≈я≈ я√п╨п╬п╫п╨п╦, я┴п╬ п╡п╤п╣ п╡ п╫я▄п╬п╪я┐ п╥п╫п╟я┘п╬п╢я▐я┌я▄я│я▐, п©я─п╦п©п╦п╫я▐я┌я▄\n"
+"п╨п╬я─п╣п╨я┌п╫п╬ п©я─п╟я├я▌п╡п╟я┌п╦."
 
 #
 #: ../src/winspector.c:1600
 msgid "Shared application icon"
-msgstr "Сп╕льна ╕конка програми"
+msgstr "п║п©я√п╩я▄п╫п╟ я√п╨п╬п╫п╨п╟ п©я─п╬пЁя─п╟п╪п╦"
 
 #: ../src/winspector.c:1602
 msgid ""
 "Use a single shared application icon for all of\n"
 "the instances of this application.\n"
 msgstr ""
-"Використовувати ╓дину сп╕льну ╕конку програми для\n"
-"вс╕х екземпляр╕в ц╕╓╖ програми.\n"
+"п▓п╦п╨п╬я─п╦я│я┌п╬п╡я┐п╡п╟я┌п╦ я■п╢п╦п╫я┐ я│п©я√п╩я▄п╫я┐ я√п╨п╬п╫п╨я┐ п©я─п╬пЁя─п╟п╪п╦ п╢п╩я▐\n"
+"п╡я│я√я┘ п╣п╨п╥п╣п╪п©п╩я▐я─я√п╡ я├я√я■я≈ п©я─п╬пЁя─п╟п╪п╦.\n"
 
 #: ../src/wmspec.c:277
 msgid "out of memory while updating wm hints"
-msgstr "вичерпана пам'ять при оновленн╕ wm hints"
+msgstr "п╡п╦я┤п╣я─п©п╟п╫п╟ п©п╟п╪'я▐я┌я▄ п©я─п╦ п╬п╫п╬п╡п╩п╣п╫п╫я√ wm hints"
 
 #: ../src/workspace.c:107 ../src/workspace.c:108 ../src/workspace.c:893
 #, c-format
 msgid "Workspace %i"
-msgstr "Робочий ст╕л %i"
+msgstr "п═п╬п╠п╬я┤п╦п╧ я│я┌я√п╩ %i"
 
 #: ../src/workspace.c:943
 msgid "Workspaces"
-msgstr "Робоч╕ столи"
+msgstr "п═п╬п╠п╬я┤я√ я│я┌п╬п╩п╦"
 
 #: ../src/workspace.c:945
 msgid "could not create Workspace menu"
-msgstr "не вда╓ться створити меню Робочих стол╕в"
+msgstr "п╫п╣ п╡п╢п╟я■я┌я▄я│я▐ я│я┌п╡п╬я─п╦я┌п╦ п╪п╣п╫я▌ п═п╬п╠п╬я┤п╦я┘ я│я┌п╬п╩я√п╡"
 
 #: ../src/workspace.c:952
 msgid "New"
-msgstr "Створити"
+msgstr "п║я┌п╡п╬я─п╦я┌п╦"
 
 #: ../src/workspace.c:953
 msgid "Destroy Last"
-msgstr "Знищити останн╕й"
-
+msgstr "п≈п╫п╦я┴п╦я┌п╦ п╬я│я┌п╟п╫п╫я√п╧"

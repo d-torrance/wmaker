@@ -731,10 +731,10 @@ int main(int argc, char **argv)
 			"  [L]            rotate image on the left\n"
 			"  [Q]            quit\n"
 			"  [R]            rotate image on the right\n"
-			"  [right]        next image\n"
-			"  [left]         previous image\n"
-			"  [up]           first image\n"
-			"  [down]         last image\n",
+			"  [▸]            next image\n"
+			"  [◂]            previous image\n"
+			"  [▴]            first image\n"
+			"  [▾]            last image\n",
 			argv[0]);
 			return EXIT_SUCCESS;
 		case 'v':
