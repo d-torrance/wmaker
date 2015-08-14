@@ -34,7 +34,7 @@ AC_PREREQ([2.69])
 
 dnl Configuration for Autoconf and Automake
 dnl =======================================
-AC_INIT([WindowMaker],[0.95.6],[wmaker-dev@lists.windowmaker.org],[WindowMaker],[http://www.windowmaker.org/])
+AC_INIT([WindowMaker],[0.95.7],[wmaker-dev@lists.windowmaker.org],[WindowMaker],[http://www.windowmaker.org/])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
 
@@ -534,7 +534,7 @@ AS_IF([test "x$enable_xdnd" = "xyes"],
     [supported_core="$supported_core XDnD"
      AC_DEFINE([USE_DOCK_XDND], [1], [whether Drag-and-Drop on the dock should be enabled])],
     [unsupported="$unsupported XDnd"])
-AM_CONDITIONAL([USE_DOCK_XDND], [test "x$enable_dock_xdnd" != "xno"])
+AM_CONDITIONAL([USE_DOCK_XDND], [test "x$enable_xdnd" != "xno"])
 
 
 dnl Support for ICCCM 2.0 Window Manager replacement

@@ -1240,23 +1240,28 @@ static void draw_snap_frame(WWindow *wwin, int direction)
 
 static int get_snap_direction(WScreen *scr, int x, int y)
 {
-	if (x < 1) {
-		if (y < 1)
-			return SNAP_TOPLEFT;
-		if (y > scr->scr_height - 2)
-			return SNAP_BOTTOMLEFT;
+	int edge, corner;
+
+	edge = wPreferences.snap_edge_detect;
+	corner = wPreferences.snap_corner_detect;
+
+	if (x < corner && y < corner)
+		return SNAP_TOPLEFT;
+	if (x < corner && y >= scr->scr_height - corner)
+		return SNAP_BOTTOMLEFT;
+	if (x < edge)
 		return SNAP_LEFT;
-	}
-	if (x > scr->scr_width - 2) {
-		if (y < 1)
-			return SNAP_TOPRIGHT;
-		if (y > scr->scr_height - 2)
-			return SNAP_BOTTOMRIGHT;
+
+	if (x >= scr->scr_width - corner && y < corner)
+		return SNAP_TOPRIGHT;
+	if (x >= scr->scr_width - corner && y >= scr->scr_height - corner)
+		return SNAP_BOTTOMRIGHT;
+	if (x >= scr->scr_width - edge)
 		return SNAP_RIGHT;
-	}
-	if (y < 1)
+
+	if (y < edge)
 		return SNAP_TOP;
-	if (y > scr->scr_height - 2)
+	if (y >= scr->scr_height - edge)
 		return SNAP_BOTTOM;
 	return SNAP_NONE;
 }
@@ -1440,6 +1445,9 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 				keysym = XLookupKeysym(&event.xkey, 0);
 				switch (keysym) {
 				case XK_Return:
+#ifdef XK_KP_Enter
+				case XK_KP_Enter:
+#endif
 					done = 2;
 					break;
 				case XK_Escape:
@@ -1766,10 +1774,15 @@ int wMouseMoveWindow(WWindow * wwin, XEvent * ev)
 			break;
 
 		case MotionNotify:
-			if (IS_RESIZABLE(wwin) && wPreferences.window_snapping && wPreferences.no_autowrap) {
+			if (IS_RESIZABLE(wwin) && wPreferences.window_snapping) {
 				int snap_direction;
 
 				snap_direction = get_snap_direction(scr, moveData.mouseX, moveData.mouseY);
+
+				if (!wPreferences.no_autowrap &&
+				    snap_direction != SNAP_TOP &&
+				    snap_direction != SNAP_BOTTOM)
+					snap_direction = SNAP_NONE;
 
 				if (moveData.snap != snap_direction) {
 					/* erase old frame */
