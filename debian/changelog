@@ -1,3 +1,10 @@
+wmaker (0.95.7+20150813-0ppa1) wily; urgency=medium
+
+  * debian/{control,README.ppa}
+    - Update email address.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 13 Aug 2015 23:01:18 -0400
+
 wmaker (0.95.6+20150613-0ppa1) wily; urgency=medium
 
   * debian/source/options
