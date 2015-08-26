@@ -7,8 +7,8 @@ export CPPFLAGS = `dpkg-buildflags --get CPPFLAGS`
 
 LINGUAS           := $(patsubst po/%.po, %, $(wildcard po/*.po))
 
-WMAKER_OPTIONS := --disable-locale --enable-modelock --enable-randr --enable-pango --enable-xinerama
-#not-enabled      --enable-usermenu --disable-shape --disable-shm --enable-xrandr
+WMAKER_OPTIONS := --disable-locale --enable-modelock --enable-randr --enable-pango --enable-xinerama --enable-usermenu
+#not-enabled      --disable-shape --disable-shm --enable-xrandr
 #not-enabled      --disable-xpm --disable-png --disable-jpeg --disable-gif --disable-tiff
 
 # Debian packages destination folder
