@@ -1,3 +1,10 @@
+wmaker (0.95.7+20150813-0ppa2) wily; urgency=medium
+
+  * debian/rules
+    - Enable user menu option.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Wed, 26 Aug 2015 07:28:10 -0400
+
 wmaker (0.95.7+20150813-0ppa1) wily; urgency=medium
 
   * debian/{control,README.ppa}
