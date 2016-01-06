@@ -4,3 +4,4 @@
 54_Debian_wmmacros.diff
 basic_wings_theming.patch
 55_ungif_problem.diff
+56_ignore_runstatedir.diff

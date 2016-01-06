@@ -583,7 +583,7 @@ static void keepIconsCallback(WMenu *menu, WMenuEntry *entry)
 				wAppIconPaint(aicon);
 			}
 		}
-		save_appicon(aicon, True);
+		save_appicon(aicon);
 	}
 	WMFreeArray(selectedIcons);
 }
@@ -1445,7 +1445,7 @@ static void dockIconPaint(WAppIcon *btn)
 		wDrawerIconPaint(btn);
 	} else {
 		wAppIconPaint(btn);
-		save_appicon(btn, True);
+		save_appicon(btn);
 	}
 }
 
@@ -2219,7 +2219,7 @@ Bool wDockAttachIcon(WDock *dock, WAppIcon *icon, int x, int y, Bool update_icon
 	wAppIconPaint(icon);
 
 	/* Save it */
-	save_appicon(icon, True);
+	save_appicon(icon);
 
 	if (wPreferences.auto_arrange_icons)
 		wArrangeIcons(dock->screen_ptr, True);
@@ -2344,7 +2344,6 @@ Bool wDockMoveIconBetweenDocks(WDock *src, WDock *dest, WAppIcon *icon, int x, i
 			icon->icon->shadowed = 0;
 			update_icon = True;
 		}
-		save_appicon(icon, True);
 	}
 
 	if (src->auto_collapse || src->auto_raise_lower)
@@ -2426,6 +2425,9 @@ void wDockDetach(WDock *dock, WAppIcon *icon)
 
 	dock->icon_count--;
 
+	/* Remove the Cached Icon */
+	remove_cache_icon(icon->icon->file);
+
 	/* if the dock is not attached to an application or
 	 * the application did not set the appropriate hints yet,
 	 * destroy the icon */
@@ -2453,6 +2455,7 @@ void wDockDetach(WDock *dock, WAppIcon *icon)
 		if (wPreferences.auto_arrange_icons)
 			wArrangeIcons(dock->screen_ptr, True);
 	}
+
 	if (dock->auto_collapse || dock->auto_raise_lower)
 		clipLeave(dock);
 }
