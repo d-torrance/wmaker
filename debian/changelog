@@ -54,6 +54,7 @@ wmaker (0.95.7-1) unstable; urgency=medium
 
  -- Rodolfo García Peñas (kix) <kix@debian.org>  Thu, 13 Aug 2015 20:19:33 +0200
 
+<<<<<<< HEAD
 wmaker (0.95.6+20150613-0ppa1) wily; urgency=medium
 
   * debian/source/options
@@ -295,6 +296,14 @@ wmaker (0.95.6+20140902-0ppa1) trusty; urgency=medium
       should match up exactly outside of the debian directory.
 
  -- Doug Torrance <dtorrance@monmouthcollege.edu>  Wed, 03 Sep 2014 00:07:51 -0500
+
+wmaker (0.95.6-1.2) unstable; urgency=medium
+
+  * Non-maintainer upload, with maintainer approval.
+  * Pull 56_wrlib-add-support-for-release-5.1.0-of-the-libgif.patch from
+    upstream to allow building against giflib 5. Closes: #803292
+
+ -- Andreas Metzler <ametzler@debian.org>  Wed, 16 Dec 2015 19:16:51 +0100
 
 wmaker (0.95.6-1.1) unstable; urgency=medium
 
