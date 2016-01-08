@@ -29,6 +29,8 @@ Build-Depends: automake (>= 1:1.12),
                libxt-dev,
                sharutils
 Homepage: http://windowmaker.org/
+Vcs-Browser: http://anonscm.debian.org/cgit/pkg-wmaker/wmaker.git
+Vcs-Git: https://anonscm.debian.org/git/pkg-wmaker/wmaker.git
 
 Package: wmaker
 Architecture: any
