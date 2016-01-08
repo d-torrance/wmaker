@@ -34,6 +34,7 @@ Vcs-Git: https://anonscm.debian.org/git/pkg-wmaker/wmaker.git
 
 Package: wmaker
 Architecture: any
+Multi-Arch: foreign
 Depends: wmaker-common (= ${source:Version}),
          ${misc:Depends},
          ${shlibs:Depends}
@@ -49,6 +50,7 @@ Description: NeXTSTEP-like window manager for X
 
 Package: wmaker-common
 Architecture: all
+Multi-Arch: foreign
 Depends: ${misc:Depends}
 Suggests: wmaker
 Description: Window Maker - Architecture independent files
@@ -63,6 +65,7 @@ Description: Window Maker - Architecture independent files
 
 Package: libwraster-dev
 Architecture: any
+Multi-Arch: same
 Section: libdevel
 Depends: libc6-dev,
          libgif-dev,
@@ -86,6 +89,7 @@ Description: Static libraries and headers of Window Maker rasterizer
 
 Package: libwraster5
 Architecture: any
+Multi-Arch: same
 Section: libs
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: Shared libraries of Window Maker rasterizer
@@ -95,6 +99,7 @@ Description: Shared libraries of Window Maker rasterizer
 
 Package: libwings-dev
 Architecture: any
+Multi-Arch: same
 Section: libdevel
 Depends: libc6-dev,
          libfontconfig1-dev,
@@ -115,6 +120,7 @@ Description: Window Maker's own widget set
 
 Package: libwutil5
 Architecture: any
+Multi-Arch: same
 Section: libs
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: Window Maker's own widget set - utility library
@@ -129,6 +135,7 @@ Description: Window Maker's own widget set - utility library
 
 Package: libwings3
 Architecture: any
+Multi-Arch: same
 Section: libs
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: Window Maker's own widget set - runtime library
@@ -143,6 +150,7 @@ Description: Window Maker's own widget set - runtime library
 
 Package: wmaker-dbg
 Architecture: any
+Multi-Arch: same
 Section: debug
 Priority: extra
 Depends: libwraster5 (= ${binary:Version}) | libwings3 (= ${binary:Version}) | libwutil5 (= ${binary:Version}) | wmaker (= ${binary:Version}),
