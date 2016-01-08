@@ -1,7 +1,9 @@
 Source: wmaker
 Section: x11
 Priority: optional
-Maintainer: Rodolfo García Peñas (kix) <kix@debian.org>
+Maintainer: Debian Window Maker Team <pkg-wmaker-devel@lists.alioth.debian.org>
+Uploaders: Rodolfo García Peñas (kix) <kix@debian.org>,
+ Doug Torrance <dtorrance@piedmont.edu>
 Standards-Version: 3.9.6
 Build-Depends: debhelper (>= 9), automake (>= 1:1.12), gettext,
  libfontconfig1-dev, libjpeg-dev, libpng-dev, libsm-dev, libtiff5-dev,
