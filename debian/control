@@ -32,7 +32,7 @@ Homepage: http://windowmaker.org/
 
 Package: wmaker
 Architecture: any
-Depends: wmaker-common (>= 0.95.0+20111028-3),
+Depends: wmaker-common (= ${source:Version}),
          ${misc:Depends},
          ${shlibs:Depends}
 Provides: x-window-manager
