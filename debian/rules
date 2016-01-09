@@ -63,7 +63,7 @@ override_dh_install:
 	# Install files
 	dh_install
 
-	# Restore version numer
+	# Restore version number
 	sed -i "s/`cat newversion`/`cat oldversion`/" configure.ac
 	rm oldversion newversion
 
