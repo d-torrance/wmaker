@@ -6,6 +6,7 @@ NEWS
 README
 README.i18n
 TODO
+debian/README.ppa
 debian/copyright
 debian/debianfiles/Theme/Debian.theme.txt
 util/wm-oldmenu2new
