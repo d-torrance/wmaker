@@ -20,10 +20,10 @@ wmaker (0.95.7+20150813-0ppa1) wily; urgency=medium
 
  -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 13 Aug 2015 23:01:18 -0400
 
-wmaker (0.95.7-1) unstable; urgency=medium
+wmaker (0.95.7-1) experimental; urgency=medium
 
   [ Rodolfo García Peñas (kix) ]
-  * New upstrem version 0.95.7.
+  * New upstream version 0.95.7.
   * debian/changelog, removed debian files (lintian warning).
   * Updated debian/libwings3.symbols.
   * Updated libwraster5.symbols
@@ -72,7 +72,7 @@ wmaker (0.95.7-1) unstable; urgency=medium
   * Use wildcards for locales in debian/wmaker-common.install for
     maintainability.
 
- -- Rodolfo García Peñas (kix) <kix@debian.org>  Thu, 13 Aug 2015 20:19:33 +0200
+ -- Andreas Metzler <ametzler@debian.org>  Sun, 10 Jan 2016 11:38:11 +0100
 
 wmaker (0.95.6+20150613-0ppa1) wily; urgency=medium
 
