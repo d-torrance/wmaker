@@ -1,3 +1,9 @@
+wmaker (0.95.7-2) UNRELEASED; urgency=medium
+
+  * Drop unused (since at least 0.95.0+20111028-1) b-d on grep-dctrl.
+
+ -- Andreas Metzler <ametzler@debian.org>  Sun, 10 Jan 2016 18:39:33 +0100
+
 wmaker (0.95.7-1) experimental; urgency=medium
 
   [ Rodolfo García Peñas (kix) ]

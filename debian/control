@@ -7,7 +7,6 @@ Uploaders: Rodolfo García Peñas (kix) <kix@debian.org>,
            Doug Torrance <dtorrance@piedmont.edu>
 Standards-Version: 3.9.6
 Build-Depends: automake (>= 1:1.12),
-               dctrl-tools,
                debhelper (>= 9),
                dh-autoreconf,
                gettext,
