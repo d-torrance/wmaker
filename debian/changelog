@@ -8,6 +8,13 @@ wmaker (0.95.7-2) UNRELEASED; urgency=medium
     libtiff transitions; also allows backports to earlier releases, e.g.,
     wheezy/precise.
   * Split wxcopy and wxpaste into new wmaker-utils package (Closes: #78119).
+  * The theme that was removed in version 0.92.0-6 has been reintroduced as an
+    option, now named "DebianLegacy".  Because it now contains two themes, the
+    directory debian/debianfiles/Theme has been renamed to Themes.  The file
+    Debian.theme.txt in this directory, which actually describes the
+    DebianLegacy theme but was never removed, has been renamed to
+    DebianLegacy.txt.  A corresponding paragraph has been added to
+    debian/copyright. (Closes: #393143)
 
  -- Andreas Metzler <ametzler@debian.org>  Sun, 10 Jan 2016 18:39:33 +0100
 
