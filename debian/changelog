@@ -1,3 +1,13 @@
+wmaker (0.95.7+20160110-0ppa2) xenial; urgency=medium
+
+  * Merge latest draft of official Debian 0.95.7-2 package.
+  * debian/rules
+    - Remove unexport of build flags; I can't remember why I added these in the
+      first place and it was causing the config files to be put in the wrong
+      place.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Fri, 15 Jan 2016 11:33:34 -0500
+
 wmaker (0.95.7+20160110-0ppa1) xenial; urgency=medium
 
   * Merge official Debian 0.95.7-1 package.
