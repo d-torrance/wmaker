@@ -109,7 +109,6 @@ wmaker (0.95.7-1) experimental; urgency=medium
     maintainability.
 
  -- Andreas Metzler <ametzler@debian.org>  Sun, 10 Jan 2016 11:38:11 +0100
-<<<<<<< HEAD
 
 wmaker (0.95.6+20150613-0ppa1) wily; urgency=medium
 
@@ -352,8 +351,6 @@ wmaker (0.95.6+20140902-0ppa1) trusty; urgency=medium
       should match up exactly outside of the debian directory.
 
  -- Doug Torrance <dtorrance@monmouthcollege.edu>  Wed, 03 Sep 2014 00:07:51 -0500
-=======
->>>>>>> debian
 
 wmaker (0.95.6-1.2) unstable; urgency=medium
 
