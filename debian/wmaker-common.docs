@@ -8,5 +8,5 @@ README.i18n
 TODO
 debian/README.ppa
 debian/copyright
-debian/debianfiles/Theme/Debian.theme.txt
+debian/debianfiles/Themes/DebianLegacy.txt
 util/wm-oldmenu2new
