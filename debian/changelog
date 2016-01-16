@@ -7,7 +7,6 @@ wmaker (0.95.7-2) UNRELEASED; urgency=medium
   * Switch Build-Depends from libtiff5-dev to libtiff-dev for possible future
     libtiff transitions; also allows backports to earlier releases, e.g.,
     wheezy/precise.
-  * Split wxcopy and wxpaste into new wmaker-utils package (Closes: #78119).
   * The theme that was removed in version 0.92.0-6 has been reintroduced as an
     option, now named "DebianLegacy".  Because it now contains two themes, the
     directory debian/debianfiles/Theme has been renamed to Themes.  The file
