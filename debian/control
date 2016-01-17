@@ -72,8 +72,8 @@ Package: wmaker-utils
 Architecture: any
 Multi-Arch: foreign
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Breaks: wmaker (<< 0.95.7-2)
-Replaces: wmaker (<< 0.95.7-2)
+Breaks: wmaker (<< 0.95.7-3)
+Replaces: wmaker (<< 0.95.7-3)
 Description: Window Maker - Utilities
  Written by Alfredo Kojima almost from scratch, resembles the NeXTStep look
  very closely, and it is now an official GNU project. Window Maker (originally
