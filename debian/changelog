@@ -1,3 +1,10 @@
+wmaker (0.95.7+20160117-0ppa1) xenial; urgency=medium
+
+  * debian/{control,libwmaker*}
+    - Restore libwmaker library.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Mon, 18 Jan 2016 22:54:29 -0500
+
 wmaker (0.95.7+20160110-0ppa3) xenial; urgency=medium
 
   * Move Ambiance and Radiance styles into new Themes directory; restore
