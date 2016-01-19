@@ -478,6 +478,8 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.snap_edge_detect, getInt, NULL, NULL, NULL},
 	{"SnapCornerDetect", "10", NULL,
 	    &wPreferences.snap_corner_detect, getInt, NULL, NULL, NULL},
+	{"SnapToTopMaximizesFullscreen", "NO", NULL,
+	    &wPreferences.snap_to_top_maximizes_fullscreen, getBool, NULL, NULL, NULL},
 	{"DragMaximizedWindow", "Move", seDragMaximizedWindow,
 	    &wPreferences.drag_maximized_window, getEnum, NULL, NULL, NULL},
 	{"HighlightActiveApp", "YES", NULL,
@@ -545,7 +547,7 @@ WDefaultEntry optionList[] = {
 	{"WorkspaceSpecificBack", "()", NULL,
 	    NULL, getWSSpecificBackground, setWorkspaceSpecificBack, NULL, NULL},
 	/* WorkspaceBack must come after WorkspaceSpecificBack or
-	 * WorkspaceBack wont know WorkspaceSpecificBack was also
+	 * WorkspaceBack won't know WorkspaceSpecificBack was also
 	 * specified and 2 copies of wmsetbg will be launched */
 	{"WorkspaceBack", "(solid, black)", NULL,
 	    NULL, getWSBackground, setWorkspaceBack, NULL, NULL},
