@@ -1,3 +1,13 @@
+wmaker (0.95.8-1) unstable; urgency=medium
+
+  * New upstream release.
+    - Follow window placement rules when placing windows on non-active
+      workspaces (Closes: #181735).
+    - New keyboard shortcuts (Closes: #306808).
+    - Windows list sorted by workspace (Closes: #280851).
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Wed, 20 Jan 2016 10:11:58 -0500
+
 wmaker (0.95.7-7) unstable; urgency=medium
 
   * Add missing license information to debian/copyright.
