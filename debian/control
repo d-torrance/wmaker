@@ -39,12 +39,7 @@ Depends: wmaker-common (= ${source:Version}),
          ${misc:Depends},
          ${shlibs:Depends}
 Provides: x-window-manager
-Suggests: desktop-base,
-          menu,
-          wmaker-data,
-          wmaker-utils,
-          x-terminal-emulator,
-          x11-apps
+Suggests: desktop-base, menu, wmaker-data, x-terminal-emulator, x11-apps
 Description: NeXTSTEP-like window manager for X
  Written by Alfredo Kojima almost from scratch, resembles the NeXTStep look
  very closely, and it is now an official GNU project. Window Maker (originally
@@ -68,24 +63,6 @@ Description: Window Maker - Architecture independent files
  .
  This package contains the architecture independent files.
 
-Package: wmaker-utils
-Architecture: any
-Multi-Arch: foreign
-Depends: ${misc:Depends}, ${shlibs:Depends}
-Breaks: wmaker (<< 0.95.7-3)
-Replaces: wmaker (<< 0.95.7-3)
-Description: Window Maker - Utilities
- Written by Alfredo Kojima almost from scratch, resembles the NeXTStep look
- very closely, and it is now an official GNU project. Window Maker (originally
- named WindowMaker) is not overloaded with features, and it is easier to
- configure than most other window managers. Its final goal is to produce a
- window manager that doesn't require editing of configuration files.
- Window Maker is fast and doesn't require tons of memory to run.
- .
- This package contains wxcopy and wxpaste, two utilities ordinarily shipped with
- Window Maker but not depending on it or any of its libraries.  These
- utilities allow users to interact with cut buffers on the command line.
-
 Package: libwraster-dev
 Architecture: any
 Multi-Arch: same
@@ -95,7 +72,7 @@ Depends: libc6-dev,
          libjpeg-dev,
          libpng-dev,
          libtiff5-dev,
-         libwraster5v2 (= ${binary:Version}),
+         libwraster5 (= ${binary:Version}),
          libx11-dev,
          libxext-dev,
          libxpm-dev,
@@ -110,7 +87,7 @@ Description: Static libraries and headers of Window Maker rasterizer
  Contains libwraster and header files, for manipulating and
  rasterizing images.
 
-Package: libwraster5v2
+Package: libwraster5
 Architecture: any
 Multi-Arch: same
 Section: libs
@@ -176,7 +153,7 @@ Architecture: any
 Multi-Arch: same
 Section: debug
 Priority: extra
-Depends: libwraster5v2 (= ${binary:Version}) | libwings3 (= ${binary:Version}) | libwutil5 (= ${binary:Version}) | wmaker (= ${binary:Version}),
+Depends: libwraster5 (= ${binary:Version}) | libwings3 (= ${binary:Version}) | libwutil5 (= ${binary:Version}) | wmaker (= ${binary:Version}),
          ${misc:Depends}
 Description: Debugging symbols for WindowMaker packages
  Written by Alfredo Kojima almost from scratch, resembles the NeXTStep look

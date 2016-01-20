@@ -1,11 +1,3 @@
-wmaker (0.95.7-3) UNRELEASED; urgency=medium
-
-  * Split wxcopy and wxpaste into new wmaker-utils package (Closes: #78119).
-  * Rename libwraster5 package to libwraster5v2 due to incompatibilities
-    introduced between versions 0.95.6 and 0.95.7 (Closes: #811304).
-
- -- Doug Torrance <dtorrance@piedmont.edu>  Sat, 16 Jan 2016 12:55:19 -0500
-
 wmaker (0.95.7-2) unstable; urgency=medium
 
   [ Andreas Metzler ]
