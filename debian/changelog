@@ -5,6 +5,7 @@ wmaker (0.95.8-1) unstable; urgency=medium
       workspaces (Closes: #181735).
     - New keyboard shortcuts (Closes: #306808).
     - Windows list sorted by workspace (Closes: #280851).
+    - Menus may be shaded (Closes: #72038).
 
  -- Doug Torrance <dtorrance@piedmont.edu>  Wed, 20 Jan 2016 10:11:58 -0500
 
