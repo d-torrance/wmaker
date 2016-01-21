@@ -5,3 +5,4 @@
 basic_wings_theming.patch
 55_ungif_problem.diff
 56_ignore_runstatedir.diff
+60_fix_wraster_symbol_versioning.diff
