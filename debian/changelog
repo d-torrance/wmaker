@@ -1,3 +1,10 @@
+wmaker (0.95.7+20160117-0ppa3) xenial; urgency=medium
+
+  * debian/libwmaker-dev.install
+    - Add new pkg-config file.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Sat, 23 Jan 2016 11:12:52 -0500
+
 wmaker (0.95.7+20160117-0ppa2) xenial; urgency=medium
 
   * Merge official Debian 0.95.7-3 package.
