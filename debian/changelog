@@ -4,6 +4,8 @@ wmaker (0.95.7-4) UNRELEASED; urgency=medium
     warning.
   * Fix typo in README.Debian; fixes spelling-error-in-readme-debian Lintian
     warning.
+  * Enable all hardening flags; fixes hardening-no-{bindnow,pie} Lintian
+    warnings.
 
  -- Doug Torrance <dtorrance@piedmont.edu>  Sun, 31 Jan 2016 12:27:24 -0500
 
