@@ -1,3 +1,10 @@
+wmaker (0.95.7-4) UNRELEASED; urgency=medium
+
+  * Update Vcs-Browser to use https; fixes vcs-field-uses-insecure-uri Lintian
+    warning.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Sun, 31 Jan 2016 12:27:24 -0500
+
 wmaker (0.95.7-3) unstable; urgency=low
 
   * Patch back libwraster symbol version to LIBWRASTER3. Temporarily mark
