@@ -3,6 +3,8 @@ Description: Ignore runstatedir in check-cmdline-options-doc.sh
  Ignore it when checking whether INSTALL is up to date.
 Author: Andreas Metzler <ametzler@debian.org>
 Origin: vendor
+Applied-Upstream: http://repo.or.cz/wmaker-crm.git/commit/4f18b3e
+Last-Update: 2016-02-09
 
 --- wmaker-0.95.7.orig/Makefile.am
 +++ wmaker-0.95.7/Makefile.am

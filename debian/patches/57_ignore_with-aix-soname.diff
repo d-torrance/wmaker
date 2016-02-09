@@ -3,6 +3,8 @@ Description: Ignore with-aix-soname in check-cmdline-options-doc.sh
  whether INSTALL-WMAKER is up to date.
 Author: Doug Torrance <dtorrance@piedmont.edu>
 Bug-Debian: http://bugs.debian.org/814213
+Applied-Upstream: http://repo.or.cz/wmaker-crm.git/commit/67e9e7e
+Last-Update: 2016-02-09
 
 --- a/Makefile.am
 +++ b/Makefile.am
