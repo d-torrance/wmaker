@@ -1,0 +1,16 @@
+Description: Ignore with-aix-soname in check-cmdline-options-doc.sh
+ libtool 2.4.4 will add a --with-aix-soname option.  Ignore it when checking
+ whether INSTALL-WMAKER is up to date.
+Author: Doug Torrance <dtorrance@piedmont.edu>
+Bug-Debian: http://bugs.debian.org/814213
+
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -107,6 +107,7 @@
+ 		--ignore-prg 'disable-option-checking,enable-fast-install # should be in INSTALL' \
+ 		--ignore-prg 'disable-libtool-lock,with-pic,with-gnu-ld,with-sysroot # for libtool' \
+ 		--ignore-prg 'runstatedir #new in autoconf 2.70, backported in Debian' \
++		--ignore-prg 'with-aix-soname #new in libtool 2.4.4' \
+ 		--ignore-prg 'with-x # no use, it would not work without X'
+ 
+ .PHONY: configure-documentation

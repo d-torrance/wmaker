@@ -7,8 +7,10 @@ wmaker (0.95.7-4) UNRELEASED; urgency=medium
   * Enable all hardening flags; fixes hardening-no-{bindnow,pie} Lintian
     warnings.
   * Bump Standards-Version to 3.9.7, no changes required.
+  * 57_ignore_with-aix-soname.diff: Ignore missing documentation for
+    --with-aix-soname in INSTALL-WMAKER (Closes: #814213).
 
- -- Doug Torrance <dtorrance@piedmont.edu>  Mon, 01 Feb 2016 23:40:46 -0500
+ -- Doug Torrance <dtorrance@piedmont.edu>  Tue, 09 Feb 2016 11:07:04 -0500
 
 wmaker (0.95.7-3) unstable; urgency=low
 

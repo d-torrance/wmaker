@@ -4,4 +4,5 @@
 54_Debian_wmmacros.diff
 55_ungif_problem.diff
 56_ignore_runstatedir.diff
+57_ignore_with-aix-soname.diff
 60_fix_wraster_symbol_versioning.diff
