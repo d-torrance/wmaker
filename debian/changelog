@@ -1,4 +1,4 @@
-wmaker (0.95.7-4) UNRELEASED; urgency=medium
+wmaker (0.95.7-4) unstable; urgency=medium
 
   * Update Vcs-Browser to use https; fixes vcs-field-uses-insecure-uri Lintian
     warning.
@@ -10,7 +10,7 @@ wmaker (0.95.7-4) UNRELEASED; urgency=medium
   * 57_ignore_with-aix-soname.diff: Ignore missing documentation for
     --with-aix-soname in INSTALL-WMAKER (Closes: #814213).
 
- -- Doug Torrance <dtorrance@piedmont.edu>  Tue, 09 Feb 2016 11:07:04 -0500
+ -- Doug Torrance <dtorrance@piedmont.edu>  Fri, 12 Feb 2016 22:27:08 -0500
 
 wmaker (0.95.7-3) unstable; urgency=low
 
