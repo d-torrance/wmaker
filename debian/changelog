@@ -1,6 +1,7 @@
 wmaker (0.95.7-5) UNRELEASED; urgency=medium
 
   * Split wxcopy and wxpaste into new wmaker-utils package (Closes: #78119).
+  * Restore libwmaker packages.
 
  -- Doug Torrance <dtorrance@piedmont.edu>  Tue, 16 Feb 2016 00:17:31 -0500
 
