@@ -2,6 +2,7 @@ wmaker (0.95.7-5) UNRELEASED; urgency=medium
 
   * Clean up debian/copyright. Add some files which were missed in the LGPL
     paragraph and bump its version to 2+.  Restore debian/* paragraph.
+  * Remove useless debian/*.changelog-upstream files.
 
  -- Doug Torrance <dtorrance@piedmont.edu>  Mon, 15 Feb 2016 22:29:40 -0500
 
