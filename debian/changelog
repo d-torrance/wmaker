@@ -1,8 +1,22 @@
-wmaker (0.95.7-4) UNRELEASED; urgency=medium
+wmaker (0.95.7-5) UNRELEASED; urgency=medium
 
   * Split wxcopy and wxpaste into new wmaker-utils package (Closes: #78119).
 
- -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 21 Jan 2016 12:24:20 -0500
+ -- Doug Torrance <dtorrance@piedmont.edu>  Tue, 16 Feb 2016 00:17:31 -0500
+
+wmaker (0.95.7-4) unstable; urgency=medium
+
+  * Update Vcs-Browser to use https; fixes vcs-field-uses-insecure-uri Lintian
+    warning.
+  * Fix typo in README.Debian; fixes spelling-error-in-readme-debian Lintian
+    warning.
+  * Enable all hardening flags; fixes hardening-no-{bindnow,pie} Lintian
+    warnings.
+  * Bump Standards-Version to 3.9.7, no changes required.
+  * 57_ignore_with-aix-soname.diff: Ignore missing documentation for
+    --with-aix-soname in INSTALL-WMAKER (Closes: #814213).
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Fri, 12 Feb 2016 22:27:08 -0500
 
 wmaker (0.95.7-3) unstable; urgency=low
 
