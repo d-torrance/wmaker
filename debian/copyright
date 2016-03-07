@@ -79,17 +79,17 @@ License: WTFPL-1
  .
  DO WHAT THE FUCK YOU WANT TO.
 
-Files: debian/debianfiles/Themes/DebianLegacy.style
-       debian/debianfiles/Themes/DebianLegacy.txt
-       debian/debianfiles/Themes/DebianSwirl.jpg
-Copyright: 1999 Gary Burke <gfburke@earthlink.net>
-License: GPL-1+
-
 Files: debian/*
 Copyright: 1997, Neil A. Rubin <nar5@po.cwru.edu>
            1997, Marcelo E. Magallon <mmagallo@debian.org>
            2011, Rodolfo García Peñas (kix) <kix@kix.es>
 License: GPL-2+
+
+Files: debian/debianfiles/Themes/DebianLegacy.style
+       debian/debianfiles/Themes/DebianLegacy.txt
+       debian/debianfiles/Themes/DebianSwirl.jpg
+Copyright: 1999 Gary Burke <gfburke@earthlink.net>
+License: GPL-1+
 
 License: GPL-2+
  This program is free software; you can redistribute it
