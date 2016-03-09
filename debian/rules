@@ -6,8 +6,8 @@ export DEB_CFLAGS_MAINT_APPEND += -Wall -DGLOBAL_DEFAULTS_SUBDIR=\"GNUstep/Defau
 
 LINGUAS           := $(patsubst po/%.po, %, $(wildcard po/*.po))
 
-WMAKER_OPTIONS := --disable-locale --enable-modelock --enable-randr --enable-pango --enable-xinerama --enable-usermenu
-#not-enabled      --disable-shape --disable-shm --enable-xrandr
+WMAKER_OPTIONS := --disable-locale --enable-modelock --enable-pango --enable-xinerama
+#not-enabled      --enable-usermenu --disable-shape --disable-shm --enable-randr
 #not-enabled      --disable-xpm --disable-png --disable-jpeg --disable-gif --disable-tiff
 
 # Debian packages destination folder
@@ -68,13 +68,6 @@ override_dh_install:
 	# Restore version number
 	sed -i "s/`cat newversion`/`cat oldversion`/" configure.ac
 	rm oldversion newversion
-
-override_dh_strip:
-	dh_strip --dbg-package=wmaker-dbg
-
-# unexport CFLAGS
-# unexport CPPFLAGS
-# unexport LDFLAGS
 
 get-orig-source:
 	@git checkout next
