@@ -1,3 +1,9 @@
+wmaker (0.95.7+20160324-0ppa1) unstable; urgency=medium
+
+  * Merge official Debian 0.95.7-6 package.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 24 Mar 2016 19:20:26 -0400
+
 wmaker (0.95.7+20160309-0ppa1) xenial; urgency=medium
 
   * Merge official Debian 0.95.7-5 package.
@@ -83,6 +89,13 @@ wmaker (0.95.7+20150813-0ppa1) wily; urgency=medium
     - Update email address.
 
  -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 13 Aug 2015 23:01:18 -0400
+
+wmaker (0.95.7-6) unstable; urgency=medium
+
+  * Split wxcopy and wxpaste into new wmaker-utils package (Closes: #78119).
+  * Restore libwmaker packages.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Wed, 09 Mar 2016 00:08:43 -0500
 
 wmaker (0.95.7-5) unstable; urgency=medium
 

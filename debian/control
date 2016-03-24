@@ -73,8 +73,8 @@ Package: wmaker-utils
 Architecture: any
 Multi-Arch: foreign
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Breaks: wmaker (<< 0.95.7-2)
-Replaces: wmaker (<< 0.95.7-2)
+Breaks: wmaker (<< 0.95.7-6)
+Replaces: wmaker (<< 0.95.7-6)
 Description: Window Maker - Utilities
  Written by Alfredo Kojima almost from scratch, resembles the NeXTStep look
  very closely, and it is now an official GNU project. Window Maker (originally
@@ -176,9 +176,10 @@ Package: libwmaker-dev
 Architecture: any
 Multi-Arch: same
 Section: libdevel
-Depends: libwmaker1 (= ${binary:Version}), libx11-dev, ${misc:Depends}
+Depends: libx11-dev, ${misc:Depends}
 Description: Static libraries and headers for Window Maker applications
  Window Maker is a NeXTSTEP-like window manager for X.
+ .
  This package contains libWMaker and header files, for building
  Window Maker aware applications.
 
@@ -189,5 +190,6 @@ Section: libs
 Depends: ${misc:Depends}, ${shlibs:Depends}
 Description: Runtime library for Window Maker applications
  Window Maker is a NeXTSTEP-like window manager for X.
+ .
  This package contains the libWMaker runtime library for Window Maker
  aware applications.
