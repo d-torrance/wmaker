@@ -1,4 +1,4 @@
-wmaker (0.95.7-6) experimental; urgency=medium
+wmaker (0.95.7-6) unstable; urgency=medium
 
   * Split wxcopy and wxpaste into new wmaker-utils package (Closes: #78119).
   * Restore libwmaker packages.
