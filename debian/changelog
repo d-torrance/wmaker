@@ -1,4 +1,4 @@
-wmaker (0.95.7+20160324-0ppa1) unstable; urgency=medium
+wmaker (0.95.7+20160324-0ppa1) xenial; urgency=medium
 
   * Merge official Debian 0.95.7-6 package.
 
