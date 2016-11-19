@@ -1,9 +1,9 @@
-wmaker (0.95.7-7) UNRELEASED; urgency=medium
+wmaker (0.95.7-7) unstable; urgency=medium
 
-  * debian/copyright
-    - Add missing license information.
+  * Add missing license information to debian/copyright.
+  * Fix segfault in wmmenugen (Closes: #844783).
 
- -- Doug Torrance <dtorrance@piedmont.edu>  Fri, 25 Mar 2016 22:58:36 -0400
+ -- Doug Torrance <dtorrance@piedmont.edu>  Sat, 19 Nov 2016 10:35:50 -0500
 
 wmaker (0.95.7-6) unstable; urgency=medium
 
