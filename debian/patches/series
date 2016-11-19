@@ -6,3 +6,4 @@
 56_ignore_runstatedir.diff
 57_ignore_with-aix-soname.diff
 60_fix_wraster_symbol_versioning.diff
+61_fix_wmmenugen_segfault.diff
