@@ -1,3 +1,9 @@
+wmaker (0.95.7+20170129-0ppa1) zesty; urgency=medium
+
+  * Merge official Debian 0.957-7 package.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Sun, 29 Jan 2017 13:05:01 -0500
+
 wmaker (0.95.7+20160324-0ppa1) xenial; urgency=medium
 
   * Merge official Debian 0.95.7-6 package.
@@ -89,6 +95,13 @@ wmaker (0.95.7+20150813-0ppa1) wily; urgency=medium
     - Update email address.
 
  -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 13 Aug 2015 23:01:18 -0400
+
+wmaker (0.95.7-7) unstable; urgency=medium
+
+  * Add missing license information to debian/copyright.
+  * Fix segfault in wmmenugen (Closes: #844783).
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Sat, 19 Nov 2016 10:35:50 -0500
 
 wmaker (0.95.7-6) unstable; urgency=medium
 

@@ -216,6 +216,10 @@ void wSetFocusTo(WScreen *scr, WWindow *wwin)
 			if (wPreferences.highlight_active_app)
 				wApplicationDeactivate(oapp);
 		}
+
+		/* reset fullscreen if temporarily removed due to lost focus*/
+		if (wwin->flags.fullscreen)
+			ChangeStackingLevel(wwin->frame->core, WMFullscreenLevel);
 	}
 
 	wWindowFocus(wwin, focused);
@@ -727,8 +731,7 @@ void wFullscreenWindow(WWindow *wwin)
 
 	wWindowConfigureBorders(wwin);
 
-	ChangeStackingLevel(wwin->frame->core, WMNormalLevel);
-	wRaiseFrame(wwin->frame->core);
+	ChangeStackingLevel(wwin->frame->core, WMFullscreenLevel);
 
 	wwin->bfs_geometry.x = wwin->frame_x;
 	wwin->bfs_geometry.y = wwin->frame_y;
@@ -752,10 +755,15 @@ void wUnfullscreenWindow(WWindow *wwin)
 
 	wwin->flags.fullscreen = False;
 
-	if (WFLAGP(wwin, sunken))
-		ChangeStackingLevel(wwin->frame->core, WMSunkenLevel);
-	else if (WFLAGP(wwin, floating))
-		ChangeStackingLevel(wwin->frame->core, WMFloatingLevel);
+	if (wwin->frame->core->stacking->window_level == WMFullscreenLevel) {
+		if (WFLAGP(wwin, sunken)) {
+			ChangeStackingLevel(wwin->frame->core, WMSunkenLevel);
+		} else if (WFLAGP(wwin, floating)) {
+			ChangeStackingLevel(wwin->frame->core, WMFloatingLevel);
+		} else {
+			ChangeStackingLevel(wwin->frame->core, WMNormalLevel);
+		}
+	}
 
 	wWindowConfigure(wwin, wwin->bfs_geometry.x, wwin->bfs_geometry.y,
 			 wwin->bfs_geometry.width, wwin->bfs_geometry.height);
