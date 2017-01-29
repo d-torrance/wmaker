@@ -6,8 +6,9 @@ wmaker (0.95.8-1) unstable; urgency=medium
     - New keyboard shortcuts (Closes: #306808).
     - Windows list sorted by workspace (Closes: #280851).
     - Menus may be shaded (Closes: #72038).
+    - Default menu uses correct path to WPrefs (Closes: #851737).
 
- -- Doug Torrance <dtorrance@piedmont.edu>  Wed, 20 Jan 2016 10:11:58 -0500
+ -- Doug Torrance <dtorrance@piedmont.edu>  Sun, 29 Jan 2017 00:31:08 -0500
 
 wmaker (0.95.7-7) unstable; urgency=medium
 
