@@ -180,14 +180,13 @@ static WDECallbackUpdate setCursor;
 #define REFRESH_WINDOW_FONT	(1<<8)
 #define REFRESH_ICON_TILE	(1<<9)
 #define REFRESH_ICON_FONT	(1<<10)
-#define REFRESH_WORKSPACE_BACK	(1<<11)
 
-#define REFRESH_BUTTON_IMAGES   (1<<12)
+#define REFRESH_BUTTON_IMAGES   (1<<11)
 
-#define REFRESH_ICON_TITLE_COLOR (1<<13)
-#define REFRESH_ICON_TITLE_BACK (1<<14)
+#define REFRESH_ICON_TITLE_COLOR (1<<12)
+#define REFRESH_ICON_TITLE_BACK (1<<13)
 
-#define REFRESH_WORKSPACE_MENU	(1<<15)
+#define REFRESH_WORKSPACE_MENU	(1<<14)
 
 #define REFRESH_FRAME_BORDER REFRESH_MENU_FONT|REFRESH_WINDOW_FONT
 
@@ -482,6 +481,12 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.snap_to_top_maximizes_fullscreen, getBool, NULL, NULL, NULL},
 	{"DragMaximizedWindow", "Move", seDragMaximizedWindow,
 	    &wPreferences.drag_maximized_window, getEnum, NULL, NULL, NULL},
+	{"MoveHalfMaximizedWindowsBetweenScreens", "NO", NULL,
+	    &wPreferences.move_half_max_between_heads, getBool, NULL, NULL, NULL},
+	{"AlternativeHalfMaximized", "NO", NULL,
+	    &wPreferences.alt_half_maximize, getBool, NULL, NULL, NULL},
+	{"PointerWithHalfMaxWindows", "NO", NULL,
+	    &wPreferences.pointer_with_half_max_windows, getBool, NULL, NULL, NULL},
 	{"HighlightActiveApp", "YES", NULL,
 	    &wPreferences.highlight_active_app, getBool, NULL, NULL, NULL},
 	{"AutoArrangeIcons", "NO", NULL,
