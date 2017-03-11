@@ -117,6 +117,16 @@ void PlaceIcon(WScreen *scr, int *x_ret, int *y_ret, int head)
 	WMBagIterator iter;
 	WArea area = wGetUsableAreaForHead(scr, head, NULL, False);
 
+	/* Do not place icons under the dock. */
+	if (scr->dock) {
+		int offset = wPreferences.icon_size + DOCK_EXTRA_SPACE;
+
+		if (scr->dock->on_right_side)
+			area.x2 -= offset;
+		else
+		    area.x1 += offset;
+	}
+
 	/* Find out screen boundaries. */
 
 	/* Allows each head to have miniwindows */
@@ -546,7 +556,7 @@ void PlaceWindow(WWindow *wwin, int *x_ret, int *y_ret, unsigned width, unsigned
 	/*
 	 * clip to usableArea instead of full screen
 	 * this will also take dock/clip etc.. into account
-	 * aswell as being xinerama friendly
+	 * as well as being xinerama friendly
 	 */
 	if (*x_ret + width > usableArea.x2)
 		*x_ret = usableArea.x2 - width;

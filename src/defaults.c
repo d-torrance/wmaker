@@ -67,11 +67,6 @@
 
 #define MAX_SHORTCUT_LENGTH 32
 
-#ifndef GLOBAL_DEFAULTS_SUBDIR
-#define GLOBAL_DEFAULTS_SUBDIR "WindowMaker"
-#endif
-
-
 typedef struct _WDefaultEntry  WDefaultEntry;
 typedef int (WDECallbackConvert) (WScreen *scr, WDefaultEntry *entry, WMPropList *plvalue, void *addr, void **tdata);
 typedef int (WDECallbackUpdate) (WScreen *scr, WDefaultEntry *entry, void *tdata, void *extra_data);
@@ -180,14 +175,13 @@ static WDECallbackUpdate setCursor;
 #define REFRESH_WINDOW_FONT	(1<<8)
 #define REFRESH_ICON_TILE	(1<<9)
 #define REFRESH_ICON_FONT	(1<<10)
-#define REFRESH_WORKSPACE_BACK	(1<<11)
 
-#define REFRESH_BUTTON_IMAGES   (1<<12)
+#define REFRESH_BUTTON_IMAGES   (1<<11)
 
-#define REFRESH_ICON_TITLE_COLOR (1<<13)
-#define REFRESH_ICON_TITLE_BACK (1<<14)
+#define REFRESH_ICON_TITLE_COLOR (1<<12)
+#define REFRESH_ICON_TITLE_BACK (1<<13)
 
-#define REFRESH_WORKSPACE_MENU	(1<<15)
+#define REFRESH_WORKSPACE_MENU	(1<<14)
 
 #define REFRESH_FRAME_BORDER REFRESH_MENU_FONT|REFRESH_WINDOW_FONT
 
@@ -478,8 +472,16 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.snap_edge_detect, getInt, NULL, NULL, NULL},
 	{"SnapCornerDetect", "10", NULL,
 	    &wPreferences.snap_corner_detect, getInt, NULL, NULL, NULL},
+	{"SnapToTopMaximizesFullscreen", "NO", NULL,
+	    &wPreferences.snap_to_top_maximizes_fullscreen, getBool, NULL, NULL, NULL},
 	{"DragMaximizedWindow", "Move", seDragMaximizedWindow,
 	    &wPreferences.drag_maximized_window, getEnum, NULL, NULL, NULL},
+	{"MoveHalfMaximizedWindowsBetweenScreens", "NO", NULL,
+	    &wPreferences.move_half_max_between_heads, getBool, NULL, NULL, NULL},
+	{"AlternativeHalfMaximized", "NO", NULL,
+	    &wPreferences.alt_half_maximize, getBool, NULL, NULL, NULL},
+	{"PointerWithHalfMaxWindows", "NO", NULL,
+	    &wPreferences.pointer_with_half_max_windows, getBool, NULL, NULL, NULL},
 	{"HighlightActiveApp", "YES", NULL,
 	    &wPreferences.highlight_active_app, getBool, NULL, NULL, NULL},
 	{"AutoArrangeIcons", "NO", NULL,
@@ -545,7 +547,7 @@ WDefaultEntry optionList[] = {
 	{"WorkspaceSpecificBack", "()", NULL,
 	    NULL, getWSSpecificBackground, setWorkspaceSpecificBack, NULL, NULL},
 	/* WorkspaceBack must come after WorkspaceSpecificBack or
-	 * WorkspaceBack wont know WorkspaceSpecificBack was also
+	 * WorkspaceBack won't know WorkspaceSpecificBack was also
 	 * specified and 2 copies of wmsetbg will be launched */
 	{"WorkspaceBack", "(solid, black)", NULL,
 	    NULL, getWSBackground, setWorkspaceBack, NULL, NULL},
@@ -682,6 +684,10 @@ WDefaultEntry optionList[] = {
 		NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"MaximusKey", "None", (void*)WKBD_MAXIMUS,
 		NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"KeepOnTopKey", "None", (void *)WKBD_KEEP_ON_TOP,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"KeepAtBottomKey", "None", (void *)WKBD_KEEP_AT_BOTTOM,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"OmnipresentKey", "None", (void *)WKBD_OMNIPRESENT,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"RaiseKey", "\"Meta+Up\"", (void *)WKBD_RAISE,
@@ -868,7 +874,7 @@ static WMPropList *readGlobalDomain(const char *domainName, Bool requireDictiona
 	char path[PATH_MAX];
 	struct stat stbuf;
 
-	snprintf(path, sizeof(path), "%s/%s/%s", SYSCONFDIR, GLOBAL_DEFAULTS_SUBDIR, domainName);
+	snprintf(path, sizeof(path), "%s/%s", DEFSDATADIR, domainName);
 	if (stat(path, &stbuf) >= 0) {
 		globalDict = WMReadPropListFromFile(path);
 		if (globalDict && requireDictionary && !WMIsPLDictionary(globalDict)) {
@@ -918,7 +924,7 @@ void wDefaultsMergeGlobalMenus(WDDomain * menuDomain)
 		return;
 
 #ifdef GLOBAL_PREAMBLE_MENU_FILE
-	submenu = WMReadPropListFromFile(SYSCONFDIR "/" GLOBAL_DEFAULTS_SUBDIR "/" GLOBAL_PREAMBLE_MENU_FILE);
+	submenu = WMReadPropListFromFile(DEFSDATADIR "/" GLOBAL_PREAMBLE_MENU_FILE);
 
 	if (submenu && !WMIsPLArray(submenu)) {
 		wwarning(_("invalid global menu file %s"), GLOBAL_PREAMBLE_MENU_FILE);
@@ -932,7 +938,7 @@ void wDefaultsMergeGlobalMenus(WDDomain * menuDomain)
 #endif
 
 #ifdef GLOBAL_EPILOGUE_MENU_FILE
-	submenu = WMReadPropListFromFile(SYSCONFDIR "/" GLOBAL_DEFAULTS_SUBDIR "/" GLOBAL_EPILOGUE_MENU_FILE);
+	submenu = WMReadPropListFromFile(DEFSDATADIR "/" GLOBAL_EPILOGUE_MENU_FILE);
 
 	if (submenu && !WMIsPLArray(submenu)) {
 		wwarning(_("invalid global menu file %s"), GLOBAL_EPILOGUE_MENU_FILE);

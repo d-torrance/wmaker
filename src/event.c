@@ -329,7 +329,7 @@ static void handle_inotify_events(void)
 		return;
 	}
 
-	/* check what events occured */
+	/* check what events occurred */
 	/* Should really check wd here too, but for now we only have one watch! */
 	while (i < eventQLength) {
 		struct inotify_event *pevent = (struct inotify_event *)&buff[i];
@@ -408,7 +408,7 @@ noreturn void EventLoop(void)
 			/* check for available read data from inotify - don't block! */
 			retVal = select(w_global.inotify.fd_event_queue + 1, &rfds, NULL, NULL, &time);
 
-			if (retVal < 0) {	/* an error has occured */
+			if (retVal < 0) {	/* an error has occurred */
 				wwarning(_("select failed. The inotify instance will be closed."
 					   " Changes to the defaults database will require"
 					   " a restart to take effect."));
@@ -632,7 +632,8 @@ static void handleMapRequest(XEvent * ev)
 	if (wwin) {
 		wClientSetState(wwin, NormalState, None);
 		if (wwin->flags.maximized) {
-			wMaximizeWindow(wwin, wwin->flags.maximized);
+			wMaximizeWindow(wwin, wwin->flags.maximized,
+					wGetHeadForWindow(wwin));
 		}
 		if (wwin->flags.shaded) {
 			wwin->flags.shaded = 0;
@@ -1310,7 +1311,7 @@ static void handleColormapNotify(XEvent * event)
 
 				/* some bastard app (like XV) removed our colormap */
 				/*
-				 * can't enforce or things like xscreensaver wont work
+				 * can't enforce or things like xscreensaver won't work
 				 * reinstall = True;
 				 */
 			} else if (event->xcolormap.state == ColormapInstalled &&
@@ -1499,6 +1500,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_HORIZONTAL | MAX_KEYBOARD);
+			movePionterToWindowCenter(wwin);
 		}
 		break;
 	case WKBD_LHMAXIMIZE:
@@ -1506,6 +1508,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_VERTICAL | MAX_LEFTHALF | MAX_KEYBOARD);
+			movePionterToWindowCenter(wwin);
 		}
 		break;
 	case WKBD_RHMAXIMIZE:
@@ -1513,6 +1516,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_VERTICAL | MAX_RIGHTHALF | MAX_KEYBOARD);
+			movePionterToWindowCenter(wwin);
 		}
 		break;
 	case WKBD_THMAXIMIZE:
@@ -1520,6 +1524,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_HORIZONTAL | MAX_TOPHALF | MAX_KEYBOARD);
+			movePionterToWindowCenter(wwin);
 		}
 		break;
 	case WKBD_BHMAXIMIZE:
@@ -1527,6 +1532,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_HORIZONTAL | MAX_BOTTOMHALF | MAX_KEYBOARD);
+			movePionterToWindowCenter(wwin);
 		}
 		break;
 	case WKBD_LTCMAXIMIZE:
@@ -1534,6 +1540,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_LEFTHALF | MAX_TOPHALF | MAX_KEYBOARD);
+			movePionterToWindowCenter(wwin);
 		}
 		break;
 	case WKBD_RTCMAXIMIZE:
@@ -1541,6 +1548,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_RIGHTHALF | MAX_TOPHALF | MAX_KEYBOARD);
+			movePionterToWindowCenter(wwin);
 		}
 		break;
 	case WKBD_LBCMAXIMIZE:
@@ -1548,6 +1556,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_LEFTHALF | MAX_BOTTOMHALF | MAX_KEYBOARD);
+			movePionterToWindowCenter(wwin);
 		}
 		 break;
 	case WKBD_RBCMAXIMIZE:
@@ -1555,6 +1564,7 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_RIGHTHALF | MAX_BOTTOMHALF | MAX_KEYBOARD);
+			movePionterToWindowCenter(wwin);
 		}
 		break;
 	case WKBD_MAXIMUS:
@@ -1562,6 +1572,27 @@ static void handleKeyPress(XEvent * event)
 			CloseWindowMenu(scr);
 
 			handleMaximize(wwin, MAX_MAXIMUS | MAX_KEYBOARD);
+		}
+		break;
+	case WKBD_KEEP_ON_TOP:
+		if (ISMAPPED(wwin) && ISFOCUSED(wwin)) {
+			CloseWindowMenu(scr);
+
+			if (wwin->frame->core->stacking->window_level != WMFloatingLevel)
+				ChangeStackingLevel(wwin->frame->core, WMFloatingLevel);
+			else
+				ChangeStackingLevel(wwin->frame->core, WMNormalLevel);
+		}
+		break;
+
+	case WKBD_KEEP_AT_BOTTOM:
+		if (ISMAPPED(wwin) && ISFOCUSED(wwin)) {
+			CloseWindowMenu(scr);
+
+			if (wwin->frame->core->stacking->window_level != WMSunkenLevel)
+				ChangeStackingLevel(wwin->frame->core, WMSunkenLevel);
+			else
+				ChangeStackingLevel(wwin->frame->core, WMNormalLevel);
 		}
 		break;
 	case WKBD_OMNIPRESENT:
