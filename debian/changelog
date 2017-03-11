@@ -1,3 +1,45 @@
+wmaker (0.95.8-1) experimental; urgency=medium
+
+  * New upstream release.
+    - Menus may be shaded (Closes: #72038).
+    - Follow window placement rules when placing windows on non-active
+      workspaces (Closes: #181735).
+    - Windows list sorted by workspace (Closes: #280851).
+    - New keyboard shortcuts (Closes: #306808).
+    - Default menu uses correct path to WPrefs (Closes: #851737).
+    - Use PKG_PROG_PKG_CONFIG macro to allow cross building
+      (Closes: #853236).
+  * debian/{control,libwraster*}
+    - Rename libwraster5 -> libwraster6 for soname version bump.
+  * debian/patches/50_def_config_paths.diff
+    - Remove unnecessary patch. It added /etc/GNUstep/Defaults to the
+      DEF_CONFIG_PATHS macro, but the files needed in the paths
+      referenced in this macro (in particular, menu, autostart, and
+      exitscript) will not be located there.
+  * debian/patches/51_wmaker_man.diff
+    - Remove patch; applied upstream.
+  * debian/patches/53_Debian_WMState.diff
+    - Update patch.  The path to WPrefs is already set correctly during
+      build; we do not need to set it explicitly.
+  * debian/patches/56_ignore_runstatedir.diff
+    - Remove patch; applied upstream.
+  * debian/patches/57_ignore_with-aix-soname.diff
+    - Remove patch; applied upstream.
+  * debian/patches/60_fix_wraster_symbol_versioning.diff
+    - Remove patch; no longer necessary as the wraster soname version has
+      been bumped.
+  * debian/patches/61_fix_wmmenugen_segfault.diff
+    - Remove patch; applied upstream.
+  * debian/rules
+    - Replace old GLOBAL_DEFAULTS_SUBDIR macro with new --with-defsdatadir
+      configure option.
+  * debian/watch
+    - Bump to uscan v4 and simplify using new strings.
+  * debian/wmaker-common.install
+    - Update installation directory of WMGLOBAL and WMState config files.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Sat, 11 Mar 2017 09:49:15 -0500
+
 wmaker (0.95.7-8) unstable; urgency=medium
 
   * debian/control
