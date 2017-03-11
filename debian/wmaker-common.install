@@ -1,4 +1,4 @@
-debian/debianfiles/Themes/Debian		usr/share/WindowMaker/Themes
+debian/debianfiles/Themes/Debian.style		usr/share/WindowMaker/Themes
 debian/debianfiles/Themes/DebianLegacy.style	usr/share/WindowMaker/Themes
 debian/debianfiles/Themes/DebianSwirl.jpg	usr/share/WindowMaker/Backgrounds
 debian/debianfiles/Themes/debian.tiff		usr/share/WindowMaker/Backgrounds
