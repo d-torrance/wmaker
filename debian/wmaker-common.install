@@ -1,7 +1,3 @@
-README.WPrefs					usr/share/doc/wmaker
-README.WPrefs.po				usr/share/doc/wmaker
-README.definable-cursor				usr/share/doc/wmaker
-README.po					usr/share/doc/wmaker
 debian/debianfiles/Themes/Debian		usr/share/WindowMaker/Themes
 debian/debianfiles/Themes/DebianLegacy.style	usr/share/WindowMaker/Themes
 debian/debianfiles/Themes/DebianSwirl.jpg	usr/share/WindowMaker/Backgrounds
