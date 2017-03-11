@@ -6,8 +6,11 @@ wmaker (0.95.8-2) UNRELEASED; urgency=medium
     /usr/share/applications.  This gives a decent approximation of
     compliance with freedesktop.org's menu standards (Closes: #868431).
   * Bump Standards-Version to 4.0.0.
+  * Move wmaker manpage from wmaker-common to wmaker package.
+    From Policy 12.1: "Each program, utility, and function should have
+    an associated manual page included in the *same* package."
 
- -- Doug Torrance <dtorrance@piedmont.edu>  Mon, 24 Jul 2017 10:20:31 -0400
+ -- Doug Torrance <profzoom@cayke>  Mon, 24 Jul 2017 22:17:44 -0400
 
 wmaker (0.95.8-1) unstable; urgency=low
 
