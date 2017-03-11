@@ -5,7 +5,6 @@ FAQ
 NEWS
 README
 TODO
-debian/copyright
 debian/debianfiles/Themes/DebianLegacy.txt
 debian/tmp/README.WPrefs
 debian/tmp/README.WPrefs.po
