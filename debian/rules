@@ -54,6 +54,10 @@ override_dh_install:
 	chmod +x $(DEBIAN_TMP)$(WMSHAREDIR)/autostart.sh
 	chmod +x $(DEBIAN_TMP)$(WMSHAREDIR)/exitscript.sh
 
+	# apply Debian theme
+	GNUSTEP_USER_ROOT=$(DEBIAN_TMP)/etc/GNUstep \
+		$(DEBIAN_TMP)/usr/bin/setstyle \
+		debian/debianfiles/Themes/Debian.style
 
 	# Now, change the #wmdatadir# string to $(WMSHAREDIR)
 	perl -pi -e 's:#wmdatadir#:$(WMSHAREDIR):' `find $(DEBIAN_TMP)/$(WMSHAREDIR) -name plmenu.*`

@@ -4,13 +4,13 @@ debian/debianfiles/Themes/DebianSwirl.jpg	usr/share/WindowMaker/Backgrounds
 debian/debianfiles/Themes/debian.tiff		usr/share/WindowMaker/Backgrounds
 debian/debianfiles/conf/WMRootMenu		etc/GNUstep/Defaults
 debian/debianfiles/conf/WMWindowAttributes	etc/GNUstep/Defaults
-debian/debianfiles/conf/WindowMaker		etc/GNUstep/Defaults
 debian/debianfiles/menu/wmappearance		etc/menu-methods
 debian/debianfiles/upgrade-windowmaker-defaults usr/sbin
 debian/debianfiles/wmaker			usr/bin
 debian/debianfiles/wmaker-common.desktop	usr/share/xsessions
 etc/GNUstep/Defaults/WMGLOBAL
 etc/GNUstep/Defaults/WMState
+etc/GNUstep/Defaults/WindowMaker
 usr/share/WINGs
 usr/share/WindowMaker
 usr/share/lib/GNUstep/System/Applications/WPrefs.app/WPrefs.tiff
