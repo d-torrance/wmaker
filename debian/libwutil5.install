@@ -1,1 +1,2 @@
 usr/lib/*/libWUtil.so.*
+usr/share/locale/*/LC_MESSAGES/WINGs.mo

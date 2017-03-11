@@ -20,4 +20,6 @@ usr/share/WindowMaker
 usr/share/lib/GNUstep/System/Applications/WPrefs.app/WPrefs.tiff
 usr/share/lib/GNUstep/System/Applications/WPrefs.app/WPrefs.xpm
 usr/share/lib/GNUstep/System/Applications/WPrefs.app/tiff
-usr/share/locale/*/LC_MESSAGES/*.mo
+usr/share/locale/*/LC_MESSAGES/WPrefs.mo
+usr/share/locale/*/LC_MESSAGES/WindowMaker.mo
+usr/share/locale/*/LC_MESSAGES/wmgenmenu.mo
