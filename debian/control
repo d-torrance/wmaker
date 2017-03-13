@@ -44,7 +44,8 @@ Suggests: desktop-base,
           wmaker-data,
           wmaker-utils,
           x-terminal-emulator,
-          x11-apps
+          x11-apps,
+          xterm
 Description: NeXTSTEP-like window manager for X
  Written by Alfredo Kojima almost from scratch, resembles the NeXTStep look
  very closely, and it is now an official GNU project. Window Maker (originally
