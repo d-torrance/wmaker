@@ -18,14 +18,12 @@ DEBIAN_TMP        := debian/tmp
 BASEDIR           := /usr
 INCLUDEDIR        := $(BASEDIR)/include
 SHAREDIR          := $(BASEDIR)/share
-NLSDIR            := $(SHAREDIR)/locale
 GNUSTEPDIR        := $(SHAREDIR)/lib/GNUstep/System
 WMSHAREDIR        := $(SHAREDIR)/WindowMaker
 PIXMAPDIR         := $(INCLUDEDIR)/X11/pixmaps
 DEFSDATADIR       := /etc/GNUstep/Defaults
 
 COMMON_OPTIONS    := --datadir=$(SHAREDIR)            \
-                     --with-localedir=$(NLSDIR)       \
                      --with-pixmapdir=$(PIXMAPDIR)    \
                      --with-gnustepdir=$(GNUSTEPDIR)  \
                      --with-defsdatadir=$(DEFSDATADIR)
