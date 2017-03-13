@@ -6,7 +6,7 @@ export DEB_CFLAGS_MAINT_APPEND += -Wall
 
 LINGUAS           := $(patsubst po/%.po, %, $(wildcard po/*.po))
 
-WMAKER_OPTIONS := --disable-locale --enable-modelock --enable-pango --enable-xinerama
+WMAKER_OPTIONS := --disable-xlocale --enable-modelock --enable-pango --enable-xinerama
 #not-enabled      --enable-usermenu --disable-shape --disable-shm --enable-randr
 #not-enabled      --disable-xpm --disable-png --disable-jpeg --disable-gif --disable-tiff
 
