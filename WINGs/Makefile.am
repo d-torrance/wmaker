@@ -60,6 +60,7 @@ libWINGs_la_SOURCES = 	\
 	wtabview.c \
 	wtext.c \
 	wtextfield.c \
+	wtexture.c \
 	wview.c \
 	wwindow.c
 

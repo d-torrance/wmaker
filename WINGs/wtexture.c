@@ -18,8 +18,6 @@
  *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#include "wconfig.h"
-
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
@@ -27,18 +25,15 @@
 #include <stdio.h>
 #include <string.h>
 
+#include "WINGsP.h"
+#include "../src/wconfig.h"
+
 #include <wraster.h>
 
-#include "WindowMaker.h"
-#include "texture.h"
-#include "window.h"
-#include "misc.h"
-
-
 static void bevelImage(RImage * image, int relief);
-static RImage * get_texture_image(WScreen *scr, const char *pixmap_file);
+static RImage * get_texture_image(WMScreen *scr, const char *pixmap_file);
 
-WTexSolid *wTextureMakeSolid(WScreen * scr, XColor * color)
+WTexSolid *wTextureMakeSolid(WMScreen * scr, XColor * color)
 {
 	WTexSolid *texture;
 	int gcm;
@@ -49,7 +44,7 @@ WTexSolid *wTextureMakeSolid(WScreen * scr, XColor * color)
 	texture->type = WTEX_SOLID;
 	texture->subtype = 0;
 
-	XAllocColor(dpy, scr->w_colormap, color);
+	XAllocColor(WMScreenDisplay(scr), scr->colormap, color);
 	texture->normal = *color;
 	if (color->red == 0 && color->blue == 0 && color->green == 0) {
 		texture->light.red = 0xb6da;
@@ -86,24 +81,24 @@ WTexSolid *wTextureMakeSolid(WScreen * scr, XColor * color)
 	texture->dark.red = 0;
 	texture->dark.green = 0;
 	texture->dark.blue = 0;
-	XAllocColor(dpy, scr->w_colormap, &texture->light);
-	XAllocColor(dpy, scr->w_colormap, &texture->dim);
-	XAllocColor(dpy, scr->w_colormap, &texture->dark);
+	XAllocColor(WMScreenDisplay(scr), scr->colormap, &texture->light);
+	XAllocColor(WMScreenDisplay(scr), scr->colormap, &texture->dim);
+	XAllocColor(WMScreenDisplay(scr), scr->colormap, &texture->dark);
 
 	gcm = GCForeground | GCBackground | GCGraphicsExposures;
 	gcv.graphics_exposures = False;
 
 	gcv.background = gcv.foreground = texture->light.pixel;
-	texture->light_gc = XCreateGC(dpy, scr->w_win, gcm, &gcv);
+	texture->light_gc = XCreateGC(WMScreenDisplay(scr), W_DRAWABLE(scr), gcm, &gcv);
 
 	gcv.background = gcv.foreground = texture->dim.pixel;
-	texture->dim_gc = XCreateGC(dpy, scr->w_win, gcm, &gcv);
+	texture->dim_gc = XCreateGC(WMScreenDisplay(scr), W_DRAWABLE(scr), gcm, &gcv);
 
 	gcv.background = gcv.foreground = texture->dark.pixel;
-	texture->dark_gc = XCreateGC(dpy, scr->w_win, gcm, &gcv);
+	texture->dark_gc = XCreateGC(WMScreenDisplay(scr), W_DRAWABLE(scr), gcm, &gcv);
 
 	gcv.background = gcv.foreground = color->pixel;
-	texture->normal_gc = XCreateGC(dpy, scr->w_win, gcm, &gcv);
+	texture->normal_gc = XCreateGC(WMScreenDisplay(scr), W_DRAWABLE(scr), gcm, &gcv);
 
 	return texture;
 }
@@ -117,7 +112,7 @@ static int dummyErrorHandler(Display * foo, XErrorEvent * bar)
 	return 0;
 }
 
-void wTextureDestroy(WScreen * scr, WTexture * texture)
+void wTextureDestroy(WMScreen * scr, WTexture * texture)
 {
 	int i;
 	int count = 0;
@@ -126,12 +121,12 @@ void wTextureDestroy(WScreen * scr, WTexture * texture)
 	/*
 	 * some stupid servers don't like white or black being freed...
 	 */
-#define CANFREE(c) (c!=scr->black_pixel && c!=scr->white_pixel && c!=0)
+#define CANFREE(c) (c!=WMColorPixel(WMBlackColor(scr)) && c!=WMColorPixel(WMWhiteColor(scr)) && c!=0)
 	switch (texture->any.type) {
 	case WTEX_SOLID:
-		XFreeGC(dpy, texture->solid.light_gc);
-		XFreeGC(dpy, texture->solid.dark_gc);
-		XFreeGC(dpy, texture->solid.dim_gc);
+		XFreeGC(WMScreenDisplay(scr), texture->solid.light_gc);
+		XFreeGC(WMScreenDisplay(scr), texture->solid.dark_gc);
+		XFreeGC(WMScreenDisplay(scr), texture->solid.dim_gc);
 		if (CANFREE(texture->solid.light.pixel))
 			colors[count++] = texture->solid.light.pixel;
 		if (CANFREE(texture->solid.dim.pixel))
@@ -167,18 +162,18 @@ void wTextureDestroy(WScreen * scr, WTexture * texture)
 
 		/* ignore error from buggy servers that don't know how
 		 * to do reference counting for colors. */
-		XSync(dpy, 0);
+		XSync(WMScreenDisplay(scr), 0);
 		oldhandler = XSetErrorHandler(dummyErrorHandler);
-		XFreeColors(dpy, scr->w_colormap, colors, count, 0);
-		XSync(dpy, 0);
+		XFreeColors(WMScreenDisplay(scr), scr->colormap, colors, count, 0);
+		XSync(WMScreenDisplay(scr), 0);
 		XSetErrorHandler(oldhandler);
 	}
-	XFreeGC(dpy, texture->any.gc);
+	XFreeGC(WMScreenDisplay(scr), texture->any.gc);
 	wfree(texture);
 #undef CANFREE
 }
 
-WTexGradient *wTextureMakeGradient(WScreen *scr, int style, const RColor *from, const RColor *to)
+WTexGradient *wTextureMakeGradient(WMScreen *scr, int style, const RColor *from, const RColor *to)
 {
 	WTexGradient *texture;
 	XGCValues gcv;
@@ -194,15 +189,15 @@ WTexGradient *wTextureMakeGradient(WScreen *scr, int style, const RColor *from, 
 	texture->normal.green = (from->green + to->green) << 7;
 	texture->normal.blue = (from->blue + to->blue) << 7;
 
-	XAllocColor(dpy, scr->w_colormap, &texture->normal);
+	XAllocColor(WMScreenDisplay(scr), scr->colormap, &texture->normal);
 	gcv.background = gcv.foreground = texture->normal.pixel;
 	gcv.graphics_exposures = False;
-	texture->normal_gc = XCreateGC(dpy, scr->w_win, GCForeground | GCBackground | GCGraphicsExposures, &gcv);
+	texture->normal_gc = XCreateGC(WMScreenDisplay(scr), W_DRAWABLE(scr), GCForeground | GCBackground | GCGraphicsExposures, &gcv);
 
 	return texture;
 }
 
-WTexIGradient *wTextureMakeIGradient(WScreen *scr, int thickness1, const RColor colors1[2],
+WTexIGradient *wTextureMakeIGradient(WMScreen *scr, int thickness1, const RColor colors1[2],
 				     int thickness2, const RColor colors2[2])
 {
 	WTexIGradient *texture;
@@ -226,15 +221,15 @@ WTexIGradient *wTextureMakeIGradient(WScreen *scr, int thickness1, const RColor 
 		texture->normal.green = (colors2[0].green + colors2[1].green) << 7;
 		texture->normal.blue = (colors2[0].blue + colors2[1].blue) << 7;
 	}
-	XAllocColor(dpy, scr->w_colormap, &texture->normal);
+	XAllocColor(WMScreenDisplay(scr), scr->colormap, &texture->normal);
 	gcv.background = gcv.foreground = texture->normal.pixel;
 	gcv.graphics_exposures = False;
-	texture->normal_gc = XCreateGC(dpy, scr->w_win, GCForeground | GCBackground | GCGraphicsExposures, &gcv);
+	texture->normal_gc = XCreateGC(WMScreenDisplay(scr), W_DRAWABLE(scr), GCForeground | GCBackground | GCGraphicsExposures, &gcv);
 
 	return texture;
 }
 
-WTexMGradient *wTextureMakeMGradient(WScreen * scr, int style, RColor ** colors)
+WTexMGradient *wTextureMakeMGradient(WMScreen * scr, int style, RColor ** colors)
 {
 	WTexMGradient *texture;
 	XGCValues gcv;
@@ -254,15 +249,15 @@ WTexMGradient *wTextureMakeMGradient(WScreen * scr, int style, RColor ** colors)
 
 	texture->colors = colors;
 
-	XAllocColor(dpy, scr->w_colormap, &texture->normal);
+	XAllocColor(WMScreenDisplay(scr), scr->colormap, &texture->normal);
 	gcv.background = gcv.foreground = texture->normal.pixel;
 	gcv.graphics_exposures = False;
-	texture->normal_gc = XCreateGC(dpy, scr->w_win, GCForeground | GCBackground | GCGraphicsExposures, &gcv);
+	texture->normal_gc = XCreateGC(WMScreenDisplay(scr), W_DRAWABLE(scr), GCForeground | GCBackground | GCGraphicsExposures, &gcv);
 
 	return texture;
 }
 
-WTexPixmap *wTextureMakePixmap(WScreen *scr, int style, const char *pixmap_file, XColor *color)
+WTexPixmap *wTextureMakePixmap(WMScreen *scr, int style, const char *pixmap_file, XColor *color)
 {
 	WTexPixmap *texture;
 	XGCValues gcv;
@@ -278,17 +273,17 @@ WTexPixmap *wTextureMakePixmap(WScreen *scr, int style, const char *pixmap_file,
 
 	texture->normal = *color;
 
-	XAllocColor(dpy, scr->w_colormap, &texture->normal);
+	XAllocColor(WMScreenDisplay(scr), scr->colormap, &texture->normal);
 	gcv.background = gcv.foreground = texture->normal.pixel;
 	gcv.graphics_exposures = False;
-	texture->normal_gc = XCreateGC(dpy, scr->w_win, GCForeground | GCBackground | GCGraphicsExposures, &gcv);
+	texture->normal_gc = XCreateGC(WMScreenDisplay(scr), W_DRAWABLE(scr), GCForeground | GCBackground | GCGraphicsExposures, &gcv);
 
 	texture->pixmap = image;
 
 	return texture;
 }
 
-WTexTGradient *wTextureMakeTGradient(WScreen *scr, int style, const RColor *from, const RColor *to,
+WTexTGradient *wTextureMakeTGradient(WMScreen *scr, int style, const RColor *from, const RColor *to,
 				     const char *pixmap_file, int opacity)
 {
 	WTexTGradient *texture;
@@ -311,22 +306,46 @@ WTexTGradient *wTextureMakeTGradient(WScreen *scr, int style, const RColor *from
 	texture->normal.green = (from->green + to->green) << 7;
 	texture->normal.blue = (from->blue + to->blue) << 7;
 
-	XAllocColor(dpy, scr->w_colormap, &texture->normal);
+	XAllocColor(WMScreenDisplay(scr), scr->colormap, &texture->normal);
 	gcv.background = gcv.foreground = texture->normal.pixel;
 	gcv.graphics_exposures = False;
-	texture->normal_gc = XCreateGC(dpy, scr->w_win, GCForeground | GCBackground | GCGraphicsExposures, &gcv);
+	texture->normal_gc = XCreateGC(WMScreenDisplay(scr), W_DRAWABLE(scr), GCForeground | GCBackground | GCGraphicsExposures, &gcv);
 
 	texture->pixmap = image;
 
 	return texture;
 }
 
-static RImage * get_texture_image(WScreen *scr, const char *pixmap_file)
+static RImage * get_texture_image(WMScreen *scr, const char *pixmap_file)
 {
-	char *file;
+	char *file, *path;
 	RImage *image;
+	WMPropList *defaults, *pixmap_path;
 
-	file = FindImage(wPreferences.pixmap_path, pixmap_file);
+	file = NULL;
+
+	/* check user Window Maker config for pixmap path */
+	path = wdefaultspathfordomain("WindowMaker");
+	defaults = WMReadPropListFromFile(path);
+	pixmap_path = WMGetFromPLDictionary(defaults, WMCreatePLString("PixmapPath"));
+	if (pixmap_path)
+		file = wfindfileinarray(pixmap_path, pixmap_file);
+
+	/* couldn't find file, check global Window Maker config for pixmap path */
+	if (!file) {
+		path = wglobaldefaultspathfordomain("WindowMaker");
+		defaults = WMReadPropListFromFile(path);
+		pixmap_path = WMGetFromPLDictionary(defaults, WMCreatePLString("PixmapPath"));
+		if (pixmap_path)
+			file = wfindfileinarray(pixmap_path, pixmap_file);
+	}
+
+	/* still couldn't find file, use default pixmap path */
+	if (!file) {
+		pixmap_path = WMCreatePropListFromDescription(DEF_PIXMAP_PATHS);
+		file = wfindfileinarray(pixmap_path, pixmap_file);
+	}
+
 	if (!file) {
 		wwarning(_("image file \"%s\" used as texture could not be found."), pixmap_file);
 		return NULL;
@@ -526,65 +545,5 @@ static void bevelImage(RImage * image, int relief)
 		RDrawLine(image, 0, height - 1, width - 1, height - 1, &color);
 		 /**/ break;
 
-	}
-}
-
-void wDrawBevel(Drawable d, unsigned width, unsigned height, WTexSolid * texture, int relief)
-{
-	GC light, dim, dark;
-	XSegment segs[4];
-
-	if (relief == WREL_FLAT)
-		return;
-
-	light = texture->light_gc;
-	dim = texture->dim_gc;
-	dark = texture->dark_gc;
-	switch (relief) {
-	case WREL_MENUENTRY:
-	case WREL_RAISED:
-	case WREL_ICON:
-		segs[0].x1 = 1;
-		segs[0].x2 = width - 2;
-		segs[0].y2 = segs[0].y1 = height - 2;
-		segs[1].x1 = width - 2;
-		segs[1].y1 = 1;
-		segs[1].x2 = width - 2;
-		segs[1].y2 = height - 2;
-		if (wPreferences.new_style == TS_NEXT) {
-			XDrawSegments(dpy, d, dark, segs, 2);
-		} else {
-			XDrawSegments(dpy, d, dim, segs, 2);
-		}
-		segs[0].x1 = 0;
-		segs[0].x2 = width - 1;
-		segs[0].y2 = segs[0].y1 = height - 1;
-		segs[1].x1 = segs[1].x2 = width - 1;
-		segs[1].y1 = 0;
-		segs[1].y2 = height - 1;
-		if (wPreferences.new_style == TS_NEXT) {
-			XDrawSegments(dpy, d, light, segs, 2);
-		} else {
-			XDrawSegments(dpy, d, dark, segs, 2);
-		}
-		segs[0].x1 = segs[0].y1 = segs[0].y2 = 0;
-		segs[0].x2 = width - 2;
-		segs[1].x1 = segs[1].y1 = 0;
-		segs[1].x2 = 0;
-		segs[1].y2 = height - 2;
-		if (wPreferences.new_style == TS_NEXT) {
-			XDrawSegments(dpy, d, dark, segs, 2);
-		} else {
-			XDrawSegments(dpy, d, light, segs, 2);
-		}
-		if (relief == WREL_ICON) {
-			segs[0].x1 = segs[0].y1 = segs[0].y2 = 1;
-			segs[0].x2 = width - 2;
-			segs[1].x1 = segs[1].y1 = 1;
-			segs[1].x2 = 1;
-			segs[1].y2 = height - 2;
-			XDrawSegments(dpy, d, light, segs, 2);
-		}
-		break;
 	}
 }

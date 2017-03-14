@@ -50,7 +50,6 @@
 #include "WindowMaker.h"
 #include "framewin.h"
 #include "window.h"
-#include "texture.h"
 #include "screen.h"
 #include "resources.h"
 #include "defaults.h"
@@ -1689,7 +1688,7 @@ static WTexture *parse_texture(WScreen * scr, WMPropList * pl)
 			return NULL;
 		}
 
-		texture = (WTexture *) wTextureMakeSolid(scr, &color);
+		texture = (WTexture *) wTextureMakeSolid(scr->wmscreen, &color);
 	} else if (strcasecmp(val, "dgradient") == 0
 		   || strcasecmp(val, "vgradient") == 0 || strcasecmp(val, "hgradient") == 0) {
 		RColor color1, color2;
@@ -1739,7 +1738,7 @@ static WTexture *parse_texture(WScreen * scr, WMPropList * pl)
 		color2.green = xcolor.green >> 8;
 		color2.blue = xcolor.blue >> 8;
 
-		texture = (WTexture *) wTextureMakeGradient(scr, type, &color1, &color2);
+		texture = (WTexture *) wTextureMakeGradient(scr->wmscreen, type, &color1, &color2);
 
 	} else if (strcasecmp(val, "igradient") == 0) {
 		RColor colors1[2], colors2[2];
@@ -1796,7 +1795,7 @@ static WTexture *parse_texture(WScreen * scr, WMPropList * pl)
 		val = WMGetFromPLString(elem);
 		th2 = atoi(val);
 
-		texture = (WTexture *) wTextureMakeIGradient(scr, th1, colors1, th2, colors2);
+		texture = (WTexture *) wTextureMakeIGradient(scr->wmscreen, th1, colors1, th2, colors2);
 
 	} else if (strcasecmp(val, "mhgradient") == 0
 		   || strcasecmp(val, "mvgradient") == 0 || strcasecmp(val, "mdgradient") == 0) {
@@ -1848,7 +1847,7 @@ static WTexture *parse_texture(WScreen * scr, WMPropList * pl)
 		}
 		colors[i] = NULL;
 
-		texture = (WTexture *) wTextureMakeMGradient(scr, type, colors);
+		texture = (WTexture *) wTextureMakeMGradient(scr->wmscreen, type, colors);
 	} else if (strcasecmp(val, "spixmap") == 0 ||
 		   strcasecmp(val, "cpixmap") == 0 || strcasecmp(val, "tpixmap") == 0) {
 		XColor color;
@@ -1882,7 +1881,7 @@ static WTexture *parse_texture(WScreen * scr, WMPropList * pl)
 			return NULL;
 		val = WMGetFromPLString(elem);
 
-		texture = (WTexture *) wTextureMakePixmap(scr, type, val, &color);
+		texture = (WTexture *) wTextureMakePixmap(scr->wmscreen, type, val, &color);
 	} else if (strcasecmp(val, "thgradient") == 0
 		   || strcasecmp(val, "tvgradient") == 0 || strcasecmp(val, "tdgradient") == 0) {
 		RColor color1, color2;
@@ -1951,7 +1950,7 @@ static WTexture *parse_texture(WScreen * scr, WMPropList * pl)
 			return NULL;
 		val = WMGetFromPLString(elem);
 
-		texture = (WTexture *) wTextureMakeTGradient(scr, style, &color1, &color2, val, opacity);
+		texture = (WTexture *) wTextureMakeTGradient(scr->wmscreen, style, &color1, &color2, val, opacity);
 	} else if (strcasecmp(val, "function") == 0) {
 		/* Leave this in to handle the unlikely case of
 		 * someone actually having function textures configured */
@@ -2638,7 +2637,7 @@ static int setIconTile(WScreen * scr, WDefaultEntry * entry, void *tdata, void *
 	if (!img) {
 		wwarning(_("could not render texture for icon background"));
 		if (!entry->addr)
-			wTextureDestroy(scr, *texture);
+			wTextureDestroy(scr->wmscreen, *texture);
 		return 0;
 	}
 	RConvertImage(scr->rcontext, img, &pixmap);
@@ -2676,13 +2675,13 @@ static int setIconTile(WScreen * scr, WDefaultEntry * entry, void *tdata, void *
 	}
 
 	if (scr->icon_back_texture)
-		wTextureDestroy(scr, (WTexture *) scr->icon_back_texture);
+		wTextureDestroy(scr->wmscreen, (WTexture *) scr->icon_back_texture);
 
-	scr->icon_back_texture = wTextureMakeSolid(scr, &((*texture)->any.color));
+	scr->icon_back_texture = wTextureMakeSolid(scr->wmscreen, &((*texture)->any.color));
 
 	/* Free the texture as nobody else will use it, nor refer to it.  */
 	if (!entry->addr)
-		wTextureDestroy(scr, *texture);
+		wTextureDestroy(scr->wmscreen, *texture);
 
 	return (reset ? REFRESH_ICON_TILE : 0);
 }
@@ -2951,9 +2950,9 @@ static int setIconTitleBack(WScreen * scr, WDefaultEntry * entry, void *tdata, v
 	(void) foo;
 
 	if (scr->icon_title_texture) {
-		wTextureDestroy(scr, (WTexture *) scr->icon_title_texture);
+		wTextureDestroy(scr->wmscreen, (WTexture *) scr->icon_title_texture);
 	}
-	scr->icon_title_texture = wTextureMakeSolid(scr, color);
+	scr->icon_title_texture = wTextureMakeSolid(scr->wmscreen, color);
 
 	return REFRESH_ICON_TITLE_BACK;
 }
@@ -3129,7 +3128,7 @@ static int setWidgetColor(WScreen * scr, WDefaultEntry * entry, void *tdata, voi
 	(void) foo;
 
 	if (scr->widget_texture) {
-		wTextureDestroy(scr, (WTexture *) scr->widget_texture);
+		wTextureDestroy(scr->wmscreen, (WTexture *) scr->widget_texture);
 	}
 	scr->widget_texture = *(WTexSolid **) texture;
 
@@ -3145,7 +3144,7 @@ static int setFTitleBack(WScreen * scr, WDefaultEntry * entry, void *tdata, void
 	(void) foo;
 
 	if (scr->window_title_texture[WS_FOCUSED]) {
-		wTextureDestroy(scr, scr->window_title_texture[WS_FOCUSED]);
+		wTextureDestroy(scr->wmscreen, scr->window_title_texture[WS_FOCUSED]);
 	}
 	scr->window_title_texture[WS_FOCUSED] = *texture;
 
@@ -3161,7 +3160,7 @@ static int setPTitleBack(WScreen * scr, WDefaultEntry * entry, void *tdata, void
 	(void) foo;
 
 	if (scr->window_title_texture[WS_PFOCUSED]) {
-		wTextureDestroy(scr, scr->window_title_texture[WS_PFOCUSED]);
+		wTextureDestroy(scr->wmscreen, scr->window_title_texture[WS_PFOCUSED]);
 	}
 	scr->window_title_texture[WS_PFOCUSED] = *texture;
 
@@ -3177,7 +3176,7 @@ static int setUTitleBack(WScreen * scr, WDefaultEntry * entry, void *tdata, void
 	(void) foo;
 
 	if (scr->window_title_texture[WS_UNFOCUSED]) {
-		wTextureDestroy(scr, scr->window_title_texture[WS_UNFOCUSED]);
+		wTextureDestroy(scr->wmscreen, scr->window_title_texture[WS_UNFOCUSED]);
 	}
 	scr->window_title_texture[WS_UNFOCUSED] = *texture;
 
@@ -3193,7 +3192,7 @@ static int setResizebarBack(WScreen * scr, WDefaultEntry * entry, void *tdata, v
 	(void) foo;
 
 	if (scr->resizebar_texture[0]) {
-		wTextureDestroy(scr, scr->resizebar_texture[0]);
+		wTextureDestroy(scr->wmscreen, scr->resizebar_texture[0]);
 	}
 	scr->resizebar_texture[0] = *texture;
 
@@ -3209,7 +3208,7 @@ static int setMenuTitleBack(WScreen * scr, WDefaultEntry * entry, void *tdata, v
 	(void) foo;
 
 	if (scr->menu_title_texture[0]) {
-		wTextureDestroy(scr, scr->menu_title_texture[0]);
+		wTextureDestroy(scr->wmscreen, scr->menu_title_texture[0]);
 	}
 	scr->menu_title_texture[0] = *texture;
 
@@ -3225,12 +3224,12 @@ static int setMenuTextBack(WScreen * scr, WDefaultEntry * entry, void *tdata, vo
 	(void) foo;
 
 	if (scr->menu_item_texture) {
-		wTextureDestroy(scr, scr->menu_item_texture);
-		wTextureDestroy(scr, (WTexture *) scr->menu_item_auxtexture);
+		wTextureDestroy(scr->wmscreen, scr->menu_item_texture);
+		wTextureDestroy(scr->wmscreen, (WTexture *) scr->menu_item_auxtexture);
 	}
 	scr->menu_item_texture = *texture;
 
-	scr->menu_item_auxtexture = wTextureMakeSolid(scr, &scr->menu_item_texture->any.color);
+	scr->menu_item_auxtexture = wTextureMakeSolid(scr->wmscreen, &scr->menu_item_texture->any.color);
 
 	return REFRESH_MENU_TEXTURE;
 }
@@ -3302,7 +3301,7 @@ static int setWorkspaceMapBackground(WScreen *scr, WDefaultEntry *entry, void *t
 	(void) foo;
 
 	if (wPreferences.wsmbackTexture)
-		wTextureDestroy(scr, wPreferences.wsmbackTexture);
+		wTextureDestroy(scr->wmscreen, wPreferences.wsmbackTexture);
 
 	wPreferences.wsmbackTexture = *texture;
 

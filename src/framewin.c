@@ -33,7 +33,6 @@
 
 #include "WindowMaker.h"
 #include "GNUstep.h"
-#include "texture.h"
 #include "resources.h"
 #include "screen.h"
 #include "wcore.h"
@@ -59,6 +58,7 @@ static void paintButton(WCoreWindow * button, WTexture * texture,
 static void updateTitlebar(WFrameWindow * fwin);
 
 static void allocFrameBorderPixel(Colormap colormap, const char *color_name, unsigned long **pixel);
+void wDrawBevel(Drawable d, unsigned width, unsigned height, WTexSolid * texture, int relief);
 
 static void allocFrameBorderPixel(Colormap colormap, const char *color_name, unsigned long **pixel) {
 	XColor xcol;
@@ -1511,3 +1511,64 @@ static void buttonMouseDown(WObjDescriptor * desc, XEvent * event)
 
 	}
 }
+
+void wDrawBevel(Drawable d, unsigned width, unsigned height, WTexSolid * texture, int relief)
+{
+	GC light, dim, dark;
+	XSegment segs[4];
+
+	if (relief == WREL_FLAT)
+		return;
+
+	light = texture->light_gc;
+	dim = texture->dim_gc;
+	dark = texture->dark_gc;
+	switch (relief) {
+	case WREL_MENUENTRY:
+	case WREL_RAISED:
+	case WREL_ICON:
+		segs[0].x1 = 1;
+		segs[0].x2 = width - 2;
+		segs[0].y2 = segs[0].y1 = height - 2;
+		segs[1].x1 = width - 2;
+		segs[1].y1 = 1;
+		segs[1].x2 = width - 2;
+		segs[1].y2 = height - 2;
+		if (wPreferences.new_style == TS_NEXT) {
+			XDrawSegments(dpy, d, dark, segs, 2);
+		} else {
+			XDrawSegments(dpy, d, dim, segs, 2);
+		}
+		segs[0].x1 = 0;
+		segs[0].x2 = width - 1;
+		segs[0].y2 = segs[0].y1 = height - 1;
+		segs[1].x1 = segs[1].x2 = width - 1;
+		segs[1].y1 = 0;
+		segs[1].y2 = height - 1;
+		if (wPreferences.new_style == TS_NEXT) {
+			XDrawSegments(dpy, d, light, segs, 2);
+		} else {
+			XDrawSegments(dpy, d, dark, segs, 2);
+		}
+		segs[0].x1 = segs[0].y1 = segs[0].y2 = 0;
+		segs[0].x2 = width - 2;
+		segs[1].x1 = segs[1].y1 = 0;
+		segs[1].x2 = 0;
+		segs[1].y2 = height - 2;
+		if (wPreferences.new_style == TS_NEXT) {
+			XDrawSegments(dpy, d, dark, segs, 2);
+		} else {
+			XDrawSegments(dpy, d, light, segs, 2);
+		}
+		if (relief == WREL_ICON) {
+			segs[0].x1 = segs[0].y1 = segs[0].y2 = 1;
+			segs[0].x2 = width - 2;
+			segs[1].x1 = segs[1].y1 = 1;
+			segs[1].x2 = 1;
+			segs[1].y2 = height - 2;
+			XDrawSegments(dpy, d, light, segs, 2);
+		}
+		break;
+	}
+}
+

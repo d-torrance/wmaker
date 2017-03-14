@@ -34,7 +34,6 @@
 
 #include "WindowMaker.h"
 #include "wcore.h"
-#include "texture.h"
 #include "window.h"
 #include "icon.h"
 #include "actions.h"

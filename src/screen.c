@@ -39,7 +39,6 @@
 #include "WindowMaker.h"
 #include "def_pixmaps.h"
 #include "screen.h"
-#include "texture.h"
 #include "pixmap.h"
 #include "menu.h"
 #include "window.h"
