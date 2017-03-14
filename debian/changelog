@@ -1,4 +1,4 @@
-wmaker (0.95.8-1) experimental; urgency=medium
+wmaker (0.95.8-1~exp1) experimental; urgency=medium
 
   * New upstream release.
     - Menus may be shaded (Closes: #72038).
