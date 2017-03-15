@@ -1,3 +1,26 @@
+Themes/texture stuff (+ other bugs that I've noticed while working on this)
+===========================================================================
+- Move typedefs to WINGsP.h
+- Do we need all the defines in WINGs.h?  Maybe move some back to
+   wtexture.c
+- defines to enums
+- Use more WINGs-y names, e.g., WMTexture
+- Move over parse_texture from src/defaults.c
+- More descriptive variables in WINGs.h declarations
+- Use existing WINGs reliefs instead of WREL_*.  (This might require
+   adding some new bevels to libwraster.)
+- The first time we look up a pixmap, store the Window Maker pixmap
+   paths, merging user + global (static).
+- wconfig.h's default pixmap/icon path #defines don't match the ones
+   given in the default WindowMaker file.
+- can't find system icons when running from strange installation
+   directory (possibly related to wconfig.h problem above)
+- Add WMSetWidgetBackgroundTexture function
+- Once the above is ready, submit patches
+
+- Then begin theming.
+===========================================================================
+
 - move paint to idle handlers
 - check if its useful to add some WMBrowserSelectionDidChangeNotification
   (actually a pass-through for WMListSelectionDidChangeNotification).
