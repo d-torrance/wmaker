@@ -1,3 +1,62 @@
+wmaker (0.95.8-1~exp2) UNRELEASED; urgency=medium
+
+  * debian/debianfiles/Themes/Debian.style
+    - Rename from just "Debian" for consistency with other Window
+      Maker themes.
+  * debian/debianfiles/upgrade-windowmaker-defaults
+    - Delete archaic script. It was intended to help users upgrade
+      Window Maker 15+ years ago when the configuration file syntax
+      was not stable.  No longer necessary.
+  * debian/libwings3.symbols
+    - Remove MISSING comment lines.
+  * debian/{libwings3,wmaker-common}.install
+    - Move /usr/share/WINGs to libwings3 in case WINGs is installed
+      without Window Maker.
+  * debian/libwings-dev.examples
+    - New file; install WINGs examples.
+  * debian/libwmaker-dev.install
+    - Install libwmaker pkg-config file.
+  * debian/{libwutil5,wmaker-common}.install
+    - Move WINGs language files to libwutil5 package.  However unlikely,
+      it is possible for a user to install WINGs/WUtil without Window
+      Maker itself.
+  * debian/patches/50_def_config_paths.diff
+    - Remove unnecessary patch. It added /etc/GNUstep/Defaults to
+      the DEF_CONFIG_PATHS macro, but the files needed in the paths
+      referenced in this macro (in particular, menu, autostart, and
+      exitscript) will not be located there.
+  * debian/patches/53_Debian_WMState.diff
+    - Update patch.  The path to WPrefs is already set correctly
+      during build; we do not need to set it explicitly.
+  * debian/README.Debian
+    - Remove notes about upgrading from very old (15+ years ago)
+      versions of Window Maker.
+  * debian/watch
+    - Bump to uscan v4 and simplify using new strings.
+  * debian/wmaker.dirs
+    - Remove unnecessary file
+  * debian/wmaker-common.dirs
+    - Remove redundant lines.
+  * debian/wmaker-common.docs
+    - Do not specify installation of debian/copyright;
+      dh_installdocs already installs it by default.
+  * debian/wmaker-common.{docs,install}
+    - Move installation of various README files from dh_install
+      to dh_installdocs.
+  * debian/wmaker-common.install
+    - Simplify by giving directories instead of individual files
+      where possible.
+  * debian/wmaker-common.links
+    - Remove unnecessary file. It created a link which was a
+      workaround for a bug fixed in the latest upstream release.
+  * debian/wmaker-common.maintscript
+    - Sort with wrap-and-sort.
+  * debian/rules
+    - New override_dh_installdocs target; contains code renaming
+      README files from override_dh_install target.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 16 Mar 2017 11:07:30 -0400
+
 wmaker (0.95.8-1~exp1) experimental; urgency=medium
 
   * New upstream release.
