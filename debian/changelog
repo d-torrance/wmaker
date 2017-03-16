@@ -1,100 +1,41 @@
-wmaker (0.95.7+20170129-0ppa1) zesty; urgency=medium
+wmaker (0.95.8-1~exp1) experimental; urgency=medium
 
-  * Merge official Debian 0.957-7 package.
-
- -- Doug Torrance <dtorrance@piedmont.edu>  Sun, 29 Jan 2017 13:05:01 -0500
-
-wmaker (0.95.7+20160324-0ppa1) xenial; urgency=medium
-
-  * Merge official Debian 0.95.7-6 package.
-
- -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 24 Mar 2016 19:20:26 -0400
-
-wmaker (0.95.7+20160309-0ppa1) xenial; urgency=medium
-
-  * Merge official Debian 0.95.7-5 package.
-
- -- Doug Torrance <dtorrance@piedmont.edu>  Wed, 09 Mar 2016 15:55:17 -0500
-
-wmaker (0.95.7+20160215-0ppa1) xenial; urgency=medium
-
-  * Merge official Debian 0.95.7-4 package.
+  * New upstream release.
+    - Menus may be shaded (Closes: #72038).
+    - Follow window placement rules when placing windows on non-active
+      workspaces (Closes: #181735).
+    - Windows list sorted by workspace (Closes: #280851).
+    - New keyboard shortcuts (Closes: #306808).
+    - Default menu uses correct path to WPrefs (Closes: #851737).
+    - Use PKG_PROG_PKG_CONFIG macro to allow cross building
+      (Closes: #853236).
   * debian/control
-    - Switch Uploaders to XSBC-Original-Uploaders.
-
- -- Doug Torrance <dtorrance@piedmont.edu>  Mon, 15 Feb 2016 17:17:49 -0500
-
-wmaker (0.95.7+20160117-0ppa4) xenial; urgency=medium
-
-  * debian/patches/56_ignore_runstatedir.diff
-    - Remove patch; applied upstream.
-
- -- Doug Torrance <dtorrance@piedmont.edu>  Tue, 09 Feb 2016 16:35:47 -0500
-
-wmaker (0.95.7+20160117-0ppa3) xenial; urgency=medium
-
-  * debian/libwmaker-dev.install
-    - Add new pkg-config file.
-
- -- Doug Torrance <dtorrance@piedmont.edu>  Sat, 23 Jan 2016 11:12:52 -0500
-
-wmaker (0.95.7+20160117-0ppa2) xenial; urgency=medium
-
-  * Merge official Debian 0.95.7-3 package.
-
- -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 21 Jan 2016 11:05:27 -0500
-
-wmaker (0.95.7+20160117-0ppa1) xenial; urgency=medium
-
-  * debian/{control,libwmaker*}
-    - Restore libwmaker library.
-
- -- Doug Torrance <dtorrance@piedmont.edu>  Mon, 18 Jan 2016 22:54:29 -0500
-
-wmaker (0.95.7+20160110-0ppa3) xenial; urgency=medium
-
-  * Move Ambiance and Radiance styles into new Themes directory; restore
-    corresponding lines in wmaker-common.install.
-
- -- Doug Torrance <dtorrance@piedmont.edu>  Fri, 15 Jan 2016 21:09:29 -0500
-
-wmaker (0.95.7+20160110-0ppa2) xenial; urgency=medium
-
-  * Merge latest draft of official Debian 0.95.7-2 package.
+    - Add xterm to Suggests as it is referenced in the default Window
+      Maker menus (LP: #1429495).
+  * debian/libwraster*
+    - Rename libwraster5 -> libwraster6 for soname version bump.
+  * debian/patches
+     - Remove patches which were either applied or otherwise made
+       unnecessary with the new upstream release.  In particular,
+       + 51_wmaker_man.diff
+       + 55_ungif_problem.diff
+       + 56_ignore_runstatedir.diff
+       + 57_ignore_with-aix-soname.diff
+       + 60_fix_wraster_symbol_versioning.diff
+       + 61_fix_wmmenugen_segfault.diff
   * debian/rules
-    - Remove unexport of build flags; I can't remember why I added these in the
-      first place and it was causing the config files to be put in the wrong
-      place.
+    - Use new --with-defsdatadir configure option to specify global
+      defaults directory instead of old GLOBAL_DEFAULTS_SUBDIR macro.
+    - Use renamed --with-xlocale configure option instead of old
+      --with-locale.
+    - Drop --with-localedir configure option, as it does not exist.
+      It should have been --localedir, but the default is what we
+      want anyway.
+    - Add -Wl,--as-needed to LDFLAGS to avoid useless dependencies.
+  * debian/wmaker-common.install
+    - Update path for system WMGLOBAL and WMState config files.
 
- -- Doug Torrance <dtorrance@piedmont.edu>  Fri, 15 Jan 2016 11:33:34 -0500
-
-wmaker (0.95.7+20160110-0ppa1) xenial; urgency=medium
-
-  * Merge official Debian 0.95.7-1 package.
-
- -- Doug Torrance <dtorrance@piedmont.edu>  Sun, 10 Jan 2016 17:26:56 -0500
-
-wmaker (0.95.7+20160104-0ppa1) xenial; urgency=medium
-
-  * Merge upstream changes to debian directory.
-  * debian/rules
-    - Move patching of version number to new override_dh_autoreconf target.
-
- -- Doug Torrance <dtorrance@piedmont.edu>  Wed, 06 Jan 2016 06:46:56 -0500
-
-wmaker (0.95.7+20150813-0ppa2) wily; urgency=medium
-
-  * debian/rules
-    - Enable user menu option.
-
- -- Doug Torrance <dtorrance@piedmont.edu>  Wed, 26 Aug 2015 07:28:10 -0400
-
-wmaker (0.95.7+20150813-0ppa1) wily; urgency=medium
-
-  * debian/{control,README.ppa}
-    - Update email address.
-
- -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 13 Aug 2015 23:01:18 -0400
+ -- Doug Torrance <dtorrance@piedmont.edu>  Mon, 13 Mar 2017 14:26:52 -0400
 
 wmaker (0.95.7-8) unstable; urgency=medium
 

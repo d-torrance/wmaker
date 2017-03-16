@@ -6,12 +6,8 @@ DIST_SUBDIRS = build cs ru sk
 dist_man_MANS = \
 	geticonset.1 \
 	getstyle.1 \
-	get-wings-flags.1 \
-	get-wraster-flags.1 \
-	get-wutil-flags.1 \
 	seticons.1 \
 	setstyle.1 \
-	upgrade-windowmaker-defaults.8 \
 	wdread.1 \
 	wdwrite.1 \
 	WindowMaker.1 \
