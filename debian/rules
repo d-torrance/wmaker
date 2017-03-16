@@ -71,12 +71,9 @@ override_dh_install:
 	rm oldversion newversion
 
 get-orig-source:
-	@git checkout next
-	@git pull http://repo.or.cz/wmaker-crm.git next
 	@./autogen.sh
 	@./configure
 	@make dist
-	@git checkout ppa
 	@grep -Po \
 		'(?<=AC_INIT\(\[WindowMaker\],\[).*(?=\],\[wmaker-dev)' \
 		configure.ac > version
