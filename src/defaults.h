@@ -56,5 +56,6 @@ void wDefaultChangeIcon(const char *instance, const char* class, const char *fil
 RImage *get_rimage_from_file(WScreen *scr, const char *file_name, int max_size);
 
 void wDefaultPurgeInfo(const char *instance, const char *class);
+void initDefaults(int print);
 
 #endif /* WMDEFAULTS_H_ */

@@ -448,6 +448,7 @@ static void print_help(void)
 	puts(_(" --no-polling		do not periodically check for configuration updates"));
 #endif
 	puts(_(" --global_defaults_path	print the path for default config and exit"));
+	puts(_(" --print-defaults       print default config options and exit"));
 	puts(_(" --version		print version and exit"));
 	puts(_(" --help			show this message"));
 }
@@ -692,6 +693,9 @@ static int real_main(int argc, char **argv)
 #else
 				wmessage(_("your version of Window Maker was compiled with INotify support, so \"--no-polling\" has no effect"));
 #endif
+			} else if (strcmp(argv[i], "-print-defaults") == 0 || strcmp(argv[i], "--print-defaults") == 0) {
+				initDefaults(1);
+				exit(0);
 			} else if (strcmp(argv[i], "--help") == 0) {
 				print_help();
 				exit(0);

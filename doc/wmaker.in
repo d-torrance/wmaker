@@ -55,6 +55,9 @@ disable the Drawers in the Dock
 @USE_ICCCM_WMREPLACE@.B \-\-replace
 @USE_ICCCM_WMREPLACE@ask the currently running window manager to let Window Maker take his place
 .TP
+.B \-\-print-defaults
+print default config options and exit
+.TP
 .B \-\-static
 do not update or save automatically the configuration
 .TP

@@ -818,10 +818,14 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.cycle_ignore_minimized, getBool, NULL, NULL, NULL}
 };
 
-static void initDefaults(void)
+void initDefaults(int print)
 {
 	unsigned int i;
 	WDefaultEntry *entry;
+	WMPropList *defaults = NULL;
+
+	if (print)
+		defaults = WMCreatePLDictionary(NULL, NULL);
 
 	WMPLSetCaseSensitive(False);
 
@@ -833,6 +837,8 @@ static void initDefaults(void)
 			entry->plvalue = WMCreatePropListFromDescription(entry->default_value);
 		else
 			entry->plvalue = NULL;
+		if (print)
+			WMPutInPLDictionary(defaults, entry->plkey, entry->plvalue);
 	}
 
 	for (i = 0; i < wlengthof(staticOptionList); i++) {
@@ -843,7 +849,12 @@ static void initDefaults(void)
 			entry->plvalue = WMCreatePropListFromDescription(entry->default_value);
 		else
 			entry->plvalue = NULL;
+		if (print)
+			WMPutInPLDictionary(defaults, entry->plkey, entry->plvalue);
 	}
+
+	if (print)
+		printf("%s\n", WMGetPropListDescription(defaults, 1));
 }
 
 static WMPropList *readGlobalDomain(const char *domainName, Bool requireDictionary)
@@ -941,7 +952,7 @@ WDDomain *wDefaultsInitDomain(const char *domain, Bool requireDictionary)
 
 	if (!inited) {
 		inited = 1;
-		initDefaults();
+		initDefaults(0);
 	}
 
 	db = wmalloc(sizeof(WDDomain));
