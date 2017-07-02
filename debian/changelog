@@ -1,5 +1,6 @@
 wmaker (0.95.8-1~exp2) UNRELEASED; urgency=medium
 
+  [ Doug Torrance ]
   * debian/debianfiles/Themes/Debian.style
     - Rename from just "Debian" for consistency with other Window
       Maker themes.
@@ -54,6 +55,10 @@ wmaker (0.95.8-1~exp2) UNRELEASED; urgency=medium
   * debian/rules
     - New override_dh_installdocs target; contains code renaming
       README files from override_dh_install target.
+
+  [ Andreas Metzler ]
+  * Drop Rodolfo García Peñas from uploaders. - Thanks for your work!
+    Closes: #866854
 
  -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 16 Mar 2017 11:07:30 -0400
 
