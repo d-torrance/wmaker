@@ -1,4 +1,4 @@
-wmaker (0.95.8-1~exp2) UNRELEASED; urgency=medium
+wmaker (0.95.8-1) UNRELEASED; urgency=medium
 
   [ Doug Torrance ]
   * debian/debianfiles/Themes/Debian.style
