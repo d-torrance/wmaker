@@ -159,9 +159,6 @@ void create_appicon_for_application(WApplication *wapp, WWindow *wwin)
 		if (!WFLAGP(wapp->main_window_desc, no_appicon))
 			paint_app_icon(wapp);
 	}
-
-	/* Save the app_icon in a file */
-	save_appicon(wapp->app_icon, False);
 }
 
 void unpaint_app_icon(WApplication *wapp)
@@ -436,14 +433,14 @@ void wAppIconPaint(WAppIcon *aicon)
 }
 
 /* Save the application icon, if it's a dockapp then use it with dock = True */
-void save_appicon(WAppIcon *aicon, Bool dock)
+void save_appicon(WAppIcon *aicon)
 {
 	char *path;
 
 	if (!aicon)
 		return;
 
-	if (dock && (!aicon->docked || aicon->attracted))
+	if (!aicon->docked || aicon->attracted)
 		return;
 
 	path = wIconStore(aicon->icon);
@@ -1180,7 +1177,7 @@ static void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window m
 	}
 
 	/* If created, then set some flags */
-	if (wapp->app_icon) {
+	if (wapp->app_icon && !WFLAGP(wapp->main_window_desc, no_appicon)) {
 		WWindow *mainw = wapp->main_window_desc;
 
 		wapp->app_icon->running = 1;
@@ -1193,7 +1190,6 @@ static void create_appicon_from_dock(WWindow *wwin, WApplication *wapp, Window m
 
 		/* Paint it */
 		wAppIconPaint(wapp->app_icon);
-		save_appicon(wapp->app_icon, True);
 	}
 }
 

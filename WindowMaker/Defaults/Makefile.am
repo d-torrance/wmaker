@@ -1,6 +1,3 @@
-
-defsdatadir = $(sysconfdir)/WindowMaker
-
 defsdata_DATA = WMRootMenu WMWindowAttributes WindowMaker WMState WMGLOBAL
 
 wpexecbindir = @wprefs_bindir@
@@ -23,5 +20,5 @@ WMState: $(srcdir)/WMState.in
 	$(AM_V_GEN)sed -e "s:#wprefs#:$(wpexecbindir)/WPrefs:" $(srcdir)/WMState.in > WMState ; \
 	chmod 644 WMState
 
-WMRootMenu: $(srcdir)/../plmenu
-	$(AM_V_GEN)cp -f $(srcdir)/../plmenu WMRootMenu
+WMRootMenu: ./../plmenu
+	$(AM_V_GEN)cp -f ./../plmenu WMRootMenu
