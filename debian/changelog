@@ -59,6 +59,9 @@ wmaker (0.95.8-1~exp2) UNRELEASED; urgency=medium
   [ Andreas Metzler ]
   * Drop Rodolfo García Peñas from uploaders. - Thanks for your work!
     Closes: #866854
+  * 10_util-fix-parsing-of-XDG-menus-with-multiple-groups.patch from upstream
+    GIT next: Fix wmmenugen parsing of XDG menu files with more than one
+    group.
 
  -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 16 Mar 2017 11:07:30 -0400
 
