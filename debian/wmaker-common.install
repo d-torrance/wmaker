@@ -10,10 +10,9 @@ debian/debianfiles/wmaker			usr/bin
 debian/debianfiles/wmaker-common.desktop	usr/share/xsessions
 etc/GNUstep/Defaults/WMGLOBAL
 etc/GNUstep/Defaults/WMState
+usr/share/WINGs
 usr/share/WindowMaker
 usr/share/lib/GNUstep/System/Applications/WPrefs.app/WPrefs.tiff
 usr/share/lib/GNUstep/System/Applications/WPrefs.app/WPrefs.xpm
 usr/share/lib/GNUstep/System/Applications/WPrefs.app/tiff
-usr/share/locale/*/LC_MESSAGES/WPrefs.mo
-usr/share/locale/*/LC_MESSAGES/WindowMaker.mo
-usr/share/locale/*/LC_MESSAGES/wmgenmenu.mo
+usr/share/locale/*/LC_MESSAGES/*.mo
