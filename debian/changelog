@@ -10,17 +10,10 @@ wmaker (0.95.8-1~exp2) UNRELEASED; urgency=medium
       was not stable.  No longer necessary.
   * debian/libwings3.symbols
     - Remove MISSING comment lines.
-  * debian/{libwings3,wmaker-common}.install
-    - Move /usr/share/WINGs to libwings3 in case WINGs is installed
-      without Window Maker.
   * debian/libwings-dev.examples
     - New file; install WINGs examples.
   * debian/libwmaker-dev.install
     - Install libwmaker pkg-config file.
-  * debian/{libwutil5,wmaker-common}.install
-    - Move WINGs language files to libwutil5 package.  However unlikely,
-      it is possible for a user to install WINGs/WUtil without Window
-      Maker itself.
   * debian/patches/50_def_config_paths.diff
     - Remove unnecessary patch. It added /etc/GNUstep/Defaults to
       the DEF_CONFIG_PATHS macro, but the files needed in the paths
