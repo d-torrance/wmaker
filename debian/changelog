@@ -63,7 +63,7 @@ wmaker (0.95.8-1) UNRELEASED; urgency=medium
   * Drop Rodolfo García Peñas from uploaders. - Thanks for your work!
     Closes: #866854
 
- -- Doug Torrance <dtorrance@piedmont.edu>  Tue, 04 Jul 2017 13:21:45 -0400
+ -- Doug Torrance <profzoom@cayke>  Tue, 04 Jul 2017 13:18:41 -0400
 
 wmaker (0.95.8-1~exp1) experimental; urgency=medium
 
