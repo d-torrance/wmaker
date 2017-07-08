@@ -1,9 +1,6 @@
 wmaker (0.95.8-1) UNRELEASED; urgency=medium
 
   [ Doug Torrance ]
-  * debian/control
-    - Add Breaks/Replaces to account for files moved from wmaker-common
-      to libwings3/libwutil5.
   * debian/debianfiles/Themes/Debian.style
     - Rename from just "Debian" for consistency with other Window
       Maker themes.
@@ -63,7 +60,7 @@ wmaker (0.95.8-1) UNRELEASED; urgency=medium
   * Drop Rodolfo García Peñas from uploaders. - Thanks for your work!
     Closes: #866854
 
- -- Doug Torrance <profzoom@cayke>  Tue, 04 Jul 2017 13:18:41 -0400
+ -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 16 Mar 2017 11:07:30 -0400
 
 wmaker (0.95.8-1~exp1) experimental; urgency=medium
 

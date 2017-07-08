@@ -146,8 +146,6 @@ Architecture: any
 Multi-Arch: same
 Section: libs
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Breaks: wmaker-common (<< 0.95.8-1~)
-Replaces: wmaker-common (<< 0.95.8-1~)
 Description: Window Maker's own widget set - utility library
  WINGs Is Not GNUstep (WINGs) is a small widget set with the NeXTSTEP
  look and feel. Its API is inspired in OpenSTEP and its
@@ -163,8 +161,6 @@ Architecture: any
 Multi-Arch: same
 Section: libs
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Breaks: wmaker-common (<< 0.95.8-1~)
-Replaces: wmaker-common (<< 0.95.8-1~)
 Description: Window Maker's own widget set - runtime library
  WINGs Is Not GNUstep (WINGs) is a small widget set with the NeXTSTEP
  look and feel. Its API is inspired in OpenSTEP and its
