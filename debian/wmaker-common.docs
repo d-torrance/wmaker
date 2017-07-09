@@ -7,6 +7,9 @@ README
 README.i18n
 TODO
 debian/README.ppa
-debian/copyright
 debian/debianfiles/Themes/DebianLegacy.txt
+debian/tmp/README.WPrefs
+debian/tmp/README.WPrefs.po
+debian/tmp/README.definable-cursor
+debian/tmp/README.po
 util/wm-oldmenu2new

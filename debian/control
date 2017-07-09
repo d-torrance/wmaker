@@ -3,8 +3,7 @@ Section: x11
 Priority: optional
 Maintainer: Doug Torrance <dtorrance@piedmont.edu>
 XSBC-Original-Maintainer: Debian Window Maker Team <pkg-wmaker-devel@lists.alioth.debian.org>
-XSBC-Original-Uploaders: Rodolfo García Peñas (kix) <kix@debian.org>,
-                         Andreas Metzler <ametzler@debian.org>,
+XSBC-Original-Uploaders: Andreas Metzler <ametzler@debian.org>,
                          Doug Torrance <dtorrance@piedmont.edu>
 Standards-Version: 3.9.7
 Build-Depends: automake (>= 1:1.12),
@@ -147,7 +146,8 @@ Package: libwutil5
 Architecture: any
 Multi-Arch: same
 Section: libs
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends},
+         wmaker-common (>= ${source:Version})
 Description: Window Maker's own widget set - utility library
  WINGs Is Not GNUstep (WINGs) is a small widget set with the NeXTSTEP
  look and feel. Its API is inspired in OpenSTEP and its
@@ -162,7 +162,8 @@ Package: libwings3
 Architecture: any
 Multi-Arch: same
 Section: libs
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends}, ${shlibs:Depends},
+         wmaker-common (>= ${source:Version})
 Description: Window Maker's own widget set - runtime library
  WINGs Is Not GNUstep (WINGs) is a small widget set with the NeXTSTEP
  look and feel. Its API is inspired in OpenSTEP and its
