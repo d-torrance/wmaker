@@ -9,6 +9,12 @@ wmaker (0.95.8+20170315-0ppa1) zesty; urgency=medium
 
  -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 16 Mar 2017 09:30:05 -0400
 
+wmaker (0.95.8-1) unstable; urgency=low
+
+  * Upload to unstable.
+
+ -- Andreas Metzler <ametzler@debian.org>  Sun, 09 Jul 2017 13:35:24 +0200
+
 wmaker (0.95.8-1~exp2) experimental; urgency=medium
 
   [ Doug Torrance ]
