@@ -36,9 +36,6 @@ override_dh_auto_configure:
 	env LINGUAS="$(LINGUAS)" dh_auto_configure --verbose -- \
 		$(COMMON_OPTIONS) $(WMAKER_OPTIONS)
 
-override_dh_installmenu:
-	dh_installmenu -a --noscripts
-
 override_dh_installdocs:
 	# Readmes - Copy+rename before install
 	# We use the root of the temporal directory debian/tmp

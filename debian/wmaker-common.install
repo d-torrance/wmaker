@@ -2,10 +2,8 @@ debian/debianfiles/Themes/Debian.style		usr/share/WindowMaker/Themes
 debian/debianfiles/Themes/DebianLegacy.style	usr/share/WindowMaker/Themes
 debian/debianfiles/Themes/DebianSwirl.jpg	usr/share/WindowMaker/Backgrounds
 debian/debianfiles/Themes/debian.tiff		usr/share/WindowMaker/Backgrounds
-debian/debianfiles/conf/WMRootMenu		etc/GNUstep/Defaults
 debian/debianfiles/conf/WMWindowAttributes	etc/GNUstep/Defaults
 debian/debianfiles/conf/WindowMaker		etc/GNUstep/Defaults
-debian/debianfiles/menu/wmappearance		etc/menu-methods
 debian/debianfiles/wmaker			usr/bin
 debian/debianfiles/wmaker-common.desktop	usr/share/xsessions
 etc/GNUstep/Defaults/WMGLOBAL
