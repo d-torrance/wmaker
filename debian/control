@@ -39,7 +39,6 @@ Depends: wmaker-common (= ${source:Version}),
          ${shlibs:Depends}
 Provides: x-window-manager
 Suggests: desktop-base,
-          menu,
           wmaker-data,
           wmaker-utils,
           x-terminal-emulator,
