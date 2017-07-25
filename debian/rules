@@ -30,7 +30,7 @@ COMMON_OPTIONS    := --datadir=$(SHAREDIR)            \
                      --with-defsdatadir=$(DEFSDATADIR)
 
 %:
-	dh $@ --parallel --with autoreconf
+	dh $@ --parallel
 
 override_dh_auto_configure:
 	env LINGUAS="$(LINGUAS)" dh_auto_configure --verbose -- \

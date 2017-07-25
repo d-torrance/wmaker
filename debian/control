@@ -7,7 +7,6 @@ Uploaders: Andreas Metzler <ametzler@debian.org>,
 Standards-Version: 4.0.0
 Build-Depends: automake (>= 1:1.12),
                debhelper (>= 10),
-               dh-autoreconf,
                gettext,
                libfontconfig1-dev,
                libgif-dev,
