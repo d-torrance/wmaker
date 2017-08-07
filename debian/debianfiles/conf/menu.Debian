@@ -1,0 +1,30 @@
+/* Root Menu definition for WindowMaker
+ * This menu is in old (not-PropList) because we want to include it in 
+ * ~/GNUstep/Defaults/WMRootMenu with a single line containing just
+ * "menu.hook"
+ * (/usr/share/WindowMaker/menu.hook is a symlink pointing to
+ * /etc/GNUstep/Defaults/menu.Debian)
+ * This currently is only supported for old-style menus.
+ */
+Debian MENU
+  "Applications" OPEN_PLMENU "|| wmmenugen -parser:xdg /usr/share/applications/"
+  "Run..." EXEC "%A(Run,Type command to run)"
+  "Window Maker" MENU
+    "Info Panel ..."  INFO_PANEL
+    "Legal Panel ..."  LEGAL_PANEL
+    "Preferences"  EXEC WPrefs
+    "Refresh screen"  REFRESH
+    "Restart"  RESTART
+  "Window Maker" END
+  "WorkSpace" MENU
+    "Appearance"  OPEN_MENU appearance.menu
+    "Arrange Icons"  ARRANGE_ICONS
+    "Clear Session"  CLEAR_SESSION
+    "Hide Others"  HIDE_OTHERS
+    "Save Session"  SAVE_SESSION
+    "Show All"  SHOW_ALL
+    "Workspaces"  WORKSPACE_MENU
+  "WorkSpace" END
+    "Exit"  EXIT
+    "Exit session"  SHUTDOWN
+Debian END
