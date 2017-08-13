@@ -195,10 +195,9 @@ the root menu.  And that is not a good idea (the reason is left as an
 exercise to the reader, take into account the people that aren't using
 menu.hook as the root menu in the first place).
 
-Still want to use WPrefs to edit you menu? Copy
-/usr/share/doc/wmaker-common/examples/plmenu.Debian into
-~/GNUstep/Defaults/WMRootMenu, start WPrefs, click the Menu Guru (the 9th
-icon, left to right).  Now go read the docs.  That's the reason they are
-there.
+Still want to use WPrefs to edit you menu? Cut and paste the example
+above into ~/GNUstep/Defaults/WMRootMenu, start WPrefs, click the Menu
+Guru (the 9th icon, left to right).  Now go read the docs.  That's the
+reason they are there.
 
 Marcelo E. Magallon <mmagallo@debian.org>, Thr, 1 Apr 1999 18:47:30 -0600

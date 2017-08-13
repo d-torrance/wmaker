@@ -25,10 +25,9 @@ wmaker (0.95.8-2) UNRELEASED; urgency=medium
     on upgrades and purge.
   * Because of the moved manpage (which in turn is needed for using
     dh_installwm) wmaker breaks/replaces wmaker-common (<< 0.95.8-2~).
-  * Ship our menu (in classic format) as /etc/GNUstep/Defaults/menu.Debian and
-    add a symlink to it as /usr/share/WindowMaker/menu.hook to make the menu
-    accessible for upgraded installations. Also ship the menu in PropList
-    format in /usr/share/doc/wmaker-common/examples/plmenu.Debian.
+  * Ship our menu as /etc/GNUstep/Defaults/plmenu.Debian and add a symlink
+    to it as /usr/share/WindowMaker/menu.hook to make the menu accessible for
+    upgraded installations.
 
  -- Doug Torrance <dtorrance@piedmont.edu>  Mon, 24 Jul 2017 22:34:23 -0400
 
