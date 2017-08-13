@@ -21,8 +21,6 @@ wmaker (0.95.8-2) UNRELEASED; urgency=medium
     debian/wmaker{,-common}.maintscript. Remove generated menufiles
     (etc/GNUstep/Defaults/appearance.menu and /etc/GNUstep/Defaults/menu.hook
     on upgrades and purge.
-  * Because of the moved manpage (which in turn is needed for using
-    dh_installwm) wmaker breaks/replaces wmaker-common (<< 0.95.8-2~).
   * Ship our menu (in classic format) as /etc/GNUstep/Defaults/menu.Debian and
     add a symlink to it as /usr/share/WindowMaker/menu.hook to make the menu
     accessible for upgraded installations. Also ship the menu in PropList
