@@ -7,7 +7,8 @@ XSBC-Original-Uploaders: Andreas Metzler <ametzler@debian.org>,
                          Doug Torrance <dtorrance@piedmont.edu>
 Standards-Version: 4.0.1
 Build-Depends: automake (>= 1:1.12),
-               debhelper (>= 10),
+               debhelper (>= 9),
+               dh-autoreconf,
                gettext,
                libfontconfig1-dev,
                libgif-dev,

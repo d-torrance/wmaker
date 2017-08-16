@@ -30,7 +30,7 @@ COMMON_OPTIONS    := --datadir=$(SHAREDIR)            \
                      --with-defsdatadir=$(DEFSDATADIR)
 
 %:
-	dh $@ --parallel
+	dh $@ --parallel --with autoreconf
 
 override_dh_autoreconf:
 	# Append git snapshot date to version number
