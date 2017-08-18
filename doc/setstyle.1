@@ -1,5 +1,5 @@
 .\" Hey, Emacs!  This is an -*- nroff -*- source file.
-.TH setstyle 1 "April 2015"
+.TH setstyle 1 "August 2017"
 .SH NAME
 setstyle \- set style related options for Window Maker or loads a theme
 .SH SYNOPSIS
@@ -16,6 +16,15 @@ domain, effectively setting the Window Maker style.
 If the supplied path is a directory
 .RI ( themepack ),
 it will be treated as a theme pack and it will be loaded appropriately.
+
+If the macro "@usergnusteppath@" is included in
+.IR  stylefile ,
+then
+.B setstyle
+will replace it with the value of the environment variable GNUSTEP_USER_ROOT,
+if it exists, or "~/GNUstep", if not.  This may be useful for writing scripts
+involving
+.BR setstyle .
 .SH OPTIONS
 .TP
 .B \-\-help

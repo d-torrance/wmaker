@@ -425,6 +425,9 @@ int main(int argc, char **argv)
 
 	file = argv[0];
 
+	if (strstr(file, "@usergnusteppath@") == file)
+		file = wstrconcat(wusergnusteppath(), file + 17);
+
 	WMPLSetCaseSensitive(False);
 
 	path = wdefaultspathfordomain("WindowMaker");
