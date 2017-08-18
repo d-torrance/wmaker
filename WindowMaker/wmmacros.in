@@ -54,7 +54,10 @@
 #define STYLES_DIR		#wmdatadir#/Styles
 #define ICON_SETS_DIR		#wmdatadir#/IconSets
 #define BACKGROUNDS_DIR		#wmdatadir#/Backgrounds
-
+#define USER_THEMES_DIR		@usergnusteppath@/Library/WindowMaker/Themes
+#define USER_STYLES_DIR		@usergnusteppath@/Library/WindowMaker/Styles
+#define USER_ICON_SETS_DIR	@usergnusteppath@/Library/WindowMaker/IconSets
+#define USER_BACKGROUNDS_DIR	@usergnusteppath@/Library/WindowMaker/Backgrounds
 
 #define StaticGray		0
 #define GrayScale		1
