@@ -1,3 +1,13 @@
+wmaker (0.95.8+20170819-0ppa1) artful; urgency=medium
+
+  * debian/control
+    - Modify Breaks/Replaces for wmaker manpage package switch.
+  * debian/debianfiles/wmaker
+    - Copy new proplist menu file to user directory.  Then users may
+      use WPrefs to make modifications.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Sat, 19 Aug 2017 13:42:18 -0400
+
 wmaker (0.95.8+20170814-0ppa1) artful; urgency=medium
 
   * Revert back to debhelper compatibility level 9 for the sake of
