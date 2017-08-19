@@ -56,6 +56,11 @@ copy_defaults_if_needed WindowMaker
 copy_defaults_if_needed WMRootMenu
 copy_defaults_if_needed WMState
 #copy_defaults_if_needed WMWindowAttributes
+copy_defaults_if_needed plmenu.Debian
+
+if [ ! -f "$wm_base/menu.hook" ] ; then
+    install -m 0644 $gs_system_defaults/plmenu.Debian $wm_base/menu.hook
+fi
 
 if [ -x $convertfonts -a ! -e "$wm_base/.fonts_converted" ] ; then
 # --keep-xlfd is used in order to preserve the original information
