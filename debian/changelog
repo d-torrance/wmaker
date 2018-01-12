@@ -2,6 +2,7 @@ wmaker (0.95.8-3) UNRELEASED; urgency=medium
 
   * Update Vcs-* after migration to Salsa.
   * Install WPrefs into the correct directory (LP: #1742842).
+  * Update Format in d/copyright to https.
 
  -- Doug Torrance <dtorrance@piedmont.edu>  Fri, 12 Jan 2018 11:52:23 -0500
 
