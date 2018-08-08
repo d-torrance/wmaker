@@ -11,16 +11,16 @@ wmaker (0.95.8-3) UNRELEASED; urgency=medium
       --enable-pango to configure during build since version 0.95.7-1,
       but it has been failing.
     - Bump Standards-Version to 4.2.0.
+    - Use https in Homepage.
     - Update Vcs-* after migration to Salsa.
-  * debian/control: Use https in Homepage.
   * debian/copyright
     - Update Format to https.
-  * debian/README.Debian
-    - Add documentation for new FreeDesktop-style menu which replaced
-      the deprecated Debian menu (Closes: #872879).
   * debian/patches/60_fix_pkg-config_variable_typo.patch
     - New patch; correctly call pkg-config when building with
       ImageMagick support.
+  * debian/README.Debian
+    - Add documentation for new FreeDesktop-style menu which replaced
+      the deprecated Debian menu (Closes: #872879).
   * debian/rules
     - Add --enable-magick configure option to enable ImageMagick
       support (Closes: #905608).
