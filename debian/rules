@@ -7,7 +7,8 @@ export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
 
 LINGUAS           := $(patsubst po/%.po, %, $(wildcard po/*.po))
 
-WMAKER_OPTIONS := --disable-xlocale --enable-modelock --enable-pango --enable-xinerama
+WMAKER_OPTIONS := --disable-xlocale --enable-modelock --enable-pango \
+                  --enable-xinerama --enable-magick
 #not-enabled      --enable-usermenu --disable-shape --disable-shm --enable-randr
 #not-enabled      --disable-xpm --disable-png --disable-jpeg --disable-gif --disable-tiff
 
