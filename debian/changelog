@@ -24,12 +24,13 @@ wmaker (0.95.8-3) UNRELEASED; urgency=medium
   * debian/rules
     - Add --enable-magick configure option to enable ImageMagick
       support (Closes: #905608).
+    - Remove --parallel option to dh; default after debhelper 10.
   * debian/watch
     - Use https for download link.
   * debian/wmaker.install
     - Install WPrefs into the correct directory (LP: #1742842).
 
- -- Doug Torrance <dtorrance@piedmont.edu>  Wed, 08 Aug 2018 05:28:46 -0400
+ -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 09 Aug 2018 19:59:03 -0400
 
 wmaker (0.95.8-2) unstable; urgency=low
 
