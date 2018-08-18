@@ -28,8 +28,6 @@ wmaker (0.95.8-3) UNRELEASED; urgency=medium
     - Remove --parallel option to dh; default after debhelper 10.
   * debian/watch
     - Use https for download link.
-  * debian/wmaker.install
-    - Install WPrefs into the correct directory (LP: #1742842).
 
   [ Andreas Metzler ]
   * Delete trailing whitespace in Debian changelog. (Thanks, lintian)
