@@ -31,6 +31,8 @@ wmaker (0.95.8-3) UNRELEASED; urgency=medium
 
   [ Andreas Metzler ]
   * Delete trailing whitespace in Debian changelog. (Thanks, lintian)
+  * Hotfix WPrefs not opening from menu by symlinking the WPrefs binary to
+    usr/share/lib/GNUstep/System/Applications/WPrefs.app/. (LP: #1742842)
 
  -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 09 Aug 2018 19:59:03 -0400
 
