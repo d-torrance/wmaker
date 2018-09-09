@@ -36,6 +36,7 @@ wmaker (0.95.8-3) UNRELEASED; urgency=medium
     Build with --with-gnustepdir=/usr/share/GNUstep (instead of
     /usr/share/lib/...) and fix references in debian/* accordingly.
     (LP: #1742842)
+  * Set Rules-Requires-Root: no.
 
  -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 09 Aug 2018 19:59:03 -0400
 

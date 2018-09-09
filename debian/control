@@ -4,6 +4,7 @@ Priority: optional
 Maintainer: Debian Window Maker Team <pkg-wmaker-devel@lists.alioth.debian.org>
 Uploaders: Andreas Metzler <ametzler@debian.org>,
            Doug Torrance <dtorrance@piedmont.edu>
+Rules-Requires-Root: no
 Standards-Version: 4.2.0
 Build-Depends: debhelper (>= 11),
                gettext,
