@@ -11,7 +11,7 @@ wmaker (0.95.8-3) UNRELEASED; urgency=medium
     - Add libpango1.0-dev to Build-Depends.  We have been passing
       --enable-pango to configure during build since version 0.95.7-1,
       but it has been failing.
-    - Bump Standards-Version to 4.2.0.
+    - Bump Standards-Version to 4.2.1.
     - Use https in Homepage.
     - Update Vcs-* after migration to Salsa.
   * debian/copyright
