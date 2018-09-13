@@ -1,4 +1,4 @@
-wmaker (0.95.8-3) UNRELEASED; urgency=medium
+wmaker (0.95.8-3) unstable; urgency=low
 
   [ Doug Torrance ]
   * debian/compat
@@ -38,7 +38,7 @@ wmaker (0.95.8-3) UNRELEASED; urgency=medium
     (LP: #1742842)
   * Set Rules-Requires-Root: no.
 
- -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 09 Aug 2018 19:59:03 -0400
+ -- Andreas Metzler <ametzler@debian.org>  Thu, 13 Sep 2018 19:16:14 +0200
 
 wmaker (0.95.8-2) unstable; urgency=low
 
