@@ -376,6 +376,7 @@ extern struct WPreferences {
 	char disable_root_mouse;           /* disable button events in root window */
 	char auto_focus;                   /* focus window when it's mapped */
 	char *icon_back_file;              /* background image for icons */
+	char enforce_icon_margin;          /* auto-shrink icon images */
 
 	WCoord *root_menu_pos;             /* initial position of the root menu*/
 	WCoord *app_menu_pos;
@@ -486,6 +487,8 @@ extern struct WPreferences {
 
 	/* Map table between w_cursor and actual X id */
 	Cursor cursor[WCUR_LAST];
+
+    int switch_panel_icon_size;               /* icon size in switch panel */
 
 } wPreferences;
 

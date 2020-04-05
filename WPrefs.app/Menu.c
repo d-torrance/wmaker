@@ -22,6 +22,7 @@
 #include "WPrefs.h"
 #include <assert.h>
 #include <ctype.h>
+#include <unistd.h>
 
 #include <X11/keysym.h>
 #include <X11/cursorfont.h>
@@ -613,7 +614,7 @@ static void createPanel(_Panel * p)
 	WMAddNotificationObserver(dataChanged, panel, WMTextDidChangeNotification, panel->pathT);
 
 	label = WMCreateLabel(panel->pathF);
-	WMResizeWidget(label, width - 20, 80);
+	WMResizeWidget(label, width - 20, 90);
 	WMMoveWidget(label, 10, 50);
 	WMSetLabelText(label, _("Enter the path for a file containing a menu\n"
 				"or a list of directories with the programs you\n"
@@ -1435,12 +1436,12 @@ static WEditMenu *buildSubmenu(_Panel * panel, WMPropList * pl)
 					WSetEditMenuItemImage(item, panel->markerPix[data->type]);
 				WSetEditMenuItemData(item, data, (WMCallback *) freeItemData);
 			} else {
-				char *buf = wmalloc(1024);
-				snprintf(buf, 1024, _("Invalid menu command \"%s\" with label \"%s\" cleared"),
+				char buf[256];
+
+				snprintf(buf, sizeof(buf), _("Invalid menu command \"%s\" with label \"%s\" cleared"),
 					WMGetFromPLString(WMGetFromPLArray(pi, 1)),
 					WMGetFromPLString(WMGetFromPLArray(pi, 0)));
 				WMRunAlertPanel(scr, panel->parent, _("Warning"), buf, _("OK"), NULL, NULL);
-				wfree(buf);
 			}
 
 		}
@@ -1482,7 +1483,8 @@ static WMPropList *getDefaultMenu(_Panel * panel)
 static void showData(_Panel * panel)
 {
 	const char *gspath;
-	char *menuPath;
+	char *menuPath, *labelText;
+	char buf[1024];
 	WMPropList *pmenu;
 
 	gspath = wusergnusteppath();
@@ -1492,6 +1494,41 @@ static void showData(_Panel * panel)
 	strcat(menuPath, "/Defaults/WMRootMenu");
 
 	pmenu = WMReadPropListFromFile(menuPath);
+
+	/* check if WMRootMenu references another file, and if so,
+	   if that file is in proplist format */
+	while (WMIsPLString(pmenu)) {
+		char *path = NULL;
+
+		path = wexpandpath(WMGetFromPLString(pmenu));
+
+		if (access(path, F_OK) < 0)
+			path = wfindfile(DEF_CONFIG_PATHS, path);
+
+		/* TODO: if needed, concatenate locale suffix to path.
+		   See getLocalizedMenuFile() in src/rootmenu.c. */
+
+		if (!path)
+			break;
+
+		if (access(path, W_OK) < 0) {
+			snprintf(buf, sizeof(buf),
+				 _("The menu file \"%s\" referenced by "
+				   "WMRootMenu is read-only.\n"
+				   "You cannot use WPrefs to modify it."),
+				 path);
+			WMRunAlertPanel(WMWidgetScreen(panel->parent),
+					panel->parent,
+					_("Warning"), buf,
+					_("OK"), NULL, NULL);
+			panel->dontSave = True;
+			wfree(path);
+			return;
+		}
+
+		pmenu = WMReadPropListFromFile(path);
+		menuPath = path;
+	}
 
 	if (!pmenu || !WMIsPLArray(pmenu)) {
 		int res;
@@ -1516,6 +1553,14 @@ static void showData(_Panel * panel)
 	}
 
 	panel->menuPath = menuPath;
+
+	snprintf(buf, sizeof(buf),
+		 _("\n\nWhen saved, the menu will be written to the file\n\"%s\"."),
+		 menuPath);
+	labelText = WMGetLabelText(panel->sections[NoInfo][0]);
+	labelText = wstrconcat(labelText, buf);
+	WMSetLabelText(panel->sections[NoInfo][0], labelText);
+	wfree(labelText);
 
 	buildMenuFromPL(panel, pmenu);
 
@@ -1557,15 +1602,12 @@ static WMPropList *processData(const char *title, ItemData * data)
 	case ExecInfo:
 		if (data->param.exec.command == NULL)
 			goto return_null;
-#if 1
+
 		if (strpbrk(data->param.exec.command, "&$*|><?`=;")) {
 			s1 = "SHEXEC";
 		} else {
 			s1 = "EXEC";
 		}
-#else
-		s1 = "SHEXEC";
-#endif
 
 		if (notblank(data->param.exec.shortcut)) {
 			WMAddToPLArray(item, pscut);

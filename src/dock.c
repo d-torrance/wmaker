@@ -92,7 +92,7 @@ static void iconMouseDown(WObjDescriptor *desc, XEvent *event);
 
 static pid_t execCommand(WAppIcon *btn, const char *command, WSavedState *state);
 
-static void trackDeadProcess(pid_t pid, unsigned char status, WDock *dock);
+static void trackDeadProcess(pid_t pid, unsigned int status, void *cdata);
 
 static int getClipButton(int px, int py);
 
@@ -1392,7 +1392,7 @@ void wClipIconPaint(WAppIcon *aicon)
 	WMColor *color;
 	Window win = aicon->icon->core->window;
 	int length, nlength;
-	char *ws_name, ws_number[10];
+	char *ws_name, ws_number[sizeof scr->current_workspace * CHAR_BIT / 3 + 1];
 	int ty, tx;
 
 	wIconPaint(aicon->icon);
@@ -1400,7 +1400,7 @@ void wClipIconPaint(WAppIcon *aicon)
 	length = strlen(workspace->name);
 	ws_name = wmalloc(length + 1);
 	snprintf(ws_name, length + 1, "%s", workspace->name);
-	snprintf(ws_number, sizeof(ws_number), "%i", scr->current_workspace + 1);
+	snprintf(ws_number, sizeof ws_number, "%u", scr->current_workspace + 1);
 	nlength = strlen(ws_number);
 
 	if (wPreferences.flags.noclip || !workspace->clip->collapsed)
@@ -3091,7 +3091,7 @@ static pid_t execCommand(WAppIcon *btn, const char *command, WSavedState *state)
 				state->workspace = scr->current_workspace;
 		}
 		wWindowAddSavedState(btn->wm_instance, btn->wm_class, cmdline, pid, state);
-		wAddDeathHandler(pid, (WDeathHandler *) trackDeadProcess, btn->dock);
+		wAddDeathHandler(pid, trackDeadProcess, btn->dock);
 	} else if (state) {
 		wfree(state);
 	}
@@ -3334,8 +3334,9 @@ void wClipUpdateForWorkspaceChange(WScreen *scr, int workspace)
 	}
 }
 
-static void trackDeadProcess(pid_t pid, unsigned char status, WDock *dock)
+static void trackDeadProcess(pid_t pid, unsigned int status, void *cdata)
 {
+	WDock *dock = cdata;
 	WAppIcon *icon;
 	int i;
 

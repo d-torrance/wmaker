@@ -159,6 +159,13 @@ void create_appicon_for_application(WApplication *wapp, WWindow *wwin)
 		if (!WFLAGP(wapp->main_window_desc, no_appicon))
 			paint_app_icon(wapp);
 	}
+
+	/* At this point the application is fully set up and all icon and
+	 * window data are known - so try to save the icon file for docked
+	 * applications to ensure that the file exists when window maker
+	 * starts up next time. */
+	if (wapp->app_icon->docked && !WFLAGP(wapp->main_window_desc, no_appicon))
+		save_appicon(wapp->app_icon);
 }
 
 void unpaint_app_icon(WApplication *wapp)
@@ -373,11 +380,10 @@ void wAppIconMove(WAppIcon * aicon, int x, int y)
 static void updateDockNumbers(WScreen *scr)
 {
 	int length;
-	char *ws_numbers;
+	char ws_numbers[20];
 	WAppIcon *dicon = scr->dock->icon_array[0];
 
-	ws_numbers = wmalloc(20);
-	snprintf(ws_numbers, 20, "%i [ %i ]", scr->current_workspace + 1, ((scr->current_workspace / 10) + 1));
+	snprintf(ws_numbers, sizeof(ws_numbers), "%i [ %i ]", scr->current_workspace + 1, ((scr->current_workspace / 10) + 1));
 	length = strlen(ws_numbers);
 
 	XClearArea(dpy, dicon->icon->core->window, 2, 2, 50, WMFontHeight(scr->icon_title_font) + 1, False);
@@ -387,8 +393,6 @@ static void updateDockNumbers(WScreen *scr)
 
 	WMDrawString(scr->wmscreen, dicon->icon->core->window, scr->white,
 		     scr->icon_title_font, 3, 2, ws_numbers, length);
-
-	wfree(ws_numbers);
 }
 #endif				/* WS_INDICATOR */
 

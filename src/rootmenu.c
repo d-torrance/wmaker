@@ -673,6 +673,11 @@ static void constructMenu(WMenu * menu, WMenuEntry * entry)
 				}
 
 				tmp = wexpandpath(path[i]);
+
+				if (strstr(tmp, "#usergnusteppath#") == tmp)
+					tmp = wstrconcat(wusergnusteppath(),
+							  tmp + 17);
+
 				wfree(path[i]);
 				lpath = getLocalizedMenuFile(tmp);
 				if (lpath) {
@@ -1505,6 +1510,7 @@ static WMenu *configureMenu(WScreen *scr, WMPropList *definition)
 		if (!scr->root_menu || stat_buf.st_mtime > scr->root_menu->timestamp
 		    /* if the pointer in WMRootMenu has changed */
 		    || w_global.domain.root_menu->timestamp > scr->root_menu->timestamp) {
+			WMPropList *menu_from_file = NULL;
 
 			if (menu_is_default) {
 				wwarning(_
@@ -1512,7 +1518,14 @@ static WMenu *configureMenu(WScreen *scr, WMPropList *definition)
 					 path);
 			}
 
-			menu = readMenuFile(scr, path);
+			menu_from_file = WMReadPropListFromFile(path);
+			if (menu_from_file == NULL) { /* old style menu */
+				menu = readMenuFile(scr, path);
+			} else {
+				menu = configureMenu(scr, menu_from_file);
+				WMReleasePropList(menu_from_file);
+			}
+
 			if (menu)
 				menu->timestamp = WMAX(stat_buf.st_mtime, w_global.domain.root_menu->timestamp);
 		} else {

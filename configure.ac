@@ -34,7 +34,7 @@ AC_PREREQ([2.69])
 
 dnl Configuration for Autoconf and Automake
 dnl =======================================
-AC_INIT([WindowMaker],[0.95.8],[wmaker-dev@lists.windowmaker.org],[WindowMaker],[http://www.windowmaker.org/])
+AC_INIT([WindowMaker],[0.95.9],[wmaker-dev@googlegroups.com],[WindowMaker],[http://www.windowmaker.org/])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
 
@@ -370,7 +370,7 @@ AC_SEARCH_LIBS([strerror], [cposix])
 dnl nanosleep is generally available in standard libc, although not always the
 dnl case. One known example is Solaris which needs -lrt
 AC_SEARCH_LIBS([nanosleep], [rt], [],
-    [AC_MSG_ERROR([function 'nanosleep' not found, please report to wmaker-dev@lists.windowmaker.org])])
+    [AC_MSG_ERROR([function 'nanosleep' not found, please report to wmaker-dev@googlegroups.com])])
 
 dnl the flag 'O_NOFOLLOW' for 'open' is used in WINGs
 WM_FUNC_OPEN_NOFOLLOW
@@ -459,12 +459,6 @@ dnl that the gettext environment works
 WM_I18N_LANGUAGES
 WM_I18N_XGETTEXT
 WM_I18N_MENUTEXTDOMAIN
-
-dnl 2014/12/29: The option is deprecated, we should keep this message for at
-dnl least 2 years to ensure users see it and update their build scripts
-AC_ARG_WITH([nlsdir], [],
-    [AC_MSG_ERROR([option '--with-nlsdir' is deprecated, please use autoconf's standard '--localedir' instead])])
-
 
 dnl ===========================================
 dnl 		Stuff that uses X

@@ -287,14 +287,14 @@ AS_IF([test "x$enable_magick" = "xno"],
         [wm_cv_libchk_magick=no
          dnl First try to get the configuration from either pkg-config (the official way)
          dnl or with the fallback MagickWand-config
-         AS_IF([test "x$PKGCONFIG" = "x"],
+         AS_IF([test "x$PKG_CONFIG" = "x"],
              [AC_PATH_PROGS_FEATURE_CHECK([magickwand], [MagickWand-config],
                  [wm_cv_libchk_magick_cflags=`$ac_path_magickwand --cflags`
                   wm_cv_libchk_magick_libs=`$ac_path_magickwand --ldflags`
                   wm_cv_libchk_magick=magickwand])],
-             [AS_IF([$PKGCONFIG --exists MagickWand],
-                 [wm_cv_libchk_magick_cflags=`$PKGCONFIG --cflags MagickWand`
-                  wm_cv_libchk_magick_libs=`$PKGCONFIG --libs MagickWand`
+             [AS_IF([$PKG_CONFIG --exists MagickWand],
+                 [wm_cv_libchk_magick_cflags=`$PKG_CONFIG --cflags MagickWand`
+                  wm_cv_libchk_magick_libs=`$PKG_CONFIG --libs MagickWand`
                   wm_cv_libchk_magick=pkgconfig])])
          AS_IF([test "x$wm_cv_libchk_magick" = "xno"],
              [AS_IF([test "x$enable_magick" != "xauto"],
@@ -312,7 +312,7 @@ AS_IF([test "x$enable_magick" = "xno"],
               dnl
               dnl The library was found, check if header is available and compiles
               wm_save_CFLAGS="$CFLAGS"
-              AS_IF([wm_fn_lib_try_compile "wand/magick_wand.h" "MagickWand *wand;" "wand = NewMagickWand()" "$wm_cv_libchk_magick_cflags"],
+              AS_IF([wm_fn_lib_try_compile "MagickWand/MagickWand.h" "MagickWand *wand;" "wand = NewMagickWand()" "$wm_cv_libchk_magick_cflags"],
                   [wm_cv_libchk_magick="$wm_cv_libchk_magick_cflags % $wm_cv_libchk_magick_libs"],
                   [AC_MSG_ERROR([found MagickWand library but could not compile its header])])
               CFLAGS="$wm_save_CFLAGS"])dnl

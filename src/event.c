@@ -1006,9 +1006,9 @@ static void handleClientMessage(XEvent * event)
 		char *command;
 		size_t len;
 
-		len = sizeof(event->xclient.data.b) + 1;
-		command = wmalloc(len);
-		strncpy(command, event->xclient.data.b, sizeof(event->xclient.data.b));
+		len = sizeof(event->xclient.data.b);
+		command = wmalloc(len + 1);
+		strncpy(command, event->xclient.data.b, len);
 
 		if (strncmp(command, "Reconfigure", sizeof("Reconfigure")) == 0) {
 			wwarning(_("Got Reconfigure command"));
@@ -1799,6 +1799,13 @@ static void handleKeyPress(XEvent * event)
 				scr->shortcutWindows[widx] = WMDuplicateArray(scr->selected_windows);
 			}
 		}
+
+		break;
+
+	case WKBD_MOVE_12_TO_6_HEAD:
+	case WKBD_MOVE_6_TO_12_HEAD:
+		if (wwin)
+			moveBetweenHeads(wwin, command - WKBD_MOVE_12_TO_6_HEAD);
 
 		break;
 
