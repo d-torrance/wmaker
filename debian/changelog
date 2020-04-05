@@ -1,3 +1,42 @@
+wmaker (0.95.9-1) UNRELEASED; urgency=medium
+
+  * New upstream release.
+    - No longer sets GNUSTEP_USER_ROOT environment variable
+      (Closes: #922284).
+  * debian/compat
+    - Remove file; compatibility level now handled by debhelper-compat
+      package.
+  * debian/control
+    - Bump Standards-Version to 4.5.0.
+    - Switch Build-Depends on debhelper to debhelper-compat for
+      compatibility level 12.
+  * debian/lib*.symbols
+    - Add Build-Depends-Package fields.
+  * debian/libwings3.symbols
+    - Add new WINGs symbols.
+  * debian/patches
+    - Refresh patches for new upstream version and remove the ones
+      which have been applied upstream.
+  * debian/patches/10_support_imagemagick6.diff
+    - New patch; restore support for ImageMagick v6, as v7 is not in
+      Debian yet.
+  * debian/patches/.keepme
+    - Remove unnecessary file; was causing
+      patch-file-present-but-not-mentioned-in-series Lintian warning.
+  * debian/README.Debian
+    - Fix typo.
+  * debian/rules
+    - Remove replacement of #wmdatadir# to $(WMSHAREDIR) in some menu
+      files; this is now done by upstream during build.
+    - Install README's from WindowMaker directory correctly. Avoids
+      package-contains-documentation-outside-usr-share-doc Lintian
+      warning.
+  * debian/wmaker-common.docs
+    - Use wildcard to catch all the README's that have been renamed
+      in d/rules.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Sun, 05 Apr 2020 21:30:31 -0400
+
 wmaker (0.95.8-3) unstable; urgency=low
 
   [ Doug Torrance ]
