@@ -51,15 +51,6 @@ override_dh_install:
 	chmod +x $(DEBIAN_TMP)$(WMSHAREDIR)/autostart.sh
 	chmod +x $(DEBIAN_TMP)$(WMSHAREDIR)/exitscript.sh
 
-
-	# Now, change the #wmdatadir# string to $(WMSHAREDIR)
-	# Remove this with next upstream release as replacement will be done
-	# during build.
-	# (http://repo.or.cz/wmaker-crm.git/commitdiff/d364aff)
-	perl -pi -e 's:#wmdatadir#:$(WMSHAREDIR):' `find $(DEBIAN_TMP)/$(WMSHAREDIR) -name plmenu.*`
-	perl -pi -e 's:#wmdatadir#:$(WMSHAREDIR):' $(DEBIAN_TMP)$(WMSHAREDIR)/wmmacros
-	perl -pi -e 's:#wmdatadir#:$(WMSHAREDIR):' $(DEBIAN_TMP)$(WMSHAREDIR)/plmenu
-
 	# Install files
 	dh_install
 
