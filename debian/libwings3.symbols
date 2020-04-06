@@ -1,4 +1,5 @@
 libWINGs.so.3 libwings3 #MINVER#
+* Build-Depends-Package: libwings-dev
  WINGsConfiguration@Base 0.95.0
  WMAddBoxSubview@Base 0.95.0
  WMAddBoxSubviewAtEnd@Base 0.95.0
