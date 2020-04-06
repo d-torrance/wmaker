@@ -191,7 +191,7 @@ FreeDesktop menu
 As of policy version 3.9.8, the Debian menu has been deprecated in favor
 of the FreeDesktop menu standard.
 
-There is currently not a menu for Window Maker which is 100% compatibile
+There is currently not a menu for Window Maker which is 100% compatible
 with the standards.  But several options exist which offer a decent
 approximation.
 
@@ -208,3 +208,5 @@ approximation.
 * xdg-menu (https://wiki.archlinux.org/index.php/xdg-menu)
 
 Marcelo E. Magallon <mmagallo@debian.org>, Thr, 1 Apr 1999 18:47:30 -0600
+
+ -- Doug Torrance <dtorrance@piedmont.edu>, Sun,  5 Apr 2020 20:09:38 -0400
