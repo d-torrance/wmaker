@@ -3,6 +3,12 @@ wmaker (0.95.9-1) UNRELEASED; urgency=medium
   * New upstream release.
     - No longer sets GNUSTEP_USER_ROOT environment variable
       (Closes: #922284).
+    - Drop patches previously pulled from upstream GIT:
+      10_util-fix-parsing-of-XDG-menus-with-multiple-groups.patch
+      11_XDG-menu-categories.patch 12_reference-proplist-menus.patch
+      60_fix_pkg-config_variable_typo.patch
+    - Unfuzz 75_WPrefs_to_bindir_when_gnustedir_is_set.diff
+    - 54_Debian_wmmacros.diff dropped, main functionality included upstream.
   * debian/compat
     - Remove file; compatibility level now handled by debhelper-compat
       package.
@@ -14,9 +20,6 @@ wmaker (0.95.9-1) UNRELEASED; urgency=medium
     - Add Build-Depends-Package fields.
   * debian/libwings3.symbols
     - Add new WINGs symbols.
-  * debian/patches
-    - Refresh patches for new upstream version and remove the ones
-      which have been applied upstream.
   * debian/patches/10_support_imagemagick6.diff
     - New patch; restore support for ImageMagick v6, as v7 is not in
       Debian yet.
