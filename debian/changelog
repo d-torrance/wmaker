@@ -3,6 +3,8 @@ wmaker (0.95.9-1) UNRELEASED; urgency=medium
   * New upstream release.
     - No longer sets GNUSTEP_USER_ROOT environment variable
       (Closes: #922284).
+    - Prefers TryExec to Exec when generating menu entries from XDG desktop
+      files (closes: #930674).
     - Drop patches previously pulled from upstream GIT:
       10_util-fix-parsing-of-XDG-menus-with-multiple-groups.patch
       11_XDG-menu-categories.patch 12_reference-proplist-menus.patch
