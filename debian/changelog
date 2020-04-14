@@ -1,5 +1,6 @@
-wmaker (0.95.9-1) UNRELEASED; urgency=medium
+wmaker (0.95.9-1) experimental; urgency=low
 
+  [ Doug Torrance ]
   * New upstream release.
     - No longer sets GNUSTEP_USER_ROOT environment variable
       (Closes: #922284).
@@ -40,7 +41,7 @@ wmaker (0.95.9-1) UNRELEASED; urgency=medium
     - Use wildcard to catch all the README's that have been renamed
       in d/rules.
 
- -- Doug Torrance <dtorrance@piedmont.edu>  Sun, 05 Apr 2020 21:30:31 -0400
+ -- Andreas Metzler <ametzler@debian.org>  Tue, 14 Apr 2020 18:06:26 +0200
 
 wmaker (0.95.8-3) unstable; urgency=low
 
