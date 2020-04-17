@@ -1,6 +1,36 @@
 NEWS for veteran Window Maker users
 -----------------------------------
 
+-- 0.95.9
+
+Configurable SwitchPanel
+------------------------
+
+SwitchPanel is now more configurable: you can configure the switch panel icon
+size by setting the "SwitchPanelIconSize" option to your preferred value in
+~/GNUstep/Defaults/WindowMaker. The font size used in this panel now is also
+sensible to changes in the system font.
+
+
+New user configuration directory environment variable
+-----------------------------------------------------
+
+In previous versions, the GNUstep directory used to store a user's Window Maker
+configuration files was specified by the GNUSTEP_USER_ROOT environment variable,
+which defaulted to ~/GNUstep.  However, this environment variable was deprecated
+in gnustep-make v2.  Therefore, it has been replaced by the WMAKER_USER_ROOT
+environment variable.
+
+
+libXmu is now an optional dependency
+------------------------------------
+
+If the library is not found, compilation work, the only limitation will arise
+when trying to install the standard colormap on displays which are not TrueColor.
+Please note that if you have the library but not the headers, configure will
+still stop; there is no user option to explicitly disable the library use.
+
+
 -- 0.95.8
 
 Move pointer with maximized windows
@@ -1613,7 +1643,7 @@ raising/lowering there is a time threshold before raising/lowering.
 The thresholds can be changed in wconfig.h by changing one or both of
 AUTO_LOWER_DELAY and AUTO_RAISE_DELAY (expressed in milliseconds).
 For example if you set AUTO_RAISE_DELAY to 0, then the Clip will be raised as
-soon as the mouse pointer enters it's area. Setting AUTO_RAISE_DELAY to a very
+soon as the mouse pointer enters its area. Setting AUTO_RAISE_DELAY to a very
 big value, will make the Clip to practically do not auto raise unless clicked,
 but to be automatically lowered after AUTO_LOWER_DELAY (ms) when leaved.
 
@@ -2542,7 +2572,7 @@ The OPEN_MENU command now supports the following syntax:
    // it in current position
    OPEN_MENU file.menu
 2. Pipe menu handling.
-   // opens command and uses it's stdout to construct menu.
+   // opens command and uses its stdout to construct menu.
    // Command's output must be a valid menu description.
    OPEN_MENU | command
 3. Directory handling.
@@ -3145,7 +3175,7 @@ when they are first mapped
 titlebar gradients are in a single piece now
 
 the WMDock file was merged into the WMState file. You can insert this
-file in WMState and set it's key to Dock. For example, if your WMDock
+file in WMState and set its key to Dock. For example, if your WMDock
 contains:
 
 {

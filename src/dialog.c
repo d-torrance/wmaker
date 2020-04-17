@@ -75,15 +75,18 @@ int wMessageDialog(WScreen *scr, const char *title, const char *message, const c
 	WWindow *wwin;
 	int result;
 	WMPoint center;
+	int pwidth, pheight;
 
-	panel = WMCreateAlertPanel(scr->wmscreen, NULL, title, message, defBtn, altBtn, othBtn);
+	panel = WMCreateScaledAlertPanel(scr->wmscreen, NULL, title, message, defBtn, altBtn, othBtn);
+	pwidth = WMWidgetWidth(panel->win);
+	pheight = WMWidgetHeight(panel->win);
 
-	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 400, 180, 0, 0, 0);
+	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, pwidth, pheight, 0, 0, 0);
 
 	XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
-	center = getCenter(scr, 400, 180);
-	wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y, 400, 180);
+	center = getCenter(scr, pwidth, pheight);
+	wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y, pwidth, pheight);
 	wwin->client_leader = WMWidgetXID(panel->win);
 
 	WMMapWidget(panel->win);
@@ -121,24 +124,27 @@ int wExitDialog(WScreen *scr, const char *title, const char *message, const char
 	WWindow *wwin;
 	WMPoint center;
 	int result;
+	int pwidth, pheight;
 
-	panel = WMCreateAlertPanel(scr->wmscreen, NULL, title, message, defBtn, altBtn, othBtn);
+	panel = WMCreateScaledAlertPanel(scr->wmscreen, NULL, title, message, defBtn, altBtn, othBtn);
+	pwidth = WMWidgetWidth(panel->win);
+	pheight = WMWidgetHeight(panel->win);
 
 	/* add save session button */
 	saveSessionBtn = WMCreateSwitchButton(panel->hbox);
 	WMSetButtonAction(saveSessionBtn, toggleSaveSession, NULL);
-	WMAddBoxSubview(panel->hbox, WMWidgetView(saveSessionBtn), False, True, 200, 0, 0);
+	WMAddBoxSubview(panel->hbox, WMWidgetView(saveSessionBtn), False, True, pwidth / 2, 0, 0);
 	WMSetButtonText(saveSessionBtn, _("Save workspace state"));
 	WMSetButtonSelected(saveSessionBtn, wPreferences.save_session_on_exit);
 	WMRealizeWidget(saveSessionBtn);
 	WMMapWidget(saveSessionBtn);
 
-	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 400, 180, 0, 0, 0);
+	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, pwidth, pheight, 0, 0, 0);
 
 	XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
-	center = getCenter(scr, 400, 180);
-	wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y, 400, 180);
+	center = getCenter(scr, pwidth, pheight);
+	wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y, pwidth, pheight);
 
 	wwin->client_leader = WMWidgetXID(panel->win);
 
@@ -422,10 +428,11 @@ int wAdvancedInputDialog(WScreen *scr, const char *title, const char *message, c
 	WMPoint center;
 	WMInputPanelWithHistory *p;
 	char *filename;
+	int pwidth, pheight;
 
 	filename = HistoryFileName(name);
 	p = wmalloc(sizeof(WMInputPanelWithHistory));
-	p->panel = WMCreateInputPanel(scr->wmscreen, NULL, title, message, *text, _("OK"), _("Cancel"));
+	p->panel = WMCreateScaledInputPanel(scr->wmscreen, NULL, title, message, *text, _("OK"), _("Cancel"));
 	p->history = LoadHistory(filename, wPreferences.history_lines);
 	p->histpos = 0;
 	p->prefix = NULL;
@@ -434,14 +441,16 @@ int wAdvancedInputDialog(WScreen *scr, const char *title, const char *message, c
 	p->variants = NULL;
 	p->varpos = 0;
 	WMCreateEventHandler(WMWidgetView(p->panel->text), KeyPressMask, handleHistoryKeyPress, p);
+	pwidth = WMWidgetWidth(p->panel->win);
+	pheight = WMWidgetHeight(p->panel->win);
 
-	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 320, 160, 0, 0, 0);
+	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, pwidth, pheight, 0, 0, 0);
 	XSelectInput(dpy, parent, KeyPressMask | KeyReleaseMask);
 
 	XReparentWindow(dpy, WMWidgetXID(p->panel->win), parent, 0, 0);
 
-	center = getCenter(scr, 320, 160);
-	wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y, 320, 160);
+	center = getCenter(scr, pwidth, pheight);
+	wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y, pwidth, pheight);
 
 	wwin->client_leader = WMWidgetXID(p->panel->win);
 
@@ -485,16 +494,19 @@ int wInputDialog(WScreen *scr, const char *title, const char *message, char **te
 	WMInputPanel *panel;
 	char *result;
 	WMPoint center;
+	int pwidth, pheight;
 
-	panel = WMCreateInputPanel(scr->wmscreen, NULL, title, message, *text, _("OK"), _("Cancel"));
+	panel = WMCreateScaledInputPanel(scr->wmscreen, NULL, title, message, *text, _("OK"), _("Cancel"));
+	pwidth = WMWidgetWidth(panel->win);
+	pheight = WMWidgetHeight(panel->win);
 
-	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 320, 160, 0, 0, 0);
+	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, pwidth, pheight, 0, 0, 0);
 	XSelectInput(dpy, parent, KeyPressMask | KeyReleaseMask);
 
 	XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
-	center = getCenter(scr, 320, 160);
-	wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y, 320, 160);
+	center = getCenter(scr, pwidth, pheight);
+	wwin = wManageInternalWindow(scr, parent, None, NULL, center.x, center.y, pwidth, pheight);
 
 	wwin->client_leader = WMWidgetXID(panel->win);
 
@@ -618,12 +630,15 @@ static void setViewedImage(IconPanel *panel, const char *file)
 {
 	WMPixmap *pixmap;
 	RColor color;
+	int iwidth, iheight;
 
 	color.red = 0xae;
 	color.green = 0xaa;
 	color.blue = 0xae;
 	color.alpha = 0;
-	pixmap = WMCreateScaledBlendedPixmapFromFile(WMWidgetScreen(panel->win), file, &color, 75, 75);
+	iwidth = WMWidgetWidth(panel->iconView);
+	iheight = WMWidgetHeight(panel->iconView);
+	pixmap = WMCreateScaledBlendedPixmapFromFile(WMWidgetScreen(panel->win), file, &color, iwidth, iheight);
 
 	if (!pixmap) {
 		WMSetButtonEnabled(panel->okButton, False);
@@ -909,22 +924,27 @@ Bool wIconChooserDialog(WScreen *scr, char **file, const char *instance, const c
 	WMColor *color;
 	WMFont *boldFont;
 	Bool result;
+	int wmScaleWidth, wmScaleHeight;
+	int pwidth, pheight;
 
 	panel = wmalloc(sizeof(IconPanel));
 
 	panel->scr = scr;
 
 	panel->win = WMCreateWindow(scr->wmscreen, "iconChooser");
-	WMResizeWidget(panel->win, 450, 280);
+	WMGetScaleBaseFromSystemFont(scr->wmscreen, &wmScaleWidth, &wmScaleHeight);
+	pwidth = WMScaleX(450);
+	pheight = WMScaleY(280);
+	WMResizeWidget(panel->win, pwidth, pheight);
 
 	WMCreateEventHandler(WMWidgetView(panel->win), KeyPressMask | KeyReleaseMask, keyPressHandler, panel);
 
-	boldFont = WMBoldSystemFontOfSize(scr->wmscreen, 12);
-	panel->normalfont = WMSystemFontOfSize(WMWidgetScreen(panel->win), 12);
+	boldFont = WMBoldSystemFontOfSize(scr->wmscreen, WMScaleY(12));
+	panel->normalfont = WMSystemFontOfSize(WMWidgetScreen(panel->win), WMScaleY(12));
 
 	panel->dirLabel = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->dirLabel, 200, 20);
-	WMMoveWidget(panel->dirLabel, 10, 7);
+	WMResizeWidget(panel->dirLabel, WMScaleX(200), WMScaleY(20));
+	WMMoveWidget(panel->dirLabel, WMScaleX(10), WMScaleY(7));
 	WMSetLabelText(panel->dirLabel, _("Directories"));
 	WMSetLabelFont(panel->dirLabel, boldFont);
 	WMSetLabelTextAlignment(panel->dirLabel, WACenter);
@@ -932,8 +952,8 @@ Bool wIconChooserDialog(WScreen *scr, char **file, const char *instance, const c
 	WMSetLabelRelief(panel->dirLabel, WRSunken);
 
 	panel->iconLabel = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->iconLabel, 140, 20);
-	WMMoveWidget(panel->iconLabel, 215, 7);
+	WMResizeWidget(panel->iconLabel, WMScaleX(140), WMScaleY(20));
+	WMMoveWidget(panel->iconLabel, WMScaleX(215), WMScaleY(7));
 	WMSetLabelText(panel->iconLabel, _("Icons"));
 	WMSetLabelFont(panel->iconLabel, boldFont);
 	WMSetLabelTextAlignment(panel->iconLabel, WACenter);
@@ -953,64 +973,64 @@ Bool wIconChooserDialog(WScreen *scr, char **file, const char *instance, const c
 	WMSetLabelRelief(panel->iconLabel, WRSunken);
 
 	panel->dirList = WMCreateList(panel->win);
-	WMResizeWidget(panel->dirList, 200, 170);
-	WMMoveWidget(panel->dirList, 10, 30);
+	WMResizeWidget(panel->dirList, WMScaleX(200), WMScaleY(170));
+	WMMoveWidget(panel->dirList, WMScaleX(10), WMScaleY(30));
 	WMSetListAction(panel->dirList, listCallback, panel);
 
 	panel->iconList = WMCreateList(panel->win);
-	WMResizeWidget(panel->iconList, 140, 170);
-	WMMoveWidget(panel->iconList, 215, 30);
+	WMResizeWidget(panel->iconList, WMScaleX(140), WMScaleY(170));
+	WMMoveWidget(panel->iconList, WMScaleX(215), WMScaleY(30));
 	WMSetListAction(panel->iconList, listCallback, panel);
 
 	WMHangData(panel->iconList, panel);
 
 	panel->previewButton = WMCreateCommandButton(panel->win);
-	WMResizeWidget(panel->previewButton, 75, 26);
-	WMMoveWidget(panel->previewButton, 365, 130);
+	WMResizeWidget(panel->previewButton, WMScaleX(75), WMScaleY(26));
+	WMMoveWidget(panel->previewButton, WMScaleX(365), WMScaleY(130));
 	WMSetButtonText(panel->previewButton, _("Preview"));
 	WMSetButtonAction(panel->previewButton, buttonCallback, panel);
 
 	panel->iconView = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->iconView, 75, 75);
-	WMMoveWidget(panel->iconView, 365, 40);
+	WMResizeWidget(panel->iconView, WMScaleX(75), WMScaleY(75));
+	WMMoveWidget(panel->iconView, WMScaleX(365), WMScaleY(40));
 	WMSetLabelImagePosition(panel->iconView, WIPOverlaps);
 	WMSetLabelRelief(panel->iconView, WRSunken);
 	WMSetLabelTextAlignment(panel->iconView, WACenter);
 
 	panel->fileLabel = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->fileLabel, 80, 20);
-	WMMoveWidget(panel->fileLabel, 10, 210);
+	WMResizeWidget(panel->fileLabel, WMScaleX(80), WMScaleY(20));
+	WMMoveWidget(panel->fileLabel, WMScaleX(10), WMScaleY(210));
 	WMSetLabelText(panel->fileLabel, _("File Name:"));
 
 	panel->fileField = WMCreateTextField(panel->win);
 	WMSetViewNextResponder(WMWidgetView(panel->fileField), WMWidgetView(panel->win));
-	WMResizeWidget(panel->fileField, 345, 20);
-	WMMoveWidget(panel->fileField, 95, 210);
+	WMResizeWidget(panel->fileField, WMScaleX(345), WMScaleY(20));
+	WMMoveWidget(panel->fileField, WMScaleX(95), WMScaleY(210));
 	WMSetTextFieldEditable(panel->fileField, False);
 
 	panel->okButton = WMCreateCommandButton(panel->win);
-	WMResizeWidget(panel->okButton, 80, 26);
-	WMMoveWidget(panel->okButton, 360, 240);
+	WMResizeWidget(panel->okButton, WMScaleX(80), WMScaleY(26));
+	WMMoveWidget(panel->okButton, WMScaleX(360), WMScaleY(242));
 	WMSetButtonText(panel->okButton, _("OK"));
 	WMSetButtonEnabled(panel->okButton, False);
 	WMSetButtonAction(panel->okButton, buttonCallback, panel);
 
 	panel->cancelButton = WMCreateCommandButton(panel->win);
-	WMResizeWidget(panel->cancelButton, 80, 26);
-	WMMoveWidget(panel->cancelButton, 270, 240);
+	WMResizeWidget(panel->cancelButton, WMScaleX(80), WMScaleY(26));
+	WMMoveWidget(panel->cancelButton, WMScaleX(270), WMScaleY(242));
 	WMSetButtonText(panel->cancelButton, _("Cancel"));
 	WMSetButtonAction(panel->cancelButton, buttonCallback, panel);
 #if 0
 	panel->chooseButton = WMCreateCommandButton(panel->win);
-	WMResizeWidget(panel->chooseButton, 110, 26);
-	WMMoveWidget(panel->chooseButton, 150, 240);
+	WMResizeWidget(panel->chooseButton, WMScaleX(110), WMScaleY(26));
+	WMMoveWidget(panel->chooseButton, WMScaleX(150), WMScaleY(242));
 	WMSetButtonText(panel->chooseButton, _("Choose File"));
 	WMSetButtonAction(panel->chooseButton, buttonCallback, panel);
 #endif
 	WMRealizeWidget(panel->win);
 	WMMapSubwidgets(panel->win);
 
-	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, 450, 280, 0, 0, 0);
+	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, pwidth, pheight, 0, 0, 0);
 
 	XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
@@ -1045,9 +1065,9 @@ Bool wIconChooserDialog(WScreen *scr, char **file, const char *instance, const c
 			strcat(title, "]");
 		}
 
-		center = getCenter(scr, 450, 280);
+		center = getCenter(scr, pwidth, pheight);
 
-		wwin = wManageInternalWindow(scr, parent, None, title, center.x, center.y, 450, 280);
+		wwin = wManageInternalWindow(scr, parent, None, title, center.x, center.y, pwidth, pheight);
 		wfree(title);
 	}
 
@@ -1129,7 +1149,7 @@ typedef struct {
 #define COPYRIGHT_TEXT  \
     "Copyright \xc2\xa9 1997-2006 Alfredo K. Kojima\n"\
     "Copyright \xc2\xa9 1998-2006 Dan Pascu\n"\
-    "Copyright \xc2\xa9 2013-2017 Window Maker Developers Team"
+    "Copyright \xc2\xa9 2013-2020 Window Maker Developers Team"
 
 static InfoPanel *infoPanel = NULL;
 
@@ -1149,12 +1169,10 @@ static void destroyInfoPanel(WCoreWindow *foo, void *data, XEvent *event)
 
 void wShowInfoPanel(WScreen *scr)
 {
-	const int win_width = 382;
-	const int win_height = 250;
 	InfoPanel *panel;
 	WMPixmap *logo;
 	WMFont *font;
-	char *name, *strbuf = NULL;
+	char *strbuf = NULL;
 	const char *separator;
 	char buffer[256];
 	Window parent;
@@ -1170,6 +1188,8 @@ void wShowInfoPanel(WScreen *scr)
 		"TrueColor",
 		"DirectColor"
 	};
+	int wmScaleWidth, wmScaleHeight;
+	int pwidth, pheight;
 
 	if (infoPanel) {
 		if (infoPanel->scr == scr) {
@@ -1184,7 +1204,10 @@ void wShowInfoPanel(WScreen *scr)
 	panel->scr = scr;
 
 	panel->win = WMCreateWindow(scr->wmscreen, "info");
-	WMResizeWidget(panel->win, win_width, win_height);
+	WMGetScaleBaseFromSystemFont(scr->wmscreen, &wmScaleWidth, &wmScaleHeight);
+	pwidth = WMScaleX(382);
+	pheight = WMScaleY(250);
+	WMResizeWidget(panel->win, pwidth, pheight);
 
 	logo = WMCreateApplicationIconBlendedPixmap(scr->wmscreen, (RColor *) NULL);
 	if (!logo) {
@@ -1192,20 +1215,23 @@ void wShowInfoPanel(WScreen *scr)
 	}
 	if (logo) {
 		panel->logoL = WMCreateLabel(panel->win);
-		WMResizeWidget(panel->logoL, 64, 64);
-		WMMoveWidget(panel->logoL, 30, 20);
+		WMResizeWidget(panel->logoL, WMScaleX(64), WMScaleY(64));
+		WMMoveWidget(panel->logoL, WMScaleX(30), WMScaleY(20));
 		WMSetLabelImagePosition(panel->logoL, WIPImageOnly);
 		WMSetLabelImage(panel->logoL, logo);
 		WMReleasePixmap(logo);
 	}
 
-	sepHeight = 3;
+	sepHeight = WMScaleY(3);
 	panel->name1L = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->name1L, 240, 30 + 2);
-	WMMoveWidget(panel->name1L, 100, 30 - 2 - sepHeight);
+	WMResizeWidget(panel->name1L, WMScaleX(240), WMScaleY(30) + WMScaleY(2));
+	WMMoveWidget(panel->name1L, WMScaleX(100), WMScaleY(30) - WMScaleY(2) - sepHeight);
 
-	name = "Lucida Sans,Comic Sans MS,URW Gothic L,Trebuchet MS" ":italic:pixelsize=28:antialias=true";
-	font = WMCreateFont(scr->wmscreen, name);
+	snprintf(buffer,
+		sizeof(buffer),
+		"Lucida Sans,Comic Sans MS,URW Gothic L,Trebuchet MS:italic:pixelsize=%d:antialias=true",
+		WMScaleY(24));
+	font = WMCreateFont(scr->wmscreen, buffer);
 	strbuf = "Window Maker";
 	if (font) {
 		width = WMWidthOfString(font, strbuf, strlen(strbuf));
@@ -1217,15 +1243,15 @@ void wShowInfoPanel(WScreen *scr)
 
 	panel->lineF = WMCreateFrame(panel->win);
 	WMResizeWidget(panel->lineF, width, sepHeight);
-	WMMoveWidget(panel->lineF, 100 + (240 - width) / 2, 60 - sepHeight);
+	WMMoveWidget(panel->lineF, WMScaleX(100) + (WMScaleX(240) - width) / 2, WMScaleY(60) - sepHeight);
 	WMSetFrameRelief(panel->lineF, WRSimple);
 	WMSetWidgetBackgroundColor(panel->lineF, scr->black);
 
 	panel->name2L = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->name2L, 240, 24);
-	WMMoveWidget(panel->name2L, 100, 60);
-	name = "URW Gothic L,Nimbus Sans L:pixelsize=16:antialias=true";
-	font = WMCreateFont(scr->wmscreen, name);
+	WMResizeWidget(panel->name2L, WMScaleX(240), WMScaleY(24));
+	WMMoveWidget(panel->name2L, WMScaleX(100), WMScaleY(60));
+	snprintf(buffer, sizeof(buffer), "URW Gothic L,Nimbus Sans L:pixelsize=%d:antialias=true", WMScaleY(16));
+	font = WMCreateFont(scr->wmscreen, buffer);
 	if (font) {
 		WMSetLabelFont(panel->name2L, font);
 		WMReleaseFont(font);
@@ -1236,18 +1262,18 @@ void wShowInfoPanel(WScreen *scr)
 
 	snprintf(buffer, sizeof(buffer), _("Version %s"), VERSION);
 	panel->versionL = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->versionL, 310, 16);
-	WMMoveWidget(panel->versionL, 30, 95);
+	WMResizeWidget(panel->versionL, WMScaleX(310), WMScaleY(16));
+	WMMoveWidget(panel->versionL, WMScaleX(30), WMScaleY(95));
 	WMSetLabelTextAlignment(panel->versionL, WARight);
 	WMSetLabelText(panel->versionL, buffer);
 	WMSetLabelWraps(panel->versionL, False);
 
 	panel->copyrL = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->copyrL, 360, 60);
-	WMMoveWidget(panel->copyrL, 15, 190);
+	WMResizeWidget(panel->copyrL, WMScaleX(360), WMScaleY(60));
+	WMMoveWidget(panel->copyrL, WMScaleX(15), WMScaleY(190));
 	WMSetLabelTextAlignment(panel->copyrL, WALeft);
 	WMSetLabelText(panel->copyrL, COPYRIGHT_TEXT);
-	font = WMSystemFontOfSize(scr->wmscreen, 11);
+	font = WMSystemFontOfSize(scr->wmscreen, WMScaleY(11));
 	if (font) {
 		WMSetLabelFont(panel->copyrL, font);
 		WMReleaseFont(font);
@@ -1351,10 +1377,10 @@ void wShowInfoPanel(WScreen *scr)
 #endif
 
 	panel->infoL = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->infoL, 350, 80);
-	WMMoveWidget(panel->infoL, 15, 115);
+	WMResizeWidget(panel->infoL, WMScaleX(350), WMScaleY(80));
+	WMMoveWidget(panel->infoL, WMScaleX(15), WMScaleY(115));
 	WMSetLabelText(panel->infoL, strbuf);
-	font = WMSystemFontOfSize(scr->wmscreen, 11);
+	font = WMSystemFontOfSize(scr->wmscreen, WMScaleY(11));
 	if (font) {
 		WMSetLabelFont(panel->infoL, font);
 		WMReleaseFont(font);
@@ -1365,14 +1391,14 @@ void wShowInfoPanel(WScreen *scr)
 	WMRealizeWidget(panel->win);
 	WMMapSubwidgets(panel->win);
 
-	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, win_width, win_height, 0, 0, 0);
+	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, pwidth, pheight, 0, 0, 0);
 
 	XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
 
 	WMMapWidget(panel->win);
 
-	center = getCenter(scr, win_width, win_height);
-	wwin = wManageInternalWindow(scr, parent, None, _("Info"), center.x, center.y, win_width, win_height);
+	center = getCenter(scr, pwidth, pheight);
+	wwin = wManageInternalWindow(scr, parent, None, _("Info"), center.x, center.y, pwidth, pheight);
 
 	WSETUFLAG(wwin, no_closable, 0);
 	WSETUFLAG(wwin, no_close_button, 0);
@@ -1399,6 +1425,7 @@ typedef struct {
 	WScreen *scr;
 	WWindow *wwin;
 	WMWindow *win;
+	WMFrame *frame;
 	WMLabel *licenseL;
 } LegalPanel;
 
@@ -1420,13 +1447,12 @@ static void destroyLegalPanel(WCoreWindow * foo, void *data, XEvent * event)
 
 void wShowLegalPanel(WScreen *scr)
 {
-	const int win_width = 420;
-	const int win_height = 250;
-	const int margin = 10;
 	LegalPanel *panel;
 	Window parent;
 	WWindow *wwin;
 	WMPoint center;
+	int wmScaleWidth, wmScaleHeight;
+	int pwidth, pheight;
 
 	if (legalPanel) {
 		if (legalPanel->scr == scr) {
@@ -1439,12 +1465,20 @@ void wShowLegalPanel(WScreen *scr)
 	panel = wmalloc(sizeof(LegalPanel));
 	panel->scr = scr;
 	panel->win = WMCreateWindow(scr->wmscreen, "legal");
-	WMResizeWidget(panel->win, win_width, win_height);
+	WMGetScaleBaseFromSystemFont(scr->wmscreen, &wmScaleWidth, &wmScaleHeight);
+	pwidth = WMScaleX(440);
+	pheight = WMScaleY(270);
+	WMResizeWidget(panel->win, pwidth, pheight);
 
-	panel->licenseL = WMCreateLabel(panel->win);
+	panel->frame = WMCreateFrame(panel->win);
+	WMResizeWidget(panel->frame, pwidth - (2 * WMScaleX(10)), pheight - (2 * WMScaleY(10)));
+	WMMoveWidget(panel->frame, WMScaleX(10), WMScaleY(10));
+	WMSetFrameTitle(panel->frame, NULL);
+
+	panel->licenseL = WMCreateLabel(panel->frame);
 	WMSetLabelWraps(panel->licenseL, True);
-	WMResizeWidget(panel->licenseL, win_width - (2 * margin), win_height - (2 * margin));
-	WMMoveWidget(panel->licenseL, margin, margin);
+	WMResizeWidget(panel->licenseL, pwidth - (4 * WMScaleX(10)), pheight - (4 * WMScaleY(10)));
+	WMMoveWidget(panel->licenseL, WMScaleX(8), WMScaleY(8));
 	WMSetLabelTextAlignment(panel->licenseL, WALeft);
 	WMSetLabelText(panel->licenseL,
 		       _("    Window Maker is free software; you can redistribute it and/or "
@@ -1459,15 +1493,15 @@ void wShowLegalPanel(WScreen *scr)
 			 "License along with this program; if not, write to the Free Software "
 			 "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA"
 			 "02110-1301 USA."));
-	WMSetLabelRelief(panel->licenseL, WRGroove);
 
 	WMRealizeWidget(panel->win);
 	WMMapSubwidgets(panel->win);
+	WMMapSubwidgets(panel->frame);
 
-	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, win_width, win_height, 0, 0, 0);
+	parent = XCreateSimpleWindow(dpy, scr->root_win, 0, 0, pwidth, pheight, 0, 0, 0);
 	XReparentWindow(dpy, WMWidgetXID(panel->win), parent, 0, 0);
-	center = getCenter(scr, win_width, win_height);
-	wwin = wManageInternalWindow(scr, parent, None, _("Legal"), center.x, center.y, win_width, win_height);
+	center = getCenter(scr, pwidth, pheight);
+	wwin = wManageInternalWindow(scr, parent, None, _("Legal"), center.x, center.y, pwidth, pheight);
 
 	WSETUFLAG(wwin, no_closable, 0);
 	WSETUFLAG(wwin, no_close_button, 0);

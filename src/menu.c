@@ -1519,7 +1519,7 @@ static void scrollMenuCallback(void *data)
 
 #define MENU_SCROLL_BORDER   5
 
-static int isPointNearBoder(WMenu * menu, int x, int y)
+static int isPointNearBorder(WMenu * menu, int x, int y)
 {
 	int menuX1 = menu->frame_x;
 	int menuY1 = menu->frame_y;
@@ -1591,13 +1591,14 @@ void wMenuScroll(WMenu *menu)
 		switch (ev.type) {
 		case EnterNotify:
 			WMHandleEvent(&ev);
+			/* Fall through. */
 		case MotionNotify:
 			x = (ev.type == MotionNotify) ? ev.xmotion.x_root : ev.xcrossing.x_root;
 			y = (ev.type == MotionNotify) ? ev.xmotion.y_root : ev.xcrossing.y_root;
 
 			/* on_border is != 0 if the pointer is between the menu
 			 * and the screen border and is close enough to the border */
-			on_border = isPointNearBoder(menu, x, y);
+			on_border = isPointNearBorder(menu, x, y);
 
 			smenu = wMenuUnderPointer(scr);
 
@@ -1644,6 +1645,7 @@ void wMenuScroll(WMenu *menu)
 			break;
 		case KeyPress:
 			done = 1;
+			/* Fall through. */
 		default:
 			WMHandleEvent(&ev);
 			break;
@@ -1992,7 +1994,7 @@ static void menuMouseDown(WObjDescriptor * desc, XEvent * event)
 				wusleep(MENU_BLINK_DELAY);
 			}
 #endif
-			/* unmap the menu, it's parents and call the callback */
+			/* unmap the menu, its parents and call the callback */
 			if (!menu->flags.buttoned && (!menu->flags.app_menu || menu->parent != NULL)) {
 				closeCascade(menu);
 			} else {
@@ -2232,7 +2234,7 @@ static void menuTitleMouseDown(WCoreWindow * sender, void *data, XEvent * event)
  * closed when the button is clicked.
  *
  * Side effects:
- * 	The closed menu is reinserted at it's parent menus
+ * 	The closed menu is reinserted at its parent menus
  * cascade list.
  *----------------------------------------------------------------------
  */

@@ -24,7 +24,7 @@ Last-Update: 2014-09-02
  typedef struct W_Screen WMScreen;
  
  typedef struct W_View WMView;
-@@ -905,6 +907,8 @@
+@@ -907,6 +909,8 @@
  
  char* WMGetColorRGBDescription(WMColor *color);
  
@@ -159,7 +159,7 @@ Last-Update: 2014-09-02
 +}
 --- a/WINGs/widgets.c
 +++ b/WINGs/widgets.c
-@@ -715,6 +715,8 @@
+@@ -716,6 +716,8 @@
  		scrPtr->ignoredModifierMask = numLockMask | scrollLockMask | LockMask;
  	}
  

@@ -349,7 +349,9 @@ WDefaultEntry staticOptionList[] = {
 	{"DisableMiniwindows", "NO", NULL,
 	    &wPreferences.disable_miniwindows, getBool, NULL, NULL, NULL},
 	{"EnableWorkspacePager", "NO", NULL,
-	    &wPreferences.enable_workspace_pager, getBool, NULL, NULL, NULL}
+	    &wPreferences.enable_workspace_pager, getBool, NULL, NULL, NULL},
+	{"SwitchPanelIconSize", "64", NULL,
+	    &wPreferences.switch_panel_icon_size, getInt, NULL, NULL, NULL},
 };
 
 #define NUM2STRING_(x) #x
@@ -363,6 +365,8 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.icon_yard, getEnum, setIconPosition, NULL, NULL},
 	{"IconificationStyle", "Zoom", seIconificationStyles,
 	    &wPreferences.iconification_style, getEnum, NULL, NULL, NULL},
+	{"EnforceIconMargin", "NO", NULL,
+	    &wPreferences.enforce_icon_margin, getBool, NULL, NULL, NULL},
 	{"DisableWSMouseActions", "NO", NULL,
 	    &wPreferences.disable_root_mouse, getBool, NULL, NULL, NULL},
 	{"MouseLeftButtonAction", "SelectWindows", seMouseButtonActions,
@@ -769,6 +773,10 @@ WDefaultEntry optionList[] = {
 	{"WindowShortcut9Key", "None", (void *)WKBD_WINDOW9,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"WindowShortcut10Key", "None", (void *)WKBD_WINDOW10,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MoveTo12to6Head", "None", (void *)WKBD_MOVE_12_TO_6_HEAD,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"MoveTo6to12Head", "None", (void *)WKBD_MOVE_6_TO_12_HEAD,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"WindowRelaunchKey", "None", (void *)WKBD_RELAUNCH,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
@@ -2066,7 +2074,7 @@ getWSSpecificBackground(WScreen * scr, WDefaultEntry * entry, WMPropList * value
 	 * Kluge to force wmsetbg helper to set the default background.
 	 * If the WorkspaceSpecificBack is changed once wmaker has started,
 	 * the WorkspaceBack won't be sent to the helper, unless the user
-	 * changes it's value too. So, we must force this by removing the
+	 * changes its value too. So, we must force this by removing the
 	 * value from the defaults DB.
 	 */
 	if (!scr->flags.backimage_helper_launched && !scr->flags.startup) {
@@ -3369,6 +3377,8 @@ static int setSwPOptions(WScreen * scr, WDefaultEntry * entry, void *tdata, void
 				RReleaseImage(bgimage);
 			}
 		}
+
+		/* Fall through. */
 
 	case 1:
 		if (!WMIsPLString(WMGetFromPLArray(array, 0))) {

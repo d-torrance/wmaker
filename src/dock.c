@@ -92,7 +92,7 @@ static void iconMouseDown(WObjDescriptor *desc, XEvent *event);
 
 static pid_t execCommand(WAppIcon *btn, const char *command, WSavedState *state);
 
-static void trackDeadProcess(pid_t pid, unsigned char status, WDock *dock);
+static void trackDeadProcess(pid_t pid, unsigned int status, void *cdata);
 
 static int getClipButton(int px, int py);
 
@@ -603,7 +603,7 @@ static void toggleAutoAttractCallback(WMenu *menu, WMenuEntry *entry)
 
 	if (dock->attract_icons) {
 		if (dock->type == WM_DRAWER) {
-			/* The newly auto-attracting dock is a drawer: disable any clip and 
+			/* The newly auto-attracting dock is a drawer: disable any clip and
 			 * previously attracting drawer */
 
 			if (!wPreferences.flags.noclip) {
@@ -843,7 +843,7 @@ static WAppIcon *mainIconCreate(WScreen *scr, int type, const char *name)
 			name = findUniqueName(scr, "Drawer");
 		btn = wAppIconCreateForDock(scr, NULL, name, "WMDrawer", TILE_DRAWER);
 		btn->icon->core->descriptor.handle_expose = drawerIconExpose;
-		x_pos = 0;		
+		x_pos = 0;
 	}
 
 	btn->xindex = 0;
@@ -1392,7 +1392,7 @@ void wClipIconPaint(WAppIcon *aicon)
 	WMColor *color;
 	Window win = aicon->icon->core->window;
 	int length, nlength;
-	char *ws_name, ws_number[10];
+	char *ws_name, ws_number[sizeof scr->current_workspace * CHAR_BIT / 3 + 1];
 	int ty, tx;
 
 	wIconPaint(aicon->icon);
@@ -1400,7 +1400,7 @@ void wClipIconPaint(WAppIcon *aicon)
 	length = strlen(workspace->name);
 	ws_name = wmalloc(length + 1);
 	snprintf(ws_name, length + 1, "%s", workspace->name);
-	snprintf(ws_number, sizeof(ws_number), "%i", scr->current_workspace + 1);
+	snprintf(ws_number, sizeof ws_number, "%u", scr->current_workspace + 1);
 	nlength = strlen(ws_number);
 
 	if (wPreferences.flags.noclip || !workspace->clip->collapsed)
@@ -2628,7 +2628,7 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x
 				continue;
 			for (i = 0; i < tmp->max_icons; i++) {
 				nicon = tmp->icon_array[i];
-				if (nicon && nicon != icon &&	/* Icon can't be it's own neighbour */
+				if (nicon && nicon != icon &&	/* Icon can't be its own neighbour */
 				    (abs(nicon->xindex - ex_x) <= CLIP_ATTACH_VICINITY &&
 				     abs(nicon->yindex - ex_y) <= CLIP_ATTACH_VICINITY)) {
 					neighbours = 1;
@@ -3091,7 +3091,7 @@ static pid_t execCommand(WAppIcon *btn, const char *command, WSavedState *state)
 				state->workspace = scr->current_workspace;
 		}
 		wWindowAddSavedState(btn->wm_instance, btn->wm_class, cmdline, pid, state);
-		wAddDeathHandler(pid, (WDeathHandler *) trackDeadProcess, btn->dock);
+		wAddDeathHandler(pid, trackDeadProcess, btn->dock);
 	} else if (state) {
 		wfree(state);
 	}
@@ -3334,8 +3334,9 @@ void wClipUpdateForWorkspaceChange(WScreen *scr, int workspace)
 	}
 }
 
-static void trackDeadProcess(pid_t pid, unsigned char status, WDock *dock)
+static void trackDeadProcess(pid_t pid, unsigned int status, void *cdata)
 {
+	WDock *dock = cdata;
 	WAppIcon *icon;
 	int i;
 
@@ -4385,7 +4386,7 @@ static int addADrawer(WScreen *scr)
 			}
 		}
 	}
-    
+
 	if (!found_y)
 		/* This can happen even when dock->icon_count + scr->drawer_count
 		 * < dock->max_icons when the dock is not aligned on an

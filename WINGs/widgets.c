@@ -385,6 +385,7 @@ static void renderPixmap(W_Screen * screen, Pixmap d, Pixmap mask, char **data, 
 				if (mask)
 					XDrawPoint(screen->display, mask, screen->monoGC, x, y);
 
+				/* FALLTHRU */
 			case '.':
 			case 'l':
 				XDrawPoint(screen->display, d, lightGC, x, y);
@@ -944,7 +945,7 @@ void WMSetFocusToWidget(WMWidget * widget)
 
 /*
  * WMRealizeWidget-
- * 	Realizes the widget and all it's children.
+ * 	Realizes the widget and all its children.
  *
  */
 void WMRealizeWidget(WMWidget * w)

@@ -380,11 +380,10 @@ void wAppIconMove(WAppIcon * aicon, int x, int y)
 static void updateDockNumbers(WScreen *scr)
 {
 	int length;
-	char *ws_numbers;
+	char ws_numbers[20];
 	WAppIcon *dicon = scr->dock->icon_array[0];
 
-	ws_numbers = wmalloc(20);
-	snprintf(ws_numbers, 20, "%i [ %i ]", scr->current_workspace + 1, ((scr->current_workspace / 10) + 1));
+	snprintf(ws_numbers, sizeof(ws_numbers), "%i [ %i ]", scr->current_workspace + 1, ((scr->current_workspace / 10) + 1));
 	length = strlen(ws_numbers);
 
 	XClearArea(dpy, dicon->icon->core->window, 2, 2, 50, WMFontHeight(scr->icon_title_font) + 1, False);
@@ -394,8 +393,6 @@ static void updateDockNumbers(WScreen *scr)
 
 	WMDrawString(scr->wmscreen, dicon->icon->core->window, scr->white,
 		     scr->icon_title_font, 3, 2, ws_numbers, length);
-
-	wfree(ws_numbers);
 }
 #endif				/* WS_INDICATOR */
 
@@ -937,9 +934,9 @@ Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event)
 
 				shad_x = lastDock->x_pos + ix*wPreferences.icon_size;
 				shad_y = lastDock->y_pos + iy*wPreferences.icon_size;
-			  
+
 				XMoveWindow(dpy, scr->dock_shadow, shad_x, shad_y);
-			  
+
 				if (!ondock) {
 					XMapWindow(dpy, scr->dock_shadow);
 				}
@@ -948,7 +945,7 @@ Bool wHandleAppIconMove(WAppIcon *aicon, XEvent *event)
 				lastDock = theNewDock; // i.e., NULL
 				if (ondock) {
 					XUnmapWindow(dpy, scr->dock_shadow);
-					/* 
+					/*
 					 * Leaving that weird comment for now.
 					 * But if we see no gap, there is no need to fill one!
 					 * We could test ondock first and the lastDock to NULL afterwards
