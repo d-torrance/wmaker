@@ -112,7 +112,6 @@ wmaker (0.95.8-3) unstable; urgency=low
   * Set Rules-Requires-Root: no.
 
  -- Andreas Metzler <ametzler@debian.org>  Thu, 13 Sep 2018 19:16:14 +0200
->>>>>>> next
 
 wmaker (0.95.8-2) unstable; urgency=low
 

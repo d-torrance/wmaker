@@ -46,8 +46,8 @@ Suggests: desktop-base,
           x-terminal-emulator,
           x11-apps,
           xterm
-Breaks: wmaker-common (<< 0.95.8+201708150934-0ppa201708161358~)
-Replaces: wmaker-common (<< 0.95.8+201708150934-0ppa201708161358~)
+Breaks: wmaker-common (<< 0.95.8-2~)
+Replaces: wmaker-common (<< 0.95.8-2~)
 Description: NeXTSTEP-like window manager for X
  Written by Alfredo Kojima almost from scratch, resembles the NeXTStep look
  very closely, and it is now an official GNU project. Window Maker (originally
