@@ -9,38 +9,8 @@ For the most part, this version is a snapshot of the next branch of
 the Window Maker git:
 http://repo.or.cz/w/wmaker-crm.git
 
-I have added a few extra features:
-
-################################
-## Ubuntu Window Maker themes ##
-################################
-Two new themes are available, approximating Ubuntu's Ambiance and Radiance
-themes.
-
-########################
-## Basic WINGs themes ##
-########################
-WINGs (the widget toolkit used by WPrefs and all of Window Maker's various
-dialog windows) has hardcorded in six colors used by all of its widgets.
-You can change these by setting new colors in ~/GNUstep/Defaults/WMGLOBAL.
-Here is an example that approximates the Radiance GTK theme:
-{
- Background = "#f2f1f0";
- Foreground = "#4c4c4c";
- Selected = "#f68152";
- Highlight = "#fcfcfb";
- Shadow = "#c9c6c3";
- UnselectedTabBackground = "#f2f1f0";
- UnselectedTabShadow = "#cdc6c3";
-}
-
-#########################
-## Unity greeter badge ##
-#########################
-Previous versions of this package featured a little GNUstep icon that appeared
-when you selected Window Maker at login in Unity Greeter.  This has been
-removed as it will soon appear in the new unity-greeter-badges package,
-available in Ubuntu starting with 15.04 (Vivid Vervet).
+In addition, two new themes are available, approximating Ubuntu's
+Ambiance and Radiance themes.
 
 ###############
 ## Questions ##
