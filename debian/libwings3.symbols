@@ -549,7 +549,6 @@ libWINGs.so.3 libwings3 #MINVER#
  W_FocusedViewOfToplevel@Base 0.95.0
  W_FreeViewXdndPart@Base 0.95.0
  W_GetTextHeight@Base 0.95.0
- W_GetTheme@Base 0.95.5+20140517
  W_GetViewForXWindow@Base 0.95.0
  W_HandleDNDClientMessage@Base 0.95.0
  W_HandleSelectionEvent@Base 0.95.0
