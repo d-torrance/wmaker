@@ -1,3 +1,16 @@
+wmaker (0.95.9-2ppa1) eoan; urgency=medium
+
+  * debian/co{mpat,ntrol}
+    - Drop back to debhelper compatiblity level 9 for xenial support.
+  * debian/libwings3.symbols
+    - Drop WINGs theme symbol.
+  * debian/patches/basic_wings_theming.patch
+    - Drop this patch; let's stay consistent with upstream.
+  * debian/README.ppa
+    - Update.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Sat, 18 Apr 2020 11:18:28 -0400
+
 wmaker (0.95.9-2) unstable; urgency=low
 
   * Ship manpages from as-installed location (debian/tmp) instead of
