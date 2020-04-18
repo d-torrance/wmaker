@@ -42,11 +42,15 @@ override_dh_installdocs:
 	# We use the root of the temporal directory debian/tmp
 	cp po/README $(DEBIAN_TMP)/README.po
 	cp README.definable-cursor $(DEBIAN_TMP)/README.definable-cursor
+	cp README.i18n $(DEBIAN_TMP)/README.i18n
+	cp util/po/README $(DEBIAN_TMP)/README.util.po
+	cp util/README $(DEBIAN_TMP)/README.util
 	cp WindowMaker/Icons/README $(DEBIAN_TMP)/README.Icons
 	cp WindowMaker/README $(DEBIAN_TMP)/README.menu
 	cp WindowMaker/README.themes $(DEBIAN_TMP)/README.themes
 	cp WPrefs.app/README $(DEBIAN_TMP)/README.WPrefs
 	cp WPrefs.app/po/README $(DEBIAN_TMP)/README.WPrefs.po
+	cp WPrefs.app/tiff/README $(DEBIAN_TMP)/README.WPrefs.tiff
 	dh_installdocs
 
 override_dh_install:
