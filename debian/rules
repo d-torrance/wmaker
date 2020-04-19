@@ -82,3 +82,4 @@ get-orig-source:
 	@mv -v WindowMaker-`cat version`.tar.gz \
 		../wmaker_`cat version`+`cat date`.orig.tar.gz
 	@rm date version
+	@make distclean
