@@ -8,6 +8,7 @@ XSBC-Original-Uploaders: Andreas Metzler <ametzler@debian.org>,
 Rules-Requires-Root: no
 Standards-Version: 4.5.0
 Build-Depends: debhelper (>= 9),
+               dh-autoreconf,
                gettext,
                libfontconfig1-dev,
                libgif-dev,
