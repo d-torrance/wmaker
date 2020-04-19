@@ -1,15 +1,30 @@
-wmaker (0.95.9-2ppa1) eoan; urgency=medium
+wmaker (0.95.9+20200418-0ppa1) eoan; urgency=medium
 
   * debian/co{mpat,ntrol}
-    - Drop back to debhelper compatiblity level 9 for xenial support.
+    - Drop back to debhelper compatiblity level 9 for trusty/xenial
+      support.
   * debian/libwings3.symbols
     - Drop WINGs theme symbol.
+  * debian/patches/10_support_imagemagick6.diff
+    - Remove patch; an equivalent fix has been applied upstream.
+  * debian/patches/75_WPrefs_to_bindir_when_gnustedir_is_set.diff
+    - Refresh.
   * debian/patches/basic_wings_theming.patch
     - Drop this patch; let's stay consistent with upstream.
   * debian/README.ppa
     - Update.
+  * debian/rules
+    - Add make distclean to get-orig-source target to clean up before
+      we start.
+    - Need to explicitly use dh_autoreconf again since we dropped down
+      to debhelper 9.
+    - Use rm -f in override_dh_install target in case files we're trying
+      to remove don't exist.
+  * debian/*.manpages
+    - Specify that we're looking in debian/tmp since we're using
+      debhelper < 11.
 
- -- Doug Torrance <dtorrance@piedmont.edu>  Sat, 18 Apr 2020 11:18:28 -0400
+ -- Doug Torrance <dtorrance@piedmont.edu>  Sat, 18 Apr 2020 22:14:29 -0400
 
 wmaker (0.95.9-2) unstable; urgency=low
 
