@@ -31,7 +31,14 @@ COMMON_OPTIONS    := --datadir=$(SHAREDIR)            \
                      --with-defsdatadir=$(DEFSDATADIR)
 
 %:
-	dh $@
+	dh $@ --with autoreconf
+
+override_dh_autoreconf:
+	# Append git snapshot date to version number
+	dpkg-parsechangelog | sed -n 's/^Version: //p' | sed 's/+.*//' > oldversion
+	dpkg-parsechangelog | sed -n 's/^Version: //p' | sed 's/-.*//' > newversion
+	sed -i "s/`cat oldversion`/`cat newversion`/" configure.ac
+	dh_autoreconf
 
 override_dh_auto_configure:
 	env LINGUAS="$(LINGUAS)" dh_auto_configure --verbose -- \
@@ -42,15 +49,11 @@ override_dh_installdocs:
 	# We use the root of the temporal directory debian/tmp
 	cp po/README $(DEBIAN_TMP)/README.po
 	cp README.definable-cursor $(DEBIAN_TMP)/README.definable-cursor
-	cp README.i18n $(DEBIAN_TMP)/README.i18n
-	cp util/po/README $(DEBIAN_TMP)/README.util.po
-	cp util/README $(DEBIAN_TMP)/README.util
 	cp WindowMaker/Icons/README $(DEBIAN_TMP)/README.Icons
 	cp WindowMaker/README $(DEBIAN_TMP)/README.menu
 	cp WindowMaker/README.themes $(DEBIAN_TMP)/README.themes
 	cp WPrefs.app/README $(DEBIAN_TMP)/README.WPrefs
 	cp WPrefs.app/po/README $(DEBIAN_TMP)/README.WPrefs.po
-	cp WPrefs.app/tiff/README $(DEBIAN_TMP)/README.WPrefs.tiff
 	dh_installdocs
 
 override_dh_install:
@@ -61,5 +64,22 @@ override_dh_install:
 	# Install files
 	dh_install -XREADME
 
+	# Restore version number
+	sed -i "s/`cat newversion`/`cat oldversion`/" configure.ac
+	rm -f oldversion newversion
+
 override_dh_installwm:
 	dh_installwm --priority=50
+
+get-orig-source:
+	@./autogen.sh
+	@./configure
+	@make dist
+	@grep -Po \
+		'(?<=AC_INIT\(\[WindowMaker\],\[).*(?=\],\[wmaker-dev)' \
+		configure.ac > version
+	@echo `date -d @\`git log -1 --pretty=format:%ct next\` +%Y%m%d` > date
+	@mv -v WindowMaker-`cat version`.tar.gz \
+		../wmaker_`cat version`+`cat date`.orig.tar.gz
+	@rm date version
+	@make distclean

@@ -4,7 +4,9 @@ BUGS
 FAQ
 NEWS
 README
+README.i18n
 TODO
+debian/README.ppa
 debian/debianfiles/Themes/DebianLegacy.txt
 debian/tmp/README.*
 util/wm-oldmenu2new

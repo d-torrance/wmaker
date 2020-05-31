@@ -1,17 +1,19 @@
 Source: wmaker
 Section: x11
 Priority: optional
-Maintainer: Debian Window Maker Team <pkg-wmaker-devel@lists.alioth.debian.org>
-Uploaders: Andreas Metzler <ametzler@debian.org>,
-           Doug Torrance <dtorrance@piedmont.edu>
+Maintainer: Doug Torrance <dtorrance@piedmont.edu>
+XSBC-Original-Maintainer: Debian Window Maker Team <pkg-wmaker-devel@lists.alioth.debian.org>
+XSBC-Original-Uploaders: Andreas Metzler <ametzler@debian.org>,
+                         Doug Torrance <dtorrance@piedmont.edu>
 Rules-Requires-Root: no
 Standards-Version: 4.5.0
-Build-Depends: debhelper-compat (= 12),
+Build-Depends: debhelper (>= 9),
+               dh-autoreconf,
                gettext,
                libfontconfig1-dev,
                libgif-dev,
                libjpeg-dev,
-               libmagickwand-6.q16-dev,
+               libmagickwand-dev,
                libpango1.0-dev,
                libpng-dev,
                libsm-dev,

@@ -1,0 +1,19 @@
+  _      ___         __             __  ___     __
+ | | /| / (_)__  ___/ /__ _    __  /  |/  /__ _/ /_____ ____
+ | |/ |/ / / _ \/ _  / _ \ |/|/ / / /|_/ / _ `/  '_/ -_) __/
+ |__/|__/_/_//_/\_,_/\___/__,__/ /_/  /_/\_,_/_/\_\\__/_/
+
+Thanks for trying out my Ubuntu PPA version of Window Maker!
+
+For the most part, this version is a snapshot of the next branch of
+the Window Maker git:
+http://repo.or.cz/w/wmaker-crm.git
+
+In addition, two new themes are available, approximating Ubuntu's
+Ambiance and Radiance themes.
+
+###############
+## Questions ##
+###############
+Contact me:
+Doug Torrance <dtorrance@piedmont.edu>

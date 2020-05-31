@@ -1,3 +1,31 @@
+wmaker (0.95.9+20200418-0ppa1) eoan; urgency=medium
+
+  * debian/co{mpat,ntrol}
+    - Drop back to debhelper compatiblity level 9 for trusty/xenial
+      support.
+  * debian/libwings3.symbols
+    - Drop WINGs theme symbol.
+  * debian/patches/10_support_imagemagick6.diff
+    - Remove patch; an equivalent fix has been applied upstream.
+  * debian/patches/75_WPrefs_to_bindir_when_gnustedir_is_set.diff
+    - Refresh.
+  * debian/patches/basic_wings_theming.patch
+    - Drop this patch; let's stay consistent with upstream.
+  * debian/README.ppa
+    - Update.
+  * debian/rules
+    - Add make distclean to get-orig-source target to clean up before
+      we start.
+    - Need to explicitly use dh_autoreconf again since we dropped down
+      to debhelper 9.
+    - Use rm -f in override_dh_install target in case files we're trying
+      to remove don't exist.
+  * debian/*.manpages
+    - Specify that we're looking in debian/tmp since we're using
+      debhelper < 11.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Sat, 18 Apr 2020 22:14:29 -0400
+
 wmaker (0.95.9-2) unstable; urgency=low
 
   * Ship manpages from as-installed location (debian/tmp) instead of
@@ -49,6 +77,34 @@ wmaker (0.95.9-1) experimental; urgency=low
       in d/rules.
 
  -- Andreas Metzler <ametzler@debian.org>  Tue, 14 Apr 2020 18:06:26 +0200
+
+wmaker (0.95.8+20170819-0ppa1) artful; urgency=medium
+
+  * debian/control
+    - Modify Breaks/Replaces for wmaker manpage package switch.
+  * debian/debianfiles/wmaker
+    - Copy new proplist menu file to user directory.  Then users may
+      use WPrefs to make modifications.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Sat, 19 Aug 2017 13:42:18 -0400
+
+wmaker (0.95.8+20170814-0ppa1) artful; urgency=medium
+
+  * Revert back to debhelper compatibility level 9 for the sake of
+    older releases.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Wed, 16 Aug 2017 09:56:52 -0400
+
+wmaker (0.95.8+20170315-0ppa1) zesty; urgency=medium
+
+  * debian/lib{wings,wraster}-dev.install
+    - Drop installation of get-*-flags scripts; they no longer exist.
+  * debian/{libwings-dev,libwraster-devwmaker-common}.manpages
+    - Drop installation of manpages for deleted scripts.
+  * debian/rules
+    - Drop git branch switching from get-orig-source target.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Thu, 16 Mar 2017 09:30:05 -0400
 
 wmaker (0.95.8-3) unstable; urgency=low
 
@@ -362,6 +418,248 @@ wmaker (0.95.7-1) experimental; urgency=medium
 
  -- Andreas Metzler <ametzler@debian.org>  Sun, 10 Jan 2016 11:38:11 +0100
 
+wmaker (0.95.6+20150613-0ppa1) wily; urgency=medium
+
+  * debian/source/options
+    - Ignore distros directory.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Sat, 13 Jun 2015 14:29:11 -0500
+
+wmaker (0.95.6+20150607-0ppa1) wily; urgency=medium
+
+  * debian/manpages
+    - Add wmiv.1.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Tue, 09 Jun 2015 07:02:23 -0500
+
+wmaker (0.95.6+20150526-0ppa2) wily; urgency=medium
+
+  * debian/{README.Debian,wmaker.postinst}
+    - Change references from .1x manpage to .1.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Sat, 06 Jun 2015 22:45:29 -0500
+
+wmaker (0.95.6+20150526-0ppa1) wily; urgency=medium
+
+  * Merge official 0.95.6 Debian packaging files.
+  * debian/control
+    - Add Breaks/Replaces for libwraster5-dev to libwraster-dev.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Wed, 27 May 2015 00:22:41 -0500
+
+wmaker (0.95.6+20150523-0ppa1) wily; urgency=medium
+
+  * debian/wmaker{,-common}.manpages
+    - Change sections from 1x to 1 to match upstream.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Sat, 23 May 2015 17:49:10 -0500
+
+wmaker (0.95.6+20150514-0ppa1) wily; urgency=medium
+
+  * debian/patches/basic_wings_theming.patch
+    - Refresh for upstream changes.
+  * debian/rules
+    - Remove override_dh_auto_test target; no longer needed.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Fri, 15 May 2015 06:51:16 -0500
+
+wmaker (0.95.6+20150508-0ppa1) wily; urgency=medium
+
+  * debian/rules
+    - Add override_dh_auto_test to skip "make check"; currently fails due to
+      upstream changes.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Wed, 13 May 2015 18:06:34 -0500
+
+wmaker (0.95.6+20150425-0ppa1) vivid; urgency=medium
+
+  * debian/debianfiles/{Theme/*iance.style,conf/WindowMaker}
+    - Change cpixmap back to spixmap to match Unity Greeter background.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Sun, 26 Apr 2015 14:22:03 -0500
+
+wmaker (0.95.6+20150418-0ppa1) vivid; urgency=medium
+
+  * debian/control
+    - Remove gawk from Build-Depends.
+  * debian/gbp.conf
+    - New file; set debian-branch to "ppa".
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Sat, 18 Apr 2015 19:04:48 -0500
+
+wmaker (0.95.6+20150406-0ppa2) vivid; urgency=medium
+
+  * debian/control
+    - Add gawk to Build-Depends; needed for generate-txt-from-texi.sh (again).
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Tue, 07 Apr 2015 01:40:24 -0500
+
+wmaker (0.95.6+20150406-0ppa1) vivid; urgency=medium
+
+  * debian/clean
+    - Add INSTALL-WMAKER; changed during build.
+  * debian/patches/51_wmaker_man.diff
+    - Refresh for upstream changes.
+  * debian/wmaker.manpages
+    - Rename wdread.1 to wdread.1x.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Mon, 06 Apr 2015 22:03:49 -0500
+
+wmaker (0.95.6+20150131-0ppa2) vivid; urgency=medium
+
+  * debian/clean
+    - Clean generated file README.i18n.
+  * debian/rules
+    - Move restoration of configure.ac to override_dh_auto_install target.
+      Otherwise, it is restored too soon and the appended version number never
+      appears.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Sat, 21 Feb 2015 21:49:21 -0600
+
+wmaker (0.95.6+20150131-0ppa1) vivid; urgency=medium
+
+  * debian/control
+    - Remove gawk from Build-Depends; no longer needed.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Tue, 03 Feb 2015 00:36:24 -0600
+
+wmaker (0.95.6+20150120-0ppa3) vivid; urgency=medium
+
+  * debian/control
+    - Add gawk to Build-Depends; needed for generate-txt-from-texi.sh.
+  * debian/patches
+    - (basic_wings_theming.patch) Refresh.
+  * debian/rules
+    - Restore configure.ac after patching in version number and running
+      autogen.sh. Then dpkg-source won't complain during a second build.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Fri, 23 Jan 2015 20:45:36 -0600
+
+wmaker (0.95.6+20150120-0ppa2) vivid; urgency=medium
+
+  * debian/rules
+    - Replace deprecated --with-nlsdir with --localedir.
+  * debian/wmaker-common.docs
+    - Replace FAQ.I18N with README.i18n.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Thu, 22 Jan 2015 21:39:07 -0600
+
+wmaker (0.95.6+20150120-0ppa1) vivid; urgency=medium
+
+  * debian/README.ppa
+    - Update info regarding Unity Greeter badge.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Wed, 21 Jan 2015 18:16:55 -0600
+
+wmaker (0.95.6+20150116-0ppa1) vivid; urgency=medium
+
+  * Remove Unity Greeter badge; moved to new unity-greeter-badges package.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Fri, 16 Jan 2015 07:37:52 -0600
+
+wmaker (0.95.6+20150105-0ppa1) utopic; urgency=medium
+
+  * debian/control
+    - Add ${binary:Version} versions of libwings3 to wmaker Depends and
+      libwutil5 and libwraster5 to libwings3 Depends.  Forces installation of
+      latest versions of these libraries when wmaker is upgraded.
+  * debian/lib(wings3|libwraster5).symbols
+    - Update.
+  * debian/rules
+    - Restore get-orig-source target; still handy for manual test builds. Use
+      autogen.sh instead of original autoreconf and adjust for new AC_INIT
+      syntax.  Use http protocol instead of git.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Mon, 05 Jan 2015 10:55:05 -0600
+
+wmaker (0.95.6+20141104-0ppa3~utopic1) utopic; urgency=medium
+
+  * Note that new versions are now built automatically by a Launchpad build
+    recipe, rather than whenever I feel like it. :)
+  * debian/rules
+    - Use sed instead of --show-field to get version, since precise has an
+      older dpkg-parsechangelog.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Sun, 07 Dec 2014 20:27:22 -0600
+
+wmaker (0.95.6+20141104-0ppa2~utopic1) unstable; urgency=medium
+
+  * debian/control
+    - Rename Build-Depends on libtiff5-dev to libtiff-dev; this will allow
+      building precise and post-precise packages from the same source.
+  * debian/patches
+    - (git_snapshot_version.patch) Remove file; no longer needed
+      with Launchpad builds.
+  * debian/rules
+    - Remove get-orig-source and update-version targets; no longer
+      needed with Launchpad builds.
+    - Patch configure.ac with git snapshot version number immediately before
+      running autogen.sh.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Fri, 05 Dec 2014 23:57:42 -0600
+
+wmaker (0.95.6+20141104-0ppa1~utopic1) utopic; urgency=low
+
+  * Git snapshot (build for utopic).
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Thu, 06 Nov 2014 11:19:16 -0600
+
+wmaker (0.95.6+20141104-0ppa1~precise1) precise; urgency=medium
+
+  * Git snapshot (build for precise).
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Thu, 06 Nov 2014 09:53:17 -0600
+
+wmaker (0.95.6+20140925-0ppa2~precise1) precise; urgency=medium
+
+  * debian/control
+    - Switch Build-Depends on libtiff5-dev to libtiff4-dev for precise.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Sat, 25 Oct 2014 02:24:50 -0500
+
+wmaker (0.95.6+20140925-0ppa1) trusty; urgency=medium
+
+  * Git snapshot.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Thu, 25 Sep 2014 23:15:15 -0500
+
+wmaker (0.95.6+20140921-0ppa1) trusty; urgency=medium
+
+  * Git snapshot.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Mon, 22 Sep 2014 00:25:42 -0500
+
+wmaker (0.95.6+20140912-0ppa1) trusty; urgency=medium
+
+  * Git snapshot.
+  * debian/control
+    - Add Replaces and Breaks for wmaker-ubuntu-themes and
+      wmaker-unity-greeter-badge.  Both were old ppa packages now incorporated
+      in wmaker-common.
+  * debian/README.ppa
+    - Remove notes above removing wmaker-ubuntu-themes and
+      wmaker-unity-greeter-badge, as removal will now be taken care of by dpkg.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Sat, 13 Sep 2014 15:31:33 -0500
+
+wmaker (0.95.6+20140902-0ppa1) trusty; urgency=medium
+
+  * Git snapshot (several commits after release of version 0.95.6).
+  * debian/control
+    - Convert version of wmaker-common in wmaker Depends from binary:Version to
+      source:Version (fixes "not-binnmuable-any-depends-all" Lintian warning).
+  * debian/rules
+    - Add get-orig-source target; runs "make dist" in next branch.
+    - Add update-version target; determines date of most recent commit in next
+      and appends to version (I had being doing this manually).  Also runs git
+      dch.
+  * debian/patches/(basic_wings_theming|git_snapshot_version).patch
+    - Two patches which previously had been maintained outside of the debian
+      directory have been converted to quilt.  Now the ppa and next branches
+      should match up exactly outside of the debian directory.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Wed, 03 Sep 2014 00:07:51 -0500
+
 wmaker (0.95.6-1.2) unstable; urgency=medium
 
   * Non-maintainer upload, with maintainer approval.
@@ -423,6 +721,81 @@ wmaker (0.95.6-1) unstable; urgency=medium
 
  -- Rodolfo García Peñas (kix) <kix@debian.org>  Thu, 09 Oct 2014 05:59:36 +0200
 
+wmaker (0.95.5+20140820-0ppa1) trusty; urgency=low
+
+  * Git snapshot.
+  * Increase library package names to match sonames.
+    - libwings2 -> libwings3
+    - libwraster3 -> libwraster5
+    - libwutil4 -> libwutil5
+  * debian/control
+    - Change version of wmaker-common in wmaker Depends to ${binary:Version}.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Wed, 20 Aug 2014 15:33:05 -0500
+
+wmaker (0.95.5+20140602-0ppa1) trusty; urgency=low
+
+  * Git snapshot.
+  * configure.ac
+    - Add +YYYYMMDD to version.
+  * debian/debianfiles/conf/WindowMaker
+    - Defaults to Radiance theme.
+  * debian/debianfiles/Theme/*ance.style
+    - Changed WorkspaceBack from spixmap to cpixmap to match Unity Greeter
+      background.
+  * debian/README.ppa
+    - Added information about conflicts with old wmaker-unity-greeter-badge
+      and wmaker-ubuntu-themes packages from PPA.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Mon, 02 Jun 2014 21:20:03 -0600
+
+wmaker (0.95.5+20140517-0ppa1) trusty; urgency=low
+
+  * Git snapshot.
+  * New features:
+    - Ambiance and Radiance themes.
+    - Basic WINGs theming.
+    - README.ppa file installed in /usr/share/doc/wmaker.  Read this for
+      more information!
+  * debian/control:
+    - Updated Maintainer.
+    - Added XSBC-Original-Maintainer.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Sat, 17 May 2014 21:43:15 -0500
+
+wmaker (0.95.5+20140513-0ppa1) trusty; urgency=low
+
+  * Git snapshot.
+  * debian/wmaker.install:
+    - Add wmiv.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Tue, 13 May 2014 08:52:11 -0500
+
+wmaker (0.95.5+20140509-0ppa1) trusty; urgency=low
+
+  * Git snapshot.
+  * Added Unity Greeter icons.
+  * Removed debian/patches/50_def_config_path.diff and debian/patches/
+    55_typo.diff (already applied in next).
+  * debian/control:
+    - Bump Standards-Version to 3.9.5.
+  * updated *.symbols files
+  * libwutil3 -> libwutil4
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Fri, 09 May 2014 21:12:48 -0500
+
+wmaker (0.95.5+20131015-1ppa3~precise) precise; urgency=low
+
+  * Rebuild for precise.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Thu, 28 Nov 2013 17:53:31 -0600
+
+wmaker (0.95.5+20131015-1ppa1) raring; urgency=low
+
+  * Git snapshot
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Tue, 15 Oct 2013 17:46:45 -0500
+
 wmaker (0.95.5-2) unstable; urgency=low
 
   * New patch debian/patches/56_ungif_problem.diff. [Closes: #733353]
@@ -430,6 +803,12 @@ wmaker (0.95.5-2) unstable; urgency=low
   * Bumped to standard version 3.9.5. No changes.
 
  -- Rodolfo García Peñas (kix) <kix@debian.org>  Tue, 31 Dec 2013 00:20:43 +0100
+
+wmaker (0.95.5-1ppa1) raring; urgency=low
+
+  * Packaging for PPA.
+
+ -- Doug Torrance <dtorrance@monmouthcollege.edu>  Mon, 23 Sep 2013 23:05:31 -0500
 
 wmaker (0.95.5-1) unstable; urgency=low
 
