@@ -2,6 +2,8 @@ wmaker (0.95.9-3) UNRELEASED; urgency=low
 
   * debian/copyright: use spaces rather than tabs to start continuation lines.
   * Set upstream metadata fields: Repository.
+  * Fix day-of-week for changelog entries 0.95.4-1, 0.95.3-2, 0.95.3-1,
+    0.95.0+20111028-4, 0.14.0-2, 0.14.0-1, 0.13.1-0.1, 0.12.3-0.5.
 
  -- Debian Janitor <janitor@jelmer.uk>  Mon, 13 Jul 2020 16:09:25 -0000
 
@@ -488,14 +490,14 @@ wmaker (0.95.4-1) experimental; urgency=low
   * debian/README.Debian:
     - Changed /etc path for appearance.menu.
 
- -- Rodolfo García Peñas (kix) <kix@kix.es>  Wed, 3 Jan 2013 00:17:31 +0100
+ -- Rodolfo García Peñas (kix) <kix@kix.es>  Thu, 03 Jan 2013 00:17:31 +0100
 
 wmaker (0.95.3-2) unstable; urgency=low
 
   * Hardened. debian/rules changed.
   * DM-Upload-Allowed set.
 
- -- Rodolfo García Peñas (kix) <kix@kix.es>  Thu, 10 Jun 2012 23:35:31 +0200
+ -- Rodolfo García Peñas (kix) <kix@kix.es>  Sun, 10 Jun 2012 23:35:31 +0200
 
 wmaker (0.95.3-1) unstable; urgency=low
 
@@ -518,7 +520,7 @@ wmaker (0.95.3-1) unstable; urgency=low
   * Changed the menu behaviour. Applications/* contents moved to
     the root menu.
 
- -- Rodolfo García Peñas (kix) <kix@kix.es>  Thu, 23 May 2012 21:32:22 +0200
+ -- Rodolfo García Peñas (kix) <kix@kix.es>  Wed, 23 May 2012 21:32:22 +0200
 
 wmaker (0.95.2-1) unstable; urgency=low
 
@@ -551,7 +553,7 @@ wmaker (0.95.0+20111028-4) unstable; urgency=low
     * Added patch 53_Debian_WMState.diff.
       Based on changelog: Marcelo E. Magallon Sun, 26 Nov 2000
 
- -- Rodolfo García Peñas (kix) <kix@kix.es>  Thu, 7 Jan 2012 02:06:33 +0100
+ -- Rodolfo García Peñas (kix) <kix@kix.es>  Sat, 07 Jan 2012 02:06:33 +0100
 
 wmaker (0.95.0+20111028-3) unstable; urgency=low
 
@@ -2480,7 +2482,7 @@ wmaker (0.14.0-2) unstable; urgency=low
     with AfterStep. Added diversion of asclock to asclock.afterstep because
     it does NOT requiere WindowMaker.
 
- -- Marcelo E. Magallon <mmagallo@debian.org>  Thu, 15 Mar 1998 8:51:00 -0600
+ -- Marcelo E. Magallon <mmagallo@debian.org>  Sun, 15 Mar 1998 08:51:00 -0600
 
 wmaker (0.14.0-1) unstable; urgency=high
 
@@ -2503,7 +2505,7 @@ wmaker (0.14.0-1) unstable; urgency=high
   * Ran several files through ispell. Gosh! Hope I my grammar not as bad as
     my spelin is.
 
- -- Marcelo E. Magallon <mmagallo@debian.org>  Thu, 8 Mar 1998 14:14:00 -0600
+ -- Marcelo E. Magallon <mmagallo@debian.org>  Sun, 08 Mar 1998 14:14:00 -0600
 
 wmaker (0.13.1-0.1) unstable; urgency=high
 
@@ -2520,7 +2522,7 @@ wmaker (0.13.1-0.1) unstable; urgency=high
   * inter-library dependency information included, but depends on
     patch for libtool not in the main distribution (lintian)
 
- -- Marcelo E. Magallon <mmagallo@efis.ucr.ac.cr>  Thu, 14 Feb 1998 10:54:00 -0600
+ -- Marcelo E. Magallon <mmagallo@efis.ucr.ac.cr>  Sat, 14 Feb 1998 10:54:00 -0600
 
 wmaker (0.13.0-0.1) unstable; urgency=low
 
@@ -2540,7 +2542,7 @@ wmaker (0.12.3-0.5) unstable; urgency=low
     alternative; it doesn't have the newstyle look.
   * Changed Priorities to optional for all the packages.
 
- -- Marcelo E. Magallon <mmagallo@efis.ucr.ac.cr>  Mon, 25 Jan 1998 22:00:00 -0600
+ -- Marcelo E. Magallon <mmagallo@efis.ucr.ac.cr>  Sun, 25 Jan 1998 22:00:00 -0600
 
 wmaker (0.12.3-0.4) unstable; urgency=low
 
