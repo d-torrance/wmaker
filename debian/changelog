@@ -1,6 +1,7 @@
 wmaker (0.95.9-3) UNRELEASED; urgency=low
 
   * debian/copyright: use spaces rather than tabs to start continuation lines.
+  * Set upstream metadata fields: Repository.
 
  -- Debian Janitor <janitor@jelmer.uk>  Mon, 13 Jul 2020 16:09:25 -0000
 
