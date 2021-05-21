@@ -1,3 +1,12 @@
+wmaker (0.95.9-3) UNRELEASED; urgency=medium
+
+  * Remove constraints unnecessary since stretch:
+    + wmaker-utils: Drop versioned constraint on wmaker in Replaces.
+    + wmaker-utils: Drop versioned constraint on wmaker in Breaks.
+    + Remove 5 maintscript entries from 1 files.
+
+ -- Debian Janitor <janitor@jelmer.uk>  Fri, 21 May 2021 07:10:57 -0000
+
 wmaker (0.95.9-2) unstable; urgency=low
 
   * Ship manpages from as-installed location (debian/tmp) instead of
