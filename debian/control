@@ -6,7 +6,7 @@ Uploaders: Andreas Metzler <ametzler@debian.org>,
            Doug Torrance <dtorrance@piedmont.edu>
 Rules-Requires-Root: no
 Standards-Version: 4.5.0
-Build-Depends: debhelper-compat (= 12),
+Build-Depends: debhelper-compat (= 13),
                gettext,
                libfontconfig1-dev,
                libgif-dev,
