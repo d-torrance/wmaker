@@ -28,7 +28,7 @@ DEFSDATADIR       := /etc/GNUstep/Defaults
 COMMON_OPTIONS    := --datadir=$(SHAREDIR)            \
                      --with-pixmapdir=$(PIXMAPDIR)    \
                      --with-gnustepdir=$(GNUSTEPDIR)  \
-                     --with-defsdatadir=$(DEFSDATADIR)
+                     --with-pkgconfdir=$(DEFSDATADIR)
 
 %:
 	dh $@ --with autoreconf
