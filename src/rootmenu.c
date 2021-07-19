@@ -66,7 +66,6 @@ static WMenu *readMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readPLMenuPipe(WScreen * scr, char **file_name);
 static WMenu *readMenuFile(WScreen *scr, const char *file_name);
 static WMenu *readMenuDirectory(WScreen *scr, const char *title, char **file_name, const char *command);
-static WMenu *configureMenu(WScreen *scr, WMPropList *definition);
 static void menu_parser_register_macros(WMenuParser parser);
 
 typedef struct Shortcut {
@@ -674,9 +673,13 @@ static void constructMenu(WMenu * menu, WMenuEntry * entry)
 
 				tmp = wexpandpath(path[i]);
 
-				if (strstr(tmp, "#usergnusteppath#") == tmp)
+				if (strstr(tmp, "#usergnusteppath#") == tmp) {
+					char *old_tmp = tmp;
+
 					tmp = wstrconcat(wusergnusteppath(),
 							  tmp + 17);
+					wfree(old_tmp);
+				}
 
 				wfree(path[i]);
 				lpath = getLocalizedMenuFile(tmp);
@@ -1467,7 +1470,7 @@ static WMenu *makeDefaultMenu(WScreen * scr)
  *
  *----------------------------------------------------------------------
  */
-static WMenu *configureMenu(WScreen *scr, WMPropList *definition)
+WMenu *configureMenu(WScreen *scr, WMPropList *definition)
 {
 	WMenu *menu = NULL;
 	WMPropList *elem;

@@ -1,8 +1,7 @@
-/* rootmenu.h- user defined menu
- *
+/*
  *  Window Maker window manager
  *
- *  Copyright (c) 2000-2003 Alfredo K. Kojima
+ *  Copyright (c) 2021 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -15,16 +14,28 @@
  *  GNU General Public License for more details.
  *
  *  You should have received a copy of the GNU General Public License along
- *  with this program; if not, write to the Free Software Foundation, Inc.,
- *  51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+ *  with this program, see the file COPYING.
  */
 
-#ifndef WMROOTMENU_H
-#define WMROOTMENU_H
+/*
+ * This file defines the basic stuff for WRaster's message
+ * internationalization in the code
+ */
 
-Bool wRootMenuPerformShortcut(XEvent * event);
-void wRootMenuBindShortcuts(Window window);
-void OpenRootMenu(WScreen * scr, int x, int y, int keyboard);
-WMenu *configureMenu(WScreen *scr, WMPropList *definition);
+#ifndef WRASTER_I18N_H
+#define WRASTER_I18N_H
 
-#endif /* WMROOTMENU_H */
+#if defined(HAVE_LIBINTL_H) && defined(I18N)
+# include <libintl.h>
+# define _(text) dgettext("WRaster", (text))
+#else
+# define _(text) (text)
+#endif
+
+/*
+ * the N_ macro is used for initializers, it will make xgettext pick the
+ * string for translation when generating PO files
+ */
+#define N_(text) (text)
+
+#endif
