@@ -1,3 +1,11 @@
+wmaker (0.95.9+20210718-0ppa1) impish; urgency=medium
+
+  * debian/rules
+    - Switch from using --with-defsdatadir option to 'configure to
+      --with-pkgconfdir.
+
+ -- Doug Torrance <dtorrance@piedmont.edu>  Mon, 19 Jul 2021 00:19:21 -0400
+
 wmaker (0.95.9+20200418-0ppa1) eoan; urgency=medium
 
   * debian/co{mpat,ntrol}
