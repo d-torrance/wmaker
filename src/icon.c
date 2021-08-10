@@ -51,7 +51,7 @@
 /**** Global varianebles ****/
 
 #define MOD_MASK wPreferences.modifier_mask
-#define CACHE_ICON_PATH "/"PACKAGE"/CachedPixmaps"
+#define CACHE_ICON_PATH "/" PACKAGE_TARNAME "/CachedPixmaps"
 #define ICON_BORDER 3
 
 static void miniwindowExpose(WObjDescriptor *desc, XEvent *event);
@@ -425,9 +425,7 @@ static char *get_icon_cache_path(void)
 	int len, ret;
 
 	prefix = wuserdatapath();
-	len = strlen(prefix) + strlen(CACHE_ICON_PATH) + 2;
-	path = wmalloc(len);
-	snprintf(path, len, "%s%s/", prefix, CACHE_ICON_PATH);
+	path = wstrconcat(prefix, CACHE_ICON_PATH "/");
 
 	/* If the folder exists, exit */
 	if (access(path, F_OK) == 0)

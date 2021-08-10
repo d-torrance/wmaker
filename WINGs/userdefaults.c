@@ -46,10 +46,12 @@ static void synchronizeUserDefaults(void *foo);
 #define UD_SYNC_INTERVAL	2000
 #endif
 
-const char *wusergnusteppath()
+const char *wusergnusteppath(void)
 {
+	static const char subdir[] = "/" GSUSER_SUBDIR;
 	static char *path = NULL;
 	char *gspath;
+	const char *h;
 	int pathlen;
 
 	if (path)
@@ -66,24 +68,27 @@ const char *wusergnusteppath()
 		wwarning(_("variable WMAKER_USER_ROOT defined with invalid path, not used"));
 	}
 
-	gspath = wexpandpath(GSUSER_DIR);
-	if (gspath)
-		path = gspath;
+	h = wgethomedir();
+	if (!h)
+		return NULL;
+
+	pathlen = strlen(h);
+	path = wmalloc(pathlen + sizeof(subdir));
+	strcpy(path, h);
+	strcpy(path + pathlen, subdir);
 
 	return path;
 }
 
-const char *wuserdatapath()
+const char *wuserdatapath(void)
 {
 	static char *path = NULL;
-	char *libpath;
 
 	if (path)
 		/* Value have been already computed, re-use it */
 		return path;
 
-	if (!path)
-		path = wstrappend(wexpandpath(wusergnusteppath()), "/"USERDATA_SUBDIR);
+	path = wstrconcat(wusergnusteppath(), "/" USERDATA_SUBDIR);
 
 	return path;
 }
@@ -95,12 +100,11 @@ char *wdefaultspathfordomain(const char *domain)
 	size_t slen;
 
 	gspath = wusergnusteppath();
-	slen = strlen(gspath) + strlen("/"DEFAULTS_SUBDIR) + strlen(domain) + 4;
+	slen = strlen(gspath) + strlen("/" DEFAULTS_SUBDIR "/") + strlen(domain) + 1;
 	path = wmalloc(slen);
 
 	strcpy(path, gspath);
-	strcat(path, "/"DEFAULTS_SUBDIR);
-	strcat(path, "/");
+	strcat(path, "/" DEFAULTS_SUBDIR "/");
 	strcat(path, domain);
 
 	return path;
@@ -109,14 +113,7 @@ char *wdefaultspathfordomain(const char *domain)
 /* XXX: doesn't quite belong to *user*defaults.c */
 char *wglobaldefaultspathfordomain(const char *domain)
 {
-	char *t = NULL;
-	size_t len;
-
-	len = strlen(PKGCONFDIR) + strlen(domain) + 2;
-	t = wmalloc(len);
-	snprintf(t, len, "%s/%s", PKGCONFDIR, domain);
-
-	return t;
+	return wstrconcat(PKGCONFDIR "/", domain);
 }
 
 void w_save_defaults_changes(void)
