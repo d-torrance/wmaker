@@ -1,7 +1,7 @@
 Source: wmaker
 Section: x11
 Priority: optional
-Maintainer: Debian Window Maker Team <pkg-wmaker-devel@lists.alioth.debian.org>
+Maintainer: Debian Window Maker Team <team+wmaker@tracker.debian.org>
 Uploaders: Andreas Metzler <ametzler@debian.org>,
            Doug Torrance <dtorrance@piedmont.edu>
 Rules-Requires-Root: no
