@@ -9,13 +9,24 @@ wmaker (0.95.9-3) UNRELEASED; urgency=medium
   * Set upstream metadata fields: Repository.
   * Fix day-of-week for changelog entries 0.95.4-1, 0.95.3-2, 0.95.3-1,
     0.95.0+20111028-4, 0.14.0-2, 0.14.0-1, 0.13.1-0.1, 0.12.3-0.5.
+  * Avoid explicitly specifying -Wl,--as-needed linker flag.
+  * Remove constraints unnecessary since buster
 
   [ Doug Torrance ]
   * debian/changelog
     - Enclose John H. Robinson, IV's name in quotes to avoid
       bogus-mail-host-in-debian-changelog Lintian error (see #966295).
+  * debian/control
+    - Update Maintainer email address to use tracker.d.o.
+    - Bump Standards-Version to 4.6.0.
+    - Bump to debhelper compatibility level 13.
+  * debian/copyright
+    - Use https for Source URL.
+  * debian/not-installed
+    - New file; specify files that aren't installed so dh_missing doesn't
+      cause build failures after the bump to debhelper 13.
 
- -- Doug Torrance <dtorrance@piedmont.edu>  Tue, 25 May 2021 21:54:51 -0400
+ -- Doug Torrance <dtorrance@piedmont.edu>  Fri, 08 Oct 2021 20:30:30 -0400
 
 wmaker (0.95.9-2) unstable; urgency=low
 
