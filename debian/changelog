@@ -1,4 +1,4 @@
-wmaker (0.95.9-3) UNRELEASED; urgency=medium
+wmaker (0.95.9-3) unstable; urgency=medium
 
   [ Debian Janitor ]
   * Remove constraints unnecessary since stretch:
@@ -43,7 +43,7 @@ wmaker (0.95.9-3) UNRELEASED; urgency=medium
   * debian/wmaker.install
     - Install wmaker and convertfiles to /usr/libexec for FHS compliance.
 
- -- Doug Torrance <dtorrance@piedmont.edu>  Fri, 08 Oct 2021 21:36:10 -0400
+ -- Doug Torrance <dtorrance@piedmont.edu>  Fri, 08 Oct 2021 22:20:31 -0400
 
 wmaker (0.95.9-2) unstable; urgency=low
 
