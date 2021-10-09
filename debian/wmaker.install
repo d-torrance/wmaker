@@ -1,4 +1,4 @@
-usr/bin/convertfonts usr/lib/WindowMaker
+usr/bin/convertfonts usr/libexec/WindowMaker
 usr/bin/geticonset
 usr/bin/getstyle
 usr/bin/seticons
@@ -6,7 +6,7 @@ usr/bin/setstyle
 usr/bin/wdread
 usr/bin/wdwrite
 usr/bin/wmagnify
-usr/bin/wmaker usr/lib/WindowMaker
+usr/bin/wmaker usr/libexec/WindowMaker
 usr/bin/wmgenmenu
 usr/bin/wmiv
 usr/bin/wmmenugen
