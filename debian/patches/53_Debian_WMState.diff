@@ -1,7 +1,8 @@
 Description: XTerm debian configuration.
  Based on Marcelo E. Magallon <mmagallo@debian.org> diff patch.
 Author: Rodolfo García Peñas (kix) <kix@kix.es>
-Last-Update: 2017-03-11
+Forwarded: not-needed
+Last-Update: 2021-10-08
 
 --- a/WindowMaker/Defaults/WMState.in
 +++ b/WindowMaker/Defaults/WMState.in

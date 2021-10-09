@@ -3,8 +3,8 @@ Description: Always install WPrefs binary to bindir
  to bindir (/usr/bin) for FHS compliancy.
 Author: Andreas Metzler <ametzler@debian.org>
 Origin: vendor
-Forwarded: no
-Last-Update: 2018-09-02
+Forwarded: not-needed
+Last-Update: 2021-10-08
 
 --- a/configure.ac
 +++ b/configure.ac
