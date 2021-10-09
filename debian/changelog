@@ -22,11 +22,28 @@ wmaker (0.95.9-3) UNRELEASED; urgency=medium
     - Bump to debhelper compatibility level 13.
   * debian/copyright
     - Use https for Source URL.
+  * debian/debianfiles/wmaker
+    - Update paths to wmaker and convertfonts; now in /usr/libexec.
   * debian/not-installed
     - New file; specify files that aren't installed so dh_missing doesn't
       cause build failures after the bump to debhelper 13.
+  * debian/patches/10_support_imagemagick6.diff
+    - Update patch to match upstream; support both imagemagick 6 and 7.
+  * debian/patches/20_national_encoding.diff
+    - New patch; convert README's from ISO-8859-1 to UTF-8.
+  * debian/patches/21_wrong_manual_section.diff
+    - New patch; use quotes around "Window Maker" in translated manpage
+      title headers to prevent wront-manual-section Lintian warnings.
+  * debian/patches/{53,75}*.diff
+    - Set "Forwarded: not-needed" for Debian-specific patches.
+  * debian/upstream/metadata
+    - Add Bug-* fields.
+  * debian/wmaker-common.lintian-overrides
+    - New file; override no-manual-page Lintian warning.
+  * debian/wmaker.install
+    - Install wmaker and convertfiles to /usr/libexec for FHS compliance.
 
- -- Doug Torrance <dtorrance@piedmont.edu>  Fri, 08 Oct 2021 20:30:30 -0400
+ -- Doug Torrance <dtorrance@piedmont.edu>  Fri, 08 Oct 2021 21:36:10 -0400
 
 wmaker (0.95.9-2) unstable; urgency=low
 
