@@ -1,0 +1,77 @@
+Description: Convert README's from ISO-8859-1 to UTF-8.
+Author: Doug Torrance <dtorrance@piedmont.edu>
+Forwarded: https://groups.google.com/g/wmaker-dev/c/w3YlC3CZj8E/m/eFrKImhmAgAJ
+Applied-Upstream: 0.95.10,
+ https://repo.or.cz/wmaker-crm.git/commitdiff/4b61081
+ https://repo.or.cz/wmaker-crm.git/commitdiff/71558f4
+ https://repo.or.cz/wmaker-crm.git/commitdiff/4221e30
+Last-Update: 2021-10-08
+
+--- a/WPrefs.app/po/README
++++ b/WPrefs.app/po/README
+@@ -1,7 +1,7 @@
+ File	Language		Current Maintainer
+ ------------------------------------------------------------------------------
+ pt.po	Portuguese		Eliphas Levy Theodoro <eliphas@conectiva.com.br>
+-hr.po	Croatian		Toni Biliæ <tbilic@oliver.efos.hr>
++hr.po	Croatian		Toni BiliÃ¦ <tbilic@oliver.efos.hr>
+ fr.po	French			Bastien NOCERA <hadess@writeme.com>
+ 				Hadess <hadess@infonie.fr>
+ 				Antoine Hulin <antoine@origan.fdn.org>
+@@ -23,6 +23,6 @@
+ 				Anton Zinoviev <zinoviev@debian.org>
+ sk.po   Slovak			Jan 'judas' Tomka <judas@linux.sk>
+ et.po	Estonian		Ivar Smolin <okul@linux.ee>
+-ca.po	Catalan			Ernest Adrogué <eadrogue@gmx.net>
++ca.po	Catalan			Ernest AdroguÃ© <eadrogue@gmx.net>
+ nl.po	Dutch			Alwin <translations@ziggo.nl>
+ fy.po	Frisian			Alwin <translations@ziggo.nl>
+--- a/WindowMaker/README
++++ b/WindowMaker/README
+@@ -36,7 +36,7 @@
+ 				ABE Shige <sabe@ibm.net>
+ menu.pt Portuguese      Alfredo K. Kojima <kojima@inf.ufrgs.br>
+ menu.de	German		Carsten Schaar <nhadcasc@fs-maphy.uni-hannover.de>
+-menu.cz	Czech		David ©auer <xsauer@hwlab.felk.cvut.cz>
++menu.cz	Czech		David Â©auer <xsauer@hwlab.felk.cvut.cz>
+ menu.ko	Korean		Chae-Yong Chong <cychong@metro.telecom.samsung.co.kr>
+ 			Byeong-Chan Kim <redhands@linux.sarang.net>
+ menu.gl	Galician	Xose Vazquez <xose@arrakis.es>
+@@ -44,7 +44,7 @@
+ menu.it Italian		Roberto Checozzo <croberto@aerre.it>
+ menu.ru Russian		August S.Sigov <freedomain@actor.ru>
+ menu.es Spanish		Rodrigo Hornos Prados <tnetrhp@ctv.es>
+-			José Luis Rivas López <jrivas@ares.ipf.uvigo.es>
++			JosÃ© Luis Rivas LÃ³pez <jrivas@ares.ipf.uvigo.es>
+ menu.he	Hebrew		Please send me your name/email if you wrote this
+ 			We unfortunately lost that info :(
+ menu.tr Turkish         F. Kagan Gurkaynak <kgf@wpi.edu>
+@@ -56,7 +56,7 @@
+ 			Jacob Sparre Andersen <sparre@cats.nbi.dk>
+ menu.sl Slovene		Alen Salamun <snowman@hal9000.medinet.si>
+ menu.hu Hungarian	Csanaki Csaba <prew@mail.matav.hu>
+-menu.ca Català		Carles Amig<F3> dj_fr3nd@hotmail.com
++menu.ca CatalÃ 		Carles Amig<F3> dj_fr3nd@hotmail.com
+ menu.zh_TW.Big5 Chinese Li Wei Jih <lwj83@cs.ccu.edu.tw>
+ menu.zh_CN Chinese	Wang Jian <wangjian2@asiainfo.com>
+ menu.pl Polish		Maciej Friedel <tytus@tytus.itma.pwr.wroc.pl>
+--- a/po/README
++++ b/po/README
+@@ -27,7 +27,7 @@
+ 				Tomi Kajala <tomi@iki.fi>
+ hr.po	Croatian	3	Toni Bilic <tbilic@efos.hr>
+ el.po	Greek			Nikolaos Papagrigoriou <papanikos@usa.net>
+-pl.po	Polish			Piotr Dembiñski <pdemb@aurora.put.poznan.pl>
++pl.po	Polish			Piotr DembiÃ±ski <pdemb@aurora.put.poznan.pl>
+ ro.po	Romanian		Andrei Vuta <gigi_man@manag.pub.ro>
+ da.po	Danish			Birger Langkjer <langkjer@post3.tele.dk>
+ zh_TW.Big5.po Chinese		Li Wei Jih <lwj@manufacture.com.tw>
+@@ -40,7 +40,7 @@
+ et.po   Estonian        	Ivar Smolin <okul@trenet.ee>
+ ms.po	Malay			Hasbullah Bin Pit (sebol) <sebol@ikhlas.com>
+ be.po	Belarusian		Ihar Viarheichyk <iverg@mail.ru>
+-ca.po	Catalan			Ernest Adrogué <eadrogue@gmx.net>
++ca.po	Catalan			Ernest AdroguÃ© <eadrogue@gmx.net>
+ bs.po	Bosnian			Ahmet Mulalic <am@lugzdk.ba>
+ hy.po   Armenian                Norayr Chilignaryan <chnorik@gmail.com>
+ nl.po	Dutch			Alwin <translations@ziggo.nl>
