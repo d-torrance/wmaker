@@ -3,6 +3,7 @@ wmaker (0.95.9-4) UNRELEASED; urgency=medium
   * Migrate lintian overrides with
     GIT/lintian/bin/lintian-migrate-overrides-to-pointed-hints.
   * Bump Standards-Version.
+  * Add lintian override for hand written html test file. (source-is-missing)
 
  -- Andreas Metzler <ametzler@debian.org>  Tue, 27 Dec 2022 16:48:11 +0100
 
