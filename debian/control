@@ -5,7 +5,7 @@ Maintainer: Debian Window Maker Team <team+wmaker@tracker.debian.org>
 Uploaders: Andreas Metzler <ametzler@debian.org>,
            Doug Torrance <dtorrance@piedmont.edu>
 Rules-Requires-Root: no
-Standards-Version: 4.6.0
+Standards-Version: 4.6.2
 Build-Depends: debhelper-compat (= 13),
                gettext,
                libfontconfig1-dev,
