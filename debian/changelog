@@ -1,3 +1,10 @@
+wmaker (0.95.9+20230305-0ppa1) lunar; urgency=medium
+
+  * debian/libw{ings3,util5}.symbols
+    - Add new symbols.
+
+ -- Doug Torrance <dtorrance@debian.org>  Mon, 06 Mar 2023 20:56:38 -0500
+
 wmaker (0.95.9+20210718-0ppa1) impish; urgency=medium
 
   * debian/rules
