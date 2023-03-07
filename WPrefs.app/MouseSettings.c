@@ -381,10 +381,7 @@ static void fillModifierPopUp(WMPopUpButton * pop)
 			if (mapping->modifiermap[idx] != 0) {
 				int l;
 				for (l = 0; l < 4; l++) {
-					if (xext_xkb_supported)
-						ksym = XkbKeycodeToKeysym(dpy, mapping->modifiermap[idx], 0, l);
-					else
-						ksym = XKeycodeToKeysym(dpy, mapping->modifiermap[idx], 0);
+					ksym = W_KeycodeToKeysym(dpy, mapping->modifiermap[idx], l);
 					if (ksym != NoSymbol)
 						break;
 				}
@@ -751,6 +748,8 @@ static void storeData(_Panel * panel)
 		int action;
 
 		action = WMGetPopUpButtonSelectedItem(panel->mouse_action[i].popup);
+		if (action < 0)
+			continue;
 		if (button_list[i].type == T_BUTTON)
 			db_value = button_actions[action].db_value;
 		else

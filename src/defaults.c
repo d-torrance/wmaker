@@ -154,6 +154,7 @@ static WDECallbackUpdate setModifierKeyLabels;
 
 static WDECallbackConvert getCursor;
 static WDECallbackUpdate setCursor;
+static WDECallbackUpdate updateDock;
 
 /*
  * Tables to convert strings to enumeration values.
@@ -521,6 +522,9 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.minipreview_size, getInt, NULL, NULL, NULL},
 	{"IgnoreGtkHints", "NO", NULL,
 	    &wPreferences.ignore_gtk_decoration_hints, getBool, NULL, NULL, NULL},
+	{"KeepDockOnPrimaryHead", "NO", NULL,
+	    &wPreferences.keep_dock_on_primary_head, getBool, updateDock,
+	    NULL, NULL},
 
 	/* style options */
 
@@ -783,6 +787,8 @@ WDefaultEntry optionList[] = {
 	{"ScreenSwitchKey", "None", (void *)WKBD_SWITCH_SCREEN,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"RunKey", "None", (void *)WKBD_RUN,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"ExitKey", "None", (void *)WKBD_EXIT,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 
 #ifdef KEEP_XKB_LOCK_STATUS
@@ -3480,6 +3486,18 @@ static int setCursor(WScreen * scr, WDefaultEntry * entry, void *tdata, void *ex
 	if (widx == WCUR_ROOT && *cursor != None) {
 		XDefineCursor(dpy, scr->root_win, *cursor);
 	}
+
+	return 0;
+}
+
+static int updateDock(WScreen * scr, WDefaultEntry * entry,
+			      void *tdata, void *extra_data) {
+	(void) entry;
+	(void) tdata;
+	(void) extra_data;
+
+	if (scr->dock)
+		wDockSwap(scr->dock);
 
 	return 0;
 }

@@ -29,6 +29,9 @@
 #ifdef KEEP_XKB_LOCK_STATUS
 #include <X11/XKBlib.h>
 #endif	  /* KEEP_XKB_LOCK_STATUS */
+#ifdef USE_XRES
+#include <X11/extensions/XRes.h>
+#endif
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -475,6 +478,41 @@ Bool wWindowObscuresWindow(WWindow *wwin, WWindow *obscured)
 	return True;
 }
 
+/* Get the corresponding Process Identification Number of the active window */
+static pid_t getWindowPid(Window win)
+{
+	pid_t pid = -1;
+
+	pid = wNETWMGetPidForWindow(win);
+#ifdef USE_XRES
+	if (pid > 0)
+		return pid;
+	else {
+		XResClientIdSpec spec;
+		int status;
+		long i, num_ids = 0;
+		XResClientIdValue *client_ids = NULL;
+
+		spec.client = win;
+		spec.mask = XRES_CLIENT_ID_PID_MASK;
+
+		status = XResQueryClientIds(dpy, 1, &spec, &num_ids, &client_ids);
+
+		if (status != Success)
+			return -1;
+
+		for (i = 0; i < num_ids; i++) {
+			if (client_ids[i].spec.mask == XRES_CLIENT_ID_PID_MASK) {
+				pid = XResGetClientPid(&client_ids[i]);
+				break;
+			}
+		}
+		XResClientIdsDestroy(num_ids, client_ids);
+	}
+#endif
+	return pid;
+}
+
 static void fixLeaderProperties(WWindow *wwin)
 {
 	XClassHint *classHint;
@@ -487,7 +525,7 @@ static void fixLeaderProperties(WWindow *wwin)
 
 	classHint = XAllocClassHint();
 	clientHints = XGetWMHints(dpy, wwin->client_win);
-	pid = wNETWMGetPidForWindow(wwin->client_win);
+	pid = getWindowPid(wwin->client_win);
 	if (pid > 0)
 		haveCommand = GetCommandForPid(pid, &argv, &argc);
 	else
@@ -688,6 +726,9 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	XChangeWindowAttributes(dpy, window, CWEventMask | CWDontPropagate | CWSaveUnder, &attribs);
 	XSetWindowBorderWidth(dpy, window, 0);
 
+	if (wwin->wm_class != NULL && strcmp(wwin->wm_class, "DockApp") != 0)
+		wwin->flags.fullscreen_monitors[0] = -1;
+
 	/* get hints from GNUstep app */
 	if (wwin->wm_class != NULL && strcmp(wwin->wm_class, "GNUstep") == 0)
 		wwin->flags.is_gnustep = 1;
@@ -877,6 +918,9 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 
 		if (win_state->state->miniaturized > 0 && !WFLAGP(wwin, no_miniaturizable))
 			wwin->flags.miniaturized = win_state->state->miniaturized;
+
+		if (win_state->state->maximized > 0)
+			wwin->flags.maximized = win_state->state->maximized;
 
 		if (!IS_OMNIPRESENT(wwin)) {
 			int w = wDefaultGetStartWorkspace(scr, wwin->wm_instance,
@@ -1691,9 +1735,8 @@ void wWindowSingleFocus(WWindow *wwin)
 	/* bring window back to visible area */
 	move = wScreenBringInside(scr, &x, &y, wwin->frame->core->width, wwin->frame->core->height);
 
-	if (move) {
+	if (move)
 		wWindowConfigure(wwin, x, y, wwin->client.width, wwin->client.height);
-	}
 }
 
 void wWindowFocusPrev(WWindow *wwin, Bool inSameWorkspace)
@@ -1857,9 +1900,21 @@ void wWindowConstrainSize(WWindow *wwin, unsigned int *nwidth, unsigned int *nhe
 	int baseW = 0;
 	int baseH = 0;
 
+	/*
+	 * X11 proto defines width and height as a CARD16
+	 * if window size is guaranteed to fail, failsafe to a reasonable size
+	 */
+	if (width > USHRT_MAX && height > USHRT_MAX) {
+		width = 640;
+		height = 480;
+		return;
+	}
+
 	if (wwin->normal_hints) {
-		winc = wwin->normal_hints->width_inc;
-		hinc = wwin->normal_hints->height_inc;
+		if (!wwin->flags.maximized) {
+			winc = wwin->normal_hints->width_inc;
+			hinc = wwin->normal_hints->height_inc;
+		}
 		minW = wwin->normal_hints->min_width;
 		minH = wwin->normal_hints->min_height;
 		maxW = wwin->normal_hints->max_width;
@@ -1875,15 +1930,19 @@ void wWindowConstrainSize(WWindow *wwin, unsigned int *nwidth, unsigned int *nhe
 		baseH = wwin->normal_hints->base_height;
 	}
 
+	/* trust the mins provided by the client but not the maxs */
 	if (width < minW)
 		width = minW;
 	if (height < minH)
 		height = minH;
 
-	if (width > maxW)
-		width = maxW;
-	if (height > maxH)
-		height = maxH;
+	/* if only one dimension is over the top, set a default 4/3 ratio */
+	if (width > maxW && height < maxH) {
+		width = height * 4 / 3;
+	} else {
+		if(height > maxH && width < maxW)
+			height = width * 3 / 4;
+	}
 
 	/* aspect ratio code borrowed from olwm */
 	if (minAX > 0) {
@@ -1922,15 +1981,17 @@ void wWindowConstrainSize(WWindow *wwin, unsigned int *nwidth, unsigned int *nhe
 		}
 	}
 
-	if (baseW != 0)
-		width = (((width - baseW) / winc) * winc) + baseW;
-	else
-		width = (((width - minW) / winc) * winc) + minW;
+	if (!wwin->flags.maximized) {
+		if (baseW != 0)
+			width = (((width - baseW) / winc) * winc) + baseW;
+		else
+			width = (((width - minW) / winc) * winc) + minW;
 
-	if (baseH != 0)
-		height = (((height - baseH) / hinc) * hinc) + baseH;
-	else
-		height = (((height - minH) / hinc) * hinc) + minH;
+		if (baseH != 0)
+			height = (((height - baseH) / hinc) * hinc) + baseH;
+		else
+			height = (((height - minH) / hinc) * hinc) + minH;
+	}
 
 	/* broken stupid apps may cause preposterous values for these.. */
 	if (width > 0)
@@ -2086,14 +2147,6 @@ void wWindowConfigure(WWindow *wwin, int req_x, int req_y, int req_width, int re
 {
 	int synth_notify = False;
 	int resize;
-
-	/* if window size is guaranteed to fail - fix it to some reasonable
-	 * defaults */
-	if (req_height > SHRT_MAX)
-		req_height = 480;
-
-	if (req_width > SHRT_MAX)
-		req_height = 640;
 
 	resize = (req_width != wwin->client.width || req_height != wwin->client.height);
 	/*
@@ -2649,7 +2702,7 @@ void wWindowUpdateGNUstepAttr(WWindow * wwin, GNUstepWMAttributes * attr)
 }
 
 WMagicNumber wWindowAddSavedState(const char *instance, const char *class,
-											 const char *command, pid_t pid, WSavedState * state)
+				const char *command, pid_t pid, WSavedState *state)
 {
 	WWindowState *wstate;
 
@@ -2884,7 +2937,6 @@ static void titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event)
 			}
 
 			/* maximize window */
-			
 			if (dir != 0 && IS_RESIZABLE(wwin)) {
 				int ndir = dir ^ wwin->flags.maximized;
 

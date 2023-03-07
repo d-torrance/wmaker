@@ -22,11 +22,10 @@
 #define _GNU_SOURCE
 #endif
 
-#include <X11/keysym.h>
-#include <X11/XKBlib.h>
 #include <X11/Xatom.h>
 #include <X11/Xlib.h>
-#include "wraster.h"
+#include <WINGs/WINGsP.h>
+#include <wraster.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -436,6 +435,7 @@ int zoom_in_out(int z)
 				tmp->height + (int)(tmp->height * zoom_factor));
 		if (!img) {
 			img = old_img;
+			RReleaseImage(tmp);
 			return EXIT_FAILURE;
 		}
 	} else {
@@ -450,6 +450,7 @@ int zoom_in_out(int z)
 		img = RScaleImage(tmp, new_width, new_height);
 		if (!img) {
 			img = old_img;
+			RReleaseImage(tmp);
 			return EXIT_FAILURE;
 		}
 	}
@@ -679,7 +680,7 @@ link_t *connect_dir(char *dirpath, linked_list_t *li)
 int main(int argc, char **argv)
 {
 	int option = -1;
-	RContextAttributes attr;
+	RContextAttributes attr = {};
 	XEvent e;
 	KeySym keysym;
 	char *reading_filename = "";
@@ -750,7 +751,7 @@ int main(int argc, char **argv)
 
 	dpy = XOpenDisplay(NULL);
 	if (!dpy) {
-		fprintf(stderr, "Error: can't open display");
+		fprintf(stderr, "Error: can't open display\n");
 		linked_list_free(&list);
 		return EXIT_FAILURE;
 	}
@@ -932,7 +933,7 @@ int main(int argc, char **argv)
 			continue;
 		}
 		if (e.type == KeyPress) {
-			keysym = XkbKeycodeToKeysym(dpy, e.xkey.keycode, 0, e.xkey.state & ShiftMask?1:0);
+			keysym = W_KeycodeToKeysym(dpy, e.xkey.keycode, e.xkey.state & ShiftMask?1:0);
 #ifdef HAVE_PTHREAD
 			if (keysym != XK_Right)
 				diaporama_flag = False;

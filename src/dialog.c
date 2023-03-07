@@ -36,6 +36,8 @@
 #include <dirent.h>
 #include <limits.h>
 #include <errno.h>
+#include <time.h>
+#include <sys/utsname.h>
 
 #ifdef HAVE_MALLOC_H
 #include <malloc.h>
@@ -1101,14 +1103,16 @@ Bool wIconChooserDialog(WScreen *scr, char **file, const char *instance, const c
 		} else {
 			defaultPath = FindImage(wPreferences.icon_path, *file);
 			wantedPath = WMGetTextFieldText(panel->fileField);
-			/* if the file is not the default, use full path */
-			if (strcmp(wantedPath, defaultPath) != 0) {
-				*file = wantedPath;
-			} else {
-				*file = wstrdup(*file);
-				wfree(wantedPath);
+			if (defaultPath) {
+				/* if the file is not the default, use full path */
+				if (strcmp(wantedPath, defaultPath) != 0) {
+					*file = wstrdup(wantedPath);
+				} else {
+					*file = wstrdup(*file);
+				}
+				wfree(defaultPath);
 			}
-			wfree(defaultPath);
+			wfree(wantedPath);
 		}
 	} else {
 		*file = NULL;
@@ -1153,7 +1157,7 @@ typedef struct {
 #define COPYRIGHT_TEXT  \
     "Copyright \xc2\xa9 1997-2006 Alfredo K. Kojima\n"\
     "Copyright \xc2\xa9 1998-2006 Dan Pascu\n"\
-    "Copyright \xc2\xa9 2013-2020 Window Maker Developers Team"
+    "Copyright \xc2\xa9 2013-%hu Window Maker Developers Team"
 
 static InfoPanel *infoPanel = NULL;
 
@@ -1169,6 +1173,57 @@ static void destroyInfoPanel(WCoreWindow *foo, void *data, XEvent *event)
 	WMDestroyWidget(infoPanel->win);
 	wfree(infoPanel);
 	infoPanel = NULL;
+}
+
+char *getPrettyOSName(void)
+{
+	char line[200];
+	char *token;
+	char *posn = NULL;
+	const char s[2] = "=";
+	FILE *fp;
+
+	fp = fopen("/etc/os-release", "r");
+	if (!fp) {
+		fp = fopen("/usr/lib/os-release", "r");
+		if (!fp) {
+			wwarning(_("no os-release file on the system"));
+			return NULL;
+		}
+	}
+
+	while (fgets(line, sizeof(line), fp) != NULL) {
+		if (strncmp(line, "PRETTY_NAME", strlen("PRETTY_NAME")) == 0) {
+			line[strcspn(line, "\r\n")] = 0;
+			token = strtok(line, s);
+			if (token) {
+				//get straight to the second part of the line
+				token = strtok(NULL, s);
+				if (token) {
+					//removing potential quotes
+					char *dst = token;
+					char *src = token;
+					char c;
+
+					while ((c = *src++) != '\0') {
+						if (c == '\\') {
+							*dst++ = c;
+							if ((c = *src++) == '\0')
+								break;
+							*dst++ = c;
+						} else if (c != '"' && c != '\'')
+							*dst++ = c;
+					}
+					*dst = '\0';
+					posn = wmalloc(strlen(token) + 1);
+					strcpy(posn, token);
+				}
+			}
+			break;
+		}
+	}
+	fclose(fp);
+	return posn;
 }
 
 void wShowInfoPanel(WScreen *scr)
@@ -1194,6 +1249,17 @@ void wShowInfoPanel(WScreen *scr)
 	};
 	int wmScaleWidth, wmScaleHeight;
 	int pwidth, pheight;
+	int current_year = 2020;
+	time_t s;
+	struct tm *current_time;
+	struct utsname uts;
+
+	s = time(NULL);
+	if (s) {
+		current_time = localtime(&s);
+		if (current_time->tm_year > (current_year - 1900))
+			current_year = current_time->tm_year + 1900;
+	}
 
 	if (infoPanel) {
 		if (infoPanel->scr == scr) {
@@ -1209,8 +1275,12 @@ void wShowInfoPanel(WScreen *scr)
 
 	panel->win = WMCreateWindow(scr->wmscreen, "info");
 	WMGetScaleBaseFromSystemFont(scr->wmscreen, &wmScaleWidth, &wmScaleHeight);
+#if defined(HAVE_MALLOC_H) && defined(HAVE_MALLINFO2) && defined(DEBUG)
+	pwidth = WMScaleX(412);
+#else
 	pwidth = WMScaleX(382);
-	pheight = WMScaleY(250);
+#endif
+	pheight = WMScaleY(270);
 	WMResizeWidget(panel->win, pwidth, pheight);
 
 	logo = WMCreateApplicationIconBlendedPixmap(scr->wmscreen, (RColor *) NULL);
@@ -1274,9 +1344,11 @@ void wShowInfoPanel(WScreen *scr)
 
 	panel->copyrL = WMCreateLabel(panel->win);
 	WMResizeWidget(panel->copyrL, WMScaleX(360), WMScaleY(60));
-	WMMoveWidget(panel->copyrL, WMScaleX(15), WMScaleY(190));
+	WMMoveWidget(panel->copyrL, WMScaleX(15), WMScaleY(210));
 	WMSetLabelTextAlignment(panel->copyrL, WALeft);
-	WMSetLabelText(panel->copyrL, COPYRIGHT_TEXT);
+
+	snprintf(buffer, sizeof(buffer), COPYRIGHT_TEXT, current_year);
+	WMSetLabelText(panel->copyrL, buffer);
 	font = WMSystemFontOfSize(scr->wmscreen, WMScaleY(11));
 	if (font) {
 		WMSetLabelFont(panel->copyrL, font);
@@ -1285,9 +1357,19 @@ void wShowInfoPanel(WScreen *scr)
 	}
 
 	strbuf = NULL;
+	if (uname(&uts) != -1) {
+		char *posn = getPrettyOSName();
+		if (posn) {
+			snprintf(buffer, sizeof(buffer), _("Running on: %s (%s)\n"), posn, uts.machine);
+			free(posn);
+		}
+		else
+			snprintf(buffer, sizeof(buffer), _("Running on: %s (%s)\n"), uts.sysname, uts.machine);
+		strbuf = wstrappend(strbuf, buffer);
+	}
+
 	snprintf(buffer, sizeof(buffer), _("Using visual 0x%x: %s %ibpp "),
 		 (unsigned)scr->w_visual->visualid, visuals[scr->w_visual->class], scr->w_depth);
-
 	strbuf = wstrappend(strbuf, buffer);
 
 	switch (scr->w_depth) {
@@ -1307,14 +1389,14 @@ void wShowInfoPanel(WScreen *scr)
 		break;
 	}
 
-#if defined(HAVE_MALLOC_H) && defined(HAVE_MALLINFO)
+#if defined(HAVE_MALLOC_H) && defined(HAVE_MALLINFO2)
 	{
-		struct mallinfo ma = mallinfo();
+		struct mallinfo2 ma = mallinfo2();
 		snprintf(buffer, sizeof(buffer),
 #ifdef DEBUG
-					_("Total memory allocated: %i kB (in use: %i kB, %d free chunks).\n"),
+					_("Total memory allocated: %lu kB (in use: %lu kB, %lu free chunks)\n"),
 #else
-					_("Total memory allocated: %i kB (in use: %i kB).\n"),
+					_("Total memory allocated: %lu kB (in use: %lu kB)\n"),
 #endif
 					(ma.arena + ma.hblkhd) / 1024,
 					(ma.uordblks + ma.hblkhd) / 1024
@@ -1353,6 +1435,10 @@ void wShowInfoPanel(WScreen *scr)
 	strbuf = wstrappend(strbuf, ", XDnD");
 #endif
 
+#ifdef USE_XRES
+	strbuf = wstrappend(strbuf, ", XRes");
+#endif
+
 #ifdef USE_MAGICK
 	strbuf = wstrappend(strbuf, ", ImageMagick");
 #endif
@@ -1365,7 +1451,7 @@ void wShowInfoPanel(WScreen *scr)
 	strbuf = wstrappend(strbuf, _("Xinerama: "));
 	{
 		char tmp[128];
-		snprintf(tmp, sizeof(tmp) - 1, _("%d head(s) found."), scr->xine_info.count);
+		snprintf(tmp, sizeof(tmp) - 1, _("%d head(s) found"), scr->xine_info.count);
 		strbuf = wstrappend(strbuf, tmp);
 	}
 #endif
@@ -1377,11 +1463,14 @@ void wShowInfoPanel(WScreen *scr)
 		strbuf = wstrappend(strbuf, _("supported"));
 	else
 		strbuf = wstrappend(strbuf, _("unsupported"));
-	strbuf = wstrappend(strbuf, ".");
 #endif
 
 	panel->infoL = WMCreateLabel(panel->win);
-	WMResizeWidget(panel->infoL, WMScaleX(350), WMScaleY(80));
+#if defined(HAVE_MALLOC_H) && defined(HAVE_MALLINFO2) && defined(DEBUG)
+	WMResizeWidget(panel->infoL, WMScaleX(380), WMScaleY(100));
+#else
+	WMResizeWidget(panel->infoL, WMScaleX(350), WMScaleY(100));
+#endif
 	WMMoveWidget(panel->infoL, WMScaleX(15), WMScaleY(115));
 	WMSetLabelText(panel->infoL, strbuf);
 	font = WMSystemFontOfSize(scr->wmscreen, WMScaleY(11));

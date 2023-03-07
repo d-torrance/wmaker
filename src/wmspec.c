@@ -77,6 +77,9 @@ static Atom net_wm_visible_name;	/* TODO (unnecessary?) */
 static Atom net_wm_icon_name;
 static Atom net_wm_visible_icon_name;	/* TODO (unnecessary?) */
 static Atom net_wm_desktop;
+#ifdef USE_XINERAMA
+static Atom net_wm_fullscreen_monitors;
+#endif
 static Atom net_wm_window_type;
 static Atom net_wm_window_type_desktop;
 static Atom net_wm_window_type_dock;
@@ -161,6 +164,9 @@ static atomitem_t atomNames[] = {
 	{"_NET_WM_ICON_NAME", &net_wm_icon_name},
 	{"_NET_WM_VISIBLE_ICON_NAME", &net_wm_visible_icon_name},
 	{"_NET_WM_DESKTOP", &net_wm_desktop},
+#ifdef USE_XINERAMA
+	{"_NET_WM_FULLSCREEN_MONITORS", &net_wm_fullscreen_monitors},
+#endif
 	{"_NET_WM_WINDOW_TYPE", &net_wm_window_type},
 	{"_NET_WM_WINDOW_TYPE_DESKTOP", &net_wm_window_type_desktop},
 	{"_NET_WM_WINDOW_TYPE_DOCK", &net_wm_window_type_dock},
@@ -287,6 +293,9 @@ static void setSupportedHints(WScreen *scr)
 	atom[i++] = net_wm_moveresize;
 #endif
 	atom[i++] = net_wm_desktop;
+#ifdef USE_XINERAMA
+	atom[i++] = net_wm_fullscreen_monitors;
+#endif
 	atom[i++] = net_wm_window_type;
 	atom[i++] = net_wm_window_type_desktop;
 	atom[i++] = net_wm_window_type_dock;
@@ -988,7 +997,7 @@ static void updateWorkspaceNames(WScreen *scr)
 	len = 0;
 	for (i = 0; i < scr->workspace_count; i++) {
 		curr_size = strlen(scr->workspaces[i]->name);
-		strcpy(pos, scr->workspaces[i]->name);
+		strncpy(pos, scr->workspaces[i]->name, sizeof(pos) - 1);
 		pos += (curr_size + 1);
 		len += (curr_size + 1);
 	}
@@ -1027,6 +1036,9 @@ static void updateStateHint(WWindow *wwin, Bool changedWorkspace, Bool del)
 {				/* changeable */
 	if (del) {
 		XDeleteProperty(dpy, wwin->client_win, net_wm_state);
+#ifdef USE_XINERAMA
+		XDeleteProperty(dpy, wwin->client_win, net_wm_fullscreen_monitors);
+#endif
 	} else {
 		Atom state[15];	/* nr of defined state atoms */
 		int i = 0;
@@ -1067,6 +1079,20 @@ static void updateStateHint(WWindow *wwin, Bool changedWorkspace, Bool del)
 
 		XChangeProperty(dpy, wwin->client_win, net_wm_state, XA_ATOM, 32,
 				PropModeReplace, (unsigned char *)state, i);
+
+#ifdef USE_XINERAMA
+		if (wwin->flags.fullscreen && (wwin->flags.fullscreen_monitors[0] != -1)) {
+			unsigned long data[4];
+
+			data[0] = wwin->flags.fullscreen_monitors[0];
+			data[1] = wwin->flags.fullscreen_monitors[1];
+			data[2] = wwin->flags.fullscreen_monitors[2];
+			data[3] = wwin->flags.fullscreen_monitors[3];
+
+			XChangeProperty(dpy, wwin->client_win, net_wm_fullscreen_monitors, XA_CARDINAL, 32,
+				PropModeReplace, (unsigned char *)data, 4);
+		}
+#endif
 	}
 }
 
@@ -1260,8 +1286,10 @@ static void doStateAtom(WWindow *wwin, Atom state, int set, Bool init)
 		} else {
 			if (set)
 				wFullscreenWindow(wwin);
-			else
+			else {
 				wUnfullscreenWindow(wwin);
+				wwin->flags.fullscreen_monitors[0] = -1;
+			}
 		}
 	} else if (state == net_wm_state_above) {
 		if (set == _NET_WM_STATE_TOGGLE)
@@ -1455,7 +1483,8 @@ void wNETWMPositionSplash(WWindow *wwin, int *x, int *y, int width, int height)
 static void updateWindowType(WWindow *wwin)
 {
 	Atom type_ret;
-	int fmt_ret, layer;
+	int fmt_ret;
+	int layer = INT_MIN; //illegal level
 	unsigned long nitems_ret, bytes_after_ret;
 	long *data = NULL;
 
@@ -1473,7 +1502,8 @@ static void updateWindowType(WWindow *wwin)
 	}
 
 	if (wwin->frame != NULL) {
-		ChangeStackingLevel(wwin->frame->core, layer);
+		if (layer != INT_MIN)
+			ChangeStackingLevel(wwin->frame->core, layer);
 		wwin->frame->flags.need_texture_change = 1;
 		wWindowConfigureBorders(wwin);
 		wFrameWindowPaint(wwin->frame);
@@ -1706,7 +1736,7 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 		if (wwin->frame->workspace == wwin->screen_ptr->current_workspace /* No workspace change */
 		    || event->data.l[0] == 2 /* Requested by pager */
 		    || WFLAGP(wwin, focus_across_wksp) /* Explicitly allowed */) {
-				wNETWMShowingDesktop(scr, False);
+				wNETWMShowingDesktop(wwin->screen_ptr, False);
 				wMakeWindowVisible(wwin);
 		}
 		return True;
@@ -1759,8 +1789,30 @@ Bool wNETWMProcessClientMessage(XClientMessageEvent *event)
 			wWindowChangeWorkspace(wwin, desktop);
 		}
 		return True;
-	}
 
+#ifdef USE_XINERAMA
+	} else if (event->message_type == net_wm_fullscreen_monitors) {
+		unsigned long top, bottom, left, right, src_indication;
+
+		top = event->data.l[0];
+		bottom = event->data.l[1];
+		left = event->data.l[2];
+		right = event->data.l[3];
+		src_indication = event->data.l[4];
+
+		if (src_indication > 1)
+			wwarning("_NET_WM_FULLSCREEN_MONITORS source indication %ld not supported", src_indication);
+
+		wFullscreenMonitorsWindow(wwin, top, bottom, left, right);
+		return True;
+	}
+#else
+	}
+#endif
+
+#ifdef DEBUG_WMSPEC
+	wmessage("processClientMessage unsupported type %s", XGetAtomName(dpy, event->message_type));
+#endif
 	return False;
 }
 

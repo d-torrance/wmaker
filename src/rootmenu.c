@@ -142,66 +142,17 @@ static Shortcut *shortcutList = NULL;
  *
  */
 
-#define M_QUICK		1
-
 /* menu commands */
 
 static void execCommand(WMenu * menu, WMenuEntry * entry)
 {
-	char *cmdline;
-
-	cmdline = ExpandOptions(menu->frame->screen_ptr, (char *)entry->clientdata);
-
-	XGrabPointer(dpy, menu->frame->screen_ptr->root_win, True, 0,
-		     GrabModeAsync, GrabModeAsync, None, wPreferences.cursor[WCUR_WAIT], CurrentTime);
-	XSync(dpy, 0);
-
-	if (cmdline) {
-		ExecuteShellCommand(menu->frame->screen_ptr, cmdline);
-		wfree(cmdline);
-	}
-	XUngrabPointer(dpy, CurrentTime);
-	XSync(dpy, 0);
+	ExecuteInputCommand(menu->frame->screen_ptr, (char *)entry->clientdata);
 }
 
 static void exitCommand(WMenu * menu, WMenuEntry * entry)
 {
-	static int inside = 0;
-	int result;
+	ExecuteExitCommand(menu->frame->screen_ptr, (long)entry->clientdata);
 
-	/* prevent reentrant calls */
-	if (inside)
-		return;
-	inside = 1;
-
-#define R_CANCEL 0
-#define R_EXIT   1
-
-	result = R_CANCEL;
-
-	if ((long)entry->clientdata == M_QUICK) {
-		result = R_EXIT;
-	} else {
-		int r, oldSaveSessionFlag;
-
-		oldSaveSessionFlag = wPreferences.save_session_on_exit;
-		r = wExitDialog(menu->frame->screen_ptr, _("Exit"),
-				_("Exit window manager?"), _("Exit"), _("Cancel"), NULL);
-
-		if (r == WAPRDefault) {
-			result = R_EXIT;
-		} else if (r == WAPRAlternate) {
-			/* Don't modify the "save session on exit" flag if the
-			 * user canceled the operation. */
-			wPreferences.save_session_on_exit = oldSaveSessionFlag;
-		}
-	}
-	if (result == R_EXIT)
-		Shutdown(WSExitMode);
-
-#undef R_EXIT
-#undef R_CANCEL
-	inside = 0;
 }
 
 static void shutdownCommand(WMenu * menu, WMenuEntry * entry)
@@ -1087,8 +1038,6 @@ static WMenu *readMenu(WScreen *scr, const char *flat_file, FILE *file)
 			freeline(title, command, params, shortcut);
 			break;
 		}
-
-		freeline(title, command, params, shortcut);
 	}
 
 	WMenuParserDelete(parser);

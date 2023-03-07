@@ -1764,7 +1764,7 @@ static void menuMouseDown(WObjDescriptor * desc, XEvent * event)
 		goto byebye;
 	}
 	entry_no = getEntryAt(menu, x, y);
-	if (entry_no >= 0) {
+	if ((entry_no >= 0) && (entry_no < menu->entry_no)) {
 		entry = menu->entries[entry_no];
 
 		if (!close_on_exit && (bev->state & ControlMask) && smenu && entry->flags.editable) {
@@ -1940,7 +1940,7 @@ static void menuMouseDown(WObjDescriptor * desc, XEvent * event)
 
 			if (!delayed_select) {
 				entry_no = getEntryAt(menu, x, y);
-				if (entry_no >= 0) {
+				if ((entry_no >= 0) && (entry_no < menu->entry_no)) {
 					entry = menu->entries[entry_no];
 					if (entry->flags.enabled && entry->cascade >= 0 && menu->cascades) {
 						WMenu *submenu = menu->cascades[entry->cascade];
@@ -2440,7 +2440,7 @@ static int restoreMenu(WScreen *scr, WMPropList *menu)
 static int restoreMenuRecurs(WScreen *scr, WMPropList *menus, WMenu *menu, const char *path)
 {
 	WMPropList *key, *entry;
-	char buffer[512];
+	char buffer[1024];
 	int i, x, y, res;
 	Bool lowered;
 

@@ -1852,21 +1852,14 @@ static void handleKeyPress(XEvent * event)
 
 	case WKBD_RUN:
 	{
-		char *cmdline;
+		ExecuteInputCommand(scr, _("exec %A(Run, Type command:)"));
+		break;
+	}
 
-		cmdline = ExpandOptions(scr, _("exec %A(Run,Type command to run:)"));
-
-		if (cmdline) {
-			XGrabPointer(dpy, scr->root_win, True, 0,
-			     GrabModeAsync, GrabModeAsync, None, wPreferences.cursor[WCUR_WAIT], CurrentTime);
-			XSync(dpy, False);
-
-			ExecuteShellCommand(scr, cmdline);
-			wfree(cmdline);
-
-			XUngrabPointer(dpy, CurrentTime);
-			XSync(dpy, False);
-		}
+	case WKBD_EXIT:
+	{
+		/* quick mode is not allowed to prevent inadvertently call */
+		ExecuteExitCommand(scr, 0);
 		break;
 	}
 
