@@ -99,7 +99,7 @@ Depends: libc6-dev,
          libjpeg-dev,
          libpng-dev,
          libtiff5-dev,
-         libwraster6 (= ${binary:Version}),
+         libwraster7 (= ${binary:Version}),
          libx11-dev,
          libxext-dev,
          libxpm-dev,
@@ -114,7 +114,7 @@ Description: Static libraries and headers of Window Maker rasterizer
  Contains libwraster and header files, for manipulating and
  rasterizing images.
 
-Package: libwraster6
+Package: libwraster7
 Architecture: any
 Multi-Arch: same
 Section: libs
