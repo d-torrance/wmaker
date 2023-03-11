@@ -1,3 +1,12 @@
+wmaker (0.95.9+20230311-0ppa1) lunar; urgency=medium
+
+  * debian/rules
+    - Use master branch for date for version number.
+  * debian/libwraster*
+    - Bump libwraster library version from 6 -> 7
+
+ -- Doug Torrance <dtorrance@debian.org>  Sat, 11 Mar 2023 10:09:52 -0500
+
 wmaker (0.95.9+20230305-0ppa1) lunar; urgency=medium
 
   * debian/libw{ings3,util5}.symbols
