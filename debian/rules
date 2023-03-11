@@ -78,7 +78,7 @@ get-orig-source:
 	@grep -Po \
 		'(?<=AC_INIT\(\[WindowMaker\],\[).*(?=\],\[wmaker-dev)' \
 		configure.ac > version
-	@echo `date -d @\`git log -1 --pretty=format:%ct next\` +%Y%m%d` > date
+	@echo `date -d @\`git log -1 --pretty=format:%ct master\` +%Y%m%d` > date
 	@mv -v WindowMaker-`cat version`.tar.gz \
 		../wmaker_`cat version`+`cat date`.orig.tar.gz
 	@rm date version
