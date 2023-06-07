@@ -84,11 +84,12 @@ static struct keyOption {
 	{ "RHMaximizeKey",  N_("Maximize active window right half") },
 	{ "THMaximizeKey",  N_("Maximize active window top half") },
 	{ "BHMaximizeKey",  N_("Maximize active window bottom half") },
-	{ "LTCMaximizeKey", N_("Maximize active window left top corner") },
-	{ "RTCMaximizeKey", N_("Maximize active window right top corner") },
-	{ "LBCMaximizeKey", N_("Maximize active window left bottom corner") },
-	{ "RBCMaximizeKey", N_("Maximize active window right bottom corner") },
-	{ "MaximusKey",     N_("Maximus: Tiled maximization ") },
+	{ "TLCMaximizeKey", N_("Maximize active window top left corner") },
+	{ "TRCMaximizeKey", N_("Maximize active window top right corner") },
+	{ "BLCMaximizeKey", N_("Maximize active window bottom left corner") },
+	{ "BRCMaximizeKey", N_("Maximize active window bottom right corner") },
+	{ "MaximusKey",     N_("Tile active window") },
+	{ "CenterKey",      N_("Center active window") },
 	{ "KeepOnTopKey",   N_("Toggle window on top status") },
 	{ "KeepAtBottomKey",N_("Toggle window at bottom status") },
 	{ "OmnipresentKey", N_("Toggle window omnipresent status") },
@@ -154,7 +155,7 @@ static struct keyOption {
 
 	/* Misc. */
 	{ "WindowRelaunchKey", N_("Launch new instance of application") },
-	{ "ScreenSwitchKey",   N_("Switch to Next Screen/Monitor") },
+	{ "ScreenSwitchKey",   N_("Switch to next screen/monitor") },
 	{ "RunKey",            N_("Run application") },
 	{ "ExitKey",            N_("Exit Window Maker") },
 	{ "DockRaiseLowerKey", N_("Raise/Lower Dock") },
@@ -550,7 +551,7 @@ static int cmpKeyOptions(const void *v1, const void *v2)
 	const struct keyOption *opt1 = (struct keyOption *)v1;
 	const struct keyOption *opt2 = (struct keyOption *)v2;
 
-	if ((rc = strcmp(opt1->title, opt2->title)) < 0)
+	if ((rc = strncmp(opt1->title, opt2->title, 20)) < 0)
 		return -1;
 	else if (rc > 0)
 		return 1;

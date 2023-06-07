@@ -3,6 +3,7 @@
  *  Window Maker window manager
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
+ *  Copyright (c) 2008-2023 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1900,25 +1901,20 @@ void wWindowConstrainSize(WWindow *wwin, unsigned int *nwidth, unsigned int *nhe
 	int baseW = 0;
 	int baseH = 0;
 
-	/*
-	 * X11 proto defines width and height as a CARD16
-	 * if window size is guaranteed to fail, failsafe to a reasonable size
-	 */
-	if (width > USHRT_MAX && height > USHRT_MAX) {
-		width = 640;
-		height = 480;
-		return;
-	}
-
 	if (wwin->normal_hints) {
 		if (!wwin->flags.maximized) {
 			winc = wwin->normal_hints->width_inc;
 			hinc = wwin->normal_hints->height_inc;
 		}
-		minW = wwin->normal_hints->min_width;
-		minH = wwin->normal_hints->min_height;
-		maxW = wwin->normal_hints->max_width;
-		maxH = wwin->normal_hints->max_height;
+		if (wwin->normal_hints->min_width > minW)
+			minW = wwin->normal_hints->min_width;
+		if (wwin->normal_hints->min_height > minH)
+			minH = wwin->normal_hints->min_height;
+		if (wwin->normal_hints->max_width < maxW)
+			maxW = wwin->normal_hints->max_width;
+		if (wwin->normal_hints->max_height < maxH)
+			maxH = wwin->normal_hints->max_height;
+
 		if (wwin->normal_hints->flags & PAspect) {
 			minAX = wwin->normal_hints->min_aspect.x;
 			minAY = wwin->normal_hints->min_aspect.y;
@@ -1937,11 +1933,14 @@ void wWindowConstrainSize(WWindow *wwin, unsigned int *nwidth, unsigned int *nhe
 		height = minH;
 
 	/* if only one dimension is over the top, set a default 4/3 ratio */
-	if (width > maxW && height < maxH) {
+	if (width > maxW && height < maxH)
 		width = height * 4 / 3;
-	} else {
-		if(height > maxH && width < maxW)
-			height = width * 3 / 4;
+	else if(height > maxH && width < maxW)
+		height = width * 3 / 4;
+	else if(width > maxW && height > maxH) {
+		/* if both are over the top, set size to almost fullscreen */
+		height = wwin->screen_ptr->scr_height - 2 * wPreferences.icon_size;
+		width = wwin->screen_ptr->scr_width - 2 * wPreferences.icon_size;
 	}
 
 	/* aspect ratio code borrowed from olwm */
@@ -2149,12 +2148,6 @@ void wWindowConfigure(WWindow *wwin, int req_x, int req_y, int req_width, int re
 	int resize;
 
 	resize = (req_width != wwin->client.width || req_height != wwin->client.height);
-	/*
-	 * if the window is being moved but not resized then
-	 * send a synthetic ConfigureNotify
-	 */
-	if ((req_x != wwin->frame_x || req_y != wwin->frame_y) && !resize)
-		synth_notify = True;
 
 	if (WFLAGP(wwin, dont_move_off))
 		wScreenBringInside(wwin->screen_ptr, &req_x, &req_y, req_width, req_height);
@@ -2191,10 +2184,17 @@ void wWindowConfigure(WWindow *wwin, int req_x, int req_y, int req_width, int re
 		wwin->client.width = req_width;
 		wwin->client.height = req_height;
 	} else {
-		wwin->client.x = req_x;
-		wwin->client.y = req_y + wwin->frame->top_width;
-
-		XMoveWindow(dpy, wwin->frame->core->window, req_x, req_y);
+		if (req_x != wwin->frame_x || req_y != wwin->frame_y) {
+			wwin->client.x = req_x;
+			wwin->client.y = req_y + wwin->frame->top_width;
+			XMoveWindow(dpy, wwin->frame->core->window, req_x, req_y);
+		}
+		/*
+		 * if the window is being moved but not resized
+		 * or if we change nothing then
+		 * send a synthetic ConfigureNotify
+		 */
+		synth_notify = True;
 	}
 	wwin->frame_x = req_x;
 	wwin->frame_y = req_y;
@@ -2913,17 +2913,18 @@ static void titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event)
 			} 
 		}
 		
-		if (wPreferences.double_click_fullscreen){
+		if (wPreferences.double_click_fullscreen) {
 			int dir = 0;
+
 			if (event->xbutton.state == 0) {
 				/* maximize window full screen*/
 				dir |= (MAX_VERTICAL|MAX_HORIZONTAL);
 				int ndir = dir ^ wwin->flags.maximized;
+				if (ndir != 0)
 					wMaximizeWindow(wwin, ndir, wGetHeadForWindow(wwin));
-			
-			} 
-
-					
+				else
+					wUnmaximizeWindow(wwin);
+			}
 		} else {
 			int dir = 0;
 

@@ -1,7 +1,7 @@
 /*
  *  Window Maker window manager
  *
- *  Copyright (c) 2014 Window Maker Team - David Maciejak
+ *  Copyright (c) 2014-2023 Window Maker Team - David Maciejak
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -63,8 +63,6 @@ RImage *img;
 Pixmap pix;
 
 const char *APPNAME = "wmiv";
-int APPVERSION_MAJOR = 0;
-int APPVERSION_MINOR = 7;
 int NEXT = 0;
 int PREV = 1;
 float zoom_factor = 0;
@@ -740,7 +738,7 @@ int main(int argc, char **argv)
 			argv[0]);
 			return EXIT_SUCCESS;
 		case 'v':
-			fprintf(stderr, "%s version %d.%d\n", APPNAME, APPVERSION_MAJOR, APPVERSION_MINOR);
+			printf("%s version %s\n", APPNAME, VERSION);
 			return EXIT_SUCCESS;
 		case '?':
 			return EXIT_FAILURE;

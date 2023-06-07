@@ -2,7 +2,7 @@ dnl ============================================================================
 dnl
 dnl Window Maker autoconf input
 dnl
-AC_COPYRIGHT([Copyright (c) 2001-2015 The Window Maker Team])
+AC_COPYRIGHT([Copyright (c) 2001-2023 The Window Maker Team])
 dnl
 dnl ============================================================================
 dnl
@@ -455,7 +455,6 @@ AC_CHECK_HEADERS([syslog.h], [AC_DEFINE([HAVE_SYSLOG], [1], [Check for syslog])]
 dnl Checks for header files
 dnl =======================
 AC_HEADER_SYS_WAIT
-AC_HEADER_TIME
 AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h libintl.h poll.h malloc.h ctype.h \
 		 string.h strings.h)
 

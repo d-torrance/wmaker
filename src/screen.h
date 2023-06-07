@@ -214,6 +214,19 @@ typedef struct _WScreen {
     struct WPixmap *menu_mini_indicator;   /* for miniwindow */
     struct WPixmap *menu_hide_indicator;   /* for hidden window */
     struct WPixmap *menu_shade_indicator;  /* for shaded window */
+    struct WPixmap *menu_snap_vertical_indicator;  /* for vertical snap window */
+    struct WPixmap *menu_snap_horizontal_indicator;  /* for horizontal snap window */
+    struct WPixmap *menu_snap_rh_indicator;  /* for righ half snap window */
+    struct WPixmap *menu_snap_lh_indicator;  /* for left half snap window */
+    struct WPixmap *menu_snap_th_indicator;  /* for top half snap window */
+    struct WPixmap *menu_snap_bh_indicator;  /* for bottom half snap window */
+    struct WPixmap *menu_snap_tl_indicator;  /* for top left snap window */
+    struct WPixmap *menu_snap_tr_indicator;  /* for top rigt snap window */
+    struct WPixmap *menu_snap_bl_indicator;  /* for bottom left snap window */
+    struct WPixmap *menu_snap_br_indicator;  /* for bottom right snap window */
+    struct WPixmap *menu_snap_tiled_indicator;  /* for tiled window */
+    struct WPixmap *menu_central_indicator;  /* for central window */
+
     int app_menu_x, app_menu_y;	       /* position for application menus */
 
     struct WMenu *root_menu;	       /* root window menu */
@@ -283,6 +296,8 @@ typedef struct _WScreen {
     WMHandlerID *autoRaiseTimer;
     Window autoRaiseWindow;	       /* window that is scheduled to be
                                         * raised */
+    /* for hot-corners delay */
+    WMHandlerID *hot_corner_timer;
 
     /* for window shortcuts */
     WMArray *shortcutWindows[MAX_WINDOW_SHORTCUTS];
@@ -311,6 +326,7 @@ typedef struct _WScreen {
         unsigned int doing_alt_tab:1;
         unsigned int jump_back_pending:1;
         unsigned int ignore_focus_events:1;
+        unsigned int in_hot_corner:3;
     } flags;
 } WScreen;
 

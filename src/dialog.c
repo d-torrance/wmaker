@@ -4,7 +4,7 @@
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
  *  Copyright (c) 1998-2003 Dan Pascu
- *  Copyright (c) 2014 Window Maker Team
+ *  Copyright (c) 2014-2023 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -1382,6 +1382,10 @@ void wShowInfoPanel(WScreen *scr)
 	case 24:
 	case 32:
 		strbuf = wstrappend(strbuf, _("(16 million colors)\n"));
+		break;
+	case 30:
+	case 40:
+		strbuf = wstrappend(strbuf, _("(1 billion colors)\n"));
 		break;
 	default:
 		snprintf(buffer, sizeof(buffer), _("(%d colors)\n"), 1 << scr->w_depth);
