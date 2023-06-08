@@ -1,3 +1,10 @@
+wmaker (0.95.9+20230414-0ppa2) mantic; urgency=medium
+
+  * debian/libwraster6.symbols
+    - Use LIBWRASTER7.
+
+ -- Doug Torrance <dtorrance@debian.org>  Wed, 07 Jun 2023 21:46:04 -0400
+
 wmaker (0.95.9+20230414-0ppa1) mantic; urgency=medium
 
   * debian/libwraster*
