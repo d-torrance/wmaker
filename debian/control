@@ -119,6 +119,8 @@ Architecture: any
 Multi-Arch: same
 Section: libs
 Depends: ${misc:Depends}, ${shlibs:Depends}
+Breaks: libwraster7
+Replaces: libwraster7
 Description: Shared libraries of Window Maker rasterizer
  This library is used to manipulate images and convert them to
  a format that can be displayed through the X window system.
