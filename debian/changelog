@@ -1,3 +1,10 @@
+wmaker (0.95.9+20230414-0ppa3) mantic; urgency=medium
+
+  * debian/control
+    - Add Breaks/Replaces libwraster7 to libwraster6.
+
+ -- Doug Torrance <dtorrance@debian.org>  Wed, 14 Jun 2023 23:21:07 -0400
+
 wmaker (0.95.9+20230414-0ppa2) mantic; urgency=medium
 
   * debian/libwraster6.symbols
