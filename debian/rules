@@ -22,12 +22,12 @@ SHAREDIR          := $(BASEDIR)/share
 GNUSTEPDIR        := $(SHAREDIR)/GNUstep/System
 WMSHAREDIR        := $(SHAREDIR)/WindowMaker
 PIXMAPDIR         := $(INCLUDEDIR)/X11/pixmaps
-DEFSDATADIR       := /etc/GNUstep/Defaults
+PKGCONFDIR        := /etc/GNUstep/Defaults
 
 COMMON_OPTIONS    := --datadir=$(SHAREDIR)            \
                      --with-pixmapdir=$(PIXMAPDIR)    \
                      --with-gnustepdir=$(GNUSTEPDIR)  \
-                     --with-defsdatadir=$(DEFSDATADIR)
+                     --with-pkgconfdir=$(PKGCONFDIR)
 
 %:
 	dh $@
