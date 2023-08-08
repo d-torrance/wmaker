@@ -24,6 +24,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include <errno.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
@@ -54,10 +58,12 @@
 #include "geomview.h"
 #include "wmspec.h"
 #include "rootmenu.h"
+#include "misc.h"
 
 #include "xinerama.h"
 
 #include <WINGs/WUtil.h>
+#include <WINGs/WINGsP.h>
 
 #include "defaults.h"
 
@@ -313,14 +319,34 @@ static void allocButtonPixmaps(WScreen * scr)
 	scr->b_pixmaps[WBUT_KILL] = pix;
 }
 
+static int get_dot_mult(void)
+{
+    int dot_mult;
+    
+    /*
+     * Since it's an int, the multiplier will grow only when
+     * a certain icon size is reached (1 for 64, 2 for 128,
+     * 3 for 192, and so on).
+     */
+    dot_mult = wPreferences.icon_size / 64;
+
+    if (dot_mult < 1)
+        dot_mult = 1;
+    
+    return dot_mult;
+}
+
 static void draw_dot(WScreen * scr, Drawable d, int x, int y, GC gc)
 {
+    int dot_mult;
+
+    dot_mult = get_dot_mult();
 	XSetForeground(dpy, gc, scr->black_pixel);
-	XDrawLine(dpy, d, gc, x, y, x + 1, y);
-	XDrawPoint(dpy, d, gc, x, y + 1);
+	XFillRectangle(dpy, d, gc, x, y, x + (2 * dot_mult), y + (1 * dot_mult));
+	XFillRectangle(dpy, d, gc, x, y + (1 * dot_mult), x + (1 * dot_mult), y + (2 * dot_mult));
 	XSetForeground(dpy, gc, scr->white_pixel);
-	XDrawLine(dpy, d, gc, x + 2, y, x + 2, y + 1);
-	XDrawPoint(dpy, d, gc, x + 1, y + 1);
+	XFillRectangle(dpy, d, gc, x + (2 * dot_mult), y, x + (3 * dot_mult), y + (2 * dot_mult));
+	XFillRectangle(dpy, d, gc, x + (1 * dot_mult), y + (1 * dot_mult), x + (2 * dot_mult), y + (2 * dot_mult));
 }
 
 static WPixmap *make3Dots(WScreen * scr)
@@ -329,15 +355,17 @@ static WPixmap *make3Dots(WScreen * scr)
 	GC gc2, gc;
 	XGCValues gcv;
 	Pixmap pix, mask;
+    int dot_mult;
 
+    dot_mult = get_dot_mult();
 	gc = scr->copy_gc;
 	pix = XCreatePixmap(dpy, scr->w_win, wPreferences.icon_size, wPreferences.icon_size, scr->w_depth);
 	XSetForeground(dpy, gc, scr->black_pixel);
 	XFillRectangle(dpy, pix, gc, 0, 0, wPreferences.icon_size, wPreferences.icon_size);
 	XSetForeground(dpy, gc, scr->white_pixel);
-	draw_dot(scr, pix, 4, wPreferences.icon_size - 6, gc);
-	draw_dot(scr, pix, 9, wPreferences.icon_size - 6, gc);
-	draw_dot(scr, pix, 14, wPreferences.icon_size - 6, gc);
+	draw_dot(scr, pix, 4 * dot_mult, wPreferences.icon_size - (6 * dot_mult), gc);
+	draw_dot(scr, pix, 9 * dot_mult, wPreferences.icon_size - (6 * dot_mult), gc);
+	draw_dot(scr, pix, 14 * dot_mult, wPreferences.icon_size - (6 * dot_mult), gc);
 
 	mask = XCreatePixmap(dpy, scr->w_win, wPreferences.icon_size, wPreferences.icon_size, 1);
 	gcv.foreground = 0;
@@ -345,9 +373,9 @@ static WPixmap *make3Dots(WScreen * scr)
 	gc2 = XCreateGC(dpy, mask, GCForeground | GCGraphicsExposures, &gcv);
 	XFillRectangle(dpy, mask, gc2, 0, 0, wPreferences.icon_size, wPreferences.icon_size);
 	XSetForeground(dpy, gc2, 1);
-	XFillRectangle(dpy, mask, gc2, 4, wPreferences.icon_size - 6, 3, 2);
-	XFillRectangle(dpy, mask, gc2, 9, wPreferences.icon_size - 6, 3, 2);
-	XFillRectangle(dpy, mask, gc2, 14, wPreferences.icon_size - 6, 3, 2);
+	XFillRectangle(dpy, mask, gc2, 4 * dot_mult, wPreferences.icon_size - (6 * dot_mult), 3 * dot_mult, 2 * dot_mult);
+	XFillRectangle(dpy, mask, gc2, 9 * dot_mult, wPreferences.icon_size - (6 * dot_mult), 3 * dot_mult, 2 * dot_mult);
+	XFillRectangle(dpy, mask, gc2, 14 * dot_mult, wPreferences.icon_size - (6 * dot_mult), 3 * dot_mult, 2 * dot_mult);
 
 	XFreeGC(dpy, gc2);
 
@@ -456,45 +484,34 @@ static void createPixmaps(WScreen * scr)
 	WPixmap *pix;
 
 	/* load pixmaps */
-	pix = wPixmapCreateFromXBMData(scr, (char *)MENU_RADIO_INDICATOR_XBM_DATA,
-				       (char *)MENU_RADIO_INDICATOR_XBM_DATA,
-				       MENU_RADIO_INDICATOR_XBM_SIZE,
-				       MENU_RADIO_INDICATOR_XBM_SIZE, scr->black_pixel, scr->white_pixel);
-	if (pix != NULL)
-		pix->shared = 1;
-	scr->menu_radio_indicator = pix;
+#define LOADPIXMAPINDICATOR(XBM,W,I) {\
+	pix = wPixmapCreateFromXBMData(scr, (char *)XBM, (char *)XBM,\
+					W, MENU_SNAP_INDICATOR_H_XBM_SIZE,\
+					scr->black_pixel, scr->white_pixel);\
+	if (pix != NULL)\
+		pix->shared = 1;\
+	scr->I = pix;}
 
-	pix = wPixmapCreateFromXBMData(scr, (char *)MENU_CHECK_INDICATOR_XBM_DATA,
-				       (char *)MENU_CHECK_INDICATOR_XBM_DATA,
-				       MENU_CHECK_INDICATOR_XBM_SIZE,
-				       MENU_CHECK_INDICATOR_XBM_SIZE, scr->black_pixel, scr->white_pixel);
-	if (pix != NULL)
-		pix->shared = 1;
-	scr->menu_check_indicator = pix;
+	LOADPIXMAPINDICATOR(MENU_RADIO_INDICATOR_XBM_DATA, MENU_RADIO_INDICATOR_XBM_SIZE, menu_radio_indicator)
+	LOADPIXMAPINDICATOR(MENU_CHECK_INDICATOR_XBM_DATA, MENU_CHECK_INDICATOR_XBM_SIZE, menu_check_indicator)
+	LOADPIXMAPINDICATOR(MENU_MINI_INDICATOR_XBM_DATA, MENU_MINI_INDICATOR_XBM_SIZE, menu_mini_indicator)
+	LOADPIXMAPINDICATOR(MENU_HIDE_INDICATOR_XBM_DATA, MENU_HIDE_INDICATOR_XBM_SIZE, menu_hide_indicator)
+	LOADPIXMAPINDICATOR(MENU_SHADE_INDICATOR_XBM_DATA, MENU_SHADE_INDICATOR_XBM_SIZE, menu_shade_indicator)
 
-	pix = wPixmapCreateFromXBMData(scr, (char *)MENU_MINI_INDICATOR_XBM_DATA,
-				       (char *)MENU_MINI_INDICATOR_XBM_DATA,
-				       MENU_MINI_INDICATOR_XBM_SIZE,
-				       MENU_MINI_INDICATOR_XBM_SIZE, scr->black_pixel, scr->white_pixel);
-	if (pix != NULL)
-		pix->shared = 1;
-	scr->menu_mini_indicator = pix;
+	LOADPIXMAPINDICATOR(MENU_SNAP_V_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_vertical_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_H_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_horizontal_indicator)
+	LOADPIXMAPINDICATOR(MENU_CENTRAL_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_central_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_RH_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_rh_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_LH_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_lh_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_TH_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_th_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_BH_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_bh_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_TL_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_tl_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_TR_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_tr_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_BL_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_bl_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_BR_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_br_indicator)
+	LOADPIXMAPINDICATOR(MENU_SNAP_TILED_INDICATOR_XBM_DATA, MENU_SNAP_INDICATOR_W_XBM_SIZE, menu_snap_tiled_indicator)
 
-	pix = wPixmapCreateFromXBMData(scr, (char *)MENU_HIDE_INDICATOR_XBM_DATA,
-				       (char *)MENU_HIDE_INDICATOR_XBM_DATA,
-				       MENU_HIDE_INDICATOR_XBM_SIZE,
-				       MENU_HIDE_INDICATOR_XBM_SIZE, scr->black_pixel, scr->white_pixel);
-	if (pix != NULL)
-		pix->shared = 1;
-	scr->menu_hide_indicator = pix;
-
-	pix = wPixmapCreateFromXBMData(scr, (char *)MENU_SHADE_INDICATOR_XBM_DATA,
-				       (char *)MENU_SHADE_INDICATOR_XBM_DATA,
-				       MENU_SHADE_INDICATOR_XBM_SIZE,
-				       MENU_SHADE_INDICATOR_XBM_SIZE, scr->black_pixel, scr->white_pixel);
-	if (pix != NULL)
-		pix->shared = 1;
-	scr->menu_shade_indicator = pix;
+#undef LOADPIXMAPINDICATOR
 
 	create_logo_image(scr);
 
@@ -571,6 +588,7 @@ static void createInternalWindows(WScreen * scr)
 	scr->workspace_name =
 	    XCreateWindow(dpy, scr->root_win, 0, 0, 10, 10, 0, scr->w_depth,
 			  CopyFromParent, scr->w_visual, vmask, &attribs);
+	scr->mini_screenshot_timeout = 0;
 }
 
 /*
@@ -595,7 +613,7 @@ WScreen *wScreenInit(int screen_number)
 {
 	WScreen *scr;
 	XIconSize icon_size[1];
-	RContextAttributes rattr;
+	RContextAttributes rattr = {};
 	long event_mask;
 	XErrorHandler oldHandler;
 	int i;
@@ -907,7 +925,7 @@ void wScreenRestoreState(WScreen * scr)
 		state = WMGetFromPLDictionary(scr->session_state, dClip);
 		scr->clip_icon = wClipRestoreState(scr, state);
 	}
-	
+
 	if (!wPreferences.flags.nodrawer) {
 		if (!scr->dock->on_right_side) {
 			/* Drawer tile was created early in wScreenInit() -> wReadDefaults(). At
@@ -1103,4 +1121,247 @@ int wScreenKeepInside(WScreen * scr, int *x, int *y, int width, int height)
 		*y = sy2 - height, moved = 1;
 
 	return moved;
+}
+
+static XImage *imageCaptureArea(WScreen *scr)
+{
+	XEvent event;
+	int quit = 0;
+	int xp = -1;
+	int yp = -1;
+	int w = 0, h = 0;
+	int x = xp, y = yp;
+
+	if (XGrabPointer(dpy, scr->root_win, False, ButtonMotionMask
+			| ButtonReleaseMask | ButtonPressMask, GrabModeAsync,
+			GrabModeAsync, None, wPreferences.cursor[WCUR_CAPTURE], CurrentTime) != Success) {
+		return NULL;
+	}
+
+	XGrabServer(dpy);
+
+	while (!quit) {
+		WMMaskEvent(dpy, ButtonReleaseMask | PointerMotionMask | ButtonPressMask | KeyPressMask, &event);
+
+		switch (event.type) {
+		case ButtonPress:
+			if (event.xbutton.button == Button1) {
+				xp = event.xbutton.x_root;
+				yp = event.xbutton.y_root;
+			}
+			break;
+		case ButtonRelease:
+			if (event.xbutton.button == Button1) {
+				quit = 1;
+				if (w > 0 && h > 0) {
+					XDrawRectangle(dpy, scr->root_win, scr->frame_gc, x, y, w, h);
+					XUngrabServer(dpy);
+					XUngrabPointer(dpy, CurrentTime);
+					return XGetImage(dpy, scr->root_win, x, y, w, h, AllPlanes, ZPixmap);
+				}
+			}
+			break;
+		case MotionNotify:
+			XDrawRectangle(dpy, scr->root_win, scr->frame_gc, x, y, w, h);
+			x = event.xmotion.x_root;
+                        if (x < xp) {
+                                w = xp - x;
+                        } else {
+                                w = x - xp;
+                                x = xp;
+                        }
+                        y = event.xmotion.y_root;
+                        if (y < yp) {
+                                h = yp - y;
+                        } else {
+                                h = y - yp;
+                                y = yp;
+                        }
+			XDrawRectangle(dpy, scr->root_win, scr->frame_gc, x, y, w, h);
+			break;
+		case KeyPress:
+			if (W_KeycodeToKeysym(dpy, event.xkey.keycode, 0) == XK_Escape)
+				quit = 1;
+			break;
+		default:
+			WMHandleEvent(&event);
+			break;
+		}
+	}
+
+	XUngrabServer(dpy);
+	XUngrabPointer(dpy, CurrentTime);
+	return NULL;
+}
+
+static void hideMiniScreenshot(void *data)
+{
+	WScreen *scr = (WScreen *) data;
+
+	if (time(NULL) < scr->mini_screenshot_timeout) {
+		scr->mini_screenshot_timer = WMAddTimerHandler(WORKSPACE_NAME_FADE_DELAY, hideMiniScreenshot, scr);
+	} else {
+		XWindowAttributes attr;
+
+		WMDeleteTimerHandler(scr->mini_screenshot_timer);
+		if (XGetWindowAttributes(dpy, scr->mini_screenshot, &attr))
+			slide_window(scr->mini_screenshot, attr.x, attr.y, attr.x + attr.width, attr.y);
+		XUnmapWindow(dpy, scr->mini_screenshot);
+		XDestroyWindow(dpy, scr->mini_screenshot);
+		scr->mini_screenshot_timeout = 0;
+	}
+}
+
+static void showMiniScreenshot(WScreen *scr, RImage *img)
+{
+	Pixmap pix;
+	int x = scr->scr_width - img->width - 20;
+	int y = scr->scr_height - img->height - 20;
+
+	if (!scr->mini_screenshot_timeout) {
+		Window win;
+
+		win = XCreateSimpleWindow(dpy, scr->root_win, x, y,
+			img->width, img->height, scr->frame_border_width, 0, 0);
+		scr->mini_screenshot = win;
+	}
+	RConvertImage(scr->rcontext, img, &pix);
+	XMapWindow(dpy, scr->mini_screenshot);
+	XCopyArea(dpy, pix, scr->mini_screenshot, scr->rcontext->copy_gc, 0, 0, img->width, img->height, 0, 0);
+	XFlush(dpy);
+
+	scr->mini_screenshot_timeout = time(NULL) + 2;
+	scr->mini_screenshot_timer = WMAddTimerHandler(WORKSPACE_NAME_FADE_DELAY, hideMiniScreenshot, scr);
+}
+
+void ScreenCapture(WScreen *scr, int mode)
+{
+	time_t s;
+	short i = 0;
+	struct tm *tm_info;
+	char index_str[12] = "";
+	char filename_date_part[60];
+	char filename[60];
+	char *filepath;
+	char *screenshot_dir;
+	RImage *img = NULL;
+	RImage *scale_img = NULL;
+
+#ifdef USE_PNG
+	char *filetype = ".png";
+#else
+#ifdef USE_JPEG
+	char *filetype = ".jpg";
+#else
+	char *filetype = NULL;
+#endif
+#endif
+
+	if (!filetype) {
+		werror(_("Unable to find a proper screenshot image format"));
+		return;
+	}
+
+	screenshot_dir = wstrconcat(wusergnusteppath(), "/Library/WindowMaker/Screenshots/");
+	if (-1 == mkdir(screenshot_dir, 0700) && errno != EEXIST) {
+		wfree(screenshot_dir);
+		werror(_("Unable to create screenshot directory: %s"), strerror(errno));
+		return;
+	}
+
+	s = time(NULL);
+	tm_info = localtime(&s);
+	strftime(filename_date_part, sizeof(filename_date_part), "screenshot_%Y-%m-%d_at_%H:%M:%S", tm_info);
+	strcpy(filename, filename_date_part);
+
+	filepath = wstrconcat(screenshot_dir, strcat(filename, filetype));
+	while (access(filepath, F_OK) == 0 && i < 600) {
+		i++;
+		strcpy(filename, filename_date_part);
+		sprintf(index_str, "_%d", i);
+		strncat(filename, index_str, sizeof(filename) - strlen(filename) - 1);
+		wfree(filepath);
+		filepath = wstrconcat(screenshot_dir, strcat(filename, filetype));
+	}
+
+	/* cannot generate an available filename ?! */
+	if (i == 600) {
+		wfree(filepath);
+		wfree(screenshot_dir);
+		werror(_("Could not generate a free screenshot filename"));
+		return;
+	}
+
+	switch (mode) {
+		WWindow *wwin;
+		XImage *pimg;
+
+		case PRINT_WINDOW:
+			wwin = scr->focused_window;
+			if (wwin && !wwin->flags.shaded) {
+				/*
+				 * check if hint WM_TAKE_FOCUS is set, if it's the case
+				 * we can take screenshot of the out of screen window
+				 */
+				if (wwin->focus_mode >= WFM_LOCALLY_ACTIVE) {
+					img = RCreateImageFromDrawable(scr->rcontext, wwin->client_win, None);
+				}
+				else {
+					/* we will only capture the visible window part */
+					int x_crop = 0;
+					int y_crop = 0;
+					int w_crop = wwin->client.width;
+					int h_crop = wwin->client.height;
+
+					if (wwin->client.x > 0)
+						x_crop = wwin->client.x;
+					if (wwin->client.y > 0)
+						y_crop = wwin->client.y;
+
+					if (wwin->client.x + wwin->client.width > scr->scr_width)
+						w_crop = scr->scr_width - wwin->client.x;
+					if (wwin->client.y + wwin->client.height > scr->scr_height)
+						h_crop = scr->scr_height - wwin->client.y;
+
+					pimg = XGetImage(dpy, scr->root_win, x_crop, y_crop,
+							(wwin->client.x > 0)?w_crop:w_crop + wwin->client.x,
+							(wwin->client.y > 0)?h_crop:h_crop + wwin->client.y,
+							AllPlanes, ZPixmap);
+
+					if (pimg) {
+						img = RCreateImageFromXImage(scr->rcontext, pimg, None);
+						XDestroyImage(pimg);
+					}
+				}
+			}
+			break;
+		case PRINT_PARTIAL:
+			pimg = imageCaptureArea(scr);
+			if (pimg) {
+				img = RCreateImageFromXImage(scr->rcontext, pimg, None);
+				XDestroyImage(pimg);
+			}
+			break;
+		default:
+			/* PRINT_SCREEN*/
+			img = RCreateImageFromDrawable(scr->rcontext, scr->root_win, None);
+	}
+
+	if (img) {
+#ifdef USE_PNG
+		if (RSaveTitledImage(img, filepath, (char *)(filetype + 1), "Screenshot from Window Maker")) {
+#else
+		if (RSaveTitledImage(img, filepath, (char *)(filetype + 1), "Screenshot from Window Maker")) {
+#endif
+			scale_img = RSmoothScaleImage(img, scr->scr_width / 10, scr->scr_height / 10);
+			showMiniScreenshot(scr, scale_img);
+			RReleaseImage(scale_img);
+#ifdef DEBUG
+			wmessage("screenshot filepath: %s", filepath);
+#endif
+		}
+		RReleaseImage(img);
+	}
+	wfree(filepath);
+	wfree(screenshot_dir);
 }

@@ -2,7 +2,7 @@
  *
  *  Window Maker window manager
  *
- *  Copyright (c) 2014 Window Maker Team - David Maciejak
+ *  Copyright (c) 2014-2023 Window Maker Team - David Maciejak
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -256,7 +256,7 @@ static WMPixmap *dummy_background_pixmap(WWorkspaceMap *wsmap)
 	RImage *img;
 	WMPixmap *icon;
 
-	img = RCreateImage(wsmap->wswidth, wsmap->wsheight, 0);
+	img = RCreateImage(wsmap->mini_workspace_width, wsmap->mini_workspace_height, 0);
 
 	if (!img)
 		return NULL;
@@ -327,7 +327,7 @@ static void hide_mini_workspace(W_WorkspaceMap *wsmap_array, int i)
 static  WMPixmap *get_mini_workspace(WWorkspaceMap *wsmap, int index)
 {
 	if (!wsmap->scr->workspaces[index]->map)
-		return dummy_background_pixmap(wsmap);
+		return NULL;
 
 	if (index == wsmap->scr->current_workspace)
 		return enlight_workspace(wsmap->scr, wsmap->scr->workspaces[index]->map);
@@ -337,9 +337,9 @@ static  WMPixmap *get_mini_workspace(WWorkspaceMap *wsmap, int index)
 
 static void create_mini_workspace(WScreen *scr, WWorkspaceMap *wsmap, W_WorkspaceMap *wsmap_array)
 {
-	int workspace_index;
+	unsigned short workspace_index;
 	int mini_workspace_cnt;
-	char name[10];
+	char name[6];
 	WMButton *mini_workspace_btn;
 	WMPixmap *icon;
 
@@ -363,7 +363,7 @@ static void create_mini_workspace(WScreen *scr, WWorkspaceMap *wsmap, W_Workspac
 			WMReleasePixmap(icon);
 		}
 
-		snprintf(name, sizeof(name), "%d", workspace_index);
+		snprintf(name, sizeof(name), "%hu", workspace_index);
 		WMSetButtonText(mini_workspace_btn, name);
 		WMSetButtonAction(mini_workspace_btn, selected_workspace_callback, wsmap);
 	}
@@ -423,9 +423,9 @@ static WWorkspaceMap *create_workspace_map(WScreen *scr, W_WorkspaceMap *wsmap_a
 
 static void update_mini_workspace(WWorkspaceMap *wsmap, W_WorkspaceMap *wsmap_array, int bulk_of_ten)
 {
-	int local_index, general_index;
+	unsigned short local_index, general_index;
 	int mini_workspace_cnt;
-	char name[10];
+	char name[6];
 	WMPixmap *icon;
 
 	if (bulk_of_ten == wsmap_bulk_index)
@@ -448,7 +448,7 @@ static void update_mini_workspace(WWorkspaceMap *wsmap, W_WorkspaceMap *wsmap_ar
 		if (general_index < wsmap->scr->workspace_count) {
 			/* updating label */
 			WMSetLabelText(wsmap_array[local_index].workspace_label, wsmap->scr->workspaces[general_index]->name);
-			snprintf(name, sizeof(name), "%d", general_index);
+			snprintf(name, sizeof(name), "%hu", general_index);
 			WMSetButtonText(wsmap_array[local_index].workspace_img_button, name);
 
 			/* updating label background*/
@@ -486,12 +486,15 @@ static void handle_event(WWorkspaceMap *wsmap, W_WorkspaceMap *wsmap_array)
 
 	w_global.process_workspacemap_event = True;
 	while (w_global.process_workspacemap_event) {
-		WMMaskEvent(dpy, KeyPressMask | KeyReleaseMask | ExposureMask
-		            | PointerMotionMask | ButtonPressMask | ButtonReleaseMask | EnterWindowMask, &ev);
+		WMMaskEvent(dpy, KeyPressMask | KeyReleaseMask | ExposureMask | PointerMotionMask |
+		             ButtonPressMask | ButtonReleaseMask | EnterWindowMask | FocusChangeMask, &ev);
 
 		modifiers = ev.xkey.state & w_global.shortcut.modifiers_mask;
 
 		switch (ev.type) {
+			WMScreen *wmscr;
+			WMColor *black;
+
 		case KeyPress:
 			if (ev.xkey.keycode == escKey || (wKeyBindings[WKBD_WORKSPACEMAP].keycode != 0 &&
 			                                  wKeyBindings[WKBD_WORKSPACEMAP].keycode == ev.xkey.keycode &&
@@ -528,6 +531,29 @@ static void handle_event(WWorkspaceMap *wsmap, W_WorkspaceMap *wsmap_array)
 			default:
 				WMHandleEvent(&ev);
 			}
+			break;
+
+		case  FocusIn:
+			wmscr = wsmap->scr->wmscreen;
+			black = WMBlackColor(wmscr);
+			const char *text = "?";
+			WMFont *bold = WMBoldSystemFontOfSize(wmscr, wsmap->mini_workspace_width / 3);
+			int x = (wsmap->mini_workspace_width / 2) - (WMWidthOfString(bold, text, strlen(text)) / 2);
+			int y = (wsmap->mini_workspace_height / 2) - (WMFontHeight(bold) / 2);
+			WMPixmap *icon = dummy_background_pixmap(wsmap);
+
+			if (icon) {
+				int i;
+
+				WMDrawString(wmscr, WMGetPixmapXID(icon),
+						black, bold, x, y, text, strlen(text));
+				for (i = 0; i < wsmap->scr->workspace_count; i++) {
+					if (!wsmap->scr->workspaces[i]->map)
+						WMSetButtonImage(wsmap_array[i].workspace_img_button, icon);
+				}
+				WMReleasePixmap(icon);
+			}
+			WMHandleEvent(&ev);
 			break;
 
 		default:

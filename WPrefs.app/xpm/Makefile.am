@@ -15,6 +15,7 @@ dist_xpmdata_DATA = \
 	ergonomic.xpm \
 	expert.xpm \
 	fonts.xpm \
+	hotcorners.xpm \
 	iconprefs.xpm \
 	keyboard.xpm \
 	keyboardprefs.xpm \
@@ -72,5 +73,5 @@ dist_xpmdata_DATA = \
 	windowfocus.xpm \
 	workspace.xpm \
 	workspacename.xpm \
-	xis.xpm 
+	xis.xpm
 endif

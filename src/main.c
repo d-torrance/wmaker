@@ -56,6 +56,7 @@
 #include "dialog.h"
 #include "main.h"
 #include "monitor.h"
+#include "misc.h"
 
 #include <WINGs/WUtil.h>
 
@@ -354,11 +355,19 @@ Bool RelaunchWindow(WWindow *wwin)
 
 	char **argv;
 	int argc;
+	char *command = NULL;
 
-	if (! XGetCommand(dpy, wwin->client_win, &argv, &argc) || argc == 0 || argv == NULL) {
+	command = GetCommandForWindow(wwin->client_win);
+	if (!command) {
+#ifdef USE_XRES
+		werror("cannot relaunch the application because no associated process found");
+#else
 		werror("cannot relaunch the application because no WM_COMMAND property is set");
+#endif
 		return False;
-	}
+	} else
+		wtokensplit(command, &argv, &argc);
+
 
 	pid_t pid = fork();
 
@@ -384,18 +393,19 @@ Bool RelaunchWindow(WWindow *wwin)
 	} else if (pid < 0) {
 		werror("cannot fork a new process");
 
-		XFreeStringList(argv);
+		wtokenfree(argv, argc);
+		wfree(command);
 		return False;
 	} else {
 		_tuple *data = wmalloc(sizeof(_tuple));
 
 		data->scr = wwin->screen_ptr;
-		data->command = wtokenjoin(argv, argc);
+		data->command = command;
 
 		/* not actually a shell command */
 		wAddDeathHandler(pid, shellCommandHandler, data);
 
-		XFreeStringList(argv);
+		wtokenfree(argv, argc);
 	}
 
 	return True;
@@ -488,7 +498,7 @@ static void inotifyWatchConfig(void)
 			   " Changes to the defaults database will require"
 			   " a restart to take effect. Check your kernel!"));
 	} else {
-		watchPath = wstrconcat(wusergnusteppath(), "/Defaults");
+		watchPath = wdefaultspathfordomain("");
 		/* Add the watch; really we are only looking for modify events
 		 * but we might want more in the future so check all events for now.
 		 * The individual events are checked for in event.c.
@@ -510,7 +520,7 @@ static void execInitScript(void)
 {
 	char *file, *paths;
 
-	paths = wstrconcat(wusergnusteppath(), "/Library/WindowMaker");
+	paths = wstrconcat(wuserdatapath(), "/" PACKAGE_TARNAME);
 	paths = wstrappend(paths, ":" DEF_CONFIG_PATHS);
 
 	file = wfindfile(paths, DEF_INIT_SCRIPT);
@@ -528,7 +538,7 @@ void ExecExitScript(void)
 {
 	char *file, *paths;
 
-	paths = wstrconcat(wusergnusteppath(), "/Library/WindowMaker");
+	paths = wstrconcat(wuserdatapath(), "/" PACKAGE_TARNAME);
 	paths = wstrappend(paths, ":" DEF_CONFIG_PATHS);
 
 	file = wfindfile(paths, DEF_EXIT_SCRIPT);
@@ -658,7 +668,7 @@ static int real_main(int argc, char **argv)
 				printf("Window Maker %s\n", VERSION);
 				exit(0);
 			} else if (strcmp(argv[i], "--global_defaults_path") == 0) {
-			  printf("%s\n", DEFSDATADIR);
+				printf("%s\n", PKGCONFDIR);
 				exit(0);
 			} else if (strcmp(argv[i], "-locale") == 0 || strcmp(argv[i], "--locale") == 0) {
 				i++;

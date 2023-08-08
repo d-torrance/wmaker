@@ -536,7 +536,7 @@ found_end_define_fname:
 			while (*src != '\0') {
 				idx = 0;
 				if (*src == '~') {
-					char *home = wgethomedir();
+					const char *home = wgethomedir();
 					while (*home != '\0') {
 						if (idx < sizeof(buffer) - 2)
 							buffer[idx++] = *home;
@@ -612,10 +612,10 @@ static void menu_parser_condition_ifmacro(WMenuParser parser, Bool check_exists)
 		macro = menu_parser_find_macro(parser, macro_name);
 		parser->cond.stack[0].skip =
 			((check_exists)  && (macro == NULL)) ||
-			((!check_exists) && (macro != NULL)) ;
+			((!check_exists) && (macro != NULL));
 	}
 
-	strcpy(parser->cond.stack[0].name, cmd_name);
+	strncpy(parser->cond.stack[0].name, cmd_name, sizeof(parser->cond.stack[0].name) - 1);
 	parser->cond.stack[0].line = parser->line_number;
 }
 

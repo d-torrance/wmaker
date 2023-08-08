@@ -381,10 +381,7 @@ static void fillModifierPopUp(WMPopUpButton * pop)
 			if (mapping->modifiermap[idx] != 0) {
 				int l;
 				for (l = 0; l < 4; l++) {
-					if (xext_xkb_supported)
-						ksym = XkbKeycodeToKeysym(dpy, mapping->modifiermap[idx], 0, l);
-					else
-						ksym = XKeycodeToKeysym(dpy, mapping->modifiermap[idx], 0);
+					ksym = W_KeycodeToKeysym(dpy, mapping->modifiermap[idx], l);
 					if (ksym != NoSymbol)
 						break;
 				}
@@ -650,7 +647,7 @@ static void storeCommandInScript(const char *cmd, const char *line)
 	umask(permissions);
 	permissions = (S_IRWXU | S_IRWXG | S_IRWXO) & (~permissions);
 
-	path = wstrconcat(wusergnusteppath(), "/Library/WindowMaker/autostart");
+	path = wstrconcat(wuserdatapath(), "/" PACKAGE_TARNAME "/autostart");
 
 	f = fopen(path, "rb");
 	if (!f) {
@@ -668,7 +665,7 @@ static void storeCommandInScript(const char *cmd, const char *line)
 		char *tmppath;
 		FILE *fo;
 
-		tmppath = wstrconcat(wusergnusteppath(), "/Library/WindowMaker/autostart.tmp");
+		tmppath = wstrconcat(wuserdatapath(), "/" PACKAGE_TARNAME "/autostart.tmp");
 		fo = fopen(tmppath, "wb");
 		if (!fo) {
 			werror(_("could not create temporary file %s"), tmppath);
@@ -751,6 +748,8 @@ static void storeData(_Panel * panel)
 		int action;
 
 		action = WMGetPopUpButtonSelectedItem(panel->mouse_action[i].popup);
+		if (action < 0)
+			continue;
 		if (button_list[i].type == T_BUTTON)
 			db_value = button_actions[action].db_value;
 		else

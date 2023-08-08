@@ -5,26 +5,26 @@ AUTOMAKE_OPTIONS =
 # is this a kluge? if so, how should i do it?
 includedir = @includedir@/WINGs
 
-include_HEADERS = wtableview.h wtabledelegates.h 
+include_HEADERS = wtableview.h wtabledelegates.h
 
 
 lib_LTLIBRARIES = libExtraWINGs.la
 
-noinst_PROGRAMS = test
+noinst_PROGRAMS = tableview
 
-EXTRA_DIST = 
+EXTRA_DIST =
 
 libExtraWINGs_la_SOURCES = 	\
 	wtableview.c \
 	wtabledelegates.c \
 	wtableview.h \
-	wtabledelegates.h 
+	wtabledelegates.h
 
 AM_CPPFLAGS = -I$(top_srcdir)/wrlib -I$(top_srcdir)/WINGs \
 	-DRESOURCE_PATH=\"$(datadir)/WINGs\" @HEADER_SEARCH_PATH@
 
 LDADD= $(top_builddir)/WINGs/libWINGs.la $(top_builddir)/wrlib/libwraster.la \
 	$(top_builddir)/WINGs/libWUtil.la \
-	@XFTLIBS@ @INTLIBS@
+	@XFT_LIBS@ @INTLIBS@ @XLIBS@
 
-test_LDADD = wtableview.o wtabledelegates.o $(LDADD)
+tableview_LDADD = wtableview.o wtabledelegates.o $(LDADD)

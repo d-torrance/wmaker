@@ -3,6 +3,7 @@
  *  Window Maker window manager
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
+ *  Copyright (c) 2008-2023 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -29,6 +30,9 @@
 #ifdef KEEP_XKB_LOCK_STATUS
 #include <X11/XKBlib.h>
 #endif	  /* KEEP_XKB_LOCK_STATUS */
+#ifdef USE_XRES
+#include <X11/extensions/XRes.h>
+#endif
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -475,6 +479,41 @@ Bool wWindowObscuresWindow(WWindow *wwin, WWindow *obscured)
 	return True;
 }
 
+/* Get the corresponding Process Identification Number of the active window */
+static pid_t getWindowPid(Window win)
+{
+	pid_t pid = -1;
+
+	pid = wNETWMGetPidForWindow(win);
+#ifdef USE_XRES
+	if (pid > 0)
+		return pid;
+	else {
+		XResClientIdSpec spec;
+		int status;
+		long i, num_ids = 0;
+		XResClientIdValue *client_ids = NULL;
+
+		spec.client = win;
+		spec.mask = XRES_CLIENT_ID_PID_MASK;
+
+		status = XResQueryClientIds(dpy, 1, &spec, &num_ids, &client_ids);
+
+		if (status != Success)
+			return -1;
+
+		for (i = 0; i < num_ids; i++) {
+			if (client_ids[i].spec.mask == XRES_CLIENT_ID_PID_MASK) {
+				pid = XResGetClientPid(&client_ids[i]);
+				break;
+			}
+		}
+		XResClientIdsDestroy(num_ids, client_ids);
+	}
+#endif
+	return pid;
+}
+
 static void fixLeaderProperties(WWindow *wwin)
 {
 	XClassHint *classHint;
@@ -487,7 +526,7 @@ static void fixLeaderProperties(WWindow *wwin)
 
 	classHint = XAllocClassHint();
 	clientHints = XGetWMHints(dpy, wwin->client_win);
-	pid = wNETWMGetPidForWindow(wwin->client_win);
+	pid = getWindowPid(wwin->client_win);
 	if (pid > 0)
 		haveCommand = GetCommandForPid(pid, &argv, &argc);
 	else
@@ -688,6 +727,9 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 	XChangeWindowAttributes(dpy, window, CWEventMask | CWDontPropagate | CWSaveUnder, &attribs);
 	XSetWindowBorderWidth(dpy, window, 0);
 
+	if (wwin->wm_class != NULL && strcmp(wwin->wm_class, "DockApp") != 0)
+		wwin->flags.fullscreen_monitors[0] = -1;
+
 	/* get hints from GNUstep app */
 	if (wwin->wm_class != NULL && strcmp(wwin->wm_class, "GNUstep") == 0)
 		wwin->flags.is_gnustep = 1;
@@ -878,6 +920,9 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 		if (win_state->state->miniaturized > 0 && !WFLAGP(wwin, no_miniaturizable))
 			wwin->flags.miniaturized = win_state->state->miniaturized;
 
+		if (win_state->state->maximized > 0)
+			wwin->flags.maximized = win_state->state->maximized;
+
 		if (!IS_OMNIPRESENT(wwin)) {
 			int w = wDefaultGetStartWorkspace(scr, wwin->wm_instance,
 							  wwin->wm_class);
@@ -997,9 +1042,9 @@ WWindow *wManageWindow(WScreen *scr, Window window)
 				int head;
 
 				x = transientOwner->frame_x +
-				    abs((transientOwner->frame->core->width - width) / 2) + offs;
+					abs(((int)transientOwner->frame->core->width - (int)width) / 2) + offs;
 				y = transientOwner->frame_y +
-				    abs((transientOwner->frame->core->height - height) / 3) + offs;
+					abs(((int)transientOwner->frame->core->height - (int)height) / 3) + offs;
 
 				/* limit transient windows to be inside their parent's head */
 				rect.pos.x = transientOwner->frame_x;
@@ -1691,9 +1736,8 @@ void wWindowSingleFocus(WWindow *wwin)
 	/* bring window back to visible area */
 	move = wScreenBringInside(scr, &x, &y, wwin->frame->core->width, wwin->frame->core->height);
 
-	if (move) {
+	if (move)
 		wWindowConfigure(wwin, x, y, wwin->client.width, wwin->client.height);
-	}
 }
 
 void wWindowFocusPrev(WWindow *wwin, Bool inSameWorkspace)
@@ -1858,12 +1902,19 @@ void wWindowConstrainSize(WWindow *wwin, unsigned int *nwidth, unsigned int *nhe
 	int baseH = 0;
 
 	if (wwin->normal_hints) {
-		winc = wwin->normal_hints->width_inc;
-		hinc = wwin->normal_hints->height_inc;
-		minW = wwin->normal_hints->min_width;
-		minH = wwin->normal_hints->min_height;
-		maxW = wwin->normal_hints->max_width;
-		maxH = wwin->normal_hints->max_height;
+		if (!wwin->flags.maximized) {
+			winc = wwin->normal_hints->width_inc;
+			hinc = wwin->normal_hints->height_inc;
+		}
+		if (wwin->normal_hints->min_width > minW)
+			minW = wwin->normal_hints->min_width;
+		if (wwin->normal_hints->min_height > minH)
+			minH = wwin->normal_hints->min_height;
+		if (wwin->normal_hints->max_width < maxW)
+			maxW = wwin->normal_hints->max_width;
+		if (wwin->normal_hints->max_height < maxH)
+			maxH = wwin->normal_hints->max_height;
+
 		if (wwin->normal_hints->flags & PAspect) {
 			minAX = wwin->normal_hints->min_aspect.x;
 			minAY = wwin->normal_hints->min_aspect.y;
@@ -1875,15 +1926,22 @@ void wWindowConstrainSize(WWindow *wwin, unsigned int *nwidth, unsigned int *nhe
 		baseH = wwin->normal_hints->base_height;
 	}
 
+	/* trust the mins provided by the client but not the maxs */
 	if (width < minW)
 		width = minW;
 	if (height < minH)
 		height = minH;
 
-	if (width > maxW)
-		width = maxW;
-	if (height > maxH)
-		height = maxH;
+	/* if only one dimension is over the top, set a default 4/3 ratio */
+	if (width > maxW && height < maxH)
+		width = height * 4 / 3;
+	else if(height > maxH && width < maxW)
+		height = width * 3 / 4;
+	else if(width > maxW && height > maxH) {
+		/* if both are over the top, set size to almost fullscreen */
+		height = wwin->screen_ptr->scr_height - 2 * wPreferences.icon_size;
+		width = wwin->screen_ptr->scr_width - 2 * wPreferences.icon_size;
+	}
 
 	/* aspect ratio code borrowed from olwm */
 	if (minAX > 0) {
@@ -1922,15 +1980,17 @@ void wWindowConstrainSize(WWindow *wwin, unsigned int *nwidth, unsigned int *nhe
 		}
 	}
 
-	if (baseW != 0)
-		width = (((width - baseW) / winc) * winc) + baseW;
-	else
-		width = (((width - minW) / winc) * winc) + minW;
+	if (!wwin->flags.maximized) {
+		if (baseW != 0)
+			width = (((width - baseW) / winc) * winc) + baseW;
+		else
+			width = (((width - minW) / winc) * winc) + minW;
 
-	if (baseH != 0)
-		height = (((height - baseH) / hinc) * hinc) + baseH;
-	else
-		height = (((height - minH) / hinc) * hinc) + minH;
+		if (baseH != 0)
+			height = (((height - baseH) / hinc) * hinc) + baseH;
+		else
+			height = (((height - minH) / hinc) * hinc) + minH;
+	}
 
 	/* broken stupid apps may cause preposterous values for these.. */
 	if (width > 0)
@@ -2087,21 +2147,7 @@ void wWindowConfigure(WWindow *wwin, int req_x, int req_y, int req_width, int re
 	int synth_notify = False;
 	int resize;
 
-	/* if window size is guaranteed to fail - fix it to some reasonable
-	 * defaults */
-	if (req_height > SHRT_MAX)
-		req_height = 480;
-
-	if (req_width > SHRT_MAX)
-		req_height = 640;
-
 	resize = (req_width != wwin->client.width || req_height != wwin->client.height);
-	/*
-	 * if the window is being moved but not resized then
-	 * send a synthetic ConfigureNotify
-	 */
-	if ((req_x != wwin->frame_x || req_y != wwin->frame_y) && !resize)
-		synth_notify = True;
 
 	if (WFLAGP(wwin, dont_move_off))
 		wScreenBringInside(wwin->screen_ptr, &req_x, &req_y, req_width, req_height);
@@ -2138,10 +2184,17 @@ void wWindowConfigure(WWindow *wwin, int req_x, int req_y, int req_width, int re
 		wwin->client.width = req_width;
 		wwin->client.height = req_height;
 	} else {
-		wwin->client.x = req_x;
-		wwin->client.y = req_y + wwin->frame->top_width;
-
-		XMoveWindow(dpy, wwin->frame->core->window, req_x, req_y);
+		if (req_x != wwin->frame_x || req_y != wwin->frame_y) {
+			wwin->client.x = req_x;
+			wwin->client.y = req_y + wwin->frame->top_width;
+			XMoveWindow(dpy, wwin->frame->core->window, req_x, req_y);
+		}
+		/*
+		 * if the window is being moved but not resized
+		 * or if we change nothing then
+		 * send a synthetic ConfigureNotify
+		 */
+		synth_notify = True;
 	}
 	wwin->frame_x = req_x;
 	wwin->frame_y = req_y;
@@ -2649,7 +2702,7 @@ void wWindowUpdateGNUstepAttr(WWindow * wwin, GNUstepWMAttributes * attr)
 }
 
 WMagicNumber wWindowAddSavedState(const char *instance, const char *class,
-											 const char *command, pid_t pid, WSavedState * state)
+				const char *command, pid_t pid, WSavedState *state)
 {
 	WWindowState *wstate;
 
@@ -2849,14 +2902,28 @@ static void titlebarDblClick(WCoreWindow *sender, void *data, XEvent *event)
 
 	event->xbutton.state &= w_global.shortcut.modifiers_mask;
 
-	if (event->xbutton.button == Button1) {
-		if (event->xbutton.state == 0) {
-			if (!WFLAGP(wwin, no_shadeable)) {
+	if (event->xbutton.button == Button1 ) {
+		if (event->xbutton.state == 0 ) {
+			if (!WFLAGP(wwin, no_shadeable) & !wPreferences.double_click_fullscreen) {
 				/* shade window */
 				if (wwin->flags.shaded)
 					wUnshadeWindow(wwin);
 				else
 					wShadeWindow(wwin);
+			} 
+		}
+		
+		if (wPreferences.double_click_fullscreen) {
+			int dir = 0;
+
+			if (event->xbutton.state == 0) {
+				/* maximize window full screen*/
+				dir |= (MAX_VERTICAL|MAX_HORIZONTAL);
+				int ndir = dir ^ wwin->flags.maximized;
+				if (ndir != 0)
+					wMaximizeWindow(wwin, ndir, wGetHeadForWindow(wwin));
+				else
+					wUnmaximizeWindow(wwin);
 			}
 		} else {
 			int dir = 0;

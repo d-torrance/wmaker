@@ -505,7 +505,15 @@ static BackgroundTexture *parseTexture(RContext * rc, char *text)
 			iheight = image->height;
 		}
 
-		GETSTRORGOTO(val, tmp, 2, error);
+		/* cannot use GETSTRORGOTO() here
+		 * as we have to free image in case of error */
+		val = WMGetFromPLArray(texarray, 2);
+		if (!WMIsPLString(val)) {
+			wwarning("could not parse texture %s", text);
+			RReleaseImage(image);
+			goto error;
+		}
+		tmp = WMGetFromPLString(val);
 
 		if (!XParseColor(dpy, DefaultColormap(dpy, scr), tmp, &color)) {
 			wwarning("could not parse color %s in texture %s", tmp, text);
@@ -898,6 +906,7 @@ static noreturn void helperLoop(RContext * rc)
 	int errcount = 4;
 
 	memset(textures, 0, WORKSPACE_COUNT * sizeof(BackgroundTexture *));
+	memset(buffer, 0, sizeof(buffer));
 
 	while (1) {
 		int workspace = -1;

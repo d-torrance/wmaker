@@ -4,7 +4,7 @@
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
  *  Copyright (c) 1998-2003 Dan Pascu
- *  Copyright (c) 2014 Window Maker Team
+ *  Copyright (c) 2014-2023 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -404,7 +404,7 @@ void wMaximizeWindow(WWindow *wwin, int directions, int head)
 	usableArea = wGetUsableAreaForHead(scr, head, &totalArea, True);
 
 	/* Only save directions, not kbd or xinerama hints */
-	directions &= (MAX_HORIZONTAL | MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS);
+	directions &= (MAX_HORIZONTAL | MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS | MAX_CENTRAL);
 
 	if (WFLAGP(wwin, full_maximize))
 		usableArea = totalArea;
@@ -431,12 +431,31 @@ void wMaximizeWindow(WWindow *wwin, int directions, int head)
 		wwin->maximus_y = new_y;
 		wwin->flags.old_maximized |= MAX_MAXIMUS;
 	} else {
+		/* center the window if can fit, if not sticking it to the screen edges */
+		if (directions & MAX_CENTRAL) {
+			if (wwin->frame->core->height > (usableArea.y2 - usableArea.y1)) {
+				new_y = usableArea.y1;
+				new_height = usableArea.y2 - usableArea.y1 - adj_size;
+			} else {
+				new_height = (wwin->old_geometry.height) ? wwin->old_geometry.height : wwin->frame->core->height;
+				new_height += wwin->frame->top_width + wwin->frame->bottom_width;
+				new_y = half_scr_height - new_height / 2;
+			}
+			if (wwin->frame->core->width > (usableArea.x2 - usableArea.x1)) {
+				new_x = usableArea.x1;
+				new_width = usableArea.x2 - usableArea.x1 - adj_size;
+			}
+			else {
+				new_width = (wwin->old_geometry.width) ? wwin->old_geometry.width : wwin->frame->core->width;
+				new_x = half_scr_width - new_width / 2;
+			}
+		}
 		/* set default values if no option set then */
-		if (!(directions & (MAX_HORIZONTAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_MAXIMUS))) {
+		if (!(directions & (MAX_HORIZONTAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_MAXIMUS | MAX_CENTRAL))) {
 			new_width = (wwin->old_geometry.width) ? wwin->old_geometry.width : wwin->frame->core->width;
 			new_x = (wwin->old_geometry.x) ? wwin->old_geometry.x : wwin->frame_x;
 		}
-		if (!(directions & (MAX_VERTICAL | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS))) {
+		if (!(directions & (MAX_VERTICAL | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS| MAX_CENTRAL))) {
 			new_height = (wwin->old_geometry.height) ? wwin->old_geometry.height : wwin->frame->core->height;
 			new_y = (wwin->old_geometry.y) ? wwin->old_geometry.y : wwin->frame_y;
 		}
@@ -445,17 +464,26 @@ void wMaximizeWindow(WWindow *wwin, int directions, int head)
 		if (directions & MAX_LEFTHALF) {
 			new_width = half_scr_width - adj_size;
 			new_x = usableArea.x1;
+			if (directions & MAX_CENTRAL) {
+				new_y = half_scr_height - wwin->old_geometry.height / 2;
+			}
 		} else if (directions & MAX_RIGHTHALF) {
 			new_width = half_scr_width - adj_size;
 			new_x = usableArea.x1 + half_scr_width;
+			if (directions & MAX_CENTRAL)
+				new_y = half_scr_height - wwin->old_geometry.height / 2;
 		}
 		/* top|bottom position */
 		if (directions & MAX_TOPHALF) {
 			new_height = half_scr_height - adj_size;
 			new_y = usableArea.y1;
+			if (directions & MAX_CENTRAL)
+				new_x = half_scr_width - wwin->old_geometry.width / 2;
 		} else if (directions & MAX_BOTTOMHALF) {
 			new_height = half_scr_height - adj_size;
 			new_y = usableArea.y1 + half_scr_height;
+			if (directions & MAX_CENTRAL)
+				new_x = half_scr_width - wwin->old_geometry.width / 2;
 		}
 
 		/* vertical|horizontal position */
@@ -494,7 +522,7 @@ void wMaximizeWindow(WWindow *wwin, int directions, int head)
 void handleMaximize(WWindow *wwin, int directions)
 {
 	int current = wwin->flags.maximized;
-	int requested = directions & (MAX_HORIZONTAL | MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS);
+	int requested = directions & (MAX_HORIZONTAL | MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS | MAX_CENTRAL);
 	int effective = requested ^ current;
 	int flags = directions & ~requested;
 	int head = wGetHeadForWindow(wwin);
@@ -577,7 +605,7 @@ void handleMaximize(WWindow *wwin, int directions)
 	 * corners) and only when requested state is also half maximized, but on
 	 * opposite side of the screen. As for corners, it is similar, but
 	 * expected is that only quarter maximized windows on corner can change
-	 * it's state to half maximized window, depending on direction. Note, that
+	 * its state to half maximized window, depending on direction. Note, that
 	 * MAX_KEYBOARD is passed to the wMaximizeWindow function, to preserve the
 	 * head, even if mouse was used for triggering the action. */
 
@@ -625,11 +653,24 @@ void handleMaximize(WWindow *wwin, int directions)
 				head);
 
 	else {
+
 		if ((requested == (MAX_HORIZONTAL | MAX_VERTICAL)) ||
 				(requested == MAX_MAXIMUS))
 			effective = requested;
 		else {
-			if (requested & MAX_LEFTHALF) {
+			if (requested & MAX_CENTRAL) {
+				effective |= MAX_CENTRAL;
+				if (current & (MAX_HORIZONTAL | MAX_VERTICAL))
+					effective &= ~(MAX_HORIZONTAL | MAX_VERTICAL);
+				else if (current & MAX_TOPHALF && current & MAX_LEFTHALF)
+					effective &= ~(MAX_TOPHALF | MAX_LEFTHALF);
+				else if (current & MAX_TOPHALF && current & MAX_RIGHTHALF)
+					effective &= ~(MAX_TOPHALF | MAX_RIGHTHALF);
+				else if (current & MAX_BOTTOMHALF && current & MAX_LEFTHALF)
+					effective &= ~(MAX_BOTTOMHALF | MAX_LEFTHALF);
+				else if (current & MAX_BOTTOMHALF && current & MAX_RIGHTHALF)
+					effective &= ~(MAX_BOTTOMHALF | MAX_RIGHTHALF);
+			} else if (requested & MAX_LEFTHALF) {
 				if (!(requested & (MAX_TOPHALF | MAX_BOTTOMHALF)))
 					effective |= MAX_VERTICAL;
 				else
@@ -911,6 +952,54 @@ void wUnmaximizeWindow(WWindow *wwin)
 
 	WMPostNotificationName(WMNChangedState, wwin, "maximize");
 }
+
+#ifdef USE_XINERAMA
+void wFullscreenMonitorsWindow(WWindow *wwin, unsigned long top, unsigned long bottom,
+					unsigned long left, unsigned long right)
+{
+	int i;
+	long monitor;
+	WMRect rect1, rect2;
+
+	if ((int)top < wwin->screen_ptr->xine_info.count &&
+	    (int)bottom < wwin->screen_ptr->xine_info.count &&
+	    (int)left < wwin->screen_ptr->xine_info.count &&
+	    (int)right < wwin->screen_ptr->xine_info.count) {
+		wwin->flags.fullscreen_monitors[0] = top;
+		wwin->flags.fullscreen_monitors[1] = bottom;
+		wwin->flags.fullscreen_monitors[2] = left;
+		wwin->flags.fullscreen_monitors[3] = right;
+	} else {
+		wwin->flags.fullscreen_monitors[0] = -1;
+		return;
+	}
+
+	wwin->flags.fullscreen = True;
+	wWindowConfigureBorders(wwin);
+	ChangeStackingLevel(wwin->frame->core, WMFullscreenLevel);
+
+	wwin->bfs_geometry.x = wwin->frame_x;
+	wwin->bfs_geometry.y = wwin->frame_y;
+	wwin->bfs_geometry.width = wwin->frame->core->width;
+	wwin->bfs_geometry.height = wwin->frame->core->height;
+
+	i = 0;
+	monitor = wwin->flags.fullscreen_monitors[i];
+	rect1 = wwin->screen_ptr->xine_info.screens[monitor];
+
+	for (i = 1; i <= 3; i++) {
+		monitor = wwin->flags.fullscreen_monitors[i];
+		rect2 = wwin->screen_ptr->xine_info.screens[monitor];
+		wGetRectUnion(&rect1, &rect2, &rect1);
+	}
+	wWindowConfigure(wwin, rect1.pos.x, rect1.pos.y, rect1.size.width, rect1.size.height);
+
+	wwin->screen_ptr->bfs_focused_window = wwin->screen_ptr->focused_window;
+	wSetFocusTo(wwin->screen_ptr, wwin);
+
+	WMPostNotificationName(WMNChangedState, wwin, "fullscreen");
+}
+#endif
 
 void wFullscreenWindow(WWindow *wwin)
 {
@@ -2167,7 +2256,7 @@ void wMakeWindowVisible(WWindow *wwin)
 	}
 }
 
-void movePionterToWindowCenter(WWindow *wwin)
+void movePointerToWindowCenter(WWindow *wwin)
 {
 	if (!wPreferences.pointer_with_half_max_windows)
 		return;

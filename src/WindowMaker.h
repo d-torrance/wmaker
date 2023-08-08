@@ -2,7 +2,7 @@
  *  Window Maker window manager
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- *  Copyright (c) 2014 Window Maker Team
+ *  Copyright (c) 2014-2023 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -119,6 +119,7 @@ typedef enum {
 	WCUR_QUESTION,
 	WCUR_TEXT,
 	WCUR_SELECT,
+	WCUR_CAPTURE,
 	WCUR_ROOT,
 	WCUR_EMPTY,
 
@@ -405,6 +406,7 @@ extern struct WPreferences {
 	char ignore_gtk_decoration_hints;
 
 	char dont_blink;                   /* do not blink icon selection */
+	char keep_dock_on_primary_head;    /* keep dock on primary head */
 
 	/* Appearance options */
 	char new_style;                    /* Use newstyle buttons */
@@ -453,6 +455,8 @@ extern struct WPreferences {
 	int history_lines;                  /* history of "Run..." dialog */
 	char cycle_active_head_only;        /* Cycle only windows on the active head */
 	char cycle_ignore_minimized;        /* Ignore minimized windows when cycling */
+	char double_click_fullscreen;       /* Double click on titlebar maximize a window to full screen*/
+	char close_rootmenu_left_right_click;/* Close application menu when mouse (left or right) is clicked outside focus */
 	char strict_windoze_cycle;          /* don't close switch panel when shift is released */
 	char panel_only_open;               /* Only open the switch panel; don't switch */
 	int minipreview_size;               /* Size of Mini-Previews in pixels */
@@ -469,6 +473,11 @@ extern struct WPreferences {
 	union WTexture *wsmbackTexture;
 
 	char show_clip_title;
+
+	char hot_corners;                  /* let corners execute actions */
+	int hot_corner_delay;		   /* Delay after which the hot corner is triggered */
+	int hot_corner_edge;		   /* Hot corner edge size */
+	char *hot_corner_actions[4];	   /* Action of each corner */
 
 	struct {
 #ifdef USE_ICCCM_WMREPLACE

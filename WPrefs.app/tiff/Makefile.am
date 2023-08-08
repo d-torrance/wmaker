@@ -15,6 +15,7 @@ dist_tiffdata_DATA = \
 	ergonomic.tiff \
 	expert.tiff \
 	fonts.tiff \
+	hotcorners.tiff \
 	iconprefs.tiff \
 	keyboard.tiff \
 	keyboardprefs.tiff \
@@ -73,5 +74,5 @@ dist_tiffdata_DATA = \
 	windowfocus.tiff \
 	workspace.tiff \
 	workspacename.tiff \
-	xis.tiff 
+	xis.tiff
 endif

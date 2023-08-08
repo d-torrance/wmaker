@@ -26,7 +26,7 @@
 #include <WINGs/WUtil.h>
 #include <X11/Xlib.h>
 
-#define WINGS_H_VERSION  20150508
+#define WINGS_H_VERSION  20230226
 
 
 #ifdef __cplusplus
@@ -736,7 +736,7 @@ Bool WMRequestSelection(WMView *view, Atom selection, Atom target,
                         void *cdata);
 
 
-extern char *WMSelectionOwnerDidChangeNotification;
+extern const char *WMSelectionOwnerDidChangeNotification;
 
 /* ---[ WINGs/dragcommon.c ]---------------------------------------------- */
 
@@ -977,11 +977,11 @@ WMPoint WMGetViewScreenPosition(WMView *view);
 WMWidget* WMWidgetOfView(WMView *view);
 
 /* notifications */
-extern char *WMViewSizeDidChangeNotification;
+extern const char *WMViewSizeDidChangeNotification;
 
-extern char *WMViewFocusDidChangeNotification;
+extern const char *WMViewFocusDidChangeNotification;
 
-extern char *WMViewRealizedNotification;
+extern const char *WMViewRealizedNotification;
 
 /* ---[ WINGs/wballoon.c ]------------------------------------------------ */
 
@@ -1190,9 +1190,9 @@ void WMSetTextFieldDelegate(WMTextField *tPtr, WMTextFieldDelegate *delegate);
 
 WMTextFieldDelegate* WMGetTextFieldDelegate(WMTextField *tPtr);
 
-extern char *WMTextDidChangeNotification;
-extern char *WMTextDidBeginEditingNotification;
-extern char *WMTextDidEndEditingNotification;
+extern const char *WMTextDidChangeNotification;
+extern const char *WMTextDidBeginEditingNotification;
+extern const char *WMTextDidEndEditingNotification;
 
 /* ---[ WINGs/wscroller.c ]----------------------------------------------- */
 
@@ -1212,7 +1212,7 @@ void WMSetScrollerAction(WMScroller *sPtr, WMAction *action, void *clientData);
 void WMSetScrollerArrowsPosition(WMScroller *sPtr,
                                  WMScrollArrowPosition position);
 
-extern char *WMScrollerDidScrollNotification;
+extern const char *WMScrollerDidScrollNotification;
 
 /* ---[ WINGs/wlist.c ]--------------------------------------------------- */
 
@@ -1291,8 +1291,8 @@ Bool WMListAllowsMultipleSelection(WMList *lPtr);
 Bool WMListAllowsEmptySelection(WMList *lPtr);
 
 
-extern char *WMListDidScrollNotification;
-extern char *WMListSelectionDidChangeNotification;
+extern const char *WMListDidScrollNotification;
+extern const char *WMListSelectionDidChangeNotification;
 
 /* ---[ WINGs/wbrowser.c ]------------------------------------------------ */
 
@@ -1324,7 +1324,7 @@ void WMSortBrowserColumnWithComparer(WMBrowser *bPtr, int column,
                                      WMCompareDataProc *func);
 
 /* Don't free the returned string. */
-char* WMSetBrowserPath(WMBrowser *bPtr, char *path);
+const char* WMSetBrowserPath(WMBrowser *bPtr, const char *path);
 
 /* free the returned string */
 char* WMGetBrowserPath(WMBrowser *bPtr);
@@ -1496,7 +1496,7 @@ void WMSetColorPanelPickerMode(WMColorPanel *panel, WMColorPanelMode mode);
 
 void WMSetColorPanelAction(WMColorPanel *panel, WMAction2 *action, void *data);
 
-extern char *WMColorPanelColorChangedNotification;
+extern const char *WMColorPanelColorChangedNotification;
 
 /* ---[ WINGs/wcolorwell.c ]---------------------------------------------- */
 
@@ -1509,7 +1509,7 @@ WMColor* WMGetColorWellColor(WMColorWell *cPtr);
 void WSetColorWellBordered(WMColorWell *cPtr, Bool flag);
 
 
-extern char *WMColorWellDidChangeNotification;
+extern const char *WMColorWellDidChangeNotification;
 
 
 /* ---[ WINGs/wscrollview.c ]--------------------------------------------- */
@@ -1876,7 +1876,7 @@ void WMSetFilePanelCanChooseFiles(WMFilePanel *panel, Bool flag);
 
 void WMSetFilePanelAutoCompletion(WMFilePanel *panel, Bool flag);
 
-void WMSetFilePanelDirectory(WMFilePanel *panel, char *path);
+void WMSetFilePanelDirectory(WMFilePanel *panel, const char *path);
 
 /* you can free the returned string */
 char* WMGetFilePanelFileName(WMFilePanel *panel);
@@ -1884,7 +1884,7 @@ char* WMGetFilePanelFileName(WMFilePanel *panel);
 void WMFreeFilePanel(WMFilePanel *panel);
 
 int WMRunModalFilePanelForDirectory(WMFilePanel *panel, WMWindow *owner,
-                                    char *path, const char *name, char **fileTypes);
+                                    const char *path, const char *name, char **fileTypes);
 
 void WMSetFilePanelAccessoryView(WMFilePanel *panel, WMView *view);
 

@@ -173,7 +173,7 @@ typedef struct WFakeGroupLeader {
 
 
 /*
- * Stores client window information. Each client window has it's
+ * Stores client window information. Each client window has its
  * structure created when it's being first mapped.
  */
 typedef struct WWindow {
@@ -251,9 +251,10 @@ typedef struct WWindow {
 		unsigned int miniaturized:1;
 		unsigned int hidden:1;
 		unsigned int shaded:1;
-		unsigned int maximized:7;
-		unsigned int old_maximized:7;
+		unsigned int maximized:10;
+		unsigned int old_maximized:10;
 		unsigned int fullscreen:1;
+		long fullscreen_monitors[4];
 		unsigned int omnipresent:1;
 		unsigned int semi_focused:1;
 		/* window type flags */
@@ -308,9 +309,9 @@ typedef struct WWindow {
 typedef struct WSavedState {
     int workspace;
     int miniaturized;
+    int maximized;
     int shaded;
     int hidden;
-    int maximized;
     int x;			       /* original geometry of the */
     int y;			       /* window if it's maximized */
     unsigned int w;

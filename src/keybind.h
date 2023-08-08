@@ -2,7 +2,7 @@
  *  Window Maker window manager
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- *  Copyright (c) 2014 Window Maker Team
+ *  Copyright (c) 2014-2023 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -76,6 +76,7 @@ enum {
 	WKBD_FOCUSPREV,
 	WKBD_GROUPNEXT,
 	WKBD_GROUPPREV,
+	WKBD_CENTRAL,
 
 	/* window, menu */
 	WKBD_CLOSE,
@@ -144,6 +145,18 @@ enum {
 
 	/* open "run" dialog */
 	WKBD_RUN,
+
+	/* open "exit" dialog */
+	WKBD_EXIT,
+
+	/* screen print */
+	WKBD_PRINTS,
+
+	/* window print */
+	WKBD_PRINTW,
+
+	/* partial print */
+	WKBD_PRINTP,
 
 #ifdef KEEP_XKB_LOCK_STATUS
 	WKBD_TOGGLE,

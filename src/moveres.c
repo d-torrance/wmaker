@@ -1199,46 +1199,65 @@ updateWindowPosition(WWindow * wwin, MoveData * data, Bool doResistance,
 static void draw_snap_frame(WWindow *wwin, int direction)
 {
 	WScreen *scr;
+	int head, x, y;
+	unsigned int width, height;
+	WMRect rect;
 
 	scr = wwin->screen_ptr;
+	head = wGetHeadForWindow(wwin);
+	rect = wGetRectForHead(scr, head);
+
+	x = rect.pos.x;
+	y = rect.pos.y;
+	width = rect.size.width;
+	height = rect.size.height;
 
 	switch (direction) {
 	case SNAP_LEFT:
-		drawTransparentFrame(wwin, 0, 0, scr->scr_width/2, scr->scr_height);
+		width /= 2;
 		break;
 
 	case SNAP_RIGHT:
-		drawTransparentFrame(wwin, scr->scr_width/2, 0, scr->scr_width/2, scr->scr_height);
+		width /= 2;
+		x += width;
 		break;
 
 	case SNAP_TOP:
-		if (wPreferences.snap_to_top_maximizes_fullscreen)
-			drawTransparentFrame(wwin, 0, 0, scr->scr_width, scr->scr_height);
-		else
-			drawTransparentFrame(wwin, 0, 0, scr->scr_width, scr->scr_height/2);
+		if (!wPreferences.snap_to_top_maximizes_fullscreen)
+			height /= 2;
 		break;
 
 	case SNAP_BOTTOM:
-		drawTransparentFrame(wwin, 0, scr->scr_height/2, scr->scr_width, scr->scr_height/2);
+		height /= 2;
+		y += height;
 		break;
 
 	case SNAP_TOPLEFT:
-		drawTransparentFrame(wwin, 0, 0, scr->scr_width/2, scr->scr_height/2);
+		width /= 2;
+		height /= 2;
 		break;
 
 	case SNAP_TOPRIGHT:
-		drawTransparentFrame(wwin, scr->scr_width/2, 0, scr->scr_width/2, scr->scr_height/2);
+		width /= 2;
+		height /= 2;
+		x += width;
 		break;
 
 	case SNAP_BOTTOMLEFT:
-		drawTransparentFrame(wwin, 0, scr->scr_height/2, scr->scr_width/2, scr->scr_height/2);
+		width /= 2;
+		height /= 2;
+		y += height;
 		break;
 
 	case SNAP_BOTTOMRIGHT:
-		drawTransparentFrame(wwin, scr->scr_width/2, scr->scr_height/2,
-				     scr->scr_width/2, scr->scr_height/2);
+		width /= 2;
+		height /= 2;
+		x += width;
+		y += height;
 		break;
 	}
+
+	drawTransparentFrame(wwin, x, y, width, height);
 }
 
 static int get_snap_direction(WScreen *scr, int x, int y)
@@ -1646,10 +1665,10 @@ int wKeyboardMoveResizeWindow(WWindow * wwin)
 					}
 				} else {
 					if (ww != original_w)
-						wwin->flags.maximized &= ~(MAX_HORIZONTAL | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS);
+						wwin->flags.maximized &= ~(MAX_HORIZONTAL | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS | MAX_CENTRAL);
 
 					if (wh != original_h)
-						wwin->flags.maximized &= ~(MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_MAXIMUS);
+						wwin->flags.maximized &= ~(MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_MAXIMUS | MAX_CENTRAL);
 
 					wWindowConfigure(wwin, src_x + off_x, src_y + off_y, ww, wh - vert_border);
 					wWindowSynthConfigureNotify(wwin);
@@ -2002,8 +2021,8 @@ static int getResizeDirection(WWindow * wwin, int x, int y, int dy, int flags)
 		int ydir = (abs(y) < (wwin->client.height / 2)) ? UP : DOWN;
 
 		/* How much resize space is allowed */
-		int spacew = abs(wwin->client.width / 3);
-		int spaceh = abs(wwin->client.height / 3);
+		int spacew = wwin->client.width / 3;
+		int spaceh = wwin->client.height / 3;
 
 		/* Determine where x fits */
 		if ((abs(x) > wwin->client.width/2 - spacew/2) &&
@@ -2264,10 +2283,10 @@ void wMouseResizeWindow(WWindow * wwin, XEvent * ev)
 				XUngrabServer(dpy);
 
 				if (fw != original_fw)
-					wwin->flags.maximized &= ~(MAX_HORIZONTAL | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS);
+					wwin->flags.maximized &= ~(MAX_HORIZONTAL | MAX_TOPHALF | MAX_BOTTOMHALF | MAX_MAXIMUS | MAX_CENTRAL);
 
 				if (fh != original_fh)
-					wwin->flags.maximized &= ~(MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_MAXIMUS);
+					wwin->flags.maximized &= ~(MAX_VERTICAL | MAX_LEFTHALF | MAX_RIGHTHALF | MAX_MAXIMUS | MAX_CENTRAL);
 
 				wWindowConfigure(wwin, fx, fy, fw, fh - vert_border);
 				wWindowSynthConfigureNotify(wwin);

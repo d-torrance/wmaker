@@ -2,7 +2,7 @@
  *  Window Maker window manager
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
- *  Copyright (c) 2013 Window Maker Team
+ *  Copyright (c) 2013-2023 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,6 +25,8 @@
 #include "keybind.h"
 #include "appicon.h"
 
+#define M_QUICK 1
+
 Bool wFetchName(Display *dpy, Window win, char **winname);
 Bool wGetIconName(Display *dpy, Window win, char **iconname);
 Bool UpdateDomainFile(WDDomain * domain);
@@ -45,6 +47,8 @@ void SendHelperMessage(WScreen *scr, char type, int workspace, const char *msg);
 char *ShrinkString(WMFont *font, const char *string, int width);
 char *FindImage(const char *paths, const char *file);
 char *ExpandOptions(WScreen * scr, const char *cmdline);
+void ExecuteInputCommand(WScreen *scr, const char *cmdline);
+void ExecuteExitCommand(WScreen *scr, long quickmode);
 char *GetShortcutString(const char *text);
 char *GetShortcutKey(WShortKey key);
 char *EscapeWM_CLASS(const char *name, const char *class);

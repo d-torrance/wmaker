@@ -1695,6 +1695,7 @@ Bool WMWritePropListToFile(WMPropList * plist, const char *path)
 	if (fprintf(theFile, "%s\n", desc) != strlen(desc) + 1) {
 		werror(_("writing to file: %s failed"), thePath);
 		wfree(desc);
+		fclose(theFile);
 		goto failure;
 	}
 
@@ -1731,23 +1732,36 @@ Bool WMWritePropListToFile(WMPropList * plist, const char *path)
  * file, and the last component is stripped off. the rest is the
  * the hierarchy to be created.
  *
- * refuses to create anything outside $WMAKER_USER_ROOT
+ * refuses to create anything outside $WMAKER_USER_ROOT/Defaults or $WMAKER_USER_ROOT/Library
  *
  * returns 1 on success, 0 on failure
  */
 int wmkdirhier(const char *path)
 {
-	const char *t;
+	const char *libpath;
+	char *udefpath;
+	int cmp;
 	char *thePath = NULL, buf[1024];
 	size_t p, plen;
 	struct stat st;
 
-	/* Only create directories under $WMAKER_USER_ROOT */
-	if ((t = wusergnusteppath()) == NULL)
-		return 0;
-	if (strncmp(path, t, strlen(t)) != 0)
-		return 0;
+	/* Only create directories under $WMAKER_USER_ROOT/Defaults or $WMAKER_USER_ROOT/Library */
+	libpath = wuserdatapath();
+	if (strncmp(path, libpath, strlen(libpath)) == 0)
+		if (path[strlen(libpath)] == '/')
+			goto path_in_valid_tree;
 
+	udefpath = wdefaultspathfordomain("");
+	cmp = strncmp(path, udefpath, strlen(udefpath));
+	wfree(udefpath);
+	if (cmp == 0)
+		/* Note: by side effect, 'udefpath' already contains a final '/'  */
+		goto path_in_valid_tree;
+
+	/* If we reach this point, the path is outside the allowed tree */
+	return 0;
+
+ path_in_valid_tree:
 	thePath = wstrdup(path);
 	/* Strip the trailing component if it is a file */
 	p = strlen(thePath);
@@ -1770,7 +1784,6 @@ int wmkdirhier(const char *path)
 	}
 
 	memset(buf, 0, sizeof(buf));
-	strncpy(buf, t, sizeof(buf) - 1);
 	p = strlen(buf);
 	plen = strlen(thePath);
 
@@ -1781,7 +1794,7 @@ int wmkdirhier(const char *path)
 		strncpy(buf, thePath, p);
 		if (mkdir(buf, 0777) == -1 && errno == EEXIST &&
 		    stat(buf, &st) == 0 && !S_ISDIR(st.st_mode)) {
-			werror(_("Could not create component %s"), buf);
+			werror(_("Could not create path component %s"), buf);
 			wfree(thePath);
 			return 0;
 		}
@@ -1823,7 +1836,7 @@ static int wrmdirhier_fn(const char *path, const struct stat *st,
 /*
  * remove a directory hierarchy
  *
- * refuses to remove anything outside $WMAKER_USER_ROOT
+ * refuses to remove anything outside $WMAKER_USER_ROOT/Defaults or $WMAKER_USER_ROOT/Library
  *
  * returns 1 on success, 0 on failure
  *
@@ -1833,15 +1846,27 @@ static int wrmdirhier_fn(const char *path, const struct stat *st,
  */
 int wrmdirhier(const char *path)
 {
+	const char *libpath;
+	char *udefpath = NULL;
 	struct stat st;
 	int error;
-	const char *t;
 
-	/* Only remove directories under $WMAKER_USER_ROOT */
-	if ((t = wusergnusteppath()) == NULL)
-		return EPERM;
-	if (strncmp(path, t, strlen(t)) != 0)
-		return EPERM;
+	/* Only remove directories under $WMAKER_USER_ROOT/Defaults or $WMAKER_USER_ROOT/Library */
+	libpath = wuserdatapath();
+	if (strncmp(path, libpath, strlen(libpath)) == 0)
+		if (path[strlen(libpath)] == '/')
+			goto path_in_valid_tree;
+
+	udefpath = wdefaultspathfordomain("");
+	if (strncmp(path, udefpath, strlen(udefpath)) == 0)
+		/* Note: by side effect, 'udefpath' already contains a final '/'  */
+		goto path_in_valid_tree;
+
+	wfree(udefpath);
+	return EPERM;
+
+ path_in_valid_tree:
+	wfree(udefpath);
 
 	/* Shortcut if it doesn't exist to begin with */
 	if (stat(path, &st) == -1)

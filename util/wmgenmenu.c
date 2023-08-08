@@ -44,9 +44,9 @@ int main(int argc, char *argv[])
 	char *tmp, *theme_paths, *style_paths, *icon_paths;
 
 	tmp = wstrconcat("-noext ", PKGDATADIR);
-	theme_paths = wstrconcat(tmp, "/Themes $HOME/GNUstep/Library/WindowMaker/Themes WITH setstyle");
-	style_paths = wstrconcat(tmp, "/Styles $HOME/GNUstep/Library/WindowMaker/Styles WITH setstyle");
-	icon_paths = wstrconcat(tmp, "/IconSets $HOME/GNUstep/Library/WindowMaker/IconSets WITH seticons");
+	theme_paths = wstrconcat(tmp, "/Themes $HOME/" GSUSER_SUBDIR "/" USERDATA_SUBDIR "/" PACKAGE_TARNAME "/Themes WITH setstyle");
+	style_paths = wstrconcat(tmp, "/Styles $HOME/" GSUSER_SUBDIR "/" USERDATA_SUBDIR "/" PACKAGE_TARNAME "/Styles WITH setstyle");
+	icon_paths = wstrconcat(tmp, "/IconSets $HOME/" GSUSER_SUBDIR "/" USERDATA_SUBDIR "/" PACKAGE_TARNAME "/IconSets WITH seticons");
 
 	struct option longopts[] = {
 		{ "version",		no_argument,	NULL,	'v' },
@@ -245,7 +245,7 @@ int main(int argc, char *argv[])
 	L3Menu = WMCreatePLArray(
 		WMCreatePLString(_("Images")),
 		WMCreatePLString("OPEN_MENU"),
-		WMCreatePLString("-noext $HOME/GNUstep/Library/WindowMaker/Backgrounds WITH wmsetbg -u -t"),
+		WMCreatePLString("-noext $HOME/" GSUSER_SUBDIR "/" USERDATA_SUBDIR "/" PACKAGE_TARNAME "/Backgrounds WITH wmsetbg -u -t"),
 		NULL
 	);
 	WMAddToPLArray(L2Menu, L3Menu);
@@ -265,7 +265,7 @@ int main(int argc, char *argv[])
 	L2Menu = WMCreatePLArray(
 		WMCreatePLString(_("Save IconSet")),
 		WMCreatePLString("SHEXEC"),
-		WMCreatePLString("geticonset $HOME/GNUstep/Library/WindowMaker/IconSets/"
+		WMCreatePLString("geticonset $HOME/" GSUSER_SUBDIR "/" USERDATA_SUBDIR "/" PACKAGE_TARNAME "/IconSets/"
 			"\"%a(IconSet name,Name to save icon set as)\""),
 		NULL
 	);
@@ -379,8 +379,14 @@ int main(int argc, char *argv[])
 	);
 	WMAddToPLArray(RMenu, L1Menu);
 
-	printf("%s", WMGetPropListDescription(RMenu, True));
-	puts("");
+	wfree(tmp);
+	wfree(theme_paths);
+	wfree(style_paths);
+	wfree(icon_paths);
+
+	tmp = WMGetPropListDescription(RMenu, True);
+	printf("%s\n", tmp);
+	wfree(tmp);
 
 	return 0;
 }
@@ -451,6 +457,7 @@ static void find_and_write(const char *group, char *list[][2], int this_is_termi
 			WMAddToPLArray(L2Menu, L3Menu);
 			wfree(t);
 		}
+		wtokenfree(argv, argc);
 		i++;
 	}
 	if (L2Menu)
@@ -503,7 +510,7 @@ noreturn void print_help(int print_usage, int exitval)
 {
 	printf("Usage: %s [-h] [-v]\n", prog_name);
 	if (print_usage) {
-		puts("Writes a menu structure usable as ~/GNUstep/Defaults/WMRootMenu to stdout");
+		puts("Writes a menu structure usable as ~/" GSUSER_SUBDIR "/" DEFAULTS_SUBDIR "/WMRootMenu to stdout");
 		puts("");
 		puts("  -h, --help           display this help and exit");
 		puts("  -v, --version        output version information and exit");

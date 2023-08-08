@@ -51,7 +51,7 @@ static WMColor *findCloseColor(WMScreen * scr, unsigned short red, unsigned shor
 	color->refCount = 1;
 	color->color = xcolor;
 	color->alpha = alpha;
-	color->flags.exact = 1;
+	color->flags.exact = 0;
 	color->gc = NULL;
 
 	return color;
@@ -91,7 +91,7 @@ WMColor *WMCreateRGBColor(WMScreen * scr, unsigned short red, unsigned short gre
 		color = findCloseColor(scr, red, green, blue, 0xffff);
 	}
 	if (!color)
-		color = WMBlackColor(scr);
+		color = scr->black;
 
 	return color;
 }
@@ -117,7 +117,7 @@ WMColor *WMCreateRGBAColor(WMScreen * scr, unsigned short red, unsigned short gr
 		color = findCloseColor(scr, red, green, blue, alpha);
 	}
 	if (!color)
-		color = WMBlackColor(scr);
+		color = scr->black;
 
 	return color;
 }

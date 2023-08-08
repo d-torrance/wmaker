@@ -4,6 +4,7 @@
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
  *  Copyright (c) 1998-2003 Dan Pascu
+ *  Copyright (c) 2009-2023 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -603,7 +604,7 @@ static void toggleAutoAttractCallback(WMenu *menu, WMenuEntry *entry)
 
 	if (dock->attract_icons) {
 		if (dock->type == WM_DRAWER) {
-			/* The newly auto-attracting dock is a drawer: disable any clip and 
+			/* The newly auto-attracting dock is a drawer: disable any clip and
 			 * previously attracting drawer */
 
 			if (!wPreferences.flags.noclip) {
@@ -814,6 +815,29 @@ static void unhideHereCallback(WMenu *menu, WMenuEntry *entry)
 	wUnhideApplication(wapp, False, True);
 }
 
+static int getDockXPosition(WScreen *scr, Bool on_right_side)
+{
+	int x;
+
+	if (wPreferences.keep_dock_on_primary_head) {
+		WMRect rect;
+
+		rect = wGetRectForHead(scr, scr->xine_info.primary_head);
+		x = rect.pos.x;
+		if (on_right_side)
+			x += rect.size.width - ICON_SIZE - DOCK_EXTRA_SPACE;
+		else
+			x += DOCK_EXTRA_SPACE;
+	} else {
+		if (on_right_side)
+			x = scr->scr_width - ICON_SIZE - DOCK_EXTRA_SPACE;
+		else
+			x = DOCK_EXTRA_SPACE;
+	}
+
+	return x;
+}
+
 /* Name is only used when type == WM_DRAWER and when restoring a specific
  * drawer, with a specific name. When creating a drawer, leave name to NULL
  * and mainIconCreate will find the first unused unique name */
@@ -836,14 +860,14 @@ static WAppIcon *mainIconCreate(WScreen *scr, int type, const char *name)
 		btn = wAppIconCreateForDock(scr, NULL, "Logo", "WMDock", TILE_NORMAL);
 		if (wPreferences.flags.clip_merged_in_dock)
 			btn->icon->core->descriptor.handle_expose = clipIconExpose;
-		x_pos = scr->scr_width - ICON_SIZE - DOCK_EXTRA_SPACE;
+		x_pos = getDockXPosition(scr, True);
 		break;
 	case WM_DRAWER:
 		if (name == NULL)
 			name = findUniqueName(scr, "Drawer");
 		btn = wAppIconCreateForDock(scr, NULL, name, "WMDrawer", TILE_DRAWER);
 		btn->icon->core->descriptor.handle_expose = drawerIconExpose;
-		x_pos = 0;		
+		x_pos = 0;
 	}
 
 	btn->xindex = 0;
@@ -1545,7 +1569,7 @@ static WMPropList *dockSaveState(WDock *dock)
 		WMPutInPLDictionary(dock_state, key, list);
 		WMReleasePropList(key);
 
-		snprintf(buffer, sizeof(buffer), "%i,%i", (dock->on_right_side ? -ICON_SIZE : 0), dock->y_pos);
+		snprintf(buffer, sizeof(buffer), "%i,%i", dock->x_pos, dock->y_pos);
 		value = WMCreatePLString(buffer);
 		WMPutInPLDictionary(dock_state, dPosition, value);
 		WMReleasePropList(value);
@@ -1823,11 +1847,17 @@ WDock *wDockRestoreState(WScreen *scr, WMPropList *dock_state, int type)
 					dock->x_pos = scr->scr_width - ICON_SIZE;
 				}
 			} else {
-				if (dock->x_pos >= 0) {
-					dock->x_pos = DOCK_EXTRA_SPACE;
+				int left, right, midpoint;
+
+				left = getDockXPosition(scr, False);
+				right = getDockXPosition(scr, True);
+				midpoint = (left + right) / 2;
+
+				if (dock->x_pos < midpoint) {
+					dock->x_pos = left;
 					dock->on_right_side = 0;
 				} else {
-					dock->x_pos = scr->scr_width - DOCK_EXTRA_SPACE - ICON_SIZE;
+					dock->x_pos = right;
 					dock->on_right_side = 1;
 				}
 			}
@@ -2628,7 +2658,7 @@ Bool wDockSnapIcon(WDock *dock, WAppIcon *icon, int req_x, int req_y, int *ret_x
 				continue;
 			for (i = 0; i < tmp->max_icons; i++) {
 				nicon = tmp->icon_array[i];
-				if (nicon && nicon != icon &&	/* Icon can't be it's own neighbour */
+				if (nicon && nicon != icon &&	/* Icon can't be its own neighbour */
 				    (abs(nicon->xindex - ex_x) <= CLIP_ATTACH_VICINITY &&
 				     abs(nicon->yindex - ex_y) <= CLIP_ATTACH_VICINITY)) {
 					neighbours = 1;
@@ -3003,18 +3033,15 @@ static void moveDock(WDock *dock, int new_x, int new_y)
 	}
 }
 
-static void swapDock(WDock *dock)
+void wDockSwap(WDock *dock)
 {
 	WScreen *scr = dock->screen_ptr;
 	WAppIcon *btn;
 	int x, i;
 
-	if (dock->on_right_side)
-		x = dock->x_pos = scr->scr_width - ICON_SIZE - DOCK_EXTRA_SPACE;
-	else
-		x = dock->x_pos = DOCK_EXTRA_SPACE;
-
+	x = getDockXPosition(scr, dock->on_right_side);
 	swapDrawers(scr, x);
+	dock->x_pos = x;
 
 	for (i = 0; i < dock->max_icons; i++) {
 		btn = dock->icon_array[i];
@@ -3595,7 +3622,10 @@ static void openDockMenu(WDock *dock, WAppIcon *aicon, XEvent *event)
 			x_pos = scr->scr_width - dock->menu->frame->core->width - 4;
 		}
 	} else {
-		x_pos = dock->on_right_side ? scr->scr_width - dock->menu->frame->core->width - 3 : 0;
+		x_pos = dock->x_pos;
+		if (dock->on_right_side)
+			x_pos += ICON_SIZE + DOCK_EXTRA_SPACE
+				- dock->menu->frame->core->width - 3;
 	}
 
 	wMenuMapAt(dock->menu, x_pos, event->xbutton.y_root + 2, False);
@@ -3751,7 +3781,7 @@ static void handleDockMove(WDock *dock, WAppIcon *aicon, XEvent *event)
 				if (now_on_right != dock->on_right_side)
 				{
 					dock->on_right_side = now_on_right;
-					swapDock(dock);
+					wDockSwap(dock);
 					wArrangeIcons(scr, False);
 				}
 				// Also perform the vertical move
@@ -4386,7 +4416,7 @@ static int addADrawer(WScreen *scr)
 			}
 		}
 	}
-    
+
 	if (!found_y)
 		/* This can happen even when dock->icon_count + scr->drawer_count
 		 * < dock->max_icons when the dock is not aligned on an
@@ -4580,7 +4610,7 @@ static void swapDrawer(WDock *drawer, int new_x)
 {
 	int i;
 
-	drawer->on_right_side = !drawer->on_right_side;
+	drawer->on_right_side = drawer->screen_ptr->dock->on_right_side;
 	drawer->x_pos = new_x;
 
 	for (i = 0; i < drawer->max_icons; i++) {
@@ -4589,7 +4619,10 @@ static void swapDrawer(WDock *drawer, int new_x)
 		ai = drawer->icon_array[i];
 		if (ai == NULL)
 			continue;
-		ai->xindex *= -1; /* so A B C becomes C B A */
+		if (drawer->on_right_side)
+			ai->xindex = -abs(ai->xindex);
+		else
+			ai->xindex = abs(ai->xindex);
 		ai->x_pos = new_x + ai->xindex * ICON_SIZE;
 
 		/* Update drawer's tile */
@@ -4893,6 +4926,13 @@ static WDock * drawerRestoreState(WScreen *scr, WMPropList *drawer_state)
 		drawer->icon_array[drawer->icon_count] = aicon;
 
 		if (aicon) {
+			/* don't trust the stored direction sign as the dock is
+			 * dynamically positioned depending on the screen size
+			 */
+			if (drawer->screen_ptr->dock->on_right_side)
+				aicon->xindex = -abs(aicon->xindex);
+			else
+				aicon->xindex = abs(aicon->xindex);
 			aicon->dock = drawer;
 			aicon->x_pos = drawer->x_pos + (aicon->xindex * ICON_SIZE);
 			aicon->y_pos = drawer->y_pos + (aicon->yindex * ICON_SIZE);

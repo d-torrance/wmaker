@@ -3,7 +3,7 @@
 
 #define XDND_COLOR_DATA_TYPE "application/X-color"
 
-char *WMColorWellDidChangeNotification = "WMColorWellDidChangeNotification";
+const char *WMColorWellDidChangeNotification = "WMColorWellDidChangeNotification";
 
 typedef struct W_ColorWell {
 	W_Class widgetClass;
@@ -173,10 +173,10 @@ WMColorWell *WMCreateColorWell(WMWidget * parent)
 
 void WMSetColorWellColor(WMColorWell * cPtr, WMColor * color)
 {
-	if (cPtr->color)
+	if (cPtr->color && cPtr->color != color) {
 		WMReleaseColor(cPtr->color);
-
-	cPtr->color = WMRetainColor(color);
+		cPtr->color = WMRetainColor(color);
+	}
 
 	if (cPtr->colorView->flags.realized && cPtr->colorView->flags.mapped)
 		paintColorWell(cPtr);

@@ -1522,8 +1522,8 @@ msgstr ""
 "Confirmez-vous ?"
 
 #: ../src/winmenu.c:274 ../src/winmenu.c:283
-msgid "Set Shortcut"
-msgstr "Attribuer le raccourci"
+msgid "Set Shortcut %i"
+msgstr "Attribuer le raccourci n°%i"
 
 #: ../src/winmenu.c:361 ../src/winmenu.c:406
 msgid "could not create submenu for window menu"
@@ -1648,7 +1648,7 @@ msgstr "Sans barre de titre"
 msgid ""
 "Remove the titlebar of this window.\n"
 "To access the window commands menu of a window\n"
-"without it's titlebar, press Control+Esc (or the\n"
+"without its titlebar, press Control+Esc (or the\n"
 "equivalent shortcut, if you changed the default\n"
 "settings)."
 msgstr ""

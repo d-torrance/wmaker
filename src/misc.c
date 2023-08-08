@@ -38,6 +38,7 @@
 #include <X11/XKBlib.h>
 
 #include <WINGs/WUtil.h>
+#include <WINGs/WINGsP.h>
 #include <wraster.h>
 
 #include "window.h"
@@ -53,6 +54,7 @@
 #include "xmodifier.h"
 #include "main.h"
 #include "event.h"
+#include "shutdown.h"
 
 
 #define ICON_SIZE wPreferences.icon_size
@@ -679,6 +681,64 @@ char *ExpandOptions(WScreen *scr, const char *cmdline)
 	return NULL;
 }
 
+void ExecuteExitCommand(WScreen *scr, long quickmode)
+{
+	static int inside = 0;
+	int result;
+
+	/* prevent reentrant calls */
+	if (inside)
+		return;
+	inside = 1;
+
+#define R_CANCEL 0
+#define R_EXIT   1
+
+	result = R_CANCEL;
+
+	if (quickmode == M_QUICK) {
+		result = R_EXIT;
+	} else {
+		int r, oldSaveSessionFlag;
+
+		oldSaveSessionFlag = wPreferences.save_session_on_exit;
+		r = wExitDialog(scr, _("Exit"),
+				_("Are you sure you want to quit Window Maker?"), _("Exit"), _("Cancel"), NULL);
+
+		if (r == WAPRDefault) {
+			result = R_EXIT;
+		} else if (r == WAPRAlternate) {
+			/* Don't modify the "save session on exit" flag if the
+			 * user canceled the operation. */
+			wPreferences.save_session_on_exit = oldSaveSessionFlag;
+		}
+	}
+	if (result == R_EXIT)
+		Shutdown(WSExitMode);
+
+#undef R_EXIT
+#undef R_CANCEL
+	inside = 0;
+}
+
+void ExecuteInputCommand(WScreen *scr, const char *cmdline)
+{
+	char *cmd;
+
+	cmd = ExpandOptions(scr, cmdline);
+	if (cmd) {
+		XGrabPointer(dpy, scr->root_win, True, 0,
+		     GrabModeAsync, GrabModeAsync, None, wPreferences.cursor[WCUR_WAIT], CurrentTime);
+		XSync(dpy, False);
+
+		ExecuteShellCommand(scr, cmd);
+		wfree(cmd);
+
+		XUngrabPointer(dpy, CurrentTime);
+		XSync(dpy, False);
+	}
+}
+
 void ParseWindowName(WMPropList *value, char **winstance, char **wclass, const char *where)
 {
 	char *name;
@@ -739,6 +799,7 @@ char *GetShortcutString(const char *shortcut)
 		*k = 0;
 		mod = wXModifierFromKey(text);
 		if (mod < 0) {
+			wfree(buffer);
 			return wstrdup("bug");
 		}
 		lbl = wXModifierToShortcutLabel(mod);
@@ -781,7 +842,7 @@ char *GetShortcutKey(WShortKey key)
 		}
 	}
 
-	key_name = XKeysymToString(XkbKeycodeToKeysym(dpy, key.keycode, 0, 0));
+	key_name = XKeysymToString(W_KeycodeToKeysym(dpy, key.keycode, 0));
 	if (!key_name)
 		return NULL;
 
@@ -1017,7 +1078,7 @@ Bool UpdateDomainFile(WDDomain * domain)
 	dict = domain->dictionary;
 	if (WMIsPLDictionary(domain->dictionary)) {
 		/* retrieve global system dictionary */
-		snprintf(path, sizeof(path), "%s/%s", DEFSDATADIR, domain->domain_name);
+		snprintf(path, sizeof(path), "%s/%s", PKGCONFDIR, domain->domain_name);
 		if (stat(path, &stbuf) >= 0) {
 			shared_dict = WMReadPropListFromFile(path);
 			if (shared_dict) {

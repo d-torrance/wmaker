@@ -1,5 +1,5 @@
 # Translation into Western Frisian for Window Maker
-# Copyright (C) 2015-2016 Window Maker Developers Team
+# Copyright (C) 2015-2020 Window Maker Developers Team
 # This file is distributed under the same license as the windowmaker package.
 # Original by Alwin <translations@ziggo.nl>, 2015.
 #
@@ -1626,7 +1626,7 @@ msgstr "Titelbalke útskeakelje"
 msgid ""
 "Remove the titlebar of this window.\n"
 "To access the window commands menu of a window\n"
-"without it's titlebar, press Control+Esc (or the\n"
+"without its titlebar, press Control+Esc (or the\n"
 "equivalent shortcut, if you changed the default\n"
 "settings)."
 msgstr ""

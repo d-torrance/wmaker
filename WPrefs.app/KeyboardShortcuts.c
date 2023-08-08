@@ -65,7 +65,7 @@ typedef struct _Panel {
  * First parameter is the internal keyword known by WMaker
  * Second is the text displayed to the user
  */
-static const struct {
+static struct keyOption {
 	const char *key;
 	const char *title;
 } keyOptions[] = {
@@ -84,11 +84,12 @@ static const struct {
 	{ "RHMaximizeKey",  N_("Maximize active window right half") },
 	{ "THMaximizeKey",  N_("Maximize active window top half") },
 	{ "BHMaximizeKey",  N_("Maximize active window bottom half") },
-	{ "LTCMaximizeKey", N_("Maximize active window left top corner") },
-	{ "RTCMaximizeKey", N_("Maximize active window right top corner") },
-	{ "LBCMaximizeKey", N_("Maximize active window left bottom corner") },
-	{ "RBCMaximizeKey", N_("Maximize active window right bottom corner") },
-	{ "MaximusKey",     N_("Maximus: Tiled maximization ") },
+	{ "TLCMaximizeKey", N_("Maximize active window top left corner") },
+	{ "TRCMaximizeKey", N_("Maximize active window top right corner") },
+	{ "BLCMaximizeKey", N_("Maximize active window bottom left corner") },
+	{ "BRCMaximizeKey", N_("Maximize active window bottom right corner") },
+	{ "MaximusKey",     N_("Tile active window") },
+	{ "CenterKey",      N_("Center active window") },
 	{ "KeepOnTopKey",   N_("Toggle window on top status") },
 	{ "KeepAtBottomKey",N_("Toggle window at bottom status") },
 	{ "OmnipresentKey", N_("Toggle window omnipresent status") },
@@ -154,10 +155,14 @@ static const struct {
 
 	/* Misc. */
 	{ "WindowRelaunchKey", N_("Launch new instance of application") },
-	{ "ScreenSwitchKey",   N_("Switch to Next Screen/Monitor") },
+	{ "ScreenSwitchKey",   N_("Switch to next screen/monitor") },
 	{ "RunKey",            N_("Run application") },
+	{ "ExitKey",            N_("Exit Window Maker") },
 	{ "DockRaiseLowerKey", N_("Raise/Lower Dock") },
-	{ "ClipRaiseLowerKey", N_("Raise/Lower Clip") }
+	{ "ClipRaiseLowerKey", N_("Raise/Lower Clip") },
+	{ "ScreenCaptureKey", N_("Capture the entire screen") },
+	{ "WindowCaptureKey", N_("Capture a window") },
+	{ "PartialCaptureKey", N_("Capture a portion of the screen") }
 #ifdef XKB_MODELOCK
 	,{ "ToggleKbdModeKey", N_("Toggle keyboard language") }
 #endif				/* XKB_MODELOCK */
@@ -316,11 +321,8 @@ char *capture_shortcut(Display *dpy, Bool *capturing, Bool convert_case)
 		if (ev.type == KeyPress && ev.xkey.keycode != 0) {
 			numlock_mask = NumLockMask(dpy);
 
-			if (xext_xkb_supported)
-				/* conditional mask check to get numeric keypad keys */
-				ksym = XkbKeycodeToKeysym(dpy, ev.xkey.keycode, 0, ev.xkey.state & numlock_mask?1:0);
-			else
-				ksym = XKeycodeToKeysym(dpy, ev.xkey.keycode, 0);
+			/* conditional mask check to get numeric keypad keys */
+			ksym = W_KeycodeToKeysym(dpy, ev.xkey.keycode, ev.xkey.state & numlock_mask?1:0);
 
 			if (!IsModifierKey(ksym)) {
 				if (convert_case) {
@@ -368,6 +370,36 @@ char *capture_shortcut(Display *dpy, Bool *capturing, Bool convert_case)
 	return wstrdup(buffer);
 }
 
+/*
+ * check if the keystr entered is already set to another action
+ * if found it returns the position in the keyOptions
+ */
+static int isKeySet(_Panel *panel, char *keystr)
+{
+	int i;
+	char *str;
+
+	for (i = 0; i < panel->actionCount; i++) {
+		str = NULL;
+		if (panel->shortcuts[i]) {
+			str = wtrimspace(panel->shortcuts[i]);
+			if (strlen(str) == 0) {
+				wfree(str);
+				str = NULL;
+			}
+		}
+		if (str) {
+			if (strcmp(keystr, str) == 0) {
+				wfree(str);
+				return i;
+			}
+			wfree(str);
+		}
+	}
+
+	return -1;
+}
+
 static void captureClick(WMWidget * w, void *data)
 {
 	_Panel *panel = (_Panel *) data;
@@ -382,17 +414,31 @@ static void captureClick(WMWidget * w, void *data)
 		XGrabKeyboard(dpy, WMWidgetXID(panel->parent), True, GrabModeAsync, GrabModeAsync, CurrentTime);
 		shortcut = capture_shortcut(dpy, &panel->capturing, 1);
 		if (shortcut) {
+			int key_idx = -1;
 			int row = WMGetListSelectedItemRow(panel->actLs);
 
-			WMSetTextFieldText(panel->shoT, shortcut);
-			if (row >= 0) {
-				if (panel->shortcuts[row])
-					wfree(panel->shortcuts[row]);
-				panel->shortcuts[row] = shortcut;
+			key_idx = isKeySet(panel, shortcut);
+			if (key_idx >= 0 && (key_idx != row)) {
+				char *msg;
 
-				WMRedisplayWidget(panel->actLs);
-			} else {
+				msg = wstrconcat(_("Key shortcut already in use by the "), _(keyOptions[key_idx].title));
+				WMRunAlertPanel(WMWidgetScreen(w), GetWindow(),
+						_("Error"),
+						msg,
+						_("OK"), NULL, NULL);
+				wfree(msg);
 				wfree(shortcut);
+			} else {
+				WMSetTextFieldText(panel->shoT, shortcut);
+				if (row >= 0) {
+					if (panel->shortcuts[row])
+						wfree(panel->shortcuts[row]);
+					panel->shortcuts[row] = shortcut;
+
+					WMRedisplayWidget(panel->actLs);
+				} else {
+					wfree(shortcut);
+				}
 			}
 		}
 	}
@@ -499,6 +545,20 @@ static void paintItem(WMList * lPtr, int index, Drawable d, char *text, int stat
 	WMDrawString(scr, d, panel->black, panel->font, x + 20, y, text, strlen(text));
 }
 
+static int cmpKeyOptions(const void *v1, const void *v2)
+{
+	int rc;
+	const struct keyOption *opt1 = (struct keyOption *)v1;
+	const struct keyOption *opt2 = (struct keyOption *)v2;
+
+	if ((rc = strncmp(opt1->title, opt2->title, 20)) < 0)
+		return -1;
+	else if (rc > 0)
+		return 1;
+	return 0;
+}
+
+
 static void createPanel(Panel * p)
 {
 	_Panel *panel = (_Panel *) p;
@@ -538,6 +598,7 @@ static void createPanel(Panel * p)
 	WMSetListUserDrawProc(panel->actLs, paintItem);
 	WMHangData(panel->actLs, panel);
 
+	qsort(keyOptions, wlengthof(keyOptions), sizeof(keyOptions[0]), cmpKeyOptions);
 	for (i = 0; i < wlengthof(keyOptions); i++) {
 		WMAddListItem(panel->actLs, _(keyOptions[i].title));
 	}

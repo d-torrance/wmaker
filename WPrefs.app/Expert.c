@@ -2,8 +2,9 @@
  *
  *  WPrefs - Window Maker Preferences Program
  *
- *  Copyright (c) 2014 Window Maker Team
+ *  Copyright (c) 2014-2023 Window Maker Team
  *  Copyright (c) 1998-2003 Alfredo K. Kojima
+ *  Copyright (c) 2009-2023 Window Maker Team
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -25,7 +26,7 @@
 /* This structure containts the list of all the check-buttons to display in the
  * expert tab of the window with the corresponding information for effect
  */
-static const struct {
+static struct expert_option {
 	const char *label;  /* Text displayed to user */
 
 	int def_state;  /* True/False: the default value, if not defined in current config */
@@ -88,7 +89,7 @@ static const struct {
 	  /* default: */ False, OPTION_WMAKER, "KbdModeLock" },
 #endif /* XKB_MODELOCK */
 
-	{ N_("Maximize (snap) a window to edge or corner by dragging."),
+	{ N_("Snap a window to edge or corner by dragging."),
 	  /* default: */ False, OPTION_WMAKER, "WindowSnapping" },
 
 	{ N_("Distance from edge to begin window snap."),
@@ -97,7 +98,7 @@ static const struct {
 	{ N_("Distance from corner to begin window snap."),
 	  /* default: */ 10, OPTION_WMAKER_INT, "SnapCornerDetect" },
 
-	{ N_("Snapping a window to the top maximizes it to the full screen."),
+	{ N_("Snap a window to the top to maximize it to the full screen."),
 	  /* default: */ False, OPTION_WMAKER, "SnapToTopMaximizesFullscreen" },
 
 	{ N_("Allow move half-maximized windows between multiple screens."),
@@ -113,7 +114,15 @@ static const struct {
 	  /* default: */ False, OPTION_WMAKER, "OpenTransientOnOwnerWorkspace" },
 
 	{ N_("Wrap dock-attached icons around the screen edges."),
-	  /* default: */ True, OPTION_WMAKER, "WrapAppiconsInDock" }
+	  /* default: */ True, OPTION_WMAKER, "WrapAppiconsInDock" },
+	  
+	{ N_("Double click on titlebar maximizes/minimizes a window to/from full screen."),
+	  /* default: */ False, OPTION_WMAKER, "DbClickFullScreen" },
+
+	{ N_("Close rootmenu when mouse (left or right) is clicked outside focus."),
+	  /* default: */ False, OPTION_WMAKER, "CloseRootMenuByLeftOrRightMouseClick" },
+	{ N_("Keep dock on primary head."),
+	  /* default: */ False, OPTION_WMAKER, "KeepDockOnPrimaryHead"},
 
 };
 
@@ -140,15 +149,16 @@ typedef struct _Panel {
 static void changeIntTextfield(void *data, int delta)
 {
 	WMTextField *textfield;
-	char *text;
+	char *text, buffer[12];
 	int value;
 
 	textfield = (WMTextField *)data;
 	text = WMGetTextFieldText(textfield);
 	value = atoi(text);
+	wfree(text);
 	value += delta;
-	sprintf(text, "%d", value);
-	WMSetTextFieldText(textfield, text);
+	sprintf(buffer, "%d", value);
+	WMSetTextFieldText(textfield, buffer);
 }
 
 static void downButtonCallback(WMWidget *self, void *data)
@@ -161,6 +171,19 @@ static void upButtonCallback(WMWidget *self, void *data)
 {
 	(void) self;
 	changeIntTextfield(data, 1);
+}
+
+static int cmpExpertOptions(const void *v1, const void *v2)
+{
+	int rc;
+	const struct expert_option *opt1 = (struct expert_option *)v1;
+	const struct expert_option *opt2 = (struct expert_option *)v2;
+
+	if ((rc = strcmp(opt1->label, opt2->label)) < 0)
+		return -1;
+	else if (rc > 0)
+		return 1;
+	return 0;
 }
 
 static void createPanel(Panel *p)
@@ -186,6 +209,7 @@ static void createPanel(Panel *p)
 	WMSetFrameRelief(f, WRFlat);
 
 	udb = WMGetStandardUserDefaults();
+	qsort(expert_options, wlengthof(expert_options), sizeof(expert_options[0]), cmpExpertOptions);
 	for (i = 0; i < wlengthof(expert_options); i++) {
 		if (expert_options[i].class != OPTION_WMAKER_INT) {
 			panel->swi[i] = WMCreateSwitchButton(f);
@@ -308,6 +332,7 @@ static void storeDefaults(_Panel *panel)
 
 			text = WMGetTextFieldText(panel->textfield[i]);
 			value = atoi(text);
+			wfree(text);
 
 			SetIntegerForKey(value, expert_options[i].op_name);
 			break;

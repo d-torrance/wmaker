@@ -4,7 +4,7 @@
  *
  *  Copyright (c) 1997-2003 Alfredo K. Kojima
  *  Copyright (c) 1998-2003 Dan Pascu
- *  Copyright (c) 2014 Window Maker Team
+ *  Copyright (c) 2014-2023 Window Maker Team
 
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -151,9 +151,11 @@ static WDECallbackUpdate setSwPOptions;
 static WDECallbackUpdate updateUsableArea;
 
 static WDECallbackUpdate setModifierKeyLabels;
+static WDECallbackUpdate setHotCornerActions;
 
 static WDECallbackConvert getCursor;
 static WDECallbackUpdate setCursor;
+static WDECallbackUpdate updateDock;
 
 /*
  * Tables to convert strings to enumeration values.
@@ -521,6 +523,17 @@ WDefaultEntry optionList[] = {
 	    &wPreferences.minipreview_size, getInt, NULL, NULL, NULL},
 	{"IgnoreGtkHints", "NO", NULL,
 	    &wPreferences.ignore_gtk_decoration_hints, getBool, NULL, NULL, NULL},
+	{"KeepDockOnPrimaryHead", "NO", NULL,
+	    &wPreferences.keep_dock_on_primary_head, getBool, updateDock,
+	    NULL, NULL},
+	{"HotCorners", "NO", NULL,
+	    &wPreferences.hot_corners, getBool, NULL, NULL, NULL},
+	{"HotCornerDelay", "250", (void *)&wPreferences.hot_corner_delay,
+	    &wPreferences.hot_corner_delay, getInt, NULL, NULL, NULL},
+	{"HotCornerEdge", "2", (void *)&wPreferences.hot_corner_edge,
+	    &wPreferences.hot_corner_edge, getInt, NULL, NULL, NULL},
+	{"HotCornerActions", "(\"None\", \"None\", \"None\", \"None\")", &wPreferences,
+	    NULL, getPropList, setHotCornerActions, NULL, NULL},
 
 	/* style options */
 
@@ -658,16 +671,18 @@ WDefaultEntry optionList[] = {
 		NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"BHMaximizeKey", "None", (void*)WKBD_BHMAXIMIZE,
 		NULL, getKeybind, setKeyGrab, NULL, NULL},
-	{"LTCMaximizeKey", "None", (void*)WKBD_LTCMAXIMIZE,
+	{"TLCMaximizeKey", "None", (void*)WKBD_LTCMAXIMIZE,
 		NULL, getKeybind, setKeyGrab, NULL, NULL},
-	{"RTCMaximizeKey", "None", (void*)WKBD_RTCMAXIMIZE,
+	{"TRCMaximizeKey", "None", (void*)WKBD_RTCMAXIMIZE,
 		NULL, getKeybind, setKeyGrab, NULL, NULL},
-	{"LBCMaximizeKey", "None", (void*)WKBD_LBCMAXIMIZE,
+	{"BLCMaximizeKey", "None", (void*)WKBD_LBCMAXIMIZE,
 		NULL, getKeybind, setKeyGrab, NULL, NULL},
-	{"RBCMaximizeKey", "None", (void*)WKBD_RBCMAXIMIZE,
+	{"BRCMaximizeKey", "None", (void*)WKBD_RBCMAXIMIZE,
 		NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"MaximusKey", "None", (void*)WKBD_MAXIMUS,
 		NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"CenterKey", "None", (void *)WKBD_CENTRAL,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"KeepOnTopKey", "None", (void *)WKBD_KEEP_ON_TOP,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"KeepAtBottomKey", "None", (void *)WKBD_KEEP_AT_BOTTOM,
@@ -784,6 +799,14 @@ WDefaultEntry optionList[] = {
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 	{"RunKey", "None", (void *)WKBD_RUN,
 	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"ExitKey", "None", (void *)WKBD_EXIT,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"ScreenCaptureKey", "None", (void *)WKBD_PRINTS,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"WindowCaptureKey", "None", (void *)WKBD_PRINTW,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
+	{"PartialCaptureKey", "None", (void *)WKBD_PRINTP,
+	    NULL, getKeybind, setKeyGrab, NULL, NULL},
 
 #ifdef KEEP_XKB_LOCK_STATUS
 	{"ToggleKbdModeKey", "None", (void *)WKBD_TOGGLE,
@@ -820,12 +843,18 @@ WDefaultEntry optionList[] = {
 	    NULL, getCursor, setCursor, NULL, NULL},
 	{"SelectCursor", "(builtin, cross)", (void *)WCUR_SELECT,
 	    NULL, getCursor, setCursor, NULL, NULL},
+	{"CaptureCursor", "(builtin, crosshair)", (void *)WCUR_CAPTURE,
+	    NULL, getCursor, setCursor, NULL, NULL},
 	{"DialogHistoryLines", "500", NULL,
 	    &wPreferences.history_lines, getInt, NULL, NULL, NULL},
 	{"CycleActiveHeadOnly", "NO", NULL,
 	    &wPreferences.cycle_active_head_only, getBool, NULL, NULL, NULL},
 	{"CycleIgnoreMinimized", "NO", NULL,
-	    &wPreferences.cycle_ignore_minimized, getBool, NULL, NULL, NULL}
+	    &wPreferences.cycle_ignore_minimized, getBool, NULL, NULL, NULL},
+	{"DbClickFullScreen", "NO", NULL,
+	    &wPreferences.double_click_fullscreen, getBool, NULL, NULL, NULL},
+	{"CloseRootMenuByLeftOrRightMouseClick", "NO", NULL,
+	    &wPreferences.close_rootmenu_left_right_click, getBool, NULL, NULL, NULL}
 };
 
 static void initDefaults(void)
@@ -862,7 +891,7 @@ static WMPropList *readGlobalDomain(const char *domainName, Bool requireDictiona
 	char path[PATH_MAX];
 	struct stat stbuf;
 
-	snprintf(path, sizeof(path), "%s/%s", DEFSDATADIR, domainName);
+	snprintf(path, sizeof(path), "%s/%s", PKGCONFDIR, domainName);
 	if (stat(path, &stbuf) >= 0) {
 		globalDict = WMReadPropListFromFile(path);
 		if (globalDict && requireDictionary && !WMIsPLDictionary(globalDict)) {
@@ -912,7 +941,7 @@ void wDefaultsMergeGlobalMenus(WDDomain * menuDomain)
 		return;
 
 #ifdef GLOBAL_PREAMBLE_MENU_FILE
-	submenu = WMReadPropListFromFile(DEFSDATADIR "/" GLOBAL_PREAMBLE_MENU_FILE);
+	submenu = WMReadPropListFromFile(PKGCONFDIR "/" GLOBAL_PREAMBLE_MENU_FILE);
 
 	if (submenu && !WMIsPLArray(submenu)) {
 		wwarning(_("invalid global menu file %s"), GLOBAL_PREAMBLE_MENU_FILE);
@@ -926,7 +955,7 @@ void wDefaultsMergeGlobalMenus(WDDomain * menuDomain)
 #endif
 
 #ifdef GLOBAL_EPILOGUE_MENU_FILE
-	submenu = WMReadPropListFromFile(DEFSDATADIR "/" GLOBAL_EPILOGUE_MENU_FILE);
+	submenu = WMReadPropListFromFile(PKGCONFDIR "/" GLOBAL_EPILOGUE_MENU_FILE);
 
 	if (submenu && !WMIsPLArray(submenu)) {
 		wwarning(_("invalid global menu file %s"), GLOBAL_EPILOGUE_MENU_FILE);
@@ -2074,7 +2103,7 @@ getWSSpecificBackground(WScreen * scr, WDefaultEntry * entry, WMPropList * value
 	 * Kluge to force wmsetbg helper to set the default background.
 	 * If the WorkspaceSpecificBack is changed once wmaker has started,
 	 * the WorkspaceBack won't be sent to the helper, unless the user
-	 * changes it's value too. So, we must force this by removing the
+	 * changes its value too. So, we must force this by removing the
 	 * value from the defaults DB.
 	 */
 	if (!scr->flags.backimage_helper_launched && !scr->flags.startup) {
@@ -3443,6 +3472,43 @@ static int setModifierKeyLabels(WScreen * scr, WDefaultEntry * entry, void *tdat
 	return 0;
 }
 
+static int setHotCornerActions(WScreen * scr, WDefaultEntry * entry, void *tdata, void *foo)
+{
+	WMPropList *array = tdata;
+	int i;
+	struct WPreferences *prefs = foo;
+
+	if (!WMIsPLArray(array) || WMGetPropListItemCount(array) != 4) {
+		wwarning(_("Value for option \"%s\" must be an array of 4 strings"), entry->key);
+		WMReleasePropList(array);
+		return 0;
+	}
+
+	DestroyWindowMenu(scr);
+
+	for (i = 0; i < 4; i++) {
+		if (prefs->hot_corner_actions[i])
+			wfree(prefs->hot_corner_actions[i]);
+
+		if (WMIsPLString(WMGetFromPLArray(array, i))) {
+			const char *val;
+			val = WMGetFromPLString(WMGetFromPLArray(array, i));
+			if (strcasecmp(val, "NONE") != 0)
+				prefs->hot_corner_actions[i] = wstrdup(val);
+			else
+				prefs->hot_corner_actions[i] = NULL;
+		} else {
+			wwarning(_("Invalid argument for option \"%s\" item %d"), entry->key, i);
+			prefs->hot_corner_actions[i] = NULL;
+		}
+	}
+
+	WMReleasePropList(array);
+
+	return 0;
+}
+
+
 static int setDoubleClick(WScreen *scr, WDefaultEntry *entry, void *tdata, void *foo)
 {
 	int *value = tdata;
@@ -3476,6 +3542,18 @@ static int setCursor(WScreen * scr, WDefaultEntry * entry, void *tdata, void *ex
 	if (widx == WCUR_ROOT && *cursor != None) {
 		XDefineCursor(dpy, scr->root_win, *cursor);
 	}
+
+	return 0;
+}
+
+static int updateDock(WScreen * scr, WDefaultEntry * entry,
+			      void *tdata, void *extra_data) {
+	(void) entry;
+	(void) tdata;
+	(void) extra_data;
+
+	if (scr->dock)
+		wDockSwap(scr->dock);
 
 	return 0;
 }

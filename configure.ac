@@ -2,7 +2,7 @@ dnl ============================================================================
 dnl
 dnl Window Maker autoconf input
 dnl
-AC_COPYRIGHT([Copyright (c) 2001-2015 The Window Maker Team])
+AC_COPYRIGHT([Copyright (c) 2001-2023 The Window Maker Team])
 dnl
 dnl ============================================================================
 dnl
@@ -34,14 +34,14 @@ AC_PREREQ([2.69])
 
 dnl Configuration for Autoconf and Automake
 dnl =======================================
-AC_INIT([WindowMaker],[0.95.9],[wmaker-dev@googlegroups.com],[WindowMaker],[http://www.windowmaker.org/])
+AC_INIT([WindowMaker],[0.96.0],[wmaker-dev@googlegroups.com],[WindowMaker],[http://www.windowmaker.org/])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_HEADERS([config.h])
 
 dnl We need the EXTRA_xxx_DEPENDENCIES keyword in Makefiles which have been
 dnl introduced in the version 1.11.3; because the 1.12 was realeased shortly
 dnl after, we just ask for it
-AM_INIT_AUTOMAKE([1.12 silent-rules])
+AM_INIT_AUTOMAKE([1.12 silent-rules -Wno-portability])
 
 dnl Reference file used by 'configure' to make sure the path to sources is valid
 AC_CONFIG_SRCDIR([src/WindowMaker.h])
@@ -71,16 +71,16 @@ dnl 6. If any interfaces have been removed or changed since the last
 dnl public release, then set age to 0.
 dnl
 dnl libwraster
-WRASTER_CURRENT=6
+WRASTER_CURRENT=7
 WRASTER_REVISION=0
-WRASTER_AGE=0
+WRASTER_AGE=1
 WRASTER_VERSION=$WRASTER_CURRENT:$WRASTER_REVISION:$WRASTER_AGE
 AC_SUBST(WRASTER_VERSION)
 dnl
 dnl libWINGs
-WINGS_CURRENT=4
+WINGS_CURRENT=5
 WINGS_REVISION=0
-WINGS_AGE=1
+WINGS_AGE=2
 WINGS_VERSION=$WINGS_CURRENT:$WINGS_REVISION:$WINGS_AGE
 AC_SUBST(WINGS_VERSION)
 dnl
@@ -103,6 +103,7 @@ LT_INIT
 
 dnl Debugging Options
 dnl =================
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([debug],
     [AS_HELP_STRING([--enable-debug], [enable debugging options, @<:@default=no@:>@])],
     [AS_CASE(["$enableval"],
@@ -110,6 +111,7 @@ AC_ARG_ENABLE([debug],
         [no],  [debug=no],
         [AC_MSG_ERROR([bad value $enableval for --enable-debug])] )],
     [debug=no])
+m4_divert_pop([INIT_PREPARE])dnl
 AS_IF([test "x$debug" = "xyes"],
     [dnl This flag should have already been detected and added, but if user
      dnl provided an explicit CFLAGS it may not be the case
@@ -232,6 +234,20 @@ AS_IF([test "x$debug" = "xyes"],
 ])
 
 
+dnl To upload documentation to the Website
+dnl ======================================
+m4_divert_push([INIT_PREPARE])dnl
+AC_ARG_WITH([web-repo],
+    [AS_HELP_STRING([--with-web-repo=PATH], [path to your git repository for the Web home page (maintainer stuff)])],
+    [AS_CASE([$withval],
+        [yes], [AC_MSG_ERROR([bad value '$withval' for --with-web-repo, expected a path]) ],
+        [no],  [WEB_REPO_ROOT=""],
+        [WEB_REPO_ROOT=$withval])],
+    [WEB_REPO_ROOT=""])
+m4_divert_pop([INIT_PREPARE])dnl
+WM_CHECK_WEBREPODIR
+
+
 dnl Support for Nested Functions by the compiler
 dnl ============================================
 WM_PROG_CC_NESTEDFUNC
@@ -254,8 +270,8 @@ supported_gfx=""
 dnl Platform-specific Makefile setup
 dnl ================================
 AS_CASE(["$host"],
-    [*-*-linux*|*-*-cygwin*|*-gnu*], [WM_OSDEP="linux" ; CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE=600"],
-    [*-*-freebsd*|*-k*bsd-gnu*],     [WM_OSDEP="bsd"   ; CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE=600 -DFREEBSD"],
+    [*-*-linux*|*-*-cygwin*|*-gnu*], [WM_OSDEP="linux" ; CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE=700"],
+    [*-*-freebsd*|*-k*bsd-gnu*],     [WM_OSDEP="bsd"   ; CPPFLAGS="$CPPFLAGS -D_XOPEN_SOURCE=700 -DFREEBSD"],
     [*-*-netbsd*],                   [WM_OSDEP="bsd"   ; CPPFLAGS="$CPPFLAGS -DNETBSD"],
     [*-*-openbsd*],                  [WM_OSDEP="bsd"   ; CPPFLAGS="$CPPFLAGS -DOPENBSD"],
     [*-*-dragonfly*],                [WM_OSDEP="bsd"   ; CPPFLAGS="$CPPFLAGS -DDRAGONFLYBSD"],
@@ -284,40 +300,42 @@ _bindir=`eval echo $_bindir`
 _libdir=`eval echo $libdir`
 _libdir=`eval echo $_libdir`
 
-lib_search_path='-L${libdir}'
-
-inc_search_path='-I${includedir}'
-
 dnl ===============================================
 dnl Specify paths to look for libraries and headers
 dnl ===============================================
 AC_ARG_WITH(libs-from, AS_HELP_STRING([--with-libs-from], [pass compiler flags to look for libraries]),
-	[lib_search_path="$withval $lib_search_path"])
+	[lib_search_path="$withval"], [lib_search_path='-L${libdir}'])
 
 AC_ARG_WITH(incs-from, AS_HELP_STRING([--with-incs-from], [pass compiler flags to look for header files]),
-	[inc_search_path="$withval $inc_search_path"])
+	[inc_search_path="$withval"], [inc_search_path='-I${includedir}'])
 
 
 dnl Features Configuration
 dnl ======================
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([animations],
     [AS_HELP_STRING([--disable-animations], [disable permanently animations @<:@default=enabled@:>@])],
     [AS_CASE(["$enableval"],
         [yes|no], [],
         [AC_MSG_ERROR([bad value $enableval for --enable-animations])])],
     [enable_animations="yes"])
+m4_divert_pop([INIT_PREPARE])dnl
+
 AS_IF([test "x$enable_animations" = "xno"],
     [unsupported="$unsupported Animations"],
     [AC_DEFINE([USE_ANIMATIONS], [1], [Defined when user did not request to disable animations])
      supported_core="$supported_core Animations"])
 
 
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([mwm-hints],
     [AS_HELP_STRING([--disable-mwm-hints], [disable support for Motif WM hints @<:@default=enabled@:>@])],
     [AS_CASE(["$enableval"],
         [yes|no], [],
         [AC_MSG_ERROR([bad value $enableval for --enable-mwm-hints])])],
     [enable_mwm_hints="yes"])
+m4_divert_pop([INIT_PREPARE])dnl
+
 AS_IF([test "x$enable_mwm_hints" = "xno"],
     [unsupported="$unsupported MWMHints"],
     [AC_DEFINE([USE_MWM_HINTS], [1], [Defined when used did not request to disable Motif WM hints])
@@ -327,6 +345,7 @@ AM_CONDITIONAL([USE_MWM_HINTS], [test "x$enable_mwm_hints" != "xno"])
 
 dnl Boehm GC
 dnl ========
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([boehm-gc],
     [AS_HELP_STRING([--enable-boehm-gc], [use Boehm GC instead of the default libc malloc() [default=no]])],
     [AS_CASE(["$enableval"],
@@ -334,6 +353,8 @@ AC_ARG_ENABLE([boehm-gc],
         [no],  [with_boehm_gc=no],
         [AC_MSG_ERROR([bad value $enableval for --enable-boehm-gc])] )],
     [with_boehm_gc=no])
+m4_divert_pop([INIT_PREPARE])dnl
+
 AS_IF([test "x$with_boehm_gc" = "xyes"],
     AC_SEARCH_LIBS([GC_malloc], [gc],
         [AC_DEFINE(USE_BOEHM_GC, 1, [Define if Boehm GC is to be used])],
@@ -342,10 +363,12 @@ AS_IF([test "x$with_boehm_gc" = "xyes"],
 
 dnl LCOV
 dnl ====
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([lcov],
     [AS_HELP_STRING([--enable-lcov[=output-directory]], [enable coverage data generation using LCOV (GCC only) [default=no]])],
     [],
     [enable_lcov=no])
+m4_divert_pop([INIT_PREPARE])dnl
 
 AS_IF([test "x$enable_lcov" != "xno"],
     [AX_CFLAGS_GCC_OPTION(-fprofile-arcs -ftest-coverage)
@@ -364,7 +387,7 @@ AC_FUNC_MEMCMP
 AC_FUNC_VPRINTF
 WM_FUNC_SECURE_GETENV
 AC_CHECK_FUNCS(gethostname select poll strcasecmp strncasecmp \
-	       setsid mallinfo mkstemp sysconf)
+	       setsid mallinfo2 mkstemp sysconf)
 AC_SEARCH_LIBS([strerror], [cposix])
 
 dnl nanosleep is generally available in standard libc, although not always the
@@ -378,13 +401,15 @@ WM_FUNC_OPEN_NOFOLLOW
 
 dnl Check for strlcat/strlcpy
 dnl =========================
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_WITH([libbsd],
   [AS_HELP_STRING([--without-libbsd], [do not use libbsd for strlcat and strlcpy [default=check]])],
   [AS_IF([test "x$with_libbsd" != "xno"],
-    [with_libbsd=bsd]
+    [with_libbsd=bsd],
     [with_libbsd=]
   )],
   [with_libbsd=bsd])
+m4_divert_pop([INIT_PREPARE])dnl
 
 tmp_libs=$LIBS
 AC_SEARCH_LIBS([strlcat],[$with_libbsd],
@@ -421,7 +446,7 @@ AC_CHECK_HEADERS([sys/inotify.h],
     [AC_DEFINE([HAVE_INOTIFY], [1], [Check for inotify])])
 
 
-dnl Check for syslog 
+dnl Check for syslog
 dnl ================
 dnl It is used by WUtil to log the wwarning, werror and wfatal
 AC_CHECK_HEADERS([syslog.h], [AC_DEFINE([HAVE_SYSLOG], [1], [Check for syslog])])
@@ -430,7 +455,6 @@ AC_CHECK_HEADERS([syslog.h], [AC_DEFINE([HAVE_SYSLOG], [1], [Check for syslog])]
 dnl Checks for header files
 dnl =======================
 AC_HEADER_SYS_WAIT
-AC_HEADER_TIME
 AC_CHECK_HEADERS(fcntl.h limits.h sys/ioctl.h libintl.h poll.h malloc.h ctype.h \
 		 string.h strings.h)
 
@@ -459,6 +483,7 @@ dnl that the gettext environment works
 WM_I18N_LANGUAGES
 WM_I18N_XGETTEXT
 WM_I18N_MENUTEXTDOMAIN
+WM_LIBRARY_CONSTRUCTORS
 
 dnl ===========================================
 dnl 		Stuff that uses X
@@ -468,7 +493,7 @@ AC_PATH_XTRA
 
 AS_IF([test "x$no_x" = "xyes"],
     [AC_MSG_ERROR([The path for the X11 files not found!
-Make sure you have X and it's headers and libraries (the -devel packages
+Make sure you have X and its headers and libraries (the -devel packages
 in Linux) installed.])])
 
 X_LIBRARY_PATH=$x_libraries
@@ -483,7 +508,7 @@ AC_SUBST(X_LIBRARY_PATH)
 
 
 dnl Decide which locale function to use, setlocale() or _Xsetlocale()
-dnl by MANOME Tomonori 
+dnl by MANOME Tomonori
 dnl ===========================================
 WM_I18N_XLOCALE
 
@@ -507,24 +532,30 @@ AC_CHECK_LIB([X11], [XConvertCase],
 
 dnl XKB keyboard language status
 dnl ============================
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([modelock],
     [AS_HELP_STRING([--enable-modelock], [XKB keyboard language status support])],
     [AS_CASE([$enableval],
         [yes|no], [],
         [AC_MSG_ERROR([bad value '$enableval' for --enable-modelock])])],
     [enable_modelock=no])
+m4_divert_pop([INIT_PREPARE])dnl
+
 AS_IF([test "x$enable_modelock" = "xyes"],
     [AC_DEFINE([XKB_MODELOCK], [1], [whether XKB language MODELOCK should be enabled]) ])
 
 
 dnl XDND Drag-nd-Drop support
 dnl =========================
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([xdnd],
     [AS_HELP_STRING([--disable-xdnd], [disable support for Drag-and-Drop on the dock @<:@default=enabled@:>@])],
     [AS_CASE(["$enableval"],
         [yes|no], [],
         [AC_MSG_ERROR([bad value $enableval for --disable-xdnd]) ]) ],
     [enable_xdnd=yes])
+m4_divert_pop([INIT_PREPARE])dnl
+
 AS_IF([test "x$enable_xdnd" = "xyes"],
     [supported_core="$supported_core XDnD"
      AC_DEFINE([USE_DOCK_XDND], [1], [whether Drag-and-Drop on the dock should be enabled])],
@@ -534,37 +565,57 @@ AM_CONDITIONAL([USE_DOCK_XDND], [test "x$enable_xdnd" != "xno"])
 
 dnl Support for ICCCM 2.0 Window Manager replacement
 dnl ================================================
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([wmreplace],
     [AS_HELP_STRING([--enable-wmreplace], [support for ICCCM window manager replacement])],
     [AS_CASE([$enableval],
         [yes|no], [],
         [AC_MSG_ERROR([bad value '$enableval' for --enable-wmreplace])])],
     [enable_wmreplace=no])
+m4_divert_pop([INIT_PREPARE])dnl
+
 AS_IF([test "x$enable_wmreplace" = "xyes"],
     [AC_DEFINE([USE_ICCCM_WMREPLACE], [1],
        [define to support ICCCM protocol for window manager replacement])
      supported_xext="$supported_xext WMReplace"])
 
+dnl XRes support
+dnl ==============
+m4_divert_push([INIT_PREPARE])dnl
+AC_ARG_ENABLE([res],
+    [AS_HELP_STRING([--disable-res], [disable resource window extension support])],
+    [AS_CASE(["$enableval"],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --enable-res]) ]) ],
+    [enable_res=auto])
+m4_divert_pop([INIT_PREPARE])dnl
+
+WM_XEXT_CHECK_XRES
 
 dnl XShape support
 dnl ==============
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([shape],
     [AS_HELP_STRING([--disable-shape], [disable shaped window extension support])],
     [AS_CASE(["$enableval"],
         [yes|no], [],
         [AC_MSG_ERROR([bad value $enableval for --enable-shape]) ]) ],
     [enable_shape=auto])
+m4_divert_pop([INIT_PREPARE])dnl
+
 WM_XEXT_CHECK_XSHAPE
 
 
 dnl MIT-SHM support
 dnl ===============
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([shm],
     [AS_HELP_STRING([--disable-shm], [disable usage of MIT-SHM extension])],
     [AS_CASE(["$enableval"],
         [yes|no], [],
         [AC_MSG_ERROR([bad value $enableval for --enable-shm]) ]) ],
     [enable_shm=auto])
+m4_divert_pop([INIT_PREPARE])dnl
 WM_XEXT_CHECK_XSHM
 
 
@@ -576,23 +627,27 @@ WM_EXT_CHECK_XMU
 
 dnl XINERAMA support
 dnl ================
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([xinerama],
     [AS_HELP_STRING([--enable-xinerama], [enable Xinerama extension support])],
     [AS_CASE(["$enableval"],
         [yes|no], [],
         [AC_MSG_ERROR([bad value $enableval for --enable-xinerama]) ]) ],
     [enable_xinerama=auto])
+m4_divert_pop([INIT_PREPARE])dnl
 WM_XEXT_CHECK_XINERAMA
 
 
 dnl RandR support
 dnl =============
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([randr],
     [AS_HELP_STRING([--enable-randr], [enable RandR extension support (NOT recommended, buggy)])],
     [AS_CASE(["$enableval"],
         [yes|no], [],
         [AC_MSG_ERROR([bad value $enableval for --enable-randr]) ]) ],
     [enable_randr=no])
+m4_divert_pop([INIT_PREPARE])dnl
 WM_XEXT_CHECK_XRANDR
 
 
@@ -618,72 +673,38 @@ AC_SUBST(FCLIBS)
 
 dnl Xft2 antialiased font support
 dnl =============================
+m4_define([XFT_MIN_VERSION], [2.1.0])
+PKG_CHECK_MODULES([XFT], [xft >= ]XFT_MIN_VERSION,
+    [], dnl Module found, nothing to do
+    [XFT_CFLAGS=failed])
+AS_IF([test "x$XFT_CFLAGS" = "xfailed"],
+    [dnl pkg-config did not find it, try the legacy method
+     AC_CHECK_PROG([XFTCONFIG], [xft-config], [xft-config])
+     AS_IF([test -z "$XFTCONFIG"],
+         [AC_MSG_ERROR([libXft2 is not installed, is too old or could not be found -- $XFT_PKG_ERRORS]) ])
+     XFT_LIBS=`$XFTCONFIG --libs`
+     XFT_CFLAGS=`$XFTCONFIG --cflags`
+     WM_CHECK_XFT_VERSION(XFT_MIN_VERSION,
+         [], dnl Version is ok, nothing to do
+         [AC_MSG_ERROR([Version of libXft is too old, consider upgrading to] XFT_MIN_VERSION [or newer]) ])
+    ])
+AC_SUBST(XFT_CFLAGS)
+AC_SUBST(XFT_LIBS)
 
-xft=yes
-XFTLIBS=""
-
-if test "x$PKG_CONFIG" != x -a "`$PKG_CONFIG xft; echo $?`" = 0; then
-        XFTCONFIG="$PKG_CONFIG xft"
-        pkgconfig_xft=yes
-else
-        AC_CHECK_PROG(XFTCONFIG, xft-config, xft-config)
-fi
-
-AC_MSG_CHECKING([for the Xft2 library])
-
-if test "x$XFTCONFIG" != x; then
-        XFTLIBS=`$XFTCONFIG --libs`
-        XFTFLAGS=`$XFTCONFIG --cflags`
-        AC_MSG_RESULT([found])
-else
-        AC_MSG_RESULT([not found])
-        echo
-        echo "ERROR!!! libXft2 is not installed or could not be found."
-        echo "         Xft2 is a requirement for building Window Maker."
-        echo "         Please install it (along with fontconfig) before continuing."
-        echo
-        exit 1
-fi
-
-minXFT="2.1.0"
-goodxft="no"
-
-dnl
-dnl The macro below will use $XFTFLAGS (defined above) to find Xft.h
-dnl
-WM_CHECK_XFT_VERSION($minXFT, goodxft=yes, goodxft=no)
-
-if test "$goodxft" = no; then
-        echo
-        echo "ERROR!!! libXft on this system is an old version."
-        echo "         Please consider upgrading to at least version ${minXFT}."
-        echo
-        exit 1
-fi
-
-AC_SUBST(XFTFLAGS)
-AC_SUBST(XFTLIBS)
 
 dnl PANGO support
 dnl =============
-pango=no
-AC_ARG_ENABLE(pango, AS_HELP_STRING([--enable-pango], [enable Pango text layout support]),
-                pango=$enableval, pango=no)
+dnl The libray can be used by WINGs to get better support on UTF-8 for i18n
+m4_divert_push([INIT_PREPARE])dnl
+AC_ARG_ENABLE([pango],
+    [AS_HELP_STRING([--disable-pango], [disable Pango text layout support @<:@default=auto@:>@])],
+    [AS_CASE([$enableval],
+        [yes|no], [],
+        [AC_MSG_ERROR([bad value $enableval for --disable-pango])] )],
+    [enable_pango=auto])
+m4_divert_pop([INIT_PREPARE])dnl
+WM_CHECK_LIBPANGO
 
-PANGOFLAGS=
-PANGOLIBS=
-if test "$pango" = yes; then
-	PANGOLIBS=`$PKG_CONFIG pangoxft --libs`
-	PANGOFLAGS=`$PKG_CONFIG pangoxft --cflags`
-	if test "x$PANGOLIBS" = "x" ; then
-	        AC_MSG_RESULT([not found])
-	else
-		AC_DEFINE(USE_PANGO, 1, [Define if Pango is to be used])
-		AC_MSG_RESULT([found])
-	fi
-fi
-inc_search_path="$inc_search_path $PANGOFLAGS"
-AC_SUBST(PANGOLIBS)
 
 dnl ==============================================
 dnl         Graphic Format Libraries
@@ -691,12 +712,14 @@ dnl ==============================================
 
 dnl XPM Support
 dnl ===========
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([xpm],
     [AS_HELP_STRING([--disable-xpm], [disable use of XPM pixmaps through libXpm])],
     [AS_CASE(["$enableval"],
         [yes|no], [],
         [AC_MSG_ERROR([bad value $enableval for --enable-xpm])] )],
     [enable_xpm=auto])
+m4_divert_pop([INIT_PREPARE])dnl
 WM_IMGFMT_CHECK_XPM
 
 
@@ -720,67 +743,79 @@ AS_IF([test "x$LIBEXIF" != "x"],
 
 dnl PNG Support
 dnl ===========
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([png],
     [AS_HELP_STRING([--disable-png], [disable PNG support through libpng])],
     [AS_CASE(["$enableval"],
         [yes|no], [],
         [AC_MSG_ERROR([bad value $enableval for --enable-png])] )],
     [enable_png=auto])
+m4_divert_pop([INIT_PREPARE])dnl
 WM_IMGFMT_CHECK_PNG
 
 
 dnl JPEG Support
 dnl ============
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([jpeg],
     [AS_HELP_STRING([--disable-jpeg], [disable JPEG support through libjpeg])],
     [AS_CASE(["$enableval"],
         [yes|no], [],
         [AC_MSG_ERROR([bad value $enableval for --enable-jpeg])] )],
     [enable_jpeg=auto])
+m4_divert_pop([INIT_PREPARE])dnl
 WM_IMGFMT_CHECK_JPEG
 
 
 dnl GIF Support
 dnl ============
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE(gif,
     [AS_HELP_STRING([--disable-gif], [disable GIF support through libgif or libungif])],
     [AS_CASE(["$enableval"],
         [yes|no], [],
         [AC_MSG_ERROR([bad value $enableval for --enable-gif])] )],
     [enable_gif=auto])
+m4_divert_pop([INIT_PREPARE])dnl
 WM_IMGFMT_CHECK_GIF
 
 
 dnl TIFF Support
 dnl ============
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([tiff],
     [AS_HELP_STRING([--disable-tiff], [disable use of TIFF images through libtiff])],
     [AS_CASE(["$enableval"],
         [yes|no], [],
         [AC_MSG_ERROR([bad value $enableval for --enable-tiff])] )],
     [enable_tiff=auto])
+m4_divert_pop([INIT_PREPARE])dnl
 WM_IMGFMT_CHECK_TIFF
 
 
 dnl WEBP Support
 dnl ============
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([webp],
     [AS_HELP_STRING([--disable-webp], [disable WEBP support through libwebp])],
     [AS_CASE(["$enableval"],
         [yes|no], [],
         [AC_MSG_ERROR([bad value $enableval for --enable-webp])] )],
     [enable_webp=auto])
+m4_divert_pop([INIT_PREPARE])dnl
 WM_IMGFMT_CHECK_WEBP
 
 
 dnl MagicK Support
 dnl ==============
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([magick],
     [AS_HELP_STRING([--disable-magick], [disable MAGICK support through libMagickWand])],
     [AS_CASE(["$enableval"],
         [yes|no], [],
         [AC_MSG_ERROR([bad value $enableval for --enable-magick])] )],
     [enable_magick=auto])
+m4_divert_pop([INIT_PREPARE])dnl
 WM_IMGFMT_CHECK_MAGICK
 
 
@@ -822,6 +857,7 @@ AC_CHECK_HEADERS(stdlib.h)
 
 dnl Support for PIXMAPDIR option
 dnl ============================
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_WITH([pixmapdir],
     [AS_HELP_STRING([--with-pixmapdir=PATH], [specify where pixmaps are located [DATADIR/pixmaps]])],
     [AS_CASE([$withval],
@@ -830,6 +866,7 @@ AC_ARG_WITH([pixmapdir],
         [\$*], [], dnl Assumes it starts with a reference to $prefix or a similar variable, ok
         [AC_MSG_ERROR([bad path '$withval' for pixmapdir, expecting an absolute path])])],
     [with_pixmapdir=""])
+m4_divert_pop([INIT_PREPARE])dnl
 
 AS_IF([test "x$with_pixmapdir" != "x"],
     [pixmapdir="$with_pixmapdir"],
@@ -839,6 +876,7 @@ AC_SUBST([pixmapdir])dnl
 
 dnl Support for GNUSTEP_LOCAL_ROOT, for WPrefs.app
 dnl ==============================================
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_WITH([gnustepdir],
     [AS_HELP_STRING([--with-gnustepdir=PATH], [specify the directory for GNUstep applications])],
     [AS_CASE([$withval],
@@ -848,6 +886,7 @@ AC_ARG_WITH([gnustepdir],
         [AC_MSG_ERROR([bad path '$withval' for gnustepdir, expecting an absolute path])])],
     [dnl If no command-line option was given, we use $GNUSTEP_LOCAL_ROOT if it was set
      with_gnustepdir="$GNUSTEP_LOCAL_ROOT"])
+m4_divert_pop([INIT_PREPARE])dnl
 
 AS_IF([test "x$with_gnustepdir" = "x"],
     [dnl No path specified, use default
@@ -861,30 +900,43 @@ AS_IF([test "x$with_gnustepdir" = "x"],
 AC_SUBST([wprefs_datadir])dnl
 AC_SUBST([wprefs_bindir])dnl
 
-dnl Support for DEFSDATADIR option
-dnl ============================
-AC_ARG_WITH([defsdatadir],
-    [AS_HELP_STRING([--with-defsdatadir=PATH], [specify where global defaults are located [SYSCONFDIR/WindowMaker]])],
+
+dnl Support for PKGCONFDIR option
+dnl =============================
+m4_divert_push([INIT_PREPARE])dnl
+AC_ARG_WITH([pkgconfdir],
+    [AS_HELP_STRING([--with-pkgconfdir=PATH], [specify where global defaults are located [SYSCONFDIR/WindowMaker]])],
     [AS_CASE([$withval],
-        [yes|no], [AC_MSG_ERROR([bad value '$withval' for --with-defsdatadir, expected a path]) ],
+        [yes|no], [AC_MSG_ERROR([bad value '$withval' for --with-pkgconfdir, expected a path]) ],
         [/*],  [], dnl Absolute path, ok
         [\$*], [], dnl Assumes it starts with a reference to $prefix or a similar variable, ok
-        [AC_MSG_ERROR([bad path '$withval' for defsdatadir, expecting an absolute path])])],
-    [with_defsdatadir=""])
+        [AC_MSG_ERROR([bad path '$withval' for pkgconfdir, expecting an absolute path])])],
+    [with_pkgconfdir=""])
+m4_divert_pop([INIT_PREPARE])dnl
 
-AS_IF([test "x$with_defsdatadir" != "x"],
-    [defsdatadir="$with_defsdatadir"],
-    [defsdatadir='${sysconfdir}/WindowMaker'])
-AC_SUBST([defsdatadir])dnl
+dnl Provide a message when trying to use "--with-defsdatadir" so that user can update its
+dnl arguments. Otherwise only a warning is issued, which is likely to be missed, which will
+dnl lead to perceived misbehaviour much later (and hard to debug).
+WM_DENY_ARG_WITH([defsdatadir],
+    [AC_MSG_ERROR([option "--with-defsdatadir" have been replaced by "--with-pkgconfdir"])])
+
+AS_IF([test "x$with_pkgconfdir" != "x"],
+    [pkgconfdir="$with_pkgconfdir"],
+    [pkgconfdir='${sysconfdir}/${PACKAGE_TARNAME}'])
+AC_SUBST([pkgconfdir])dnl
+
 
 dnl Enable User Defined Menu thing
 dnl ==============================
+m4_divert_push([INIT_PREPARE])dnl
 AC_ARG_ENABLE([usermenu],
     [AS_HELP_STRING([--enable-usermenu], [user defined menus for applications])],
     [AS_CASE([$enableval],
         [yes|no], [],
         [AC_MSG_ERROR([bad value '$enableval' for --enable-usermenu])])],
     [enable_usermenu=no])
+m4_divert_pop([INIT_PREPARE])dnl
+
 AS_IF([test "x$enable_usermenu" = "xyes"],
     [AC_DEFINE([USER_MENU], [1],
         [define if you want user defined menus for applications])])
@@ -910,7 +962,7 @@ AC_CONFIG_FILES(
     Makefile
 
     dnl WRaster Library
-    wrlib/Makefile
+    wrlib/Makefile wrlib/po/Makefile
     wrlib/tests/Makefile
 
     dnl WINGs toolkit
@@ -955,9 +1007,10 @@ echo "Supported core features:            :$supported_core"
 echo "Supported X extensions:             :$supported_xext"
 echo "Supported graphic format libraries  :$supported_gfx"
 echo "Unsupported features                :$unsupported"
-echo "Antialiased text support in WINGs   : $xft"
 echo "Pango text layout support in WINGs  : $pango"
 echo "Translated languages to support     :$supported_locales"
+AS_IF([test "x$WEB_REPO_ROOT" != "x"],
+    [AS_ECHO(["Git repository for WMaker's Website : $WEB_REPO_ROOT"]) ])
 AS_IF([test "x$debug" = "xyes"],
     [AS_ECHO(["Debug enabled: CFLAGS = $CFLAGS"]) ])
 echo
@@ -981,6 +1034,15 @@ AS_IF([test "x$enable_jpeg" = xno], [dnl
     AS_ECHO([])
     AS_ECHO(["WARNING   WARNING   WARNING   WARNING   WARNING   WARNING   WARNING"])dnl
 ])
+
+AS_IF([test "x$LINGUAS" != "x"],
+    [AS_IF([test "X$wm_cv_library_constructors" = "Xlegacy"],
+        [AC_MSG_WARN([I18N is enabled, but library constructor attribute is not supported])
+         AS_ECHO(["   If you have translation problems in lib WRaster, yet you know that the translation"])
+         AS_ECHO(["   file (po) is valid, this could be a cause."])
+         AS_ECHO([])dnl
+        ])dnl
+    ])
 
 
 dnl This is for Emacs.  I'm lazy, I know... (nicolai)

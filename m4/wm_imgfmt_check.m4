@@ -198,9 +198,9 @@ AC_DEFUN_ONCE([WM_IMGFMT_CHECK_WEBP],
          dnl a symbol without first using the header to handle it
          wm_save_LIBS="$LIBS"
          LIBS="$LIBS -lwebp"
-         AC_TRY_LINK(
-             [@%:@include <webp/decode.h>],
-             [WebPGetFeatures(NULL, 1024, NULL);],
+         AC_LINK_IFELSE(
+             [AC_LANG_PROGRAM([@%:@include <webp/decode.h>],
+                 [WebPGetFeatures(NULL, 1024, NULL);])],
              [wm_cv_imgfmt_webp="-lwebp"])
          LIBS="$wm_save_LIBS"
          AS_IF([test "x$enable_webp$wm_cv_imgfmt_webp" = "xyesno"],
@@ -313,8 +313,12 @@ AS_IF([test "x$enable_magick" = "xno"],
               dnl The library was found, check if header is available and compiles
               wm_save_CFLAGS="$CFLAGS"
               AS_IF([wm_fn_lib_try_compile "MagickWand/MagickWand.h" "MagickWand *wand;" "wand = NewMagickWand()" "$wm_cv_libchk_magick_cflags"],
-                  [wm_cv_libchk_magick="$wm_cv_libchk_magick_cflags % $wm_cv_libchk_magick_libs"],
-                  [AC_MSG_ERROR([found MagickWand library but could not compile its header])])
+                  [wm_cv_libchk_magick="$wm_cv_libchk_magick_cflags % $wm_cv_libchk_magick_libs"
+		   wm_cv_libchk_magick_version=7],
+		  [wm_fn_lib_try_compile "wand/magick_wand.h" "MagickWand *wand;" "wand = NewMagickWand()" "$wm_cv_libchk_magick_cflags"],
+                  [wm_cv_libchk_magick="$wm_cv_libchk_magick_cflags % $wm_cv_libchk_magick_libs"
+		   wm_cv_libchk_magick_version=6],
+		  [AC_MSG_ERROR([found MagickWand library but could not compile its header])])
               CFLAGS="$wm_save_CFLAGS"])dnl
          ])
      AS_IF([test "x$wm_cv_libchk_magick" = "xno"],
@@ -323,7 +327,7 @@ AS_IF([test "x$enable_magick" = "xno"],
          [supported_gfx="$supported_gfx Magick"
           MAGICKFLAGS=`echo "$wm_cv_libchk_magick" | sed -e 's, *%.*$,,' `
            MAGICKLIBS=`echo "$wm_cv_libchk_magick" | sed -e 's,^.*% *,,' `
-          AC_DEFINE([USE_MAGICK], [1],
+          AC_DEFINE_UNQUOTED([USE_MAGICK], [$wm_cv_libchk_magick_version],
               [defined when MagickWand library with header was found])])
      ])
 AM_CONDITIONAL([USE_MAGICK], [test "x$enable_magick" != "xno"])dnl

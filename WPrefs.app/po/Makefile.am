@@ -5,7 +5,7 @@ CATALOGS = @WPREFSMOFILES@
 CLEANFILES = $(DOMAIN).pot $(CATALOGS)
 
 EXTRA_DIST = bg.po ca.po cs.po de.po es.po et.po fi.po fr.po fy.po hr.po hu.po \
-	it.po ja.po ko.po nl.po pt.po ru.po sk.po uk.po zh_CN.po zh_TW.po
+	it.po ja.po ko.po nl.po pt.po ru.po sk.po tr.po uk.po zh_CN.po zh_TW.po
 
 POTFILES  = \
 	$(top_srcdir)/WPrefs.app/Appearance.c \
@@ -14,6 +14,7 @@ POTFILES  = \
 	$(top_srcdir)/WPrefs.app/Expert.c \
 	$(top_srcdir)/WPrefs.app/Focus.c \
 	$(top_srcdir)/WPrefs.app/FontSimple.c \
+	$(top_srcdir)/WPrefs.app/HotCornerShortcuts.c \
 	$(top_srcdir)/WPrefs.app/Icons.c \
 	$(top_srcdir)/WPrefs.app/KeyboardShortcuts.c \
 	$(top_srcdir)/WPrefs.app/Menu.c \
@@ -37,7 +38,7 @@ POTFILES  = \
 
 SUFFIXES = .po .mo
 
-.po.mo: 
+.po.mo:
 	$(AM_V_GEN)$(MSGFMT) -c -o $@ $<
 
 

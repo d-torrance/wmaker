@@ -5,9 +5,7 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 
-#ifdef USE_PANGO
-#include <pango/pango.h>
-#endif
+@USE_PANGO@#include <pango/pango.h>
 
 #include <WINGs/WINGs.h>
 
@@ -43,7 +41,7 @@ typedef struct _WINGsConfiguration {
     unsigned mouseWheelDown;
 } _WINGsConfiguration;
 
-extern char *_WINGS_progname;
+extern const char *_WINGS_progname;
 extern _WINGsConfiguration WINGsConfiguration;
 extern struct W_Application WMApplication;
 
@@ -254,7 +252,7 @@ typedef struct W_Screen {
     Atom wmIconDragOffsetAtom;
 
     Atom wmStateAtom;              /* WM_STATE */
-    
+
     Atom utf8String;
 
     Atom netwmName;
@@ -459,9 +457,7 @@ typedef struct W_Font {
     short refCount;
     char *name;
 
-#ifdef USE_PANGO
-    PangoLayout *layout;
-#endif
+@USE_PANGO@    PangoLayout *layout;
 } W_Font;
 
 #define W_FONTID(f)		(f)->font->fid
@@ -497,6 +493,8 @@ void W_SetPreeditPositon(W_View *view, int x, int y);
 
 int W_LookupString(W_View *view, XKeyPressedEvent *event, char *buffer,
                    int buflen, KeySym *keysym, Status *status);
+
+KeySym W_KeycodeToKeysym(Display *display, KeyCode keycode, int index);
 
 
 /* ---[ wmisc.c ]--------------------------------------------------------- */

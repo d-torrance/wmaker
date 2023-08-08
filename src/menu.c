@@ -724,9 +724,12 @@ static void paintEntry(WMenu * menu, int index, int selected)
 	/* draw indicator */
 	if (entry->flags.indicator && entry->flags.indicator_on) {
 		int iw, ih;
-		WPixmap *indicator;
+		WPixmap *indicator = NULL;
 
 		switch (entry->flags.indicator_type) {
+		case MI_DIAMOND:
+			indicator = scr->menu_radio_indicator;
+			break;
 		case MI_CHECK:
 			indicator = scr->menu_check_indicator;
 			break;
@@ -739,35 +742,72 @@ static void paintEntry(WMenu * menu, int index, int selected)
 		case MI_SHADED:
 			indicator = scr->menu_shade_indicator;
 			break;
-		case MI_DIAMOND:
+		case MI_SNAP_V:
+			indicator = scr->menu_snap_vertical_indicator;
+			break;
+		case MI_SNAP_H:
+			indicator = scr->menu_snap_horizontal_indicator;
+			break;
+		case MI_CENTRAL:
+			indicator = scr->menu_central_indicator;
+			break;
+		case MI_SNAP_RH:
+			indicator = scr->menu_snap_rh_indicator;
+			break;
+		case MI_SNAP_LH:
+			indicator = scr->menu_snap_lh_indicator;
+			break;
+		case MI_SNAP_TH:
+			indicator = scr->menu_snap_th_indicator;
+			break;
+		case MI_SNAP_BH:
+			indicator = scr->menu_snap_bh_indicator;
+			break;
+		case MI_SNAP_TL:
+			indicator = scr->menu_snap_tl_indicator;
+			break;
+		case MI_SNAP_TR:
+			indicator = scr->menu_snap_tr_indicator;
+			break;
+		case MI_SNAP_BL:
+			indicator = scr->menu_snap_bl_indicator;
+			break;
+		case MI_SNAP_BR:
+			indicator = scr->menu_snap_br_indicator;
+			break;
+		case MI_SNAP_TILED:
+			indicator = scr->menu_snap_tiled_indicator;
+			break;
+		case MI_NONE:
 		default:
-			indicator = scr->menu_radio_indicator;
 			break;
 		}
 
-		iw = indicator->width;
-		ih = indicator->height;
-		XSetClipMask(dpy, scr->copy_gc, indicator->mask);
-		XSetClipOrigin(dpy, scr->copy_gc, 5, y + (h - ih) / 2);
-		if (selected) {
-			if (entry->flags.enabled) {
-				XSetForeground(dpy, scr->copy_gc, WMColorPixel(scr->select_text_color));
+		if (indicator) {
+			iw = indicator->width;
+			ih = indicator->height;
+			XSetClipMask(dpy, scr->copy_gc, indicator->mask);
+			XSetClipOrigin(dpy, scr->copy_gc, 5, y + (h - ih) / 2);
+			if (selected) {
+				if (entry->flags.enabled) {
+					XSetForeground(dpy, scr->copy_gc, WMColorPixel(scr->select_text_color));
+				} else {
+					XSetForeground(dpy, scr->copy_gc, WMColorPixel(scr->dtext_color));
+				}
 			} else {
-				XSetForeground(dpy, scr->copy_gc, WMColorPixel(scr->dtext_color));
+				if (entry->flags.enabled) {
+					XSetForeground(dpy, scr->copy_gc, WMColorPixel(scr->mtext_color));
+				} else {
+					XSetForeground(dpy, scr->copy_gc, WMColorPixel(scr->dtext_color));
+				}
 			}
-		} else {
-			if (entry->flags.enabled) {
-				XSetForeground(dpy, scr->copy_gc, WMColorPixel(scr->mtext_color));
-			} else {
-				XSetForeground(dpy, scr->copy_gc, WMColorPixel(scr->dtext_color));
-			}
+			XFillRectangle(dpy, win, scr->copy_gc, 5, y + (h - ih) / 2, iw, ih);
+			/*
+			 XCopyArea(dpy, indicator->image, win, scr->copy_gc, 0, 0,
+			 iw, ih, 5, y+(h-ih)/2);
+			*/
+			XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
 		}
-		XFillRectangle(dpy, win, scr->copy_gc, 5, y + (h - ih) / 2, iw, ih);
-		/*
-		   XCopyArea(dpy, indicator->image, win, scr->copy_gc, 0, 0,
-		   iw, ih, 5, y+(h-ih)/2);
-		 */
-		XSetClipOrigin(dpy, scr->copy_gc, 0, 0);
 	}
 
 	/* draw right text */
@@ -1436,7 +1476,7 @@ static void getScrollAmount(WMenu * menu, int *hamount, int *vamount)
 
 	} else if (xroot >= (rect.pos.x + rect.size.width - 2) && menuX2 > (rect.pos.x + rect.size.width - 1)) {
 		/* scroll to the left */
-		*hamount = WMIN(MENU_SCROLL_STEP, abs(menuX2 - rect.pos.x - rect.size.width - 1));
+		*hamount = WMIN(MENU_SCROLL_STEP, abs(menuX2 - rect.pos.x - (int)rect.size.width - 1));
 
 		if (*hamount == 0)
 			*hamount = 1;
@@ -1450,7 +1490,7 @@ static void getScrollAmount(WMenu * menu, int *hamount, int *vamount)
 
 	} else if (yroot >= (rect.pos.y + rect.size.height - 2) && menuY2 > (rect.pos.y + rect.size.height - 1)) {
 		/* scroll up */
-		*vamount = WMIN(MENU_SCROLL_STEP, abs(menuY2 - rect.pos.y - rect.size.height - 2));
+		*vamount = WMIN(MENU_SCROLL_STEP, abs(menuY2 - rect.pos.y - (int)rect.size.height - 2));
 
 		*vamount = -*vamount;
 	}
@@ -1764,7 +1804,7 @@ static void menuMouseDown(WObjDescriptor * desc, XEvent * event)
 		goto byebye;
 	}
 	entry_no = getEntryAt(menu, x, y);
-	if (entry_no >= 0) {
+	if ((entry_no >= 0) && (entry_no < menu->entry_no)) {
 		entry = menu->entries[entry_no];
 
 		if (!close_on_exit && (bev->state & ControlMask) && smenu && entry->flags.editable) {
@@ -1940,7 +1980,7 @@ static void menuMouseDown(WObjDescriptor * desc, XEvent * event)
 
 			if (!delayed_select) {
 				entry_no = getEntryAt(menu, x, y);
-				if (entry_no >= 0) {
+				if ((entry_no >= 0) && (entry_no < menu->entry_no)) {
 					entry = menu->entries[entry_no];
 					if (entry->flags.enabled && entry->cascade >= 0 && menu->cascades) {
 						WMenu *submenu = menu->cascades[entry->cascade];
@@ -1994,7 +2034,7 @@ static void menuMouseDown(WObjDescriptor * desc, XEvent * event)
 				wusleep(MENU_BLINK_DELAY);
 			}
 #endif
-			/* unmap the menu, it's parents and call the callback */
+			/* unmap the menu, its parents and call the callback */
 			if (!menu->flags.buttoned && (!menu->flags.app_menu || menu->parent != NULL)) {
 				closeCascade(menu);
 			} else {
@@ -2234,7 +2274,7 @@ static void menuTitleMouseDown(WCoreWindow * sender, void *data, XEvent * event)
  * closed when the button is clicked.
  *
  * Side effects:
- * 	The closed menu is reinserted at it's parent menus
+ * 	The closed menu is reinserted at its parent menus
  * cascade list.
  *----------------------------------------------------------------------
  */
@@ -2440,7 +2480,7 @@ static int restoreMenu(WScreen *scr, WMPropList *menu)
 static int restoreMenuRecurs(WScreen *scr, WMPropList *menus, WMenu *menu, const char *path)
 {
 	WMPropList *key, *entry;
-	char buffer[512];
+	char buffer[1024];
 	int i, x, y, res;
 	Bool lowered;
 

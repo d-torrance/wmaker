@@ -27,6 +27,9 @@
 
 #include <WINGs/WUtil.h>
 
+#define PRINT_SCREEN 1
+#define PRINT_WINDOW 2
+#define PRINT_PARTIAL 3
 
 typedef struct {
     WMRect *screens;
@@ -57,7 +60,7 @@ typedef struct WDrawerChain {
 } WDrawerChain;
 
 /*
- * each WScreen is saved into a context associated with it's root window
+ * each WScreen is saved into a context associated with its root window
  */
 typedef struct _WScreen {
     int	screen;			       /* screen number */
@@ -211,6 +214,19 @@ typedef struct _WScreen {
     struct WPixmap *menu_mini_indicator;   /* for miniwindow */
     struct WPixmap *menu_hide_indicator;   /* for hidden window */
     struct WPixmap *menu_shade_indicator;  /* for shaded window */
+    struct WPixmap *menu_snap_vertical_indicator;  /* for vertical snap window */
+    struct WPixmap *menu_snap_horizontal_indicator;  /* for horizontal snap window */
+    struct WPixmap *menu_snap_rh_indicator;  /* for righ half snap window */
+    struct WPixmap *menu_snap_lh_indicator;  /* for left half snap window */
+    struct WPixmap *menu_snap_th_indicator;  /* for top half snap window */
+    struct WPixmap *menu_snap_bh_indicator;  /* for bottom half snap window */
+    struct WPixmap *menu_snap_tl_indicator;  /* for top left snap window */
+    struct WPixmap *menu_snap_tr_indicator;  /* for top rigt snap window */
+    struct WPixmap *menu_snap_bl_indicator;  /* for bottom left snap window */
+    struct WPixmap *menu_snap_br_indicator;  /* for bottom right snap window */
+    struct WPixmap *menu_snap_tiled_indicator;  /* for tiled window */
+    struct WPixmap *menu_central_indicator;  /* for central window */
+
     int app_menu_x, app_menu_y;	       /* position for application menus */
 
     struct WMenu *root_menu;	       /* root window menu */
@@ -271,10 +287,17 @@ typedef struct _WScreen {
     WMHandlerID *workspace_name_timer;
     struct WorkspaceNameData *workspace_name_data;
 
+    /* mini screenshot data */
+    Window mini_screenshot;
+    time_t mini_screenshot_timeout;
+    WMHandlerID *mini_screenshot_timer;
+
     /* for raise-delay */
     WMHandlerID *autoRaiseTimer;
     Window autoRaiseWindow;	       /* window that is scheduled to be
                                         * raised */
+    /* for hot-corners delay */
+    WMHandlerID *hot_corner_timer;
 
     /* for window shortcuts */
     WMArray *shortcutWindows[MAX_WINDOW_SHORTCUTS];
@@ -303,6 +326,7 @@ typedef struct _WScreen {
         unsigned int doing_alt_tab:1;
         unsigned int jump_back_pending:1;
         unsigned int ignore_focus_events:1;
+        unsigned int in_hot_corner:3;
     } flags;
 } WScreen;
 
@@ -314,7 +338,7 @@ void wScreenRestoreState(WScreen *scr);
 
 int wScreenBringInside(WScreen *scr, int *x, int *y, int width, int height);
 int wScreenKeepInside(WScreen *scr, int *x, int *y, int width, int height);
-
+void ScreenCapture(WScreen *scr, int mode);
 
 /* in startup.c */
 WScreen *wScreenWithNumber(int i);
