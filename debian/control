@@ -8,7 +8,7 @@ Rules-Requires-Root: no
 Standards-Version: 4.6.2
 Build-Depends: debhelper-compat (= 13),
                gettext,
-               libfontconfig1-dev,
+               libfontconfig-dev,
                libgif-dev,
                libjpeg-dev,
                libmagickwand-6.q16-dev,
