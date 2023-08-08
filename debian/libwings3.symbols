@@ -554,6 +554,7 @@ libWINGs.so.3 libwings3 #MINVER#
  W_HandleSelectionEvent@Base 0.95.0
  W_InitApplication@Base 0.95.0
  W_InitIM@Base 0.95.0
+ W_KeycodeToKeysym@Base 0.96.0
  W_LookupString@Base 0.95.0
  W_LowerView@Base 0.95.0
  W_MapSubviews@Base 0.95.0

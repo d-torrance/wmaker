@@ -56,6 +56,7 @@ libwraster.so.6 libwraster6 #MINVER#
  RRetainImage@LIBWRASTER7 0.95.8
  RRotateImage@LIBWRASTER7 0.95.8
  RSaveImage@LIBWRASTER7 0.95.8
+ RSaveTitledImage@LIBWRASTER7 0.96.0
  RScaleImage@LIBWRASTER7 0.95.8
  RShutdown@LIBWRASTER7 0.95.8
  RSmoothScaleImage@LIBWRASTER7 0.95.8
