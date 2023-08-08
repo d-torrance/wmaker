@@ -1,11 +1,33 @@
-wmaker (0.95.9-4) UNRELEASED; urgency=medium
+wmaker (0.96.0-1) UNRELEASED; urgency=medium
 
+  * New upstream release.
+
+  [ Andreas Metzler ]
   * Migrate lintian overrides with
     GIT/lintian/bin/lintian-migrate-overrides-to-pointed-hints.
   * Bump Standards-Version.
   * Add lintian override for hand written html test file. (source-is-missing)
 
- -- Andreas Metzler <ametzler@debian.org>  Tue, 27 Dec 2022 16:48:11 +0100
+  [ Doug Torrance ]
+  * debian/control
+    - Switch libfontconfig1-dev -> libfontconfig-dev in Build-Depends.
+  * debian/debianfiles/wmaker-common.desktop
+    - Remove file; now exists upstream.
+  * debian/lib*.symbols
+    - Bump libwraster symbols from LIBWRASTER6 -> LIBWRASTER7.
+    - Add new library symbols.
+  * debian/patches
+    - Remove patches applied upstream.
+      + 10_support_imagemagick6.diff
+      + 20_national_encoding.diff
+      + 21_wrong_manual_section.diff
+    - Refresh remaining patches for new upstream release.
+  * debian/rules
+    - Replace --with-defsdatadir configure option with --with-pkgconfdir.
+  * debian/wmaker-common.install
+    - Install .desktop files.
+
+ -- Doug Torrance <dtorrance@debian.org>  Tue, 08 Aug 2023 08:52:06 -0400
 
 wmaker (0.95.9-3) unstable; urgency=medium
 
