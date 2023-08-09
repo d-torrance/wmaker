@@ -11,6 +11,9 @@ wmaker (0.96.0-1) UNRELEASED; urgency=medium
   [ Doug Torrance ]
   * debian/control
     - Switch libfontconfig1-dev -> libfontconfig-dev in Build-Depends.
+    - Switch libtiff5-dev -> libtiff-dev in libwings-dev Depends.
+    - Switch libfontconfig1-dev -> libfontconfig-dev in libwraster-dev
+      Depends.
   * debian/debianfiles/wmaker-common.desktop
     - Remove file; now exists upstream.
   * debian/lib*.symbols
@@ -26,8 +29,10 @@ wmaker (0.96.0-1) UNRELEASED; urgency=medium
     - Replace --with-defsdatadir configure option with --with-pkgconfdir.
   * debian/wmaker-common.install
     - Install .desktop files.
+  * debian/wmaker-common.lintian-overrides
+    - Add desktop-command-not-in-package override.
 
- -- Doug Torrance <dtorrance@debian.org>  Tue, 08 Aug 2023 08:52:06 -0400
+ -- Doug Torrance <dtorrance@debian.org>  Tue, 08 Aug 2023 22:31:56 -0400
 
 wmaker (0.95.9-3) unstable; urgency=medium
 
