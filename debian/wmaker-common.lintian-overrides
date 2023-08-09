@@ -1,2 +1,5 @@
 # manpage is in wmaker package
 no-manual-page [usr/bin/wmaker]
+
+# WPrefs is in wmaker package
+desktop-command-not-in-package WPrefs [usr/share/applications/WPrefs.desktop]
