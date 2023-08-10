@@ -1,4 +1,4 @@
-wmaker (0.96.0-1) UNRELEASED; urgency=medium
+wmaker (0.96.0-1) unstable; urgency=medium
 
   * New upstream release.
 
@@ -32,7 +32,7 @@ wmaker (0.96.0-1) UNRELEASED; urgency=medium
   * debian/wmaker-common.lintian-overrides
     - Add desktop-command-not-in-package override.
 
- -- Doug Torrance <dtorrance@debian.org>  Tue, 08 Aug 2023 22:31:56 -0400
+ -- Doug Torrance <dtorrance@debian.org>  Thu, 10 Aug 2023 08:00:40 -0400
 
 wmaker (0.95.9-3) unstable; urgency=medium
 
