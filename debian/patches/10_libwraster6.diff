@@ -1,0 +1,26 @@
+Description: Fix libwraster symbol version (should be 6, not 7).
+Author: Andreas Metzler <ametzler@bebt.de>
+Origin: https://groups.google.com/g/wmaker-dev/c/TO106V4iiOo/m/D5oUWxBCDgAJ
+Bug-Debian: https://bugs.debian.org/1043417
+Last-Update: 2023-08-10
+
+--- a/script/generate-mapfile-from-header.sh
++++ b/script/generate-mapfile-from-header.sh
+@@ -77,8 +77,15 @@
+ 
+         -v)
+             shift
+-            # Version may be 'x:y:z', we keep only 'x'
+-            version="`echo "$1" | sed -e 's,:.*$,,' `"
++	    if echo $1 | grep -q ':' ; then
++		    # libtool versioning scheme
++		    current=`echo $1 | cut -d ':' -f 1`
++		    revision=`echo $1 | cut -d ':' -f 2`
++		    age=`echo $1 | cut -d ':' -f 3`
++		    version=$((${current}-${age}))
++	    else
++		    version=$1
++	    fi
+             # the version should only be a number
+             echo "$version" | grep '^[1-9][0-9]*$' > /dev/null || \
+                 arg_error "version \"$1\" is not valid"
