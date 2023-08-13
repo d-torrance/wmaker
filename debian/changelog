@@ -1,3 +1,11 @@
+wmaker (0.96.0+20230805-0ppa1) mantic; urgency=medium
+
+ * Merge in changes from 0.96.0-2.
+ * debian/README.ppa
+   - Now a snapshot of master, not next.
+
+ -- Doug Torrance <dtorrance@debian.org>  Sun, 13 Aug 2023 19:14:12 -0400
+
 wmaker (0.96.0-2) unstable; urgency=medium
 
   * debian/libwraster6.symbols
