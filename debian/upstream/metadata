@@ -1,0 +1,4 @@
+---
+Repository: git://repo.or.cz/wmaker-crm.git,branch=next
+Bug-Database: https://github.com/window-maker/wmaker/issues
+Bug-Submit: https://github.com/window-maker/wmaker/issues/new

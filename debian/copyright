@@ -1,34 +1,34 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: wmaker
 Upstream-Contact: Window Maker developers mailing list <wmaker-dev@googlegroups.com>
-Source: http://repo.or.cz/w/wmaker-crm.git
+Source: https://repo.or.cz/w/wmaker-crm.git
 
 Files: *
 Copyright: 1991-1995 Free Software Foundation, Inc.
-	   1995 Spencer Kimball
-	   1995 Peter Mattis
-	   1995 Sun Microsystems, Inc.
-	   1996 Ben Wing
-	   1997 Shige Abe
-	   1997-2004, 2006 Alfredo Kengi Kojima <kojima@windowmaker.info>
-	   1998-2004, 2006 Dan Pascu
-	   1998 scottc
-	   1998 James Thompson
-	   1999-2000 Nwanua Elumeze
-	   2001-2016 Window Maker Team
-	   2008 Norayr Chilingaryan <chnorik@gmail.com>
-	   2008 Guido U. Draheim <guidod@gmx.de>
-	   2010-2011 Carlos R. Mafra <crmafra@gmail.com>
-	   2010 Tamas Tevesz <ice@extreme.hu>
-	   2011 Camille d'Alméras <camilledalmeras@yahoo.com>
-	   2012-2015 Christophe Curis
-	   2012 Daniel Déchelotte
-	   2012 Leandro Vital <leandro.vital@yahoo.com.br>
+           1995 Spencer Kimball
+           1995 Peter Mattis
+           1995 Sun Microsystems, Inc.
+           1996 Ben Wing
+           1997 Shige Abe
+           1997-2004, 2006 Alfredo Kengi Kojima <kojima@windowmaker.info>
+           1998-2004, 2006 Dan Pascu
+           1998 scottc
+           1998 James Thompson
+           1999-2000 Nwanua Elumeze
+           2001-2016 Window Maker Team
+           2008 Norayr Chilingaryan <chnorik@gmail.com>
+           2008 Guido U. Draheim <guidod@gmx.de>
+           2010-2011 Carlos R. Mafra <crmafra@gmail.com>
+           2010 Tamas Tevesz <ice@extreme.hu>
+           2011 Camille d'Alméras <camilledalmeras@yahoo.com>
+           2012-2015 Christophe Curis
+           2012 Daniel Déchelotte
+           2012 Leandro Vital <leandro.vital@yahoo.com.br>
 License: GPL-2+
 
 Files: m4/ax_pthread.m4
 Copyright: 2008 Steven G. Johnson <stevenj@alum.mit.edu>
-	   2011 Daniel Richard G. <skunk@iSKUNK.ORG>
+           2011 Daniel Richard G. <skunk@iSKUNK.ORG>
 License: GPL-3+
 
 Files: m4/ld-version-script.m4
@@ -94,8 +94,8 @@ License: Expat
 
 Files: wrlib/load_ppm.c
 Copyright: 1988 Jef Poskanzer
-	   1997-2003 Alfredo K. Kojima
-	   2014 Window Maker Team
+           1997-2003 Alfredo K. Kojima
+           2014 Window Maker Team
 License: HPND and LGPL-2+
 
 License: Expat

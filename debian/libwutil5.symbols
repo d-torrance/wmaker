@@ -244,7 +244,7 @@ libWUtil.so.5 libwutil5 #MINVER#
  wtokennext@Base 0.95.5
  wtokensplit@Base 0.95.5
  wtrimspace@Base 0.95.5
- wuserdatapath@Base 0.95.9+202303062016
+ wuserdatapath@Base 0.96.0
  wusergnusteppath@Base 0.95.5
  wusleep@Base 0.95.5
  wutil_shutdown@Base 0.95.6

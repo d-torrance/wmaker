@@ -6,14 +6,14 @@ XSBC-Original-Maintainer: Debian Window Maker Team <pkg-wmaker-devel@lists.aliot
 XSBC-Original-Uploaders: Andreas Metzler <ametzler@debian.org>,
                          Doug Torrance <dtorrance@piedmont.edu>
 Rules-Requires-Root: no
-Standards-Version: 4.5.0
+Standards-Version: 4.6.2
 Build-Depends: debhelper (>= 9),
                dh-autoreconf,
                gettext,
-               libfontconfig1-dev,
+               libfontconfig-dev,
                libgif-dev,
                libjpeg-dev,
-               libmagickwand-dev,
+               libmagickwand-6.q16-dev,
                libpango1.0-dev,
                libpng-dev,
                libsm-dev,
@@ -76,8 +76,6 @@ Package: wmaker-utils
 Architecture: any
 Multi-Arch: foreign
 Depends: ${misc:Depends}, ${shlibs:Depends}
-Breaks: wmaker (<< 0.95.7-6)
-Replaces: wmaker (<< 0.95.7-6)
 Description: Window Maker - Utilities
  Written by Alfredo Kojima almost from scratch, resembles the NeXTStep look
  very closely, and it is now an official GNU project. Window Maker (originally
@@ -98,7 +96,7 @@ Depends: libc6-dev,
          libgif-dev,
          libjpeg-dev,
          libpng-dev,
-         libtiff5-dev,
+         libtiff-dev,
          libwraster6 (= ${binary:Version}),
          libx11-dev,
          libxext-dev,
@@ -131,7 +129,7 @@ Architecture: any
 Multi-Arch: same
 Section: libdevel
 Depends: libc6-dev,
-         libfontconfig1-dev,
+         libfontconfig-dev,
          libwings3 (= ${binary:Version}),
          libwraster-dev,
          libwutil5 (= ${binary:Version}),

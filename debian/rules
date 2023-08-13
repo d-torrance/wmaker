@@ -3,7 +3,6 @@
 
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 export DEB_CFLAGS_MAINT_APPEND += -Wall
-export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
 
 LINGUAS           := $(patsubst po/%.po, %, $(wildcard po/*.po))
 
@@ -23,12 +22,12 @@ SHAREDIR          := $(BASEDIR)/share
 GNUSTEPDIR        := $(SHAREDIR)/GNUstep/System
 WMSHAREDIR        := $(SHAREDIR)/WindowMaker
 PIXMAPDIR         := $(INCLUDEDIR)/X11/pixmaps
-DEFSDATADIR       := /etc/GNUstep/Defaults
+PKGCONFDIR        := /etc/GNUstep/Defaults
 
 COMMON_OPTIONS    := --datadir=$(SHAREDIR)            \
                      --with-pixmapdir=$(PIXMAPDIR)    \
                      --with-gnustepdir=$(GNUSTEPDIR)  \
-                     --with-pkgconfdir=$(DEFSDATADIR)
+                     --with-pkgconfdir=$(PKGCONFDIR)
 
 %:
 	dh $@ --with autoreconf
