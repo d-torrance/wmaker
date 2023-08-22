@@ -1,3 +1,11 @@
+wmaker (0.96.0-3) UNRELEASED; urgency=medium
+
+  * 11_Revert-WUtil-Be-more-strict-about-base-directory-for.patch from
+    upstream GIT master: Fix breakage of saving the history in
+    ~/GNUstep/.AppInfo/WindowMaker/History.
+
+ -- Andreas Metzler <ametzler@debian.org>  Tue, 22 Aug 2023 10:27:03 +0200
+
 wmaker (0.96.0-2) unstable; urgency=medium
 
   * debian/libwraster6.symbols

@@ -1,3 +1,4 @@
 10_libwraster6.diff
+11_Revert-WUtil-Be-more-strict-about-base-directory-for.patch
 53_Debian_WMState.diff
 75_WPrefs_to_bindir_when_gnustedir_is_set.diff
