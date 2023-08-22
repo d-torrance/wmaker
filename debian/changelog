@@ -1,3 +1,10 @@
+wmaker (0.96.0+20230821-0ppa1) mantic; urgency=medium
+
+  * debian/patches/10_libwraster.diff
+    - Remove patch; applied upstream.
+
+ -- Doug Torrance <dtorrance@debian.org>  Mon, 21 Aug 2023 22:48:58 -0400
+
 wmaker (0.96.0+20230805-0ppa1) mantic; urgency=medium
 
  * Merge in changes from 0.96.0-2.
