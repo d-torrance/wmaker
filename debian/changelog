@@ -1,3 +1,11 @@
+wmaker (0.96.0+20230821-0ppa2) mantic; urgency=medium
+
+  * debian/*.manpages
+    - Specify that manpages are in debian/tmp since we use debhelper < 11
+      for the PPA builds.
+
+ -- Doug Torrance <dtorrance@debian.org>  Tue, 22 Aug 2023 21:05:46 -0400
+
 wmaker (0.96.0+20230821-0ppa1) mantic; urgency=medium
 
   * debian/patches/10_libwraster.diff
