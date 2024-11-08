@@ -1,8 +1,9 @@
-Description:  Fix calculation of version number in the library mapfiles
+Description: Fix calculation of version number in the library mapfiles
 Author: Christophe CURIS <christophe.curis@free.fr>
 Origin: https://repo.or.cz/wmaker-crm.git/commitdiff/2264ed9
 Bug-Debian: https://bugs.debian.org/1043417
-Last-Update: 2023-08-13
+Last-Update: 2024-11-08
+Forwarded: not-needed
 
 --- a/script/generate-mapfile-from-header.sh
 +++ b/script/generate-mapfile-from-header.sh
