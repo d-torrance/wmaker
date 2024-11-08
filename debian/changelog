@@ -10,10 +10,12 @@ wmaker (0.96.0-3) unstable; urgency=medium
     - add myself to uploaders
     - bump Standards-Version to 4.7.0
     - bump ImageMagick build-dep from v6 to v7 (Closes: #1086941)
+  * d/gbp.conf
+    - default: set `pristine-tar` to `true`
   * d/p/10_libwraster6.diff
     - set `Forwarded: not-needed`
 
- -- Jeremy Sowden <azazel@debian.org>  Fri, 08 Nov 2024 21:28:33 +0000
+ -- Jeremy Sowden <azazel@debian.org>  Fri, 08 Nov 2024 22:37:51 +0000
 
 wmaker (0.96.0-2) unstable; urgency=medium
 
