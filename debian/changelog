@@ -1,3 +1,22 @@
+wmaker (0.96.0-3) unstable; urgency=medium
+
+  [ Andreas Metzler ]
+  * 11_Revert-WUtil-Be-more-strict-about-base-directory-for.patch from
+    upstream GIT master: Fix breakage of saving the history in
+    ~/GNUstep/.AppInfo/WindowMaker/History.
+
+  [ Jeremy Sowden ]
+  * d/control
+    - add myself to uploaders
+    - bump Standards-Version to 4.7.0
+    - bump ImageMagick build-dep from v6 to v7 (Closes: #1086941)
+  * d/gbp.conf
+    - default: set `pristine-tar` to `true`
+  * d/p/10_libwraster6.diff
+    - set `Forwarded: not-needed`
+
+ -- Jeremy Sowden <azazel@debian.org>  Fri, 08 Nov 2024 22:37:51 +0000
+
 wmaker (0.96.0+20230821-0ppa2) mantic; urgency=medium
 
   * debian/*.manpages
