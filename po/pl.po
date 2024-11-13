@@ -12,6 +12,7 @@ msgstr ""
 "PO-Revision-Date: 2003-04-15 20:21+0200\n"
 "Last-Translator: Piotr Dembiński <pdemb@fanthom.math.put.poznan.pl>\n"
 "Language-Team: Polish <pl@li.org>\n"
+"Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8-bit\n"
@@ -982,7 +983,7 @@ msgid "crashed while trying to do some post-crash cleanup. Aborting immediatelly
 msgstr "załamanie podczas próby uporządkowania po załamaniu. Wyjście awaryjne."
 
 #: ../src/startup.c:304
-msgid "a fatal error has occured, probably due to a bug. Please fill the included BUGFORM and report it."
+msgid "a fatal error has occurred, probably due to a bug. Please fill the included BUGFORM and report it."
 msgstr "wystąpił poważny błąd, prawdopodobnie pluskwa. Prosimy o wypełnienie formularza BUGFORM i wysłanie go do nas."
 
 #. restart another window manager so that the X session doesn't
