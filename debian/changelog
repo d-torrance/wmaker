@@ -1,3 +1,11 @@
+wmaker (0.96.0+20241111-0ppa1) plucky; urgency=medium
+
+  * Merge changes from Debian 0.96.0-3 package.
+  * debian/control
+    - Use unversioned libmagickwand-dev in Build-Depends.
+
+ -- Doug Torrance <dtorrance@debian.org>  Wed, 13 Nov 2024 06:33:00 -0500
+
 wmaker (0.96.0-3) unstable; urgency=medium
 
   [ Andreas Metzler ]
